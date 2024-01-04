@@ -10,22 +10,28 @@ clean:
 %_tb: test/%_tb.vhd core/%.vhd
 	ghdl -c --std=08 $^ -r $@
 
-alu_control_tb: test/alu_control_tb.vhd \
-	core/alu_control.vhd \
+ALU_CONTROL := core/alu_control.vhd \
 	core/imm_sx.vhd \
 	core/alu.vhd \
 	core/program_counter.vhd \
 	core/control_fsm.vhd
 
+alu_control_tb: test/alu_control_tb.vhd $(ALU_CONTROL)
 	ghdl -c --std=08 $^ -r $@
 
-memory_tb: test/memory_tb.vhd \
-	core/memory.vhd \
+MEMORY := core/memory.vhd \
 	core/mem.vhd \
 	core/mbr_sx.vhd \
 	core/register_file.vhd
 
+memory_tb: test/memory_tb.vhd $(MEMORY)
 	ghdl -c --std=08 $^ -r $@
+
+topmodule_tb: test/topmodule_tb.vhd \
+	core/topmodule.vhd \
+	$(ALU_CONTROL) $(MEMORY)
+	ghdl -c --std=08 $^ -r $@
+
 
 fmt: $(FMT_SRC)
 
