@@ -19,6 +19,14 @@ alu_control_tb: test/alu_control_tb.vhd \
 
 	ghdl -c --std=08 $^ -r $@
 
+memory_tb: test/memory_tb.vhd \
+	core/memory.vhd \
+	core/mem.vhd \
+	core/mbr_sx.vhd \
+	core/register_file.vhd
+
+	ghdl -c --std=08 $^ -r $@
+
 fmt: $(FMT_SRC)
 
 fmt-core/%.vhd: core/%.vhd
