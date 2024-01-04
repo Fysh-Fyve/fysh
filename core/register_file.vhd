@@ -4,16 +4,10 @@ use ieee.numeric_std.all;
 
 entity register_file is
   port (
-    rd_clk_i : in std_ulogic;
-    reset_i  : in std_ulogic;
-
-    rd_i  : in std_ulogic_vector (4 downto 0);  -- Register Destination
-    rs1_i : in std_ulogic_vector (4 downto 0);  -- Register Source 1
-    rs2_i : in std_ulogic_vector (4 downto 0);  -- Register Source 2
-
-    rd_val_i  : in  std_ulogic_vector (31 downto 0);
-    rs1_val_o : out std_ulogic_vector (31 downto 0);
-    rs2_val_o : out std_ulogic_vector (31 downto 0));
+    rd_clk_i, reset_i    : in  std_ulogic;
+    rd_i, rs1_i, rs2_i   : in  std_ulogic_vector (4 downto 0);
+    rd_val_i             : in  std_ulogic_vector (31 downto 0);
+    rs1_val_o, rs2_val_o : out std_ulogic_vector (31 downto 0));
 end register_file;
 
 architecture Behavioral of register_file is

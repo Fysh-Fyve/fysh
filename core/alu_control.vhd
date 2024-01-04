@@ -7,10 +7,15 @@ entity alu_control is
     insn_i               : in std_ulogic_vector (31 downto 0);
     rs1_val_i, rs2_val_i : in std_ulogic_vector (31 downto 0);
 
-    alu_o, pc_o, pc_alu_o                              : out std_ulogic_vector (31 downto 0);
-    reset_o, addr_sel_o, rd_clk_o, mem_clk_o, ir_clk_o : out std_ulogic;
-    rd_sel_o                                           : out std_ulogic_vector (1 downto 0);
-    sx_size_o                                          : out std_ulogic_vector (2 downto 0));
+    -- Clock outputs
+    rd_clk_o  : out std_ulogic;
+    mem_clk_o : out std_ulogic;
+    ir_clk_o  : out std_ulogic;
+
+    alu_o, pc_o, pc_alu_o : out std_ulogic_vector (31 downto 0);
+    reset_o, addr_sel_o   : out std_ulogic;
+    rd_sel_o              : out std_ulogic_vector (1 downto 0);
+    sx_size_o             : out std_ulogic_vector (2 downto 0));
 end alu_control;
 
 architecture Behavioral of alu_control is
@@ -21,13 +26,19 @@ architecture Behavioral of alu_control is
     funct3_i          : in std_ulogic_vector (2 downto 0);
     sub_sra_i         : in std_ulogic;
 
-    sub_sra_o                               : out std_ulogic;
-    func_o, sx_size_o                       : out std_ulogic_vector (2 downto 0);
-    addr_sel_o, alu_a_sel_o, alu_b_sel_o    : out std_ulogic;
-    rd_sel_o                                : out std_ulogic_vector (1 downto 0);
-    mem_clk_o, rd_clk_o, pc_clk_o, ir_clk_o : out std_ulogic;
-    pc_alu_sel_o, pc_next_sel_o             : out std_ulogic;
-    reset_o                                 : out std_logic);
+    -- Clock signals
+    mem_clk_o, rd_clk_o : out std_ulogic;
+    pc_clk_o, ir_clk_o  : out std_ulogic;
+
+    -- Select signals
+    addr_sel_o                  : out std_ulogic;
+    pc_alu_sel_o, pc_next_sel_o : out std_ulogic;
+    alu_a_sel_o, alu_b_sel_o    : out std_ulogic;
+
+    sub_sra_o         : out std_ulogic;
+    func_o, sx_size_o : out std_ulogic_vector (2 downto 0);
+    rd_sel_o          : out std_ulogic_vector (1 downto 0);
+    reset_o           : out std_logic);
   end component;
 
   component alu is port (

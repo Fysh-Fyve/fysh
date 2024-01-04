@@ -18,16 +18,19 @@ architecture Behavioral of alu_control_tb is
       sx_size_o                     : out std_ulogic_vector (2 downto 0));
   end component;
 
-  signal clk_s                : std_ulogic;
   signal insn_s               : std_ulogic_vector (31 downto 0);
   signal rs1_val_s, rs2_val_s : std_ulogic_vector (31 downto 0);
 
-  signal alu_s, pc_s, pc_alu_s         : std_ulogic_vector (31 downto 0);
-  signal reset_s, addr_sel_s           : std_ulogic;
   -- Clock Signals
-  signal rd_clk_s, ir_clk_s, mem_clk_s : std_ulogic;
-  signal rd_sel_s                      : std_ulogic_vector (1 downto 0);
-  signal sx_size_s                     : std_ulogic_vector (2 downto 0);
+  signal clk_s     : std_ulogic;
+  signal rd_clk_s  : std_ulogic;
+  signal ir_clk_s  : std_ulogic;
+  signal mem_clk_s : std_ulogic;
+
+  signal alu_s, pc_s, pc_alu_s : std_ulogic_vector (31 downto 0);
+  signal rd_sel_s              : std_ulogic_vector (1 downto 0);
+  signal reset_s, addr_sel_s   : std_ulogic;
+  signal sx_size_s             : std_ulogic_vector (2 downto 0);
 begin
   alu_control_u : component alu_control port map (
     clk_i      => clk_s,
