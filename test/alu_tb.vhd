@@ -10,11 +10,11 @@ architecture Behavioral of alu_tb is
   signal func                 : std_ulogic_vector (2 downto 0);
   signal eq, lt, ltu, sub_sra : std_ulogic;
   component alu is port (
-    a, b        : in  std_ulogic_vector (31 downto 0);
-    func        : in  std_ulogic_vector (2 downto 0);
-    sub_sra     : in  std_ulogic;       -- ADD => SUB, SLA => SRA
-    q           : out std_ulogic_vector (31 downto 0);
-    eq, lt, ltu : out std_ulogic);      -- A == B, A < B, A < B (unsigned)
+    a_i, b_i          : in  std_ulogic_vector (31 downto 0);
+    func_i            : in  std_ulogic_vector (2 downto 0);
+    sub_sra_i         : in  std_ulogic;   -- ADD => SUB, SLA => SRA
+    q_o               : out std_ulogic_vector (31 downto 0);
+    eq_o, lt_o, ltu_o : out std_ulogic);  -- A == B, A < B, A < B (unsigned)
   end component;
 
   procedure print_q(lbl : string) is
@@ -31,15 +31,15 @@ architecture Behavioral of alu_tb is
     writeline(output, my_line);
   end procedure print_q;
 begin
-  alu_test : component alu port map (
-    a       => a,
-    b       => b,
-    func    => func,
-    sub_sra => sub_sra,
-    q       => q,
-    eq      => eq,
-    lt      => lt,
-    ltu     => ltu);
+  alu_u : component alu port map (
+    a_i       => a,
+    b_i       => b,
+    func_i    => func,
+    sub_sra_i => sub_sra,
+    q_o       => q,
+    eq_o      => eq,
+    lt_o      => lt,
+    ltu_o     => ltu);
 
   process
   begin

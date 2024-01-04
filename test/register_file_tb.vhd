@@ -18,29 +18,29 @@ architecture Behavioral of register_file_tb is
 
   component register_file is
     port (
-      rd_clk : in std_ulogic;
-      reset  : in std_ulogic;
+      rd_clk_i : in std_ulogic;
+      reset_i  : in std_ulogic;
 
-      rd  : in std_ulogic_vector (4 downto 0);  -- Register Destination
-      rs1 : in std_ulogic_vector (4 downto 0);  -- Register Source 1
-      rs2 : in std_ulogic_vector (4 downto 0);  -- Register Source 2
+      rd_i  : in std_ulogic_vector (4 downto 0);  -- Register Destination
+      rs1_i : in std_ulogic_vector (4 downto 0);  -- Register Source 1
+      rs2_i : in std_ulogic_vector (4 downto 0);  -- Register Source 2
 
-      rd_val  : in  std_ulogic_vector (31 downto 0);
-      rs1_val : out std_ulogic_vector (31 downto 0);
-      rs2_val : out std_ulogic_vector (31 downto 0));
+      rd_val_i  : in  std_ulogic_vector (31 downto 0);
+      rs1_val_o : out std_ulogic_vector (31 downto 0);
+      rs2_val_o : out std_ulogic_vector (31 downto 0));
   end component;
 begin
-  reg_file : register_file port map(
-    rd_clk  => rd_clk,
-    reset   => reset,
-    rd      => rd,
-    rs1     => rs1,
-    rs2     => rs2,
-    rd_val  => rd_val,
-    rs1_val => rs1_val,
-    rs2_val => rs2_val);
+  register_file_u : register_file port map(
+    rd_clk_i  => rd_clk,
+    reset_i   => reset,
+    rd_i      => rd,
+    rs1_i     => rs1,
+    rs2_i     => rs2,
+    rd_val_i  => rd_val,
+    rs1_val_o => rs1_val,
+    rs2_val_o => rs2_val);
 
-  clock : process
+  clock_p : process
   begin
     rd_clk <= '0';
     wait for 1 fs;
@@ -52,9 +52,9 @@ begin
       wait for 5 ns;
     end loop;
     wait;
-  end process;
+  end process clock_p;
 
-  reg_file_testing : process
+  reg_file_testing_p : process
     use ieee.numeric_std.all;
   begin
     reset  <= '0';
@@ -78,9 +78,9 @@ begin
     end loop;
 
     wait;
-  end process;
+  end process reg_file_testing_p;
 
-  print_out : process (rd_clk)
+  print_out_p : process (rd_clk)
     use std.textio.all;
     variable my_line : line;
   begin
@@ -89,5 +89,5 @@ begin
     write(my_line, to_hstring(rs1_val), left, 10);
     write(my_line, to_hstring(rs2_val), left, 10);
     writeline(output, my_line);
-  end process;
+  end process print_out_p;
 end Behavioral;

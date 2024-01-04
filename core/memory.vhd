@@ -3,49 +3,51 @@ use ieee.std_logic_1164.all;
 
 entity memory is
   port (
-    mem_clk, insn_clk, addr_sel, reset : in std_ulogic;
-    sx_size                            : in std_ulogic_vector (2 downto 0);
-    alu, pc, rs2_val                   : in std_ulogic_vector (31 downto 0);
+    mem_clk_i, insn_clk_i, addr_sel_i, reset_i : in std_ulogic;
+    sx_size_i                                  : in std_ulogic_vector (2 downto 0);
+    alu_i, pc_i, rs2_val_i                     : in std_ulogic_vector (31 downto 0);
 
-    insn, mem_sx : out std_ulogic_vector (31 downto 0));
+    insn_o, mem_sx_o : out std_ulogic_vector (31 downto 0));
 end memory;
 
 architecture Behavioral of memory is
-  signal addr, mem_out : std_ulogic_vector (31 downto 0);
+  signal addr_s, mem_out_s : std_ulogic_vector (31 downto 0);
 
   component mem is port (
-    d_in, read_addr, write_addr : in  std_ulogic_vector (31 downto 0);
-    write_en                    : in  std_ulogic;
-    d_out                       : out std_ulogic_vector (31 downto 0));
+    d_i, read_addr_i, write_addr_i : in  std_ulogic_vector (31 downto 0);
+    write_en_i                     : in  std_ulogic;
+    d_o                            : out std_ulogic_vector (31 downto 0));
   end component;
 
   component mbr_sx is port (
-    mbr  : in  std_ulogic_vector (31 downto 0);
-    size : in  std_ulogic_vector (2 downto 0);
-    sx   : out std_ulogic_vector (31 downto 0));
+    mbr_i  : in  std_ulogic_vector (31 downto 0);
+    size_i : in  std_ulogic_vector (2 downto 0);
+    sx_o   : out std_ulogic_vector (31 downto 0));
   end component;
-
 begin
-  memory : component mem port map (
-    read_addr  => addr,
-    write_addr => addr,
-    write_en   => mem_clk,
-    d_in       => rs2_val,
-    d_out      => mem_out);
+  mem_u : component mem port map (
+    read_addr_i  => addr_s,
+    write_addr_i => addr_s,
+    write_en_i   => mem_clk_i,
+    d_i          => rs2_val_i,
+    d_o          => mem_out_s);
 
-  mbr : component mbr_sx port map (
-    size => sx_size,
-    mbr  => mem_out,
-    sx   => mem_sx);
+  mbr_sx_u : component mbr_sx port map (
+    mbr_i  => mem_out,
+    size_i => sx_size,
+    sx_o   => mem_sx_o);
 
-  addr <= with addr_sel select pc when '1', alu when '0', (others => 'X') when others;
+  with addr_sel_i select addr_s <=
+    pc_i            when '1',
+    alu_i           when '0',
+    (others => 'X') when others;
 
-  process(reset, insn_clk)
+  insn_register_p : process(reset_i, insn_clk_i)
   begin
-    if (reset = '0') then
-      insn <= (others => '0');
-    elsif rising_edge(insn_clk) then
-      insn <= mem_out;
+    if (reset_i = '0') then
+      insn_o <= (others => '0');
+    elsif rising_edge(insn_clk_i) then
+      insn_o <= mem_out_s;
     end if;
-  end process;
+  end process insn_register_p;
 end Behavioral;
