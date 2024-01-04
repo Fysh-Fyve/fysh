@@ -4,11 +4,20 @@ VHDL_TESTS := $(call rwildcard,test,*.vhd)
 
 FMT_SRC := $(patsubst %, fmt-%,$(VHDL_SRC) $(VHDL_TESTS))
 
+clean:
+	rm -fv **/*~
+
 %_tb: test/%_tb.vhd core/%.vhd
 	ghdl -c --std=08 $^ -r $@
 
-clean:
-	rm -fv **/*~
+alu_control_tb: test/alu_control_tb.vhd \
+	core/alu_control.vhd \
+	core/imm_sx.vhd \
+	core/alu.vhd \
+	core/program_counter.vhd \
+	core/control_fsm.vhd
+
+	ghdl -c --std=08 $^ -r $@
 
 fmt: $(FMT_SRC)
 
