@@ -63,24 +63,24 @@ architecture Behavioral of alu_control is
   end component;
 
   -- Clock Signals
-  signal pc_clk_s : std_ulogic;
+  signal pc_clk_s : std_ulogic := '0';
 
   -- Select signals
-  signal pc_next_sel_s : std_ulogic;
-  signal pc_alu_sel_s  : std_ulogic;
-  signal sub_sra_s     : std_ulogic;
-  signal func_s        : std_ulogic_vector (2 downto 0);
+  signal pc_next_sel_s : std_ulogic                     := '0';
+  signal pc_alu_sel_s  : std_ulogic                     := '0';
+  signal sub_sra_s     : std_ulogic                     := '0';
+  signal func_s        : std_ulogic_vector (2 downto 0) := (others => '0');
 
   -- Result signals
-  signal imm_x_s : std_ulogic_vector (31 downto 0);
-  signal alu_a_s : std_ulogic_vector (31 downto 0);
-  signal alu_b_s : std_ulogic_vector (31 downto 0);
-  signal eq_s    : std_ulogic;
-  signal lt_s    : std_ulogic;
-  signal ltu_s   : std_ulogic;
+  signal imm_x_s : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal alu_a_s : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal alu_b_s : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal eq_s    : std_ulogic                      := '0';
+  signal lt_s    : std_ulogic                      := '0';
+  signal ltu_s   : std_ulogic                      := '0';
 
-  signal alu_a_sel_s : std_ulogic;
-  signal alu_b_sel_s : std_ulogic;
+  signal alu_a_sel_s : std_ulogic := '0';
+  signal alu_b_sel_s : std_ulogic := '0';
 begin
   imm_sx_u : component imm_sx port map (
     insn_i  => insn_i,
