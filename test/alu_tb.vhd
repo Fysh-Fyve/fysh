@@ -12,9 +12,9 @@ architecture Behavioral of alu_tb is
   component alu is port (
     a_i, b_i          : in  std_ulogic_vector (31 downto 0);
     func_i            : in  std_ulogic_vector (2 downto 0);
-    sub_sra_i         : in  std_ulogic;   -- ADD => SUB, SLA => SRA
+    sub_sra_i         : in  std_ulogic;
     q_o               : out std_ulogic_vector (31 downto 0);
-    eq_o, lt_o, ltu_o : out std_ulogic);  -- A == B, A < B, A < B (unsigned)
+    eq_o, lt_o, ltu_o : out std_ulogic);
   end component;
 
   procedure print_q(lbl : string) is
@@ -28,6 +28,8 @@ architecture Behavioral of alu_tb is
     write(my_line, to_hstring(b), left, 8);
     write(my_line, string'(" = "));
     write(my_line, to_hstring(q), left, 8);
+    write(my_line, string'(", eq = "));
+    write(my_line, eq, left, 8);
     writeline(output, my_line);
   end procedure print_q;
 begin

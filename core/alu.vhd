@@ -7,12 +7,11 @@ use ieee.numeric_std.all;
 
 entity alu is
   port (
-    a_i, b_i  : in std_ulogic_vector (31 downto 0);
-    func_i    : in std_ulogic_vector (2 downto 0);
-    sub_sra_i : in std_ulogic;          -- ADD => SUB, SLA => SRA
-
+    a_i, b_i          : in  std_ulogic_vector (31 downto 0);
+    func_i            : in  std_ulogic_vector (2 downto 0);
+    sub_sra_i         : in  std_ulogic;
     q_o               : out std_ulogic_vector (31 downto 0);
-    eq_o, lt_o, ltu_o : out std_ulogic);  -- A == B, A < B, A < B (unsigned)
+    eq_o, lt_o, ltu_o : out std_ulogic);
 end alu;
 
 architecture Behavioral of alu is
@@ -21,7 +20,6 @@ architecture Behavioral of alu is
   signal right_shifted_s    : std_ulogic_vector (31 downto 0);
   signal unsigned_shift_a_s : std_ulogic_vector (31 downto 0);
   signal signed_shift_a_s   : std_ulogic_vector (31 downto 0);
-  signal xor_ab_s           : std_ulogic_vector (31 downto 0);
 
   function less_than_unsigned(
     a : std_ulogic_vector (31 downto 0);
@@ -36,20 +34,19 @@ begin
     a_i and b_i                when "111",
     a_i or b_i                 when "110",
     right_shifted_s            when "101",
-    xor_ab_s                   when "100",
+    a_i xor b_i                when "100",
     x"0000000" & "000" & ltu_o when "011",
     x"0000000" & "000" & lt_o  when "010",
     left_shifted_s             when "001",
     std_ulogic_vector(add_s)   when "000",
     (others => 'X')            when others;
-  xor_ab_s           <= a_i xor b_i;
   add_s              <= (signed(a_i) - signed(b_i)) when sub_sra_i else (signed(a_i) + signed(b_i));
   left_shifted_s     <= std_ulogic_vector(shift_left(unsigned(a_i), to_integer(unsigned(b_i(4 downto 0)))));
   right_shifted_s    <= signed_shift_a_s            when sub_sra_i else unsigned_shift_a_s;
   unsigned_shift_a_s <= std_ulogic_vector(shift_right(unsigned(a_i), to_integer(unsigned(b_i(4 downto 0)))));
   signed_shift_a_s   <= std_ulogic_vector(shift_right(signed(a_i), to_integer(unsigned(b_i(4 downto 0)))));
 
-  eq_o  <= and xor_ab_s;
+  eq_o  <= and (a_i xnor b_i);
   lt_o  <= '1' when to_integer(signed(a_i)) < to_integer(signed(b_i)) else '0';
   ltu_o <= less_than_unsigned(a_i, b_i);
 end Behavioral;
