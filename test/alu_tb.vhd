@@ -17,7 +17,7 @@ architecture Behavioral of alu_tb is
     eq_o, lt_o, ltu_o : out std_ulogic);
   end component;
 
-  procedure print_q(lbl : string) is
+  procedure print_result(lbl : string) is
     use std.textio.all;
     variable my_line : line;
   begin
@@ -31,9 +31,9 @@ architecture Behavioral of alu_tb is
     write(my_line, string'(", eq = "));
     write(my_line, eq, left, 8);
     writeline(output, my_line);
-  end procedure print_q;
+  end procedure print_result;
 begin
-  alu_u : component alu port map (
+  alu_inst : component alu port map (
     a_i       => a,
     b_i       => b,
     func_i    => func,
@@ -48,41 +48,41 @@ begin
     sub_sra <= '0';
     a       <= x"00FF00FF"; b <= x"0000FFFF";
 
-    func <= "111"; print_q("and");
-    func <= "110"; print_q("or");
-    func <= "100"; print_q("xor");
+    func <= "111"; print_result("and");
+    func <= "110"; print_result("or");
+    func <= "100"; print_result("xor");
 
     func    <= "000";
     sub_sra <= '0';
 
-    a <= x"FFFFFFFF"; b <= x"00000001"; print_q("add");
+    a <= x"FFFFFFFF"; b <= x"00000001"; print_result("add");
 
     sub_sra <= '1';
 
-    a <= x"00000000"; b <= x"00000001"; print_q("sub");
+    a <= x"00000000"; b <= x"00000001"; print_result("sub");
 
     func    <= "101";
     sub_sra <= '0';
 
-    a <= x"FFFF0000"; b <= x"00000010"; print_q("srl");
+    a <= x"FFFF0000"; b <= x"00000010"; print_result("srl");
 
     sub_sra <= '1';
 
-    a <= x"80000000"; b <= x"0000001F"; print_q("sra");
+    a <= x"80000000"; b <= x"0000001F"; print_result("sra");
 
     func <= "010";
 
-    a <= x"00000001"; b <= x"00000002"; print_q("slt");
-    a <= x"00000002"; b <= x"00000001"; print_q("slt");
+    a <= x"00000001"; b <= x"00000002"; print_result("slt");
+    a <= x"00000002"; b <= x"00000001"; print_result("slt");
 
     func <= "011";
 
-    a <= x"00000001"; b <= x"00000002"; print_q("sltu");
-    a <= x"80000001"; b <= x"80000002"; print_q("sltu");
-    a <= x"80000002"; b <= x"80000001"; print_q("sltu");
-    a <= x"40000002"; b <= x"80000001"; print_q("sltu");
-    a <= x"FFFFFFFF"; b <= x"FFFFFFFF"; print_q("sltu");
-    a <= x"7FFFFFFF"; b <= x"FFFFFFFF"; print_q("sltu");
+    a <= x"00000001"; b <= x"00000002"; print_result("sltu");
+    a <= x"80000001"; b <= x"80000002"; print_result("sltu");
+    a <= x"80000002"; b <= x"80000001"; print_result("sltu");
+    a <= x"40000002"; b <= x"80000001"; print_result("sltu");
+    a <= x"FFFFFFFF"; b <= x"FFFFFFFF"; print_result("sltu");
+    a <= x"7FFFFFFF"; b <= x"FFFFFFFF"; print_result("sltu");
     wait;
   end process;
 end Behavioral;

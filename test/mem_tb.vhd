@@ -15,36 +15,36 @@ architecture Behavioral of mem_tb is
     write_en_i                     : in  std_ulogic;
     d_o                            : out std_ulogic_vector (31 downto 0));
   end component;
-  signal d_in, read_addr_s, write_addr_s : std_ulogic_vector (31 downto 0);
-  signal write_en_s                      : std_ulogic;
-  signal d_out                           : std_ulogic_vector (31 downto 0);
+  signal d_in, read_addr, write_addr : std_ulogic_vector (31 downto 0);
+  signal write_en                    : std_ulogic;
+  signal d_out                       : std_ulogic_vector (31 downto 0);
 
   procedure print is
     use std.textio.all;
     variable my_line : line;
   begin
     wait for 1 fs;
-    write(my_line, to_hstring(read_addr_s), left, 8);
+    write(my_line, to_hstring(read_addr), left, 8);
     write(my_line, string'(" "));
     write(my_line, to_hstring(d_out), left, 8);
     writeline(output, my_line);
   end procedure print;
 begin
-  mem_u : component mem port map (
+  mem_inst : component mem port map (
     d_i          => d_in,
-    read_addr_i  => read_addr_s,
-    write_addr_i => write_addr_s,
-    write_en_i   => write_en_s,
+    read_addr_i  => read_addr,
+    write_addr_i => write_addr,
+    write_en_i   => write_en,
     d_o          => d_out);
 
-  print_p : process
+  print : process
   begin
-    read_addr_s <= (others => '0');
+    read_addr <= (others => '0');
     print;
     for i in 0 to 4 loop
-      read_addr_s <= std_ulogic_vector (signed(read_addr_s) + 4);
+      read_addr <= std_ulogic_vector (signed(read_addr) + 4);
       print;
     end loop;
     wait;
-  end process print_p;
+  end process print;
 end Behavioral;

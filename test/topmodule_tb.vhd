@@ -10,5 +10,5 @@ architecture Behavioral of topmodule_tb is
 
   signal clk : std_ulogic;
 begin
-  topmodule_u : component topmodule port map (clk => clk);
+  topmodule_inst : component topmodule port map (clk => clk);
 end Behavioral;

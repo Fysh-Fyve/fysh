@@ -11,21 +11,21 @@ entity program_counter is
 end program_counter;
 
 architecture Behavioral of program_counter is
-  signal next_ins_s, pc_alu_s, pc_inc_s : std_ulogic_vector(31 downto 0);
+  signal next_ins, pc_alu, pc_inc : std_ulogic_vector(31 downto 0);
 begin
-  pc_inc_s <= x"00000004";              -- hardwire pc_inc to 4
+  pc_inc <= x"00000004";                -- hardwire pc_inc to 4
   with pc_next_sel_i select
-    next_ins_s <= alu_i when '1', pc_alu_o when '0', (others => 'X') when others;
+    next_ins <= alu_i when '1', pc_alu_o when '0', (others => 'X') when others;
   with pc_alu_sel_i select
-    pc_alu_s <= pc_inc_s when '1', imm_x_i when '0', (others => 'X') when others;
-  pc_alu_o <= std_ulogic_vector(unsigned(pc_o) + unsigned(pc_alu_s));
+    pc_alu <= pc_inc when '1', imm_x_i when '0', (others => 'X') when others;
+  pc_alu_o <= std_ulogic_vector(unsigned(pc_o) + unsigned(pc_alu));
 
   process(reset_i, pc_clk_i)
   begin
     if (reset_i = '0') then
       pc_o <= (others => '0');
     elsif rising_edge(pc_clk_i) then
-      pc_o <= next_ins_s;
+      pc_o <= next_ins;
     end if;
   end process;
 end Behavioral;

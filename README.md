@@ -24,13 +24,10 @@ This is actually getting confusing 😭 especially without an LSP.
 
 We don't need a good convention, we just need one.
 
-- Identifiers
-    - `NAME_i` - input port
-    - `NAME_o` - output port
-    - `NAME_s` - signal
-    - `NAME_t` - type
+- `NAME_i` - input port
+- `NAME_o` - output port
+- `NAME_t` - type
+- `NAME_inst` - component instance
 
-- Labels
-    - `NAME_u` - component instance
-    - `NAME_p` - process
-    - `NAME_g` - generate
+To also not confuse non-annotated identifiers with the annotated identifiers, we
+should not end a variable name with `_[^iot]`.

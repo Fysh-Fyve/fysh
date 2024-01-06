@@ -20,11 +20,11 @@ end control_fsm;
 
 architecture Behavioral of control_fsm is
 begin
-  drive_clock_p : process(clk_i)
+  drive_clock : process(clk_i)
   begin
     if rising_edge(clk_i) then
       pc_clk_o <= not pc_clk_o;
       ir_clk_o <= not ir_clk_o;
     end if;
-  end process drive_clock_p;
+  end process drive_clock;
 end Behavioral;

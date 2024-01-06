@@ -21,7 +21,7 @@ architecture Behavioral of register_file_tb is
       rs1_val_o, rs2_val_o : out std_ulogic_vector (31 downto 0));
   end component;
 begin
-  register_file_u : register_file port map(
+  register_file_inst : register_file port map(
     rd_clk_i  => rd_clk,
     reset_i   => reset,
     rd_i      => rd,
@@ -31,7 +31,7 @@ begin
     rs1_val_o => rs1_val,
     rs2_val_o => rs2_val);
 
-  clock_p : process
+  clock : process
   begin
     rd_clk <= '0';
     wait for 1 fs;
@@ -43,9 +43,9 @@ begin
       wait for 5 ns;
     end loop;
     wait;
-  end process clock_p;
+  end process clock;
 
-  reg_file_testing_p : process
+  reg_file_testing : process
     use ieee.numeric_std.all;
   begin
     reset  <= '1';
@@ -67,9 +67,9 @@ begin
     end loop;
 
     wait;
-  end process reg_file_testing_p;
+  end process reg_file_testing;
 
-  print_out_p : process (rd_clk)
+  print_out : process (rd_clk)
     use std.textio.all;
     variable my_line : line;
   begin
@@ -78,5 +78,5 @@ begin
     write(my_line, to_hstring(rs1_val), left, 10);
     write(my_line, to_hstring(rs2_val), left, 10);
     writeline(output, my_line);
-  end process print_out_p;
+  end process print_out;
 end Behavioral;

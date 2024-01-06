@@ -12,27 +12,27 @@ end register_file;
 
 architecture Behavioral of register_file is
   type reg_file_t is array (31 downto 0) of std_ulogic_vector(31 downto 0);  -- 32 32-bit registers
-  signal reg_file_s : reg_file_t;
+  signal reg_file : reg_file_t;
 begin
   registers_g :
   for i in 0 to 31 generate
-    register_write_p : process(reset_i, rd_clk_i)
+    register_write : process(reset_i, rd_clk_i)
     begin
       if (reset_i = '0') then
-        reg_file_s(i) <= (others => '0');
+        reg_file(i) <= (others => '0');
       elsif rising_edge(rd_clk_i) then
         if (i = to_integer(unsigned(rd_i))) then
-          reg_file_s(i) <= rd_val_i;
+          reg_file(i) <= rd_val_i;
         end if;
       end if;
-    end process register_write_p;
+    end process register_write;
   end generate;
 
-  register_read_p : process(rd_clk_i)
+  register_read : process(rd_clk_i)
   begin
     if rising_edge(rd_clk_i) then
-      rs1_val_o <= reg_file_s(to_integer(unsigned(rs1_i)));
-      rs2_val_o <= reg_file_s(to_integer(unsigned(rs2_i)));
+      rs1_val_o <= reg_file(to_integer(unsigned(rs1_i)));
+      rs2_val_o <= reg_file(to_integer(unsigned(rs2_i)));
     end if;
-  end process register_read_p;
+  end process register_read;
 end Behavioral;
