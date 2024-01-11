@@ -1,5 +1,7 @@
 # ECE 492 RISC-V Project
 
+![](https://raw.githubusercontent.com/cbebe/492-risc-v/master/risc.gif?raw=true)
+
 ## Prequisites
 
 ```
