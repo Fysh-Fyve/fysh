@@ -1,5 +1,9 @@
+--! \file mbr_sx.vhd
+--! \author Charles Ancheta
+--! @cond Doxygen_Suppress
 library ieee;
 use ieee.std_logic_1164.all;
+--! @endcond
 
 -- Takes a value from memory and outputs its sign-extended value
 entity mbr_sx is

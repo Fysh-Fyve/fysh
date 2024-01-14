@@ -1,6 +1,10 @@
+--! \file alu.vhd
+--! \author Charles Ancheta
+--! @cond Doxygen_Suppress
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+--! @endcond
 
 -- Before I forget and have to scour Google for this again
 -- https://nandland.com/common-vhdl-conversions/

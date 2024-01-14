@@ -1,5 +1,9 @@
+--! \file topmodule_tb.vhd
+--! \author Charles Ancheta
+--! @cond Doxygen_Suppress
 library ieee;
 use ieee.std_logic_1164.all;
+--! @endcond
 
 entity topmodule_tb is
 end topmodule_tb;

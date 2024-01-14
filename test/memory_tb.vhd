@@ -1,5 +1,9 @@
+--! \file memory_tb.vhd
+--! \author Charles Ancheta
+--! @cond Doxygen_Suppress
 library ieee;
 use ieee.std_logic_1164.all;
+--! @endcond
 
 entity memory_tb is
 end memory_tb;

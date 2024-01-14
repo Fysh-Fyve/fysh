@@ -1,5 +1,9 @@
+--! \file topmodule.vhd
+--! \author Charles Ancheta
+--! @cond Doxygen_Suppress
 library ieee;
 use ieee.std_logic_1164.all;
+--! @endcond
 
 entity topmodule is
   port (clk : in std_ulogic);

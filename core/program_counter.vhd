@@ -1,6 +1,10 @@
+--! \file program_counter.vhd
+--! \author Charles Ancheta
+--! @cond Doxygen_Suppress
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+--! @endcond
 
 entity program_counter is
   port (

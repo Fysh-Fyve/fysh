@@ -1,5 +1,9 @@
+--! \file register_file.vhd
+--! \author Charles Ancheta
+--! @cond Doxygen_Suppress
 library ieee;
 use ieee.std_logic_1164.all;
+--! @endcond
 
 entity register_file_tb is
 end register_file_tb;

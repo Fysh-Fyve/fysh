@@ -1,5 +1,9 @@
+--! \file imm_sx.vhd
+--! \author Charles Ancheta
+--! @cond Doxygen_Suppress
 library ieee;
 use ieee.std_logic_1164.all;
+--! @endcond
 
 -- Takes an immediate value from an instruction and outputs its sign-extended value
 entity imm_sx is
