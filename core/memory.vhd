@@ -18,7 +18,7 @@ entity memory is
     sx_size_i    : in std_ulogic_vector (2 downto 0);
     rd_sel_i     : in std_ulogic_vector (1 downto 0);  --! Register File write select
     alu_out_i    : in std_ulogic_vector (31 downto 0);  --! Output of the ALU.
-    pc_out_i        : in std_ulogic_vector (31 downto 0);  --! Output of the Program Counter. (same as above)
+    pc_out_i     : in std_ulogic_vector (31 downto 0);  --! Output of the Program Counter. (same as above)
     pc_alu_out_i : in std_ulogic_vector (31 downto 0);  --! Output of the Program Counter's ALU. (same as above)
 
     insn_o      : out std_ulogic_vector (31 downto 0);  --! Instruction Register output.
@@ -54,7 +54,7 @@ begin
     reg_val_2_o    => reg_val_2_o);
 
   with addr_sel_i select addr <=
-    pc_out_i           when '1',
+    pc_out_i        when '1',
     alu_out_i       when '0',
     (others => 'X') when others;
 

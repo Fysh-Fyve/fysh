@@ -52,7 +52,7 @@ architecture rtl of alu_control is
 begin
   imm_sx_inst : entity work.imm_sx(rtl) port map (
     instruction_i => instruction_i,
-    imm_x_o       => imm_ex);
+    imm_val_o     => imm_ex);
 
   program_counter_inst : entity work.program_counter(rtl) port map (
     pc_clk_i        => pc_clk,
