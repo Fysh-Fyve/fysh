@@ -13,7 +13,7 @@ use ieee.std_logic_1164.all;
 entity imm_sx is
   port (
     instruction_i : in  std_ulogic_vector (31 downto 0);  --! The 32-bit instruction.
-    imm_x_o       : out std_ulogic_vector (31 downto 0)); --! The immediate value, sign-extended.
+    imm_x_o       : out std_ulogic_vector (31 downto 0));  --! The immediate value, sign-extended.
 end imm_sx;
 
 architecture Behavioral of imm_sx is

@@ -13,9 +13,9 @@ end topmodule;
 architecture Behavioral of topmodule is
   component alu_control is
     port (
-      clk_i                            : in std_ulogic;
-      instruction_i                    : in std_ulogic_vector (31 downto 0);
-      reg_val_1_i, reg_val_2_i         : in std_ulogic_vector (31 downto 0); --! The values from selected registers.
+      clk_i                    : in std_ulogic;
+      instruction_i            : in std_ulogic_vector (31 downto 0);
+      reg_val_1_i, reg_val_2_i : in std_ulogic_vector (31 downto 0);  --! The values from selected registers.
 
       alu_o           : out std_ulogic_vector (31 downto 0);
       pc_o            : out std_ulogic_vector (31 downto 0);
@@ -36,7 +36,7 @@ architecture Behavioral of topmodule is
       rd_sel_i                                             : in std_ulogic_vector (1 downto 0);
       alu_i, pc_i, pc_alu_i                                : in std_ulogic_vector (31 downto 0);
 
-      insn_o          : out std_ulogic_vector (31 downto 0);
+      insn_o      : out std_ulogic_vector (31 downto 0);
       reg_val_1_o : out std_ulogic_vector (31 downto 0);
       reg_val_2_o : out std_ulogic_vector (31 downto 0));
   end component;
@@ -66,17 +66,17 @@ begin
     sx_size_o       => sx_size);
 
   memory_inst : component memory port map (
-    rd_clk_i        => rd_clk,
-    mem_clk_i       => mem_clk,
-    insn_clk_i      => ir_clk,
-    addr_sel_i      => addr_sel,
-    reset_i         => reset,
-    sx_size_i       => sx_size,
-    rd_sel_i        => rd_sel,
-    alu_i           => alu,
-    pc_i            => pc,
-    pc_alu_i        => pc_alu,
-    insn_o          => insn,
-    reg_val_1_o     => rs1_val,
-    reg_val_2_o     => rs2_val);
+    rd_clk_i    => rd_clk,
+    mem_clk_i   => mem_clk,
+    insn_clk_i  => ir_clk,
+    addr_sel_i  => addr_sel,
+    reset_i     => reset,
+    sx_size_i   => sx_size,
+    rd_sel_i    => rd_sel,
+    alu_i       => alu,
+    pc_i        => pc,
+    pc_alu_i    => pc_alu,
+    insn_o      => insn,
+    reg_val_1_o => rs1_val,
+    reg_val_2_o => rs2_val);
 end Behavioral;
