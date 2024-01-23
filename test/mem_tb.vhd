@@ -14,11 +14,6 @@ end mem_tb;
 -- replace with the real thing when synthesizing to hardware
 
 architecture Behavioral of mem_tb is
-  component mem is port (
-    d_i, read_addr_i, write_addr_i : in  std_ulogic_vector (31 downto 0);
-    write_en_i                     : in  std_ulogic;
-    d_o                            : out std_ulogic_vector (31 downto 0));
-  end component;
   signal d_in, read_addr, write_addr : std_ulogic_vector (31 downto 0);
   signal write_en                    : std_ulogic;
   signal d_out                       : std_ulogic_vector (31 downto 0);
@@ -34,14 +29,14 @@ architecture Behavioral of mem_tb is
     writeline(output, my_line);
   end procedure print;
 begin
-  mem_inst : component mem port map (
+  mem_inst : entity work.mem(rtl) port map (
     d_i          => d_in,
     read_addr_i  => read_addr,
     write_addr_i => write_addr,
     write_en_i   => write_en,
     d_o          => d_out);
 
-  print : process
+  print_mem : process
   begin
     read_addr <= (others => '0');
     print;
@@ -50,5 +45,5 @@ begin
       print;
     end loop;
     wait;
-  end process print;
+  end process print_mem;
 end Behavioral;

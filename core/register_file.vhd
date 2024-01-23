@@ -23,7 +23,7 @@ entity register_file is
     reg_val_2_o    : out std_ulogic_vector (31 downto 0));  --! Value of Register Select 2
 end register_file;
 
-architecture Behavioral of register_file is
+architecture rtl of register_file is
   type reg_file_t is array (31 downto 0) of std_ulogic_vector(31 downto 0);  -- 32 32-bit registers
   signal reg_file : reg_file_t;
 begin
@@ -48,4 +48,4 @@ begin
       reg_val_2_o <= reg_file(to_integer(unsigned(reg_sel_2_i)));
     end if;
   end process register_read;
-end Behavioral;
+end rtl;

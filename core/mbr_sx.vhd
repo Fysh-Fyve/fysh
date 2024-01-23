@@ -15,6 +15,6 @@ entity mbr_sx is
     sx_o   : out std_ulogic_vector (31 downto 0));
 end mbr_sx;
 
-architecture Behavioral of mbr_sx is
+architecture rtl of mbr_sx is
 begin
-end Behavioral;
+end rtl;

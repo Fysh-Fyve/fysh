@@ -16,7 +16,7 @@ entity mem is
     d_o                            : out std_ulogic_vector (31 downto 0));
 end mem;
 
-architecture Behavioral of mem is
+architecture rtl of mem is
   type memory_t is array (5 downto 0) of std_ulogic_vector(31 downto 0);  -- 6 words
   signal memory : memory_t := (
     0 => x"000087b7",
@@ -27,4 +27,4 @@ architecture Behavioral of mem is
     5 => x"402a00b3");
 begin
   d_o <= memory(to_integer(unsigned(read_addr_i(31 downto 2))));
-end Behavioral;
+end rtl;

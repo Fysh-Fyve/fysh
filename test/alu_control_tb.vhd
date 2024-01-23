@@ -10,19 +10,6 @@ entity alu_control_tb is
 end alu_control_tb;
 
 architecture Behavioral of alu_control_tb is
-  component alu_control is
-    port (
-      clk_i                            : in std_ulogic;
-      instruction_i                    : in std_ulogic_vector (31 downto 0);
-      reg_sel_1_val_i, reg_sel_2_val_i : in std_ulogic_vector (31 downto 0);
-
-      alu_o, pc_o, pc_alu_result_o  : out std_ulogic_vector (31 downto 0);
-      reset_o, addr_sel_o           : out std_ulogic;
-      rd_clk_o, mem_clk_o, ir_clk_o : out std_ulogic;
-      rd_sel_o                      : out std_ulogic_vector (1 downto 0);
-      sx_size_o                     : out std_ulogic_vector (2 downto 0));
-  end component;
-
   signal insn             : std_ulogic_vector (31 downto 0) := (others => '0');
   signal rs1_val, rs2_val : std_ulogic_vector (31 downto 0) := (others => '0');
 
@@ -37,11 +24,11 @@ architecture Behavioral of alu_control_tb is
   signal reset, addr_sel : std_ulogic                      := '0';
   signal sx_size         : std_ulogic_vector (2 downto 0)  := (others => '0');
 begin
-  alu_control_inst : component alu_control port map (
+  alu_control_inst : entity work.alu_control(rtl) port map (
     clk_i           => clk,
     instruction_i   => insn,
-    reg_sel_1_val_i => rs1_val,
-    reg_sel_2_val_i => rs2_val,
+    reg_val_1_i     => rs1_val,
+    reg_val_2_i     => rs2_val,
     reset_o         => reset,
     alu_o           => alu,
     pc_o            => pc,

@@ -28,7 +28,7 @@ entity alu is
 end alu;
 
 
-architecture Behavioral of alu is
+architecture rtl of alu is
   signal add_sub_result   : signed (31 downto 0);
   signal left_shifted     : std_ulogic_vector (31 downto 0);
   signal right_shifted    : std_ulogic_vector (31 downto 0);
@@ -114,4 +114,4 @@ begin
   lt_signed_flag            <= less_than_signed(operand_a_i, operand_b_i);
   less_than_flag_o          <= lt_signed_flag;
   less_than_unsigned_flag_o <= lt_unsigned_flag;
-end Behavioral;
+end rtl;

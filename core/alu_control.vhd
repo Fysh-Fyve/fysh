@@ -15,7 +15,7 @@ entity alu_control is
     reg_val_1_i   : in std_ulogic_vector (31 downto 0);  --! Value from first selected register
     reg_val_2_i   : in std_ulogic_vector (31 downto 0);  --! Value from second selected register
 
-    rd_clk_o  : out std_ulogic;         --! register file clock signal 
+    rd_clk_o  : out std_ulogic;         --! register file clock signal
     mem_clk_o : out std_ulogic;         --! memory clock signal
     ir_clk_o  : out std_ulogic;         --! instruction register clock signal
 
@@ -25,54 +25,11 @@ entity alu_control is
 
     reset_o    : out std_ulogic;        --! Reset signal
     addr_sel_o : out std_ulogic;        --! ALU & PC address select signal
-    rd_sel_o   : out std_ulogic_vector (1 downto 0);  --! Register File write select 
-    sx_size_o  : out std_ulogic_vector (2 downto 0));  --! Memory fetch size 
+    rd_sel_o   : out std_ulogic_vector (1 downto 0);  --! Register File write select
+    sx_size_o  : out std_ulogic_vector (2 downto 0));  --! Memory fetch size
 end alu_control;
 
-architecture Behavioral of alu_control is
-  component control_fsm is port (
-    clk_i             : in std_ulogic;
-    eq_i, lt_i, ltu_i : in std_ulogic;
-    opcode_i          : in std_ulogic_vector (6 downto 0);
-    op_bits_i         : in std_ulogic_vector (2 downto 0);
-    sub_sra_i         : in std_ulogic;
-
-    -- Clock signals
-    mem_clk_o, rd_clk_o : out std_ulogic;
-    pc_clk_o, ir_clk_o  : out std_ulogic;
-
-    -- Select signals
-    addr_sel_o                  : out std_ulogic;
-    pc_alu_sel_o, pc_next_sel_o : out std_ulogic;
-    alu_a_sel_o, alu_b_sel_o    : out std_ulogic;
-
-    sub_sra_o            : out std_ulogic;
-    op_bits_o, sx_size_o : out std_ulogic_vector (2 downto 0);
-    rd_sel_o             : out std_ulogic_vector (1 downto 0);
-    reset_o              : out std_logic);
-  end component;
-
-  component alu is port (
-    operand_a_i, operand_b_i : in std_ulogic_vector (31 downto 0);
-    op_bits_i                : in std_ulogic_vector (2 downto 0);
-    sub_sra_i                : in std_ulogic;
-
-    alu_result_o                                              : out std_ulogic_vector (31 downto 0);
-    equal_flag_o, less_than_flag_o, less_than_unsigned_flag_o : out std_ulogic);
-  end component;
-
-  component imm_sx is port (
-    instruction_i : in  std_ulogic_vector (31 downto 0);
-    imm_x_o       : out std_ulogic_vector (31 downto 0));
-  end component;
-
-  component program_counter is port (
-    pc_clk_i, reset_i, pc_next_sel_i, pc_alu_sel_i : in std_ulogic;
-
-    imm_x_i, alu_i        : in  std_ulogic_vector (31 downto 0);
-    pc_o, pc_alu_result_o : out std_ulogic_vector (31 downto 0));
-  end component;
-
+architecture rtl of alu_control is
   -- Clock Signals
   signal pc_clk : std_ulogic := '0';
 
@@ -93,11 +50,11 @@ architecture Behavioral of alu_control is
   signal alu_a_sel : std_ulogic := '0';
   signal alu_b_sel : std_ulogic := '0';
 begin
-  imm_sx_inst : component imm_sx port map (
+  imm_sx_inst : entity work.imm_sx(rtl) port map (
     instruction_i => instruction_i,
     imm_x_o       => imm_ex);
 
-  program_counter_inst : component program_counter port map (
+  program_counter_inst : entity work.program_counter(rtl) port map (
     pc_clk_i        => pc_clk,
     reset_i         => reset_o,
     pc_next_sel_i   => pc_next_sel,
@@ -107,7 +64,7 @@ begin
     pc_o            => pc_o,
     pc_alu_result_o => pc_alu_result_o);
 
-  alu_inst : component alu port map (
+  alu_inst : entity work.alu(rtl) port map (
     operand_a_i               => alu_a_op,
     operand_b_i               => alu_b_op,
     op_bits_i                 => op_bits,
@@ -117,7 +74,7 @@ begin
     less_than_flag_o          => lt,
     less_than_unsigned_flag_o => ltu);
 
-  control_fsm_inst : component control_fsm port map(
+  control_fsm_inst : entity work.control_fsm(rtl) port map(
     clk_i     => clk_i,
     eq_i      => eq,
     lt_i      => lt,
@@ -150,4 +107,4 @@ begin
     reg_val_2_i     when '0',
     imm_ex          when '1',
     (others => 'X') when others;
-end Behavioral;
+end rtl;

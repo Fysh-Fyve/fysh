@@ -16,6 +16,6 @@ entity imm_sx is
     imm_x_o       : out std_ulogic_vector (31 downto 0));  --! The immediate value, sign-extended.
 end imm_sx;
 
-architecture Behavioral of imm_sx is
+architecture rtl of imm_sx is
 begin
-end Behavioral;
+end rtl;

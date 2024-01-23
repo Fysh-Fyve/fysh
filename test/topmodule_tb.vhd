@@ -10,10 +10,7 @@ entity topmodule_tb is
 end topmodule_tb;
 
 architecture Behavioral of topmodule_tb is
-  component topmodule is port (clk : in std_ulogic);
-  end component;
-
   signal clk : std_ulogic;
 begin
-  topmodule_inst : component topmodule port map (clk => clk);
+  topmodule_inst : entity work.topmodule(rtl) port map (clk => clk);
 end Behavioral;

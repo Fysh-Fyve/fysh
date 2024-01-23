@@ -1,8 +1,10 @@
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 VHDL_SRC := $(call rwildcard,core,*.vhd)
-VHDL_TESTS := $(call rwildcard,test,*.vhd)
+VHDL_TEST_SRC := $(call rwildcard,test,*.vhd)
+VHDL_TEST_BENCHES := $(patsubst test/%.vhd, %, $(VHDL_TEST_SRC))
+FMT_SRC := $(patsubst %, fmt-%,$(VHDL_SRC) $(VHDL_TEST_SRC))
 
-FMT_SRC := $(patsubst %, fmt-%,$(VHDL_SRC) $(VHDL_TESTS))
+test: $(VHDL_TEST_BENCHES)
 
 clean:
 	rm -fv **/*~

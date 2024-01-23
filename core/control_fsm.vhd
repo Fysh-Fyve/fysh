@@ -27,7 +27,7 @@ entity control_fsm is
     reset_o                                 : out std_logic);
 end control_fsm;
 
-architecture Behavioral of control_fsm is
+architecture rtl of control_fsm is
   signal pc_clk, ir_clk : std_ulogic := '0';
 begin
   drive_clock : process(clk_i)
@@ -39,4 +39,4 @@ begin
     pc_clk_o <= pc_clk;
     ir_clk_o <= ir_clk;
   end process drive_clock;
-end Behavioral;
+end rtl;

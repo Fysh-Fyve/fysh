@@ -14,13 +14,6 @@ architecture Behavioral of alu_tb is
   signal a, b, q              : std_ulogic_vector (31 downto 0) := (others => '0');
   signal op_bits              : std_ulogic_vector (2 downto 0);
   signal eq, lt, ltu, sub_sra : std_ulogic;
-  component alu is port (
-    operand_a_i, operand_b_i                                  : in  std_ulogic_vector (31 downto 0);
-    op_bits_i                                                 : in  std_ulogic_vector (2 downto 0);
-    sub_sra_i                                                 : in  std_ulogic;
-    alu_result_o                                              : out std_ulogic_vector (31 downto 0);
-    equal_flag_o, less_than_flag_o, less_than_unsigned_flag_o : out std_ulogic);
-  end component;
 
   procedure print_result(lbl : string) is
     use std.textio.all;
@@ -38,7 +31,7 @@ architecture Behavioral of alu_tb is
     writeline(output, my_line);
   end procedure print_result;
 begin
-  alu_inst : component alu port map (
+  alu_inst : entity work.alu(rtl) port map (
     operand_a_i               => a,
     operand_b_i               => b,
     op_bits_i                 => op_bits,

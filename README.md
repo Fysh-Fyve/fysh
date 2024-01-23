@@ -22,6 +22,10 @@ Then run:
 make -j fmt
 ```
 
+## Testing
+
+Simply run `make test` to run all testbenches in `test/`.
+
 ## Naming Convention
 
 This is actually getting confusing 😭 especially without an LSP.

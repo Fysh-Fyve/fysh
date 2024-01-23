@@ -25,7 +25,7 @@ entity program_counter is
     pc_alu_result_o : out std_ulogic_vector (31 downto 0));  --! Program Counter ALU Result.
 end program_counter;
 
-architecture Behavioral of program_counter is
+architecture rtl of program_counter is
   signal next_ins, pc_alu, pc_increment : std_ulogic_vector(31 downto 0);
 begin
   pc_increment <= x"00000004";          -- hardwire pc_increment to 4
@@ -50,4 +50,4 @@ begin
       pc_o <= next_ins;
     end if;
   end process;
-end Behavioral;
+end rtl;
