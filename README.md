@@ -2,7 +2,8 @@
 
 ![](https://raw.githubusercontent.com/cbebe/dotfiles/master/risc.gif)
 
-Current schematic is sourced from [here](https://www.youtube.com/watch?v=zW2Pmki81ow)
+Current schematic is sourced from
+[here](https://www.youtube.com/watch?v=zW2Pmki81ow)
 
 ## Prequisites
 
