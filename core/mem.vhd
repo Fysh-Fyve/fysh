@@ -8,7 +8,6 @@ use ieee.numeric_std.all;
 
 --! Mock Implementation of memory.\n
 
---! TODO: Replace with the real thing when synthesizing to hardware
 entity mem is
   port (
     d_i, read_addr_i, write_addr_i : in  std_ulogic_vector (31 downto 0);

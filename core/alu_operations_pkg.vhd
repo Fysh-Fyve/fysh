@@ -7,13 +7,13 @@ use ieee.std_logic_1164.all;
 
 --! A package containing constants representing the ALU operations.\n
 package alu_operations is
-  subtype op is std_ulogic_vector (2 downto 0);
-  constant OP_ADD_SUB            : op := "000";  --! A + B or A - B
-  constant OP_SHIFT_LEFT         : op := "001";  --! A << B(4:0)
-  constant OP_LESS_THAN          : op := "010";  --! A < B (signed)
-  constant OP_LESS_THAN_UNSIGNED : op := "011";  --! A < B (unsigned)
-  constant OP_XOR                : op := "100";  --! A ^ B
-  constant OP_SHIFT_RIGHT        : op := "101";  --! A >> B(4:0)
-  constant OP_OR                 : op := "110";  --! A | B
-  constant OP_AND                : op := "111";  --! A & B
+  subtype op_t is std_ulogic_vector (2 downto 0);
+  constant OP_ADD_SUB            : op_t := "000";  --! A + B or A - B
+  constant OP_SHIFT_LEFT         : op_t := "001";  --! A << B(4:0)
+  constant OP_LESS_THAN          : op_t := "010";  --! A < B (signed)
+  constant OP_LESS_THAN_UNSIGNED : op_t := "011";  --! A < B (unsigned)
+  constant OP_XOR                : op_t := "100";  --! A ^ B
+  constant OP_SHIFT_RIGHT        : op_t := "101";  --! A >> B(4:0)
+  constant OP_OR                 : op_t := "110";  --! A | B
+  constant OP_AND                : op_t := "111";  --! A & B
 end package alu_operations;
