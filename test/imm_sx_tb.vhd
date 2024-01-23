@@ -10,7 +10,7 @@ use ieee.numeric_std.all;
 entity imm_sx_tb is
 end imm_sx_tb;
 
-architecture Behavioral of imm_sx_tb is
+architecture test_bench of imm_sx_tb is
   signal instruction : std_ulogic_vector (31 downto 0);
   signal imm_val     : std_ulogic_vector (31 downto 0);
 
@@ -41,9 +41,9 @@ begin
     variable op       : std_ulogic_vector(6 downto 0);
     variable expected : std_ulogic_vector(31 downto 0);
   begin
-    rs1         := "00000";
-    rs2         := "00001";
-    rd          := "00010";
+    rs1         := "00001";
+    rs2         := "00010";
+    rd          := "00011";
     -- LUI, AUIPC
     op          := "0110111";
     instruction <= x"BEEFD" & rd & op;
@@ -75,4 +75,4 @@ begin
 
     wait;
   end process imm_test_cases;
-end Behavioral;
+end test_bench;

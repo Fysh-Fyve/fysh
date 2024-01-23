@@ -9,7 +9,7 @@ use ieee.std_logic_1164.all;
 entity register_file_tb is
 end register_file_tb;
 
-architecture Behavioral of register_file_tb is
+architecture test_bench of register_file_tb is
   signal loop_count    : integer    := 0;
   signal reset, rd_clk : std_ulogic := '0';
 
@@ -76,4 +76,4 @@ begin
     write(my_line, to_hstring(rs2_val), left, 10);
     writeline(output, my_line);
   end process print_out;
-end Behavioral;
+end test_bench;

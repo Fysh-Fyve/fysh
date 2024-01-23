@@ -9,7 +9,7 @@ use ieee.std_logic_1164.all;
 entity memory_tb is
 end memory_tb;
 
-architecture Behavioral of memory_tb is
+architecture test_bench of memory_tb is
   signal rd_clk, mem_clk, insn_clk, addr_sel, reset : std_ulogic;
   signal sx_size                                    : std_ulogic_vector (2 downto 0);
   signal rd_sel                                     : std_ulogic_vector (1 downto 0);
@@ -32,4 +32,4 @@ begin
     insn_o       => insn,
     reg_val_1_o  => rs1_val,
     reg_val_2_o  => rs2_val);
-end Behavioral;
+end test_bench;

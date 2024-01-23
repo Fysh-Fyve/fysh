@@ -9,7 +9,7 @@ use ieee.std_logic_1164.all;
 entity alu_control_tb is
 end alu_control_tb;
 
-architecture Behavioral of alu_control_tb is
+architecture test_bench of alu_control_tb is
   signal insn             : std_ulogic_vector (31 downto 0) := (others => '0');
   signal rs1_val, rs2_val : std_ulogic_vector (31 downto 0) := (others => '0');
 
@@ -39,4 +39,4 @@ begin
     mem_clk_o       => mem_clk,
     rd_sel_o        => rd_sel,
     sx_size_o       => sx_size);
-end Behavioral;
+end test_bench;

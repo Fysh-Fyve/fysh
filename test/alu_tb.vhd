@@ -10,7 +10,7 @@ use ieee.numeric_std.all;
 entity alu_tb is
 end alu_tb;
 
-architecture Behavioral of alu_tb is
+architecture test_bench of alu_tb is
   signal a, b, q              : std_ulogic_vector (31 downto 0) := (others => '0');
   signal op_bits              : std_ulogic_vector (2 downto 0);
   signal eq, lt, ltu, sub_sra : std_ulogic;
@@ -83,4 +83,4 @@ begin
     a <= x"7FFFFFFF"; b <= x"FFFFFFFF"; print_result("sltu");
     wait;
   end process;
-end Behavioral;
+end test_bench;

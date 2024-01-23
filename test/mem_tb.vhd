@@ -13,7 +13,7 @@ end mem_tb;
 -- Mock Implementation of memory
 -- replace with the real thing when synthesizing to hardware
 
-architecture Behavioral of mem_tb is
+architecture test_bench of mem_tb is
   signal d_in, read_addr, write_addr : std_ulogic_vector (31 downto 0);
   signal write_en                    : std_ulogic;
   signal d_out                       : std_ulogic_vector (31 downto 0);
@@ -46,4 +46,4 @@ begin
     end loop;
     wait;
   end process print_mem;
-end Behavioral;
+end test_bench;
