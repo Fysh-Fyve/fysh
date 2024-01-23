@@ -12,23 +12,17 @@ use ieee.numeric_std.all;
 --! when branching.
 entity program_counter is
   port (
-    --! Clock Signal for the Program Counter.
-    pc_clk_i      : in std_ulogic;
-    --! Reset Signal.
-    reset_i       : in std_ulogic;
-    --! Flag to determine the next value of the Program Counter.
-    pc_next_sel_i : in std_ulogic;
-    --! Flag to increment the value of PC with either an immediate value or 4.
-    pc_alu_sel_i  : in std_ulogic;
+    
+    pc_clk_i      : in std_ulogic; --! Program Counter Clock Signal.
+    reset_i       : in std_ulogic; --! Reset Signal.
+    pc_next_sel_i : in std_ulogic; --! Flag for selecting the next instruction.
+    pc_alu_sel_i  : in std_ulogic; --! Flag to increment the value of PC with either an immediate value or 4.
 
-    --! The immediate value by which the PC will be incremented.
-    imm_x_i         : in  std_ulogic_vector (31 downto 0);
-    --! Output from the ALU.
-    alu_i           : in  std_ulogic_vector (31 downto 0);
-    --! The Program Count.
-    pc_o            : out std_ulogic_vector (31 downto 0);
-    --! The result of the Program Counter's ALU.
-    pc_alu_result_o : out std_ulogic_vector (31 downto 0));
+    imm_x_i         : in  std_ulogic_vector (31 downto 0); -- PC increment immediate value.
+    alu_i           : in  std_ulogic_vector (31 downto 0); --! ALU Output. (use better name such as alu_out_i)
+  
+    pc_o            : out std_ulogic_vector (31 downto 0);  --! Program Counter
+    pc_alu_result_o : out std_ulogic_vector (31 downto 0)); --! Program Counter ALU Result.
 end program_counter;
 
 architecture Behavioral of program_counter is

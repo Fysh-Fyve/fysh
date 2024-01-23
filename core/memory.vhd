@@ -9,32 +9,22 @@ use ieee.std_logic_1164.all;
 
 entity memory is
   port (
-    --! Clock signal for the Register File.
-    rd_clk_i   : in std_ulogic;
-    --! Clock signal for the Memory.
-    mem_clk_i  : in std_ulogic;
-    --! Clock signal for the Instruction Register.
-    insn_clk_i : in std_ulogic;
-    --! Flag to select the address either from the ALU or the PC.
-    addr_sel_i : in std_ulogic;
-    --! The reset signal.
-    reset_i    : in std_ulogic;
+    
+    rd_clk_i   : in std_ulogic; --!  Register File clock signal
+    mem_clk_i  : in std_ulogic; --! Memory clock signal
+    insn_clk_i : in std_ulogic; --! Instruction Register clock signal
+    
+    addr_sel_i : in std_ulogic; --! ALU & PC address select signal
+    reset_i    : in std_ulogic; --! Reset signal
     sx_size_i  : in std_ulogic_vector (2 downto 0);
-    --! Flags to select the value to be written to the Register File.
-    rd_sel_i   : in std_ulogic_vector (1 downto 0);
-    --! Output of the ALU.
-    alu_i      : in std_ulogic_vector (31 downto 0);
-    --! Output of the Program Counter.
-    pc_i       : in std_ulogic_vector (31 downto 0);
-    --! Output of the Program Counter's ALU.
-    pc_alu_i   : in std_ulogic_vector (31 downto 0);
+    rd_sel_i   : in std_ulogic_vector (1 downto 0); --! Register File write select
+    alu_i      : in std_ulogic_vector (31 downto 0); --! Output of the ALU. (Hella confusing, ALU output is called alu_i????? alu_out_i would be better)
+    pc_i       : in std_ulogic_vector (31 downto 0); --! Output of the Program Counter. (same as above)
+    pc_alu_i   : in std_ulogic_vector (31 downto 0); --! Output of the Program Counter's ALU. (same as above)
 
-    --! Read 32-bit instruction from memory.
-    insn_o          : out std_ulogic_vector (31 downto 0);
-    --! First selected value from the Register File.
-    reg_sel_1_val_o : out std_ulogic_vector (31 downto 0);
-    --! Second selected value from the Register File.
-    reg_sel_2_val_o : out std_ulogic_vector (31 downto 0));
+    insn_o      : out std_ulogic_vector (31 downto 0);  --! Instruction Register output.
+    reg_val_1_o : out std_ulogic_vector (31 downto 0);  --! First selected register value
+    reg_val_2_o : out std_ulogic_vector (31 downto 0)); --! Second selected register value
 end memory;
 
 architecture Behavioral of memory is
@@ -60,8 +50,8 @@ architecture Behavioral of memory is
       reg_sel_2_i : in std_ulogic_vector (4 downto 0);  -- Register Source 2
 
       dest_reg_val_i  : in  std_ulogic_vector (31 downto 0);
-      reg_sel_1_val_o : out std_ulogic_vector (31 downto 0);
-      reg_sel_2_val_o : out std_ulogic_vector (31 downto 0));
+      reg_val_1_o : out std_ulogic_vector (31 downto 0);
+      reg_val_2_o : out std_ulogic_vector (31 downto 0));
   end component;
 
   signal rd_val                : std_ulogic_vector (31 downto 0);
@@ -72,7 +62,7 @@ begin
     read_addr_i  => addr,
     write_addr_i => addr,
     write_en_i   => mem_clk_i,
-    d_i          => reg_sel_2_val_o,
+    d_i          => reg_val_2_o,
     d_o          => mem_out);
 
   mbr_sx_inst : component mbr_sx port map (
@@ -87,8 +77,8 @@ begin
     reg_sel_1_i     => insn_o(19 downto 15),
     reg_sel_2_i     => insn_o(24 downto 20),
     dest_reg_val_i  => rd_val,
-    reg_sel_1_val_o => reg_sel_1_val_o,
-    reg_sel_2_val_o => reg_sel_2_val_o);
+    reg_val_1_o => reg_val_1_o,
+    reg_val_2_o => reg_val_2_o);
 
   with addr_sel_i select addr <=
     pc_i            when '1',

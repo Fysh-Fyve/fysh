@@ -13,22 +13,14 @@ use ieee.numeric_std.all;
 --! while `dest_reg_i` determines the register to be written to by `dest_reg_val_i`.
 entity register_file is
   port (
-    --! Register File Clock Signal.
-    rd_clk_i        : in  std_ulogic;
-    --! Reset Signal.
-    reset_i         : in  std_ulogic;
-    --! Destination Register.
-    dest_reg_i      : in  std_ulogic_vector (4 downto 0);
-    --! Register Select 1.
-    reg_sel_1_i     : in  std_ulogic_vector (4 downto 0);
-    --! Register Select 2.
-    reg_sel_2_i     : in  std_ulogic_vector (4 downto 0);
-    --! Value to write to the Destination Register.
-    dest_reg_val_i  : in  std_ulogic_vector (31 downto 0);
-    --! Value of Register Select 1.
-    reg_sel_1_val_o : out std_ulogic_vector (31 downto 0);
-    --! Value of Register Select 2 Value.
-    reg_sel_2_val_o : out std_ulogic_vector (31 downto 0));
+    rd_clk_i        : in  std_ulogic; --! Register File Clock Signal
+    reset_i         : in  std_ulogic; --! Reset Signal
+    dest_reg_i      : in  std_ulogic_vector (4 downto 0);  --! Destination Register
+    reg_sel_1_i     : in  std_ulogic_vector (4 downto 0);  --! First Register Select
+    reg_sel_2_i     : in  std_ulogic_vector (4 downto 0);  --! Second Register Select
+    dest_reg_val_i  : in  std_ulogic_vector (31 downto 0); --! Value to write to the Destination Register
+    reg_val_1_o : out std_ulogic_vector (31 downto 0);     --! Value of Register Select 1
+    reg_val_2_o : out std_ulogic_vector (31 downto 0));    --! Value of Register Select 2
 end register_file;
 
 architecture Behavioral of register_file is
@@ -52,8 +44,8 @@ begin
   register_read : process(rd_clk_i)
   begin
     if rising_edge(rd_clk_i) then
-      reg_sel_1_val_o <= reg_file(to_integer(unsigned(reg_sel_1_i)));
-      reg_sel_2_val_o <= reg_file(to_integer(unsigned(reg_sel_2_i)));
+      reg_val_1_o <= reg_file(to_integer(unsigned(reg_sel_1_i)));
+      reg_val_2_o <= reg_file(to_integer(unsigned(reg_sel_2_i)));
     end if;
   end process register_read;
 end Behavioral;

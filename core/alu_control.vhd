@@ -10,37 +10,23 @@ use ieee.std_logic_1164.all;
 --! Also includes the Program Counter and the Immediate Value sign extender.
 entity alu_control is
   port (
-    --! The clock signal.
-    clk_i           : in std_ulogic;
-    --! The 32-bit instruction.
-    instruction_i   : in std_ulogic_vector (31 downto 0);
-    --! The first selected value from the Register File.
-    reg_sel_1_val_i : in std_ulogic_vector (31 downto 0);
-    --! The second selected value from the Register File.
-    reg_sel_2_val_i : in std_ulogic_vector (31 downto 0);
+    clk_i           : in std_ulogic; --! Clock signal.
+    instruction_i   : in std_ulogic_vector (31 downto 0); --! Instruction to be executed.
+    reg_val_1_i : in std_ulogic_vector (31 downto 0);     --! Value from first selected register
+    reg_val_2_i : in std_ulogic_vector (31 downto 0);     --! Value from second selected register
 
-    --! Clock signal output that drives the register file.
-    rd_clk_o  : out std_ulogic;
-    --! Clock signal output that drives the memory.
-    mem_clk_o : out std_ulogic;
-    --! Clock signal output that drives the instruction register.
-    ir_clk_o  : out std_ulogic;
+    rd_clk_o  : out std_ulogic; --! register file clock signal 
+    mem_clk_o : out std_ulogic; --! memory clock signal
+    ir_clk_o  : out std_ulogic; --! instruction register clock signal
 
-    --! The output of the ALU.
-    alu_o           : out std_ulogic_vector (31 downto 0);
-    --! The output of the Program Counter.
-    pc_o            : out std_ulogic_vector (31 downto 0);
-    --! The output of the Program Counter's ALU.
-    pc_alu_result_o : out std_ulogic_vector (31 downto 0);
+    alu_o           : out std_ulogic_vector (31 downto 0); --! ALU output
+    pc_o            : out std_ulogic_vector (31 downto 0); --! Program Counter output
+    pc_alu_result_o : out std_ulogic_vector (31 downto 0); --! Program Counter's ALU output
 
-    --! The reset signal.
-    reset_o    : out std_ulogic;
-    --! Flag to select the read/write address either from the ALU or the PC.
-    addr_sel_o : out std_ulogic;
-    --! Determines what value is going to be written into the register file.
-    rd_sel_o   : out std_ulogic_vector (1 downto 0);
-    --! Determines the size of the value to be fetched from memory.
-    sx_size_o  : out std_ulogic_vector (2 downto 0));
+    reset_o    : out std_ulogic; --! Reset signal
+    addr_sel_o : out std_ulogic; --! ALU & PC address select signal
+    rd_sel_o   : out std_ulogic_vector (1 downto 0); --! Register File write select 
+    sx_size_o  : out std_ulogic_vector (2 downto 0)); --! Memory fetch size 
 end alu_control;
 
 architecture Behavioral of alu_control is
@@ -49,7 +35,7 @@ architecture Behavioral of alu_control is
     eq_i, lt_i, ltu_i       : in std_ulogic;
     opcode_i                : in std_ulogic_vector (6 downto 0);
     op_bits_i               : in std_ulogic_vector (2 downto 0);
-    add_shift_modify_flag_i : in std_ulogic;
+    sub_sra_i               : in std_ulogic;
 
     -- Clock signals
     mem_clk_o, rd_clk_o : out std_ulogic;
@@ -60,7 +46,7 @@ architecture Behavioral of alu_control is
     pc_alu_sel_o, pc_next_sel_o : out std_ulogic;
     alu_a_sel_o, alu_b_sel_o    : out std_ulogic;
 
-    add_shift_modify_flag_o : out std_ulogic;
+    sub_sra_o               : out std_ulogic;
     op_bits_o, sx_size_o    : out std_ulogic_vector (2 downto 0);
     rd_sel_o                : out std_ulogic_vector (1 downto 0);
     reset_o                 : out std_logic);
@@ -69,7 +55,7 @@ architecture Behavioral of alu_control is
   component alu is port (
     operand_a_i, operand_b_i : in std_ulogic_vector (31 downto 0);
     op_bits_i                : in std_ulogic_vector (2 downto 0);
-    add_shift_modify_flag_i  : in std_ulogic;
+    sub_sra_i                : in std_ulogic;
 
     alu_result_o                                              : out std_ulogic_vector (31 downto 0);
     equal_flag_o, less_than_flag_o, less_than_unsigned_flag_o : out std_ulogic);
@@ -93,7 +79,7 @@ architecture Behavioral of alu_control is
   -- Select signals
   signal pc_next_sel           : std_ulogic                     := '0';
   signal pc_alu_sel            : std_ulogic                     := '0';
-  signal add_shift_modify_flag : std_ulogic                     := '0';
+  signal sub_sra               : std_ulogic                     := '0';
   signal op_bits               : std_ulogic_vector (2 downto 0) := (others => '0');
 
   -- Result signals
@@ -125,7 +111,7 @@ begin
     operand_a_i               => alu_a_op,
     operand_b_i               => alu_b_op,
     op_bits_i                 => op_bits,
-    add_shift_modify_flag_i   => add_shift_modify_flag,
+    sub_sra_i                 => sub_sra,
     alu_result_o              => alu_o,
     equal_flag_o              => eq,
     less_than_flag_o          => lt,
@@ -138,9 +124,9 @@ begin
     ltu_i                   => ltu,
     opcode_i                => instruction_i(6 downto 0),
     op_bits_i               => instruction_i(14 downto 12),
-    add_shift_modify_flag_i => instruction_i(30),
+    sub_sra_i               => instruction_i(30),
 
-    add_shift_modify_flag_o => add_shift_modify_flag,
+    sub_sra_o               => sub_sra,
     op_bits_o               => op_bits,
     sx_size_o               => sx_size_o,
     addr_sel_o              => addr_sel_o,
@@ -156,12 +142,12 @@ begin
     reset_o                 => reset_o);
 
   with alu_a_sel select alu_a_op <=
-    reg_sel_1_val_i when '0',
+    reg_val_1_i when '0',
     pc_o            when '1',
     (others => 'X') when others;
 
   with alu_b_sel select alu_b_op <=
-    reg_sel_2_val_i when '0',
+    reg_val_2_i when '0',
     imm_ex          when '1',
     (others => 'X') when others;
 end Behavioral;

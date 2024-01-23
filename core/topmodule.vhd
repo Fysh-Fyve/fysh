@@ -15,7 +15,7 @@ architecture Behavioral of topmodule is
     port (
       clk_i                            : in std_ulogic;
       instruction_i                    : in std_ulogic_vector (31 downto 0);
-      reg_sel_1_val_i, reg_sel_2_val_i : in std_ulogic_vector (31 downto 0);
+      reg_val_1_i, reg_val_2_i         : in std_ulogic_vector (31 downto 0); --! The values from selected registers.
 
       alu_o           : out std_ulogic_vector (31 downto 0);
       pc_o            : out std_ulogic_vector (31 downto 0);
@@ -37,8 +37,8 @@ architecture Behavioral of topmodule is
       alu_i, pc_i, pc_alu_i                                : in std_ulogic_vector (31 downto 0);
 
       insn_o          : out std_ulogic_vector (31 downto 0);
-      reg_sel_1_val_o : out std_ulogic_vector (31 downto 0);
-      reg_sel_2_val_o : out std_ulogic_vector (31 downto 0));
+      reg_val_1_o : out std_ulogic_vector (31 downto 0);
+      reg_val_2_o : out std_ulogic_vector (31 downto 0));
   end component;
 
   signal insn             : std_ulogic_vector (31 downto 0) := (others => '0');
@@ -52,8 +52,8 @@ begin
   alu_control_inst : component alu_control port map (
     clk_i           => clk,
     instruction_i   => insn,
-    reg_sel_1_val_i => rs1_val,
-    reg_sel_2_val_i => rs2_val,
+    reg_val_1_i     => rs1_val,
+    reg_val_2_i     => rs2_val,
     alu_o           => alu,
     pc_o            => pc,
     pc_alu_result_o => pc_alu,
@@ -77,6 +77,6 @@ begin
     pc_i            => pc,
     pc_alu_i        => pc_alu,
     insn_o          => insn,
-    reg_sel_1_val_o => rs1_val,
-    reg_sel_2_val_o => rs2_val);
+    reg_val_1_o     => rs1_val,
+    reg_val_2_o     => rs2_val);
 end Behavioral;
