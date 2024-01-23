@@ -5,7 +5,9 @@ library ieee;
 use ieee.std_logic_1164.all;
 --! @endcond
 
--- Takes a value from memory and outputs its sign-extended value
+--! Takes a value from memory and outputs its sign-extended value.\n
+
+--! TODO: Implement
 entity mbr_sx is
   port (
     mbr_i  : in  std_ulogic_vector (31 downto 0);

@@ -5,6 +5,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 --! @endcond
 
+--! Test bench for the register file.
 entity register_file_tb is
 end register_file_tb;
 
@@ -19,21 +20,21 @@ architecture Behavioral of register_file_tb is
 
   component register_file is
     port (
-      rd_clk_i, reset_i    : in  std_ulogic;
-      rd_i, rs1_i, rs2_i   : in  std_ulogic_vector (4 downto 0);
-      rd_val_i             : in  std_ulogic_vector (31 downto 0);
-      rs1_val_o, rs2_val_o : out std_ulogic_vector (31 downto 0));
+      rd_clk_i, reset_i                    : in  std_ulogic;
+      dest_reg_i, reg_sel_1_i, reg_sel_2_i : in  std_ulogic_vector (4 downto 0);
+      dest_reg_val_i                       : in  std_ulogic_vector (31 downto 0);
+      reg_sel_1_val_o, reg_sel_2_val_o     : out std_ulogic_vector (31 downto 0));
   end component;
 begin
   register_file_inst : register_file port map(
-    rd_clk_i  => rd_clk,
-    reset_i   => reset,
-    rd_i      => rd,
-    rs1_i     => rs1,
-    rs2_i     => rs2,
-    rd_val_i  => rd_val,
-    rs1_val_o => rs1_val,
-    rs2_val_o => rs2_val);
+    rd_clk_i        => rd_clk,
+    reset_i         => reset,
+    dest_reg_i      => rd,
+    reg_sel_1_i     => rs1,
+    reg_sel_2_i     => rs2,
+    dest_reg_val_i  => rd_val,
+    reg_sel_1_val_o => rs1_val,
+    reg_sel_2_val_o => rs2_val);
 
   clock : process
   begin

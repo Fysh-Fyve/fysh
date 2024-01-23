@@ -5,6 +5,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 --! @endcond
 
+--! Test bench for the top module.
 entity topmodule_tb is
 end topmodule_tb;
 

@@ -10,11 +10,17 @@ clean:
 %_tb: test/%_tb.vhd core/%.vhd
 	ghdl -c --std=08 $^ -r $@
 
+ALU := core/alu.vhd \
+	core/alu_operations_pkg.vhd
+
 ALU_CONTROL := core/alu_control.vhd \
 	core/imm_sx.vhd \
-	core/alu.vhd \
+	$(ALU) \
 	core/program_counter.vhd \
 	core/control_fsm.vhd
+
+alu_tb: test/alu_tb.vhd $(ALU)
+	ghdl -c --std=08 $^ -r $@
 
 alu_control_tb: test/alu_control_tb.vhd $(ALU_CONTROL)
 	ghdl -c --std=08 $^ -r $@
