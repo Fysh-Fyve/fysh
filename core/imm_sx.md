@@ -1,0 +1,52 @@
+[x] 01101 lui
+[x] 00101 auipc
+[x] 00100 addi
+[x] 00100 slti
+[x] 00100 sltiu
+[x] 00100 xori
+[x] 00100 ori
+[x] 00100 andi
+[x] 00100 slli
+[x] 00100 srli
+[x] 00100 srai
+[ ] 01100 add -- not needed
+[ ] 01100 sub -- not needed
+[ ] 01100 sll -- not needed
+[ ] 01100 slt -- not needed
+[ ] 01100 sltu -- not needed
+[ ] 01100 xor -- not needed
+[ ] 01100 srl -- not needed
+[ ] 01100 sra -- not needed
+[ ] 01100 or -- not needed
+[ ] 01100 and -- not needed
+[ ] 00011 fence -- ??
+[ ] 00011 fence.i -- ??
+[ ] 11100 csrrw -- would we need CSRs?
+[ ] 11100 csrrs -- would we need CSRs?
+[ ] 11100 csrrc -- would we need CSRs?
+[ ] 11100 csrrwi -- would we need CSRs?
+[ ] 11100 csrrsi -- would we need CSRs?
+[ ] 11100 csrrci -- would we need CSRs?
+[ ] 11100 ecall
+[ ] 11100 ebreak
+[ ] 11100 uret
+[ ] 11100 sret
+[ ] 11100 mret
+[ ] 11100 wfi
+[ ] 11100 sfence.vma
+[x] 00000 lb
+[x] 00000 lh
+[x] 00000 lw
+[x] 00000 lbu
+[x] 00000 lhu
+[x] 01000 sb
+[x] 01000 sh
+[x] 01000 sw
+[x] 11011 jal
+[x] 11001 jalr
+[x] 11000 beq
+[x] 11000 bne
+[x] 11000 blt
+[x] 11000 bge
+[x] 11000 bltu
+[x] 11000 bgeu
