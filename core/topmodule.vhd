@@ -44,7 +44,7 @@ begin
     sx_size_i    => sx_size,
     rd_sel_i     => rd_sel,
     alu_out_i    => alu,
-    pc_i         => pc,
+    pc_out_i        => pc,
     pc_alu_out_i => pc_alu,
     insn_o       => insn,
     reg_val_1_o  => rs1_val,
