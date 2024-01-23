@@ -9,8 +9,9 @@ use ieee.numeric_std.all;
 --! Register File. Contains the 32-bit registers of the CPU.\n
 
 --! The register file has one 32-bit input port and two 32-bit output ports.\n
---! `reg_sel_1_i` and `rs_2_i` selects the two values to be output from the registers
---! while `dest_reg_i` determines the register to be written to by `dest_reg_val_i`.
+--! `reg_sel_1_i` and `reg_sel_2_i` selects the two values to be output from the
+--! registers while `dest_reg_i` determines the register to be written to by
+--! `dest_reg_val_i`.
 entity register_file is
   port (
     rd_clk_i       : in  std_ulogic;    --! Register File Clock Signal
