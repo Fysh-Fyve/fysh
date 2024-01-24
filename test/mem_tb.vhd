@@ -23,10 +23,10 @@ architecture test_bench of mem_tb is
     variable my_line : line;
   begin
     wait for 1 ns;
-    -- write(my_line, to_hstring(read_addr), left, 8);
-    -- write(my_line, string'(" "));
-    -- write(my_line, to_hstring(d_out), left, 8);
-    -- writeline(output, my_line);
+  -- write(my_line, to_hstring(read_addr), left, 8);
+  -- write(my_line, string'(" "));
+  -- write(my_line, to_hstring(d_out), left, 8);
+  -- writeline(output, my_line);
   end procedure print;
 begin
   mem_inst : entity work.mem(rtl) port map (

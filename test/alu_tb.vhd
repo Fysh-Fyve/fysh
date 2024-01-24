@@ -20,16 +20,16 @@ architecture test_bench of alu_tb is
     variable my_line : line;
   begin
     wait for 1 ns;
-    -- ! Only on GHDL!
-    -- write(my_line, to_hstring(a), left, 8);
-    -- write(my_line, string'(" "));
-    -- write(my_line, lbl, left, 5);
-    -- write(my_line, to_hstring(b), left, 8);
-    -- write(my_line, string'(" = "));
-    -- write(my_line, to_hstring(q), left, 8);
-    -- write(my_line, string'(", eq_flag = "));
-    -- write(my_line, eq_flag, left, 8);
-    -- writeline(output, my_line);
+  -- ! Only on GHDL!
+  -- write(my_line, to_hstring(a), left, 8);
+  -- write(my_line, string'(" "));
+  -- write(my_line, lbl, left, 5);
+  -- write(my_line, to_hstring(b), left, 8);
+  -- write(my_line, string'(" = "));
+  -- write(my_line, to_hstring(q), left, 8);
+  -- write(my_line, string'(", eq_flag = "));
+  -- write(my_line, eq_flag, left, 8);
+  -- writeline(output, my_line);
   end procedure print_result;
 begin
   alu_inst : entity work.alu(rtl) port map (

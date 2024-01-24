@@ -29,7 +29,7 @@ architecture rtl of register_file is
   signal reg_file : reg_file_t;
 begin
   registers_g :
-  for i in 0 to 31 generate
+  for i in 1 to 31 generate
     register_write : process(reset_i, rd_clk_i)
     begin
       if (reset_i = '0') then
@@ -41,6 +41,10 @@ begin
       end if;
     end process register_write;
   end generate;
+
+  -- x0 is hardwired to zero
+  -- https://five-embeddev.com/riscv-isa-manual/latest/rv32.html#gprs
+  reg_file(0) <= (others => '0');
 
   register_read : process(rd_clk_i)
   begin

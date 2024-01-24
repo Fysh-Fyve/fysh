@@ -69,14 +69,14 @@ begin
   --! This only works on GHDL unfortunately.
   --! Well, you can directly inspect the waveforms on Vivado.
 
-  -- print_out : process (rd_clk)
-  --   use std.textio.all;
-  --   variable my_line : line;
-  -- begin
-  --   write(my_line, rd_clk, left, 5);
-  --   write(my_line, loop_count, left, 5);
-  --   write(my_line, to_hstring(rs1_val), left, 10);
-  --   write(my_line, to_hstring(rs2_val), left, 10);
-  --   writeline(output, my_line);
-  -- end process print_out;
+-- print_out : process (rd_clk)
+--   use std.textio.all;
+--   variable my_line : line;
+-- begin
+--   write(my_line, rd_clk, left, 5);
+--   write(my_line, loop_count, left, 5);
+--   write(my_line, to_hstring(rs1_val), left, 10);
+--   write(my_line, to_hstring(rs2_val), left, 10);
+--   writeline(output, my_line);
+-- end process print_out;
 end test_bench;

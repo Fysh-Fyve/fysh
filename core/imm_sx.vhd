@@ -19,43 +19,43 @@ architecture rtl of imm_sx is
   --! Take 20 bits from the instruction and output as the high 20 bits.
   --! The lower 12 bits are zeroed.\n
   --! ins[31:12] (20 bits) & (12:0 => 0)
-  signal imm_hi_20  : std_ulogic_vector (31 downto 0);
+  signal u_type : std_ulogic_vector (31 downto 0);
   --! Take 12 bits from the instruction and sign extend as the low 12 bits.\n
   --! sext ins[31:20] (12 bits)
-  signal imm_lo_12  : std_ulogic_vector (31 downto 0);
+  signal i_type : std_ulogic_vector (31 downto 0);
   --! Take 12 bits from the instruction (mixed) and sign extend as the low 12
   --! bits (for store instructions).\n
   --! sext ins[31:25] (7 bits) & ins[11:7] (5 bits)
-  signal imm_st_12  : std_ulogic_vector (31 downto 0);
+  signal s_type : std_ulogic_vector (31 downto 0);
   --! Take 12 bits from the instruction (mixed) and sign extend as the low 12
   --! bits shifted left by 1, the LSb is zeroed (for branch instructions).\n
   --! sext ins[31] & ins[7] & ins[30:25] (6 bits) & ins[11:8] (4 bits) & 0
-  signal imm_br_12  : std_ulogic_vector (31 downto 0);
+  signal b_type : std_ulogic_vector (31 downto 0);
   --! Take 20 bits from the instruction (mixed) and sign extend as the low 20
   --! bits shifted left by 1, the LSb is zeroed (unique to JAL).\n
   --! sext ins[31] & ins[19:12] (8 bits) & ins[20] & ins[30:21] (10 bits) & 0
-  signal imm_jal_20 : std_ulogic_vector (31 downto 0);
+  signal j_type : std_ulogic_vector (31 downto 0);
 begin
   with instruction_i(6 downto 2) select imm_val_o <=
-    imm_hi_20       when "00101" |"01101",             -- lui, auipc
-    imm_lo_12       when "00000" | "00100" | "11001",  -- alu(imm), loads, jalr
-    imm_st_12       when "01000",                      -- stores
-    imm_br_12       when "11000",                      -- branches
-    imm_jal_20      when "11011",                      -- jal
+    u_type          when "00101" |"01101",
+    i_type          when "00000" | "00100" | "11001",
+    s_type          when "01000",
+    b_type          when "11000",
+    j_type          when "11011",
     (others => 'X') when others;
 
-  imm_hi_20 <= instruction_i(31 downto 12) & (11 downto 0 => '0');
+  u_type <= instruction_i(31 downto 12) & (11 downto 0 => '0');
 
-  imm_lo_12 <=
+  i_type <=
     (31 downto 12 => instruction_i(31))  -- Sign extend
     & instruction_i(31 downto 20);       -- 11:0
 
-  imm_st_12 <=
+  s_type <=
     (31 downto 12 => instruction_i(31))  -- Sign extend
     & instruction_i(31 downto 25)        -- 11:5
     & instruction_i(11 downto 7);        -- 4:0
 
-  imm_jal_20 <=
+  j_type <=
     (31 downto 21 => instruction_i(31))  -- Sign extend
     & instruction_i(31)                  -- 20
     & instruction_i(19 downto 12)        -- 19:12
@@ -63,7 +63,7 @@ begin
     & instruction_i(30 downto 21)        -- 10:1
     & '0';                               -- 9:0
 
-  imm_br_12 <=
+  b_type <=
     (31 downto 13 => instruction_i(31))  -- Sign extend
     & instruction_i(31)                  -- 12
     & instruction_i(7)                   -- 11

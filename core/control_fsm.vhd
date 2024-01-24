@@ -29,7 +29,16 @@ end control_fsm;
 
 architecture rtl of control_fsm is
   signal pc_clk, ir_clk : std_ulogic := '0';
+
+-- TODO: Change to actual values
+  constant OP_IMM : std_ulogic_vector(6 downto 0) := "0000000";
+  constant OP_REG : std_ulogic_vector(6 downto 0) := "0000001";
 begin
+  with opcode_i select alu_b_sel_o <=
+    '1' when OP_IMM,
+    '0' when OP_REG,
+    'X' when others;
+
   drive_clock : process(clk_i)
   begin
     if rising_edge(clk_i) then

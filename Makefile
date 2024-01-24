@@ -51,4 +51,7 @@ fmt-test/%.vhd: test/%.vhd
 	@echo FORMAT $<
 	@emacs -batch $< -f vhdl-beautify-buffer -f save-buffer 2>/dev/null
 
-.PHONY: clean
+tcl:
+	vivado -mode tcl fysh-fyve.xpr
+
+.PHONY: clean fmt test tcl
