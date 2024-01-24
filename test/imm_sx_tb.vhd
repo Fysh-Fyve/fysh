@@ -18,16 +18,17 @@ architecture test_bench of imm_sx_tb is
     use std.textio.all;
     variable my_line : line;
   begin
-    wait for 1 fs;
+    wait for 1 ns;
     if not (imm_val = expected) then
-      write(my_line, string'("unexpected value, want = "));
-      write(my_line, to_hstring(expected), left, 8);
-      write(my_line, string'(", got = "));
-      write(my_line, to_hstring(imm_val), left, 8);
-      writeline(output, my_line);
+      --! Only on GHDL!
+      -- write(my_line, string'("unexpected value, want = "));
+      -- write(my_line, to_hstring(expected), left, 8);
+      -- write(my_line, string'(", got = "));
+      -- write(my_line, to_hstring(imm_val), left, 8);
+      -- writeline(output, my_line);
       assert imm_val = expected;
     end if;
-    wait for 1 fs;
+    wait for 1 ns;
   end procedure value_check;
 begin
   imm_sx_inst : entity work.imm_sx(rtl) port map (

@@ -31,7 +31,7 @@ begin
   clock : process
   begin
     rd_clk <= '0';
-    wait for 1 fs;
+    wait for 1 ns;
     for i in 0 to 31 loop
       rd_clk     <= '1';
       loop_count <= i;
@@ -50,7 +50,7 @@ begin
     rd_val <= (others => '0');
     rs1    <= (others => '0');
     rs2    <= (others => '0');
-    wait for 1 fs;
+    wait for 1 ns;
 
     for i in 0 to 31 loop
       rd <= std_ulogic_vector(to_unsigned(i, 5));
@@ -66,14 +66,17 @@ begin
     wait;
   end process reg_file_testing;
 
-  print_out : process (rd_clk)
-    use std.textio.all;
-    variable my_line : line;
-  begin
-    write(my_line, rd_clk, left, 5);
-    write(my_line, loop_count, left, 5);
-    write(my_line, to_hstring(rs1_val), left, 10);
-    write(my_line, to_hstring(rs2_val), left, 10);
-    writeline(output, my_line);
-  end process print_out;
+  --! This only works on GHDL unfortunately.
+  --! Well, you can directly inspect the waveforms on Vivado.
+
+  -- print_out : process (rd_clk)
+  --   use std.textio.all;
+  --   variable my_line : line;
+  -- begin
+  --   write(my_line, rd_clk, left, 5);
+  --   write(my_line, loop_count, left, 5);
+  --   write(my_line, to_hstring(rs1_val), left, 10);
+  --   write(my_line, to_hstring(rs2_val), left, 10);
+  --   writeline(output, my_line);
+  -- end process print_out;
 end test_bench;

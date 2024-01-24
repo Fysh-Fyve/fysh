@@ -27,15 +27,16 @@ entity memory is
 end memory;
 
 architecture rtl of memory is
-  signal rd_val                : std_ulogic_vector (31 downto 0);
+  signal rd_val, insn          : std_ulogic_vector (31 downto 0);
   signal addr, mem_out, mem_sx : std_ulogic_vector (31 downto 0);
+  signal reg_val_1, reg_val_2  : std_ulogic_vector (31 downto 0);
 
 begin
   mem_inst : entity work.mem(rtl) port map (
     read_addr_i  => addr,
     write_addr_i => addr,
     write_en_i   => mem_clk_i,
-    d_i          => reg_val_2_o,
+    d_i          => reg_val_2,
     d_o          => mem_out);
 
   mbr_sx_inst : entity work.mbr_sx(rtl) port map (
@@ -46,12 +47,16 @@ begin
   register_file_inst : entity work.register_file(rtl) port map (
     rd_clk_i       => rd_clk_i,
     reset_i        => reset_i,
-    dest_reg_i     => insn_o(24 downto 20),
-    reg_sel_1_i    => insn_o(19 downto 15),
-    reg_sel_2_i    => insn_o(24 downto 20),
+    dest_reg_i     => insn(24 downto 20),
+    reg_sel_1_i    => insn(19 downto 15),
+    reg_sel_2_i    => insn(24 downto 20),
     dest_reg_val_i => rd_val,
-    reg_val_1_o    => reg_val_1_o,
-    reg_val_2_o    => reg_val_2_o);
+    reg_val_1_o    => reg_val_1,
+    reg_val_2_o    => reg_val_2);
+
+  reg_val_2_o <= reg_val_2;
+  reg_val_1_o <= reg_val_1;
+  insn_o      <= insn;
 
   with addr_sel_i select addr <=
     pc_out_i        when '1',
@@ -68,9 +73,9 @@ begin
   insn_register : process(reset_i, insn_clk_i)
   begin
     if (reset_i = '0') then
-      insn_o <= (others => '0');
+      insn <= (others => '0');
     elsif rising_edge(insn_clk_i) then
-      insn_o <= mem_out;
+      insn <= mem_out;
     end if;
   end process insn_register;
 end rtl;

@@ -49,6 +49,11 @@ architecture rtl of alu_control is
 
   signal alu_a_sel : std_ulogic := '0';
   signal alu_b_sel : std_ulogic := '0';
+
+  signal reset, addr_sel : std_ulogic;
+  signal rd_sel          : std_ulogic_vector (1 downto 0);
+  signal sx_size         : std_ulogic_vector (2 downto 0);
+  signal alu, pc         : std_ulogic_vector (31 downto 0);
 begin
   imm_sx_inst : entity work.imm_sx(rtl) port map (
     instruction_i => instruction_i,
@@ -56,12 +61,12 @@ begin
 
   program_counter_inst : entity work.program_counter(rtl) port map (
     pc_clk_i        => pc_clk,
-    reset_i         => reset_o,
+    reset_i         => reset,
     pc_next_sel_i   => pc_next_sel,
     pc_alu_sel_i    => pc_alu_sel,
     imm_x_i         => imm_ex,
-    alu_i           => alu_o,
-    pc_o            => pc_o,
+    alu_i           => alu,
+    pc_o            => pc,
     pc_alu_result_o => pc_alu_result_o);
 
   alu_inst : entity work.alu(rtl) port map (
@@ -69,7 +74,7 @@ begin
     operand_b_i               => alu_b_op,
     op_bits_i                 => op_bits,
     sub_sra_i                 => sub_sra,
-    alu_result_o              => alu_o,
+    alu_result_o              => alu,
     equal_flag_o              => eq,
     less_than_flag_o          => lt,
     less_than_unsigned_flag_o => ltu);
@@ -86,21 +91,28 @@ begin
     sub_sra_o     => sub_sra,
     op_bits_o     => op_bits,
     sx_size_o     => sx_size_o,
-    addr_sel_o    => addr_sel_o,
+    addr_sel_o    => addr_sel,
     alu_a_sel_o   => alu_a_sel,
     alu_b_sel_o   => alu_b_sel,
-    rd_sel_o      => rd_sel_o,
+    rd_sel_o      => rd_sel,
     mem_clk_o     => mem_clk_o,
     rd_clk_o      => rd_clk_o,
     pc_clk_o      => pc_clk,
     ir_clk_o      => ir_clk_o,
     pc_alu_sel_o  => pc_alu_sel,
     pc_next_sel_o => pc_next_sel,
-    reset_o       => reset_o);
+    reset_o       => reset);
+
+  reset_o    <= reset;
+  addr_sel_o <= addr_sel;
+  rd_sel_o   <= rd_sel;
+  sx_size_o  <= sx_size;
+  alu_o      <= alu;
+  pc_o       <= pc;
 
   with alu_a_sel select alu_a_op <=
     reg_val_1_i     when '0',
-    pc_o            when '1',
+    pc              when '1',
     (others => 'X') when others;
 
   with alu_b_sel select alu_b_op <=

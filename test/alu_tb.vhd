@@ -11,24 +11,25 @@ entity alu_tb is
 end alu_tb;
 
 architecture test_bench of alu_tb is
-  signal a, b, q              : std_ulogic_vector (31 downto 0) := (others => '0');
-  signal op_bits              : std_ulogic_vector (2 downto 0);
-  signal eq, lt, ltu, sub_sra : std_ulogic;
+  signal a, b, q                             : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal op_bits                             : std_ulogic_vector (2 downto 0);
+  signal eq_flag, lt_flag, ltu_flag, sub_sra : std_ulogic;
 
   procedure print_result(lbl : string) is
     use std.textio.all;
     variable my_line : line;
   begin
-    wait for 1 fs;
-    write(my_line, to_hstring(a), left, 8);
-    write(my_line, string'(" "));
-    write(my_line, lbl, left, 5);
-    write(my_line, to_hstring(b), left, 8);
-    write(my_line, string'(" = "));
-    write(my_line, to_hstring(q), left, 8);
-    write(my_line, string'(", eq = "));
-    write(my_line, eq, left, 8);
-    writeline(output, my_line);
+    wait for 1 ns;
+    -- ! Only on GHDL!
+    -- write(my_line, to_hstring(a), left, 8);
+    -- write(my_line, string'(" "));
+    -- write(my_line, lbl, left, 5);
+    -- write(my_line, to_hstring(b), left, 8);
+    -- write(my_line, string'(" = "));
+    -- write(my_line, to_hstring(q), left, 8);
+    -- write(my_line, string'(", eq_flag = "));
+    -- write(my_line, eq_flag, left, 8);
+    -- writeline(output, my_line);
   end procedure print_result;
 begin
   alu_inst : entity work.alu(rtl) port map (
@@ -37,9 +38,9 @@ begin
     op_bits_i                 => op_bits,
     sub_sra_i                 => sub_sra,
     alu_result_o              => q,
-    equal_flag_o              => eq,
-    less_than_flag_o          => lt,
-    less_than_unsigned_flag_o => ltu);
+    equal_flag_o              => eq_flag,
+    less_than_flag_o          => lt_flag,
+    less_than_unsigned_flag_o => ltu_flag);
 
   process
   begin

@@ -1,2 +1,5 @@
 .hdl_checker
 *~
+*.cache
+fysh-fyve.sim/sim_1/behav/xsim
+fysh-fyve.runs
