@@ -3,6 +3,7 @@
 --! @cond Doxygen_Suppress
 library ieee;
 use ieee.std_logic_1164.all;
+use std.env.stop;
 --! @endcond
 
 --! Test bench for the register file.
@@ -63,7 +64,7 @@ begin
       wait for 5 ns;
     end loop;
 
-    wait;
+    stop;
   end process reg_file_testing;
 
   --! This only works on GHDL unfortunately.

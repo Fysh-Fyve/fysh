@@ -4,6 +4,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use std.env.stop;
 --! @endcond
 
 --! Test bench for the Immediate Value Sign Extender.
@@ -74,6 +75,6 @@ begin
     instruction <= '0' & "010101" & rs2 & rs1 & "000" & "0101" & '1' & op;
     value_check(x"00000AAA");
 
-    wait;
+    stop;
   end process imm_test_cases;
 end test_bench;

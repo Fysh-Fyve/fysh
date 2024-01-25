@@ -4,6 +4,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use std.env.stop;
 --! @endcond
 
 --! Test Bench for the low-level memory component.
@@ -44,6 +45,6 @@ begin
       read_addr <= std_ulogic_vector (signed(read_addr) + 4);
       print;
     end loop;
-    wait;
+    stop;
   end process print_mem;
 end test_bench;
