@@ -5,7 +5,20 @@
 Current schematic is sourced from
 [here](https://www.youtube.com/watch?v=zW2Pmki81ow)
 
-## Prequisites
+## Vivado
+
+### Prerequisites
+
+- Vivado
+
+### Creating a project
+
+- Open Vivado
+- Go to Tools > Run Tcl Script... and select `fysh-fyve.tcl`
+
+## GHDL
+
+### Prerequisites
 
 ```
 sudo apt install ghdl
@@ -23,7 +36,7 @@ Then run:
 make -j fmt
 ```
 
-## Testing
+### Testing
 
 Simply run `make test` to run all testbenches in `test/`.
 

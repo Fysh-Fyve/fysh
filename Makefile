@@ -51,7 +51,17 @@ fmt-test/%.vhd: test/%.vhd
 	@echo FORMAT $<
 	@emacs -batch $< -f vhdl-beautify-buffer -f save-buffer 2>/dev/null
 
-tcl:
-	vivado -mode tcl fysh-fyve.xpr
+VIVADO_PROJECT_DIR := proj
+VIVADO_PROJECT_NAME := fysh-fyve
+VIVADO_PROJECT_FILE := $(VIVADO_PROJECT_DIR)/$(VIVADO_PROJECT_NAME).xpr
 
-.PHONY: clean fmt test tcl
+tcl: $(VIVADO_PROJECT_FILE)
+	vivado -mode tcl $<
+
+$(VIVADO_PROJECT_FILE):
+	vivado -mode batch -source fysh-fyve.tcl
+
+clean-project:
+	rm -rf $(VIVADO_PROJECT_DIR)
+
+.PHONY: clean fmt test tcl clean-project
