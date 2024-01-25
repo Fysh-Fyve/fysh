@@ -4,6 +4,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use std.env.stop;
 --! @endcond
 
 --! Test bench for the ALU.
@@ -82,6 +83,7 @@ begin
     a <= x"40000002"; b <= x"80000001"; print_result("sltu");
     a <= x"FFFFFFFF"; b <= x"FFFFFFFF"; print_result("sltu");
     a <= x"7FFFFFFF"; b <= x"FFFFFFFF"; print_result("sltu");
-    wait;
+    stop;
+    
   end process;
 end test_bench;
