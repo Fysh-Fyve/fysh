@@ -29,15 +29,14 @@ end control_fsm;
 
 architecture rtl of control_fsm is
   signal pc_clk, ir_clk : std_ulogic := '0';
-
--- TODO: Change to actual values
-  constant OP_IMM : std_ulogic_vector(6 downto 0) := "0000000";
-  constant OP_REG : std_ulogic_vector(6 downto 0) := "0000001";
 begin
-  with opcode_i select alu_b_sel_o <=
-    '1' when OP_IMM,
-    '0' when OP_REG,
-    'X' when others;
+  alu_b_sel_o   <= not opcode_i(5);     -- immediate value ('1') or rs2 ('0')
+  -- TODO: Figure this out
+  alu_a_sel_o   <= opcode_i(0);         -- pc ('1') or rs1 ('0')
+  addr_sel_o    <= opcode_i(0);         -- alu ('1') or pc ('0')
+  pc_alu_sel_o  <= '0';                 -- 4 ('1') or immediate value ('0')
+  pc_next_sel_o <= '0';                 -- alu ('1') or pc alu ('0')
+  rd_sel_o      <= "00";  -- mem_sx ("11"), alu ("01"), or pc alu ("00")
 
   drive_clock : process(clk_i)
   begin
