@@ -28,7 +28,7 @@ end mem;
 
 architecture rtl of mem is
   type ram_t is array (NUM_WORDS-1 downto 0) of std_logic_vector(31 downto 0);
-  signal RAM : ram_t := (others => x"00000000");
+  signal RAM : ram_t := (others => (31 downto 0 => '0'));
 begin
   process(clk_i)
   begin
