@@ -84,6 +84,6 @@ begin
     a <= x"FFFFFFFF"; b <= x"FFFFFFFF"; print_result("sltu");
     a <= x"7FFFFFFF"; b <= x"FFFFFFFF"; print_result("sltu");
     stop;
-    
+
   end process;
 end test_bench;

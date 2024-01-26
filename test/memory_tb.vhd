@@ -10,17 +10,15 @@ entity memory_tb is
 end memory_tb;
 
 architecture test_bench of memory_tb is
-  signal rd_clk, mem_clk, insn_clk, addr_sel, reset : std_ulogic;
-  signal sx_size                                    : std_ulogic_vector (2 downto 0);
-  signal rd_sel                                     : std_ulogic_vector (1 downto 0);
-  signal alu, pc, pc_alu                            : std_ulogic_vector (31 downto 0);
-  signal insn                                       : std_ulogic_vector (31 downto 0);
-  signal rs1_val                                    : std_ulogic_vector (31 downto 0);
-  signal rs2_val                                    : std_ulogic_vector (31 downto 0);
+  signal clk, rd_clk, write_en, insn_clk, addr_sel, reset : std_ulogic;
+  signal sx_size                                          : std_ulogic_vector (2 downto 0);
+  signal rd_sel                                           : std_ulogic_vector (1 downto 0);
+  signal alu, pc, pc_alu, insn, rs1_val, rs2_val          : std_ulogic_vector (31 downto 0);
 begin
   memory_inst : entity work.memory(rtl) port map (
+    clk_i          => clk,
     rd_clk_i     => rd_clk,
-    mem_clk_i    => mem_clk,
+    write_en_i   => write_en,
     insn_clk_i   => insn_clk,
     addr_sel_i   => addr_sel,
     reset_i      => reset,

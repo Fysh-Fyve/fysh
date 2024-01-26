@@ -9,8 +9,9 @@ use ieee.std_logic_1164.all;
 
 entity memory is
   port (
+    clk_i        : in std_ulogic;
     rd_clk_i   : in std_ulogic;         --!  Register File clock signal
-    mem_clk_i  : in std_ulogic;         --! Memory clock signal
+    write_en_i : in std_ulogic;         --! Memory clock signal
     insn_clk_i : in std_ulogic;         --! Instruction Register clock signal
 
     addr_sel_i   : in std_ulogic;       --! ALU & PC address select signal
@@ -33,9 +34,10 @@ architecture rtl of memory is
 
 begin
   mem_inst : entity work.mem(rtl) port map (
+    clk_i          => clk_i,
     read_addr_i  => addr,
     write_addr_i => addr,
-    write_en_i   => mem_clk_i,
+    write_en_i   => write_en_i,
     d_i          => reg_val_2,
     d_o          => mem_out);
 

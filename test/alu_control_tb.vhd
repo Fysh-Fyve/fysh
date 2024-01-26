@@ -14,10 +14,10 @@ architecture test_bench of alu_control_tb is
   signal rs1_val, rs2_val : std_ulogic_vector (31 downto 0) := (others => '0');
 
   -- Clock Signals
-  signal clk     : std_ulogic := '0';
-  signal rd_clk  : std_ulogic := '0';
-  signal ir_clk  : std_ulogic := '0';
-  signal mem_clk : std_ulogic := '0';
+  signal clk          : std_ulogic := '0';
+  signal rd_clk       : std_ulogic := '0';
+  signal ir_clk       : std_ulogic := '0';
+  signal mem_write_en : std_ulogic := '0';
 
   signal alu, pc, pc_alu : std_ulogic_vector (31 downto 0) := (others => '0');
   signal rd_sel          : std_ulogic_vector (1 downto 0)  := (others => '0');
@@ -36,7 +36,7 @@ begin
     addr_sel_o      => addr_sel,
     rd_clk_o        => rd_clk,
     ir_clk_o        => ir_clk,
-    mem_clk_o       => mem_clk,
+    mem_write_en_o  => mem_write_en,
     rd_sel_o        => rd_sel,
     sx_size_o       => sx_size);
 end test_bench;

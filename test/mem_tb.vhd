@@ -11,12 +11,9 @@ use std.env.stop;
 entity mem_tb is
 end mem_tb;
 
--- Mock Implementation of memory
--- replace with the real thing when synthesizing to hardware
-
 architecture test_bench of mem_tb is
   signal d_in, read_addr, write_addr : std_ulogic_vector (31 downto 0);
-  signal write_en                    : std_ulogic;
+  signal clk, write_en               : std_ulogic := '0';
   signal d_out                       : std_ulogic_vector (31 downto 0);
 
   procedure print is
@@ -31,11 +28,20 @@ architecture test_bench of mem_tb is
   end procedure print;
 begin
   mem_inst : entity work.mem(rtl) port map (
+    clk_i          => clk,
     d_i          => d_in,
     read_addr_i  => read_addr,
     write_addr_i => write_addr,
     write_en_i   => write_en,
     d_o          => d_out);
+
+  write_addr <= read_addr;
+
+  clock : process
+  begin
+    clk <= not clk;
+    wait for 1 ns;
+  end process clock;
 
   print_mem : process
   begin

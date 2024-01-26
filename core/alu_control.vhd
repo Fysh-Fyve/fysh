@@ -15,9 +15,9 @@ entity alu_control is
     reg_val_1_i   : in std_ulogic_vector (31 downto 0);  --! Value from first selected register
     reg_val_2_i   : in std_ulogic_vector (31 downto 0);  --! Value from second selected register
 
-    rd_clk_o  : out std_ulogic;         --! register file clock signal
-    mem_clk_o : out std_ulogic;         --! memory clock signal
-    ir_clk_o  : out std_ulogic;         --! instruction register clock signal
+    rd_clk_o       : out std_ulogic;    --! register file clock signal
+    mem_write_en_o : out std_ulogic;    --! memory clock signal
+    ir_clk_o       : out std_ulogic;    --! instruction register clock signal
 
     alu_o           : out std_ulogic_vector (31 downto 0);  --! ALU output
     pc_o            : out std_ulogic_vector (31 downto 0);  --! Program Counter output
@@ -88,20 +88,20 @@ begin
     op_bits_i => instruction_i(14 downto 12),
     sub_sra_i => instruction_i(30),
 
-    sub_sra_o     => sub_sra,
-    op_bits_o     => op_bits,
-    sx_size_o     => sx_size_o,
-    addr_sel_o    => addr_sel,
-    alu_a_sel_o   => alu_a_sel,
-    alu_b_sel_o   => alu_b_sel,
-    rd_sel_o      => rd_sel,
-    mem_clk_o     => mem_clk_o,
-    rd_clk_o      => rd_clk_o,
-    pc_clk_o      => pc_clk,
-    ir_clk_o      => ir_clk_o,
-    pc_alu_sel_o  => pc_alu_sel,
-    pc_next_sel_o => pc_next_sel,
-    reset_o       => reset);
+    sub_sra_o      => sub_sra,
+    op_bits_o      => op_bits,
+    sx_size_o      => sx_size_o,
+    addr_sel_o     => addr_sel,
+    alu_a_sel_o    => alu_a_sel,
+    alu_b_sel_o    => alu_b_sel,
+    rd_sel_o       => rd_sel,
+    mem_write_en_o => mem_write_en_o,
+    rd_clk_o       => rd_clk_o,
+    pc_clk_o       => pc_clk,
+    ir_clk_o       => ir_clk_o,
+    pc_alu_sel_o   => pc_alu_sel,
+    pc_next_sel_o  => pc_next_sel,
+    reset_o        => reset);
 
   reset_o    <= reset;
   addr_sel_o <= addr_sel;

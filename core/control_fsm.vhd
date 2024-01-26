@@ -18,17 +18,17 @@ entity control_fsm is
     op_bits_i : in std_ulogic_vector (2 downto 0);
     sub_sra_i : in std_ulogic;  -- subtract or shift right arithmetic flag (0 = add, logical shift right; 1 = subtract, arithmetic shift right).
 
-    sub_sra_o                               : out std_ulogic;
-    op_bits_o, sx_size_o                    : out std_ulogic_vector (2 downto 0);
-    addr_sel_o, alu_a_sel_o, alu_b_sel_o    : out std_ulogic;
-    rd_sel_o                                : out std_ulogic_vector (1 downto 0);
-    mem_clk_o, rd_clk_o, pc_clk_o, ir_clk_o : out std_ulogic := '0';
-    pc_alu_sel_o, pc_next_sel_o             : out std_ulogic;
-    reset_o                                 : out std_logic);
+    sub_sra_o                                    : out std_ulogic;
+    op_bits_o, sx_size_o                         : out std_ulogic_vector (2 downto 0);
+    addr_sel_o, alu_a_sel_o, alu_b_sel_o         : out std_ulogic;
+    rd_sel_o                                     : out std_ulogic_vector (1 downto 0);
+    mem_write_en_o, rd_clk_o, pc_clk_o, ir_clk_o : out std_ulogic := '0';
+    pc_alu_sel_o, pc_next_sel_o                  : out std_ulogic;
+    reset_o                                      : out std_logic);
 end control_fsm;
 
 architecture rtl of control_fsm is
-  signal pc_clk, ir_clk : std_ulogic := '0';
+  signal pc_clk, ir_clk, mem_write_en : std_ulogic := '0';
 begin
   alu_b_sel_o   <= not opcode_i(5);     -- immediate value ('1') or rs2 ('0')
   -- TODO: Figure this out
@@ -38,13 +38,24 @@ begin
   pc_next_sel_o <= '0';                 -- alu ('1') or pc alu ('0')
   rd_sel_o      <= "00";  -- mem_sx ("11"), alu ("01"), or pc alu ("00")
 
-  drive_clock : process(clk_i)
+  sub_sra_o <= sub_sra_i;
+  op_bits_o <= opcode_i(2 downto 0);    -- TODO: correct!
+  sx_size_o <= opcode_i(2 downto 0);    -- TODO: correct!
+
+  -- TODO!!
+  mem_write_en_o <= '0';
+  rd_clk_o       <= '0';
+  reset_o        <= '0';
+
+  drive_clock : process(clk_i, pc_clk, ir_clk, mem_write_en)
   begin
     if rising_edge(clk_i) then
-      pc_clk <= not pc_clk;
-      ir_clk <= not ir_clk;
+      pc_clk       <= not pc_clk;
+      ir_clk       <= not ir_clk;
+      mem_write_en <= not mem_write_en;
     end if;
-    pc_clk_o <= pc_clk;
-    ir_clk_o <= ir_clk;
+    pc_clk_o       <= pc_clk;
+    ir_clk_o       <= ir_clk;
+    mem_write_en_o <= mem_write_en;
   end process drive_clock;
 end rtl;
