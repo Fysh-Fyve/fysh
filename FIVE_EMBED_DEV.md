@@ -1,4 +1,4 @@
-# Introduction
+# RISC-V Instruction Set Manual
 
 ## ISA Overview
 

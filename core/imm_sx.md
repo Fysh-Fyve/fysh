@@ -1,3 +1,7 @@
+## Instructions to be implemented?
+
+Are these even supposed to be using the immediate value
+
 - [x] 01101 lui
 - [x] 00101 auipc
 - [x] 00100 addi
