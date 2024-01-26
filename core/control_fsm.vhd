@@ -43,7 +43,6 @@ begin
   sx_size_o <= opcode_i(2 downto 0);    -- TODO: correct!
 
   -- TODO!!
-  mem_write_en_o <= '0';
   rd_clk_o       <= '0';
   reset_o        <= '0';
 

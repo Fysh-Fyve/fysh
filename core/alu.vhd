@@ -54,19 +54,25 @@ architecture rtl of alu is
     a_int := to_integer(unsigned(a(30 downto 0)));
     b_int := to_integer(unsigned(b(30 downto 0)));
     lt    := '1' when a_int < b_int else '0';
-    return (not a(31) and b(31)) or (lt and (a(31) xnor b(31)));  -- why is there a sign check if its unsigned?
+    -- Compare 32nd bit separately because `to_integer` is limited to 31 bits
+    return (not a(31) and b(31)) or (lt and (a(31) xnor b(31)));
   end function less_than_unsigned;
 
   -- checks if `a` is less than `b` when both are signed
   function less_than_signed(
     a : std_ulogic_vector (31 downto 0);
     b : std_ulogic_vector (31 downto 0)) return std_ulogic is
+    variable a_int : integer;
+    variable b_int : integer;
+    variable lt    : std_ulogic;
   begin
-    if to_integer(signed(a)) < to_integer(signed(b)) then
-      return '1';
-    else
-      return '0';
-    end if;
+    a_int := to_integer(signed(a(30 downto 0)));
+    b_int := to_integer(signed(b(30 downto 0)));
+    lt    := '1' when a_int < b_int else '0';
+    -- TODO: This is wrong
+    return lt;
+    -- Compare 32nd bit separately because `to_integer` is limited to 31 bits
+    -- return (not a(31) and b(31)) or (lt and (a(31) xnor b(31)));
   end function less_than_signed;
 
 

@@ -15,4 +15,6 @@ set_property top topmodule [get_filesets {sources_1}]
 add_files -fileset sim_1 [glob -directory $script_path/test/ *.vhd]
 set_property top topmodule_tb [get_filesets {sim_1}]
 
+add_files -fileset constrs_1 [glob -directory $script_path/constraints/ *.vhd]
+
 set_property file_type {VHDL 2008} [get_files -of [get_filesets {sources_1 sim_1}]]

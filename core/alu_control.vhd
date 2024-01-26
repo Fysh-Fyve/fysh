@@ -90,7 +90,7 @@ begin
 
     sub_sra_o      => sub_sra,
     op_bits_o      => op_bits,
-    sx_size_o      => sx_size_o,
+    sx_size_o      => sx_size,
     addr_sel_o     => addr_sel,
     alu_a_sel_o    => alu_a_sel,
     alu_b_sel_o    => alu_b_sel,
