@@ -28,7 +28,7 @@ architecture test_bench of mem_tb is
   end procedure print;
 begin
   mem_inst : entity work.mem(rtl) port map (
-    clk_i          => clk,
+    clk_i        => clk,
     d_i          => d_in,
     read_addr_i  => read_addr,
     write_addr_i => write_addr,

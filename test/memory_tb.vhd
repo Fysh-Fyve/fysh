@@ -16,7 +16,7 @@ architecture test_bench of memory_tb is
   signal alu, pc, pc_alu, insn, rs1_val, rs2_val          : std_ulogic_vector (31 downto 0);
 begin
   memory_inst : entity work.memory(rtl) port map (
-    clk_i          => clk,
+    clk_i        => clk,
     rd_clk_i     => rd_clk,
     write_en_i   => write_en,
     insn_clk_i   => insn_clk,

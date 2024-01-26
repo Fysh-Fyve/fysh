@@ -8,8 +8,10 @@ use ieee.std_logic_1164.all;
 --! A higher-level module which contains the Memory, Register File, and Instruction Register.\n
 
 entity memory is
+  generic (
+    DOUBLE_MEM : boolean := true);
   port (
-    clk_i        : in std_ulogic;
+    clk_i      : in std_ulogic;
     rd_clk_i   : in std_ulogic;         --!  Register File clock signal
     write_en_i : in std_ulogic;         --! Memory clock signal
     insn_clk_i : in std_ulogic;         --! Instruction Register clock signal
@@ -32,14 +34,49 @@ architecture rtl of memory is
   signal addr, mem_out, mem_sx : std_ulogic_vector (31 downto 0);
   signal reg_val_1, reg_val_2  : std_ulogic_vector (31 downto 0);
 
+  --! Bit used for muxing/demuxing the two memory blocks.
+  --! Maybe we should split them up more?
+  constant MEM_SPLIT            : integer := 18;
+  signal write_hi, write_lo     : std_ulogic;
+  signal mem_hi_out, mem_lo_out : std_ulogic_vector (31 downto 0);
 begin
-  mem_inst : entity work.mem(rtl) port map (
-    clk_i          => clk_i,
-    read_addr_i  => addr,
-    write_addr_i => addr,
-    write_en_i   => write_en_i,
-    d_i          => reg_val_2,
-    d_o          => mem_out);
+  double_memory :
+  if DOUBLE_MEM generate
+    write_lo <= not addr(18) and write_en_i;
+    write_hi <= addr(18) and write_en_i;
+
+    with addr(18) select mem_out <=
+      mem_hi_out      when '1',
+      mem_lo_out      when '0',
+      (others => 'X') when others;
+
+    mem_lo_inst : entity work.mem(rtl) port map (
+      clk_i        => clk_i,
+      read_addr_i  => addr,
+      write_addr_i => addr,
+      write_en_i   => write_lo,
+      d_i          => reg_val_2,
+      d_o          => mem_lo_out);
+
+    mem_hi_inst : entity work.mem(rtl) port map (
+      clk_i        => clk_i,
+      read_addr_i  => addr,
+      write_addr_i => addr,
+      write_en_i   => write_hi,
+      d_i          => reg_val_2,
+      d_o          => mem_hi_out);
+  end generate;
+
+  single_memory :
+  if not DOUBLE_MEM generate
+    mem_inst : entity work.mem(rtl) port map (
+      clk_i        => clk_i,
+      read_addr_i  => addr,
+      write_addr_i => addr,
+      write_en_i   => write_en_i,
+      d_i          => reg_val_2,
+      d_o          => mem_out);
+  end generate;
 
   mbr_sx_inst : entity work.mbr_sx(rtl) port map (
     mbr_i  => mem_out,
@@ -67,7 +104,7 @@ begin
 
   with rd_sel_i select rd_val <=
     mem_sx          when "11",
-    (others => 'X') when "10",
+    (others => 'X') when "10",          -- could be where our RNG is gonna be
     alu_out_i       when "01",
     pc_alu_out_i    when "00",
     (others => 'X') when others;

@@ -16,13 +16,13 @@ entity mem is
     NUM_WORDS : integer := (2**ADDR_W);
     --! 0 for byte, 1 for halfword, 2 for word
     OFFSET    : integer := 2;
-    --! Yop range used for the address
+    --! Top range used for the address
     TOP_RANGE : integer := ADDR_W + OFFSET;
     --! Bottom range used for the address
-    BOT_RANGE : integer := ADDR_W + OFFSET);
+    BOT_RANGE : integer := OFFSET);
   port(
     d_i, read_addr_i, write_addr_i : in  std_ulogic_vector (31 downto 0);
-    clk_i, write_en_i                : in  std_ulogic;
+    clk_i, write_en_i              : in  std_ulogic;
     d_o                            : out std_ulogic_vector (31 downto 0));
 end mem;
 

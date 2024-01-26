@@ -34,17 +34,17 @@ begin
   -- TODO: Figure this out
   alu_a_sel_o   <= opcode_i(0);         -- pc ('1') or rs1 ('0')
   addr_sel_o    <= opcode_i(0);         -- alu ('1') or pc ('0')
-  pc_alu_sel_o  <= '0';                 -- 4 ('1') or immediate value ('0')
-  pc_next_sel_o <= '0';                 -- alu ('1') or pc alu ('0')
-  rd_sel_o      <= "00";  -- mem_sx ("11"), alu ("01"), or pc alu ("00")
+  pc_alu_sel_o  <= opcode_i(0);         -- 4 ('1') or immediate value ('0')
+  pc_next_sel_o <= opcode_i(0);         -- alu ('1') or pc alu ('0')
+  rd_sel_o      <= opcode_i(1 downto 0);  -- mem_sx ("11"), alu ("01"), or pc alu ("00")
 
   sub_sra_o <= sub_sra_i;
   op_bits_o <= opcode_i(2 downto 0);    -- TODO: correct!
   sx_size_o <= opcode_i(2 downto 0);    -- TODO: correct!
 
   -- TODO!!
-  rd_clk_o       <= '0';
-  reset_o        <= '0';
+  rd_clk_o <= opcode_i(0);
+  reset_o  <= opcode_i(0);
 
   drive_clock : process(clk_i, pc_clk, ir_clk, mem_write_en)
   begin
