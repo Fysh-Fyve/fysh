@@ -1,0 +1,35 @@
+></*>
+This particular sea aims to test
+bynary expressions in fysh
+<*/><
+
+><nemo> = ><}})})> </3 ><})>
+            <}}>< ~
+><shyft> = ><})oooooo> ~ ><//> Fukushima Fysh
+
+><res1> = ><nemo> <3 ><}))> ><//>
+            <}))})>< ~  ><//> 10*4 - 18 = 22
+
+><res2> = ><res1> & ><}})}> ~ ><//> 22 & 13 = 4
+
+><res3> = ><res2> | ><}))}> ~ ><//> 4 | 9 = 13
+
+><res4> = ><res3> ^ ><})})})}}> ~ ><//> 13 ^ 171 = 166
+
+></*>
+nemo = 10
+res1 = 22
+res2 = 4
+res3 = 13
+res4 = 166
+<*/><
+
+><res5> = ><res4> >> ><shyft> ~ ><//> 166 >> 2 = 41
+><res6> = ><res3> << ><}}> ~ ><//> 13 << 3 = 104
+
+><res7> = ><nemo> o~ ><res2> ~ ><//>  should be TRUE
+><res8> = ><nemo> ~o ><res1> ~ ><//> should be TRUE
+><res9> = ><nemo> o~ ><})})o> ~ ><//> should be FALSE
+><res10> = ><nemo> o~= ><})})o> ~ ><//> should be TRUE
+
+><//> TO BE ADDED: ANCHORS
