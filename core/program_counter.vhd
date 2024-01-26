@@ -28,8 +28,8 @@ end program_counter;
 architecture rtl of program_counter is
   signal next_ins, pc, pc_alu, pc_alu_result, pc_increment : std_ulogic_vector(31 downto 0);
 begin
-  pc_increment <= x"00000004";          -- hardwire pc_increment to 4
-
+  pc_increment <= x"00000004";          -- hardwire program counter increment to 4 
+  
   with pc_next_sel_i select next_ins <=
     alu_i           when '1',
     pc_alu_result   when '0',
