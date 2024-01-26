@@ -69,10 +69,8 @@ architecture rtl of alu is
     a_int := to_integer(signed(a(30 downto 0)));
     b_int := to_integer(signed(b(30 downto 0)));
     lt    := '1' when a_int < b_int else '0';
-    -- TODO: This is wrong
-    return lt;
     -- Compare 32nd bit separately because `to_integer` is limited to 31 bits
-    -- return (not a(31) and b(31)) or (lt and (a(31) xnor b(31)));
+    return (lt and (a(31) or not b(31))) or (a(31) and not b(31));
   end function less_than_signed;
 
 
