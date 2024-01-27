@@ -43,21 +43,21 @@ begin
     b_type          when "11000",
     j_type          when "11011",
     (others => 'X') when others;
-  
+
   -- long immediate
   u_type <= instruction_i(31 downto 12) & (11 downto 0 => '0');
-  
+
   -- immediate
   i_type <=
     (31 downto 12 => instruction_i(31))  -- Sign extend
     & instruction_i(31 downto 20);       -- 11:0
-  
+
   -- store
   s_type <=
     (31 downto 12 => instruction_i(31))  -- Sign extend
     & instruction_i(31 downto 25)        -- 11:5
     & instruction_i(11 downto 7);        -- 4:0
-    
+
   -- jump
   j_type <=
     (31 downto 21 => instruction_i(31))  -- Sign extend
@@ -66,7 +66,7 @@ begin
     & instruction_i(20)                  -- 11
     & instruction_i(30 downto 21)        -- 10:1
     & '0';                               -- 9:0
-  
+
   -- branch
   b_type <=
     (31 downto 13 => instruction_i(31))  -- Sign extend
