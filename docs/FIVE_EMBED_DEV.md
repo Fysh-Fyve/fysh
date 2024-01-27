@@ -83,7 +83,7 @@ main memory cannot. (what does this mean??)
   unconditional jump if the target address is not four-byte aligned.
   - Reported on the branch/jump instruction, not on the target instruction
 
-![](./assets/rv32_01.png)
+![](./rv32_01.png)
 
 - RISC-V keeps the `rs1`, `rs2`, and `rd` registers in the same position in all
   formats

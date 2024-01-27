@@ -1,6 +1,6 @@
 # ECE 492 RISC-V Project
 
-![](https://raw.githubusercontent.com/cbebe/dotfiles/master/risc.gif)
+![](./docs/risc.gif)
 
 Current schematic is sourced from
 [here](https://www.youtube.com/watch?v=zW2Pmki81ow)
