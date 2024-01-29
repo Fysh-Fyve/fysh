@@ -18,10 +18,12 @@ enum class TokenType {
     NOT_EQUAL,       // ~≈  (Not equal to '!=')
     INCREMENT,       // >><fysh> (add 1 'fysh++') 
     DECREMENT,       // <fysh><< (sub 1 'fysh--')
-    FYSH_TANK_LEFT,  // [ (same as left bracket  '('  )
-    FYSH_TANK_RIGHT, // ] (same as right bracker ')' )
-    FYSH_LEFT,       // ><> (same as right curly bracket '{' )
-    FYSH_RIGHT,      // <>< (same as left  curly bracket '{' )
+    FYSH_TANK_OPEN,  // [ (same as open bracket  '('  )
+    FYSH_TANK_CLOSE, // ] (same as closing bracket ')' )
+    FYSH_OPEN,       // ><> (same as open curly bracket '{' )
+    FYSH_CLOSE,      // <>< (same as closing curly bracket '{' )
+    WTF_OPEN,        // WHAT THE FYSH (Throw error opening) ><!@#$>
+    WTF_CLOSE,       // WHAT THE FYSH (Throw error closing) <!@#$><
 
     //TODO bit manipulation
 };
