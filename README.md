@@ -40,7 +40,7 @@
 
 ><(((@> [ ><fysh> o~ ><{((o> ]  // while fysh > b'100' ([ ] are brackets)
 ><> 				     // open curly bracket
-	<fysh><< ~		     // fysh--
+	<fysh><< 		     // fysh--
 <>< 				     // closing curly  bracket
 
 
