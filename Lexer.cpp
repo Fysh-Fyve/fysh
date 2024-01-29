@@ -36,6 +36,8 @@ struct {
 
 class FyshLexer {
     public:
+    // tokenize everything (modularize it)
 
     private:
+    // peak and consume
 };
