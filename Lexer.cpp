@@ -44,15 +44,14 @@ bool is_space(char c) noexcept {
 
 class Token {
     public:
-      TokenType type;
-      std::string_view value;
 
       // PLEASE DELETE THE EXPLINATION COMMENTS WHEN YOU NO LONGER NEED THEM
 
-      // string_view https://www.educative.io/answers/what-is-the-cpp-string-view-in-cpp-17
-      // size_t: https://stackoverflow.com/questions/502856/whats-the-difference-between-size-t-and-int-in-c
+      // std::string_view https://www.educative.io/answers/what-is-the-cpp-string-view-in-cpp-17
+      // std::size_t: https://stackoverflow.com/questions/502856/whats-the-difference-between-size-t-and-int-in-c
       // noexcept: supposed to be faster by saying this function does not throw exceptions
-      // distance: returns the length when you give a pointer to the start and end of the char array
+      // std::distance: returns the length when you give a pointer to the start and end of the char array
+      // std::move: transfers ownership making the original owner lose its ownership
 
       // constructors
       /*
@@ -70,24 +69,36 @@ class Token {
       //-----------------Constructors---------------------
 
       // only the TokenType is given: useful for brackets and stuff since there is only one possible value
-      Token(TokenType type) noexcept: type{type} {}
+      Token(TokenType in_type) noexcept: tokenType{in_type} {}
 
       // TokenType, pointer to first element in char array and length of char array is given
       // stores the string_view of the element into value
-      Token(TokenType type, const char* start, std::size_t len) noexcept: type{type}, value{start, len} {}
+      Token(TokenType in_type, const char* start, std::size_t len) noexcept: tokenType{in_type}, value(start, len) {}
 
       // TokenType, pointer to start of char array, pointer to end of char array. gets length and stores into string_view
-      Token(TokenType type, const char* start, const char* end) noexcept: type{type}, value{start, std::distance(start, end)} {}
+      Token(TokenType in_type, const char* start, const char* end) noexcept: tokenType{in_type}, value(start, std::distance(start, end)) {}
 
       // -----------------------METHODS-----------------------
-      
+      TokenType get_type() {return tokenType;}
+      void      set_type(TokenType in_type) noexcept {tokenType = in_type;}
 
+      bool is_type (TokenType in_type) const noexcept {return tokenType == in_type;}
+      bool not_type(TokenType in_type) const noexcept {return tokenType != in_type;}
 
+      bool is_one_of(TokenType in_type1, TokenType in_type2) const noexcept { return is_type(in_type1) || is_type(in_type2); }
 
-     
+      //TODO add template (not sure what it does yet)
 
+      std::string_view get_value() const noexcept {return value;}
 
+      void set_value(std::string_view in_value) noexcept {
+        value = std::move(in_value);
+      }
 
+      private:
+      // curly bracker means initialize to default value (example: 0)
+        TokenType tokenType {};
+        std::string_view value {};
 };
 
 
