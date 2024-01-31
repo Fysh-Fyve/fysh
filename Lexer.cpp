@@ -1,7 +1,4 @@
-#include <iostream>
 #include <string>
-#include <vector>
-#include <cctype>
 
 using namespace std;
 
@@ -24,9 +21,24 @@ enum class TokenType {
     FYSH_CLOSE,      // <>< (same as closing curly bracket '{' )
     WTF_OPEN,        // WHAT THE FYSH (Throw error opening) ><!@#$>
     WTF_CLOSE,       // WHAT THE FYSH (Throw error closing) <!@#$><
+    COMMENT,         // ><//> Comment 
+    OPENING_COMMENT, // ></*> Comment
+    CLOSING_COMMENT, // Comment <*/>< 
 
     //TODO bit manipulation
 };
+
+bool is_space(char c) noexcept {
+  switch (c) {
+    case ' ':
+    case '\t':
+    case '\r':
+    case '\n':
+      return true;
+    default:
+      return false;
+  }
+}
 
 struct {
     TokenType type;
