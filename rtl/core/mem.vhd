@@ -13,17 +13,12 @@ entity mem is
     --! Address width
     ADDR_W    : integer := 15;
     --! Number of words in physical RAM
-    NUM_WORDS : integer := (2**ADDR_W);
-    --! 0 for byte, 1 for halfword, 2 for word
-    OFFSET    : integer := 2;
-    --! Top range used for the address
-    TOP_RANGE : integer := ADDR_W + OFFSET;
-    --! Bottom range used for the address
-    BOT_RANGE : integer := OFFSET);
+    NUM_WORDS : integer := (2**ADDR_W));
   port(
-    d_i, read_addr_i, write_addr_i : in  std_ulogic_vector (31 downto 0);
-    clk_i, write_en_i              : in  std_ulogic;
-    d_o                            : out std_ulogic_vector (31 downto 0));
+    d_i                       : in  std_ulogic_vector (31 downto 0);
+    read_addr_i, write_addr_i : in  std_ulogic_vector (ADDR_W-1 downto 0);
+    clk_i, write_en_i         : in  std_ulogic;
+    d_o                       : out std_ulogic_vector (31 downto 0));
 end mem;
 
 architecture rtl of mem is
@@ -34,9 +29,9 @@ begin
   begin
     if rising_edge(clk_i) then
       if write_en_i = '1' then
-        RAM(to_integer(unsigned(write_addr_i(TOP_RANGE downto BOT_RANGE)))) <= d_i;
+        RAM(to_integer(unsigned(write_addr_i))) <= d_i;
       end if;
-      d_o <= RAM(to_integer(unsigned(read_addr_i(TOP_RANGE downto BOT_RANGE))));
+      d_o <= RAM(to_integer(unsigned(read_addr_i)));
     end if;
   end process;
 end architecture rtl;

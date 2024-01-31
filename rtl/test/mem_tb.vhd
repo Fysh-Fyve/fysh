@@ -30,8 +30,8 @@ begin
   mem_inst : entity work.mem(rtl) port map (
     clk_i        => clk,
     d_i          => d_in,
-    read_addr_i  => read_addr,
-    write_addr_i => write_addr,
+    read_addr_i  => read_addr(16 downto 2),
+    write_addr_i => write_addr(16 downto 2),
     write_en_i   => write_en,
     d_o          => d_out);
 

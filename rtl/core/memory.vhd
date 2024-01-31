@@ -52,16 +52,16 @@ begin
 
     mem_lo_inst : entity work.mem(rtl) port map (
       clk_i        => clk_i,
-      read_addr_i  => addr,
-      write_addr_i => addr,
+      read_addr_i  => addr(16 downto 2),
+      write_addr_i => addr(16 downto 2),
       write_en_i   => write_lo,
       d_i          => reg_val_2,
       d_o          => mem_lo_out);
 
     mem_hi_inst : entity work.mem(rtl) port map (
       clk_i        => clk_i,
-      read_addr_i  => addr,
-      write_addr_i => addr,
+      read_addr_i  => addr(16 downto 2),
+      write_addr_i => addr(16 downto 2),
       write_en_i   => write_hi,
       d_i          => reg_val_2,
       d_o          => mem_hi_out);

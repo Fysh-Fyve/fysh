@@ -3,6 +3,7 @@
 --! @cond Doxygen_Suppress
 library ieee;
 use ieee.std_logic_1164.all;
+use std.env.stop;
 --! @endcond
 
 --! Test bench for the top module.
@@ -13,4 +14,9 @@ architecture test_bench of topmodule_tb is
   signal clk : std_ulogic;
 begin
   topmodule_inst : entity work.topmodule(rtl) port map (clk => clk);
+  process
+  begin
+    wait for 1 ns;
+    stop;
+  end process;
 end test_bench;

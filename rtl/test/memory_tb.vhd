@@ -3,6 +3,7 @@
 --! @cond Doxygen_Suppress
 library ieee;
 use ieee.std_logic_1164.all;
+use std.env.stop;
 --! @endcond
 
 --! Test bench for the high-level memory module.
@@ -30,4 +31,10 @@ begin
     insn_o       => insn,
     reg_val_1_o  => rs1_val,
     reg_val_2_o  => rs2_val);
+
+  process
+  begin
+    wait for 1 ns;
+    stop;
+  end process;
 end test_bench;
