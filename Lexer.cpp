@@ -87,10 +87,14 @@ class Token {
 
       bool is_one_of(TokenType in_type1, TokenType in_type2) const noexcept { return is_type(in_type1) || is_type(in_type2); }
 
-      //TODO add template (not sure what it does yet)
+      //This seems hella unoptimized, I'll modify it once we have a testbench
+      template <typename... Ts>
+        bool is_one_of(TokenType type1, TokenType type2, Ts... ks) const noexcept {
+          return is_type(type1) || is_one_of(type2, ks...)
+        }
 
       std::string_view get_value() const noexcept {return value;}
-
+      
       void set_value(std::string_view in_value) noexcept {
         value = std::move(in_value);
       }
