@@ -1,1 +1,1 @@
-add_library (common Lexer.cc Lexer.h)
+add_library (common Lexer.cc Lexer.h Token.h Token.cc)
