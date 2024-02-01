@@ -56,30 +56,29 @@ public:
 
   // only the TokenType is given: useful for brackets and stuff since there is
   // only one possible value
-  Token(TokenType in_type) noexcept : tokenType{in_type} {}
+  Token(TokenType inType) noexcept : tokenType{inType} {}
 
   // TokenType, pointer to first element in char array and length of char array
   // is given stores the string_view of the element into value
-  Token(TokenType in_type, const char *start, std::size_t len) noexcept
-      : tokenType{in_type}, value(start, len) {}
+  Token(TokenType inType, const char *start, std::size_t len) noexcept
+      : tokenType{inType}, value(start, len) {}
 
   // TokenType, pointer to start of char array, pointer to end of char array.
   // gets length and stores into string_view
-  Token(TokenType in_type, const char *start, const char *end) noexcept
-      : tokenType{in_type}, value(start, std::distance(start, end)) {}
+  Token(TokenType inType, const char *start, const char *end) noexcept
+      : tokenType{inType}, value(start, std::distance(start, end)) {}
 
   // -----------------------METHODS-----------------------
   // This seems hella unoptimized, I'll modify it once we have a testbench
   template <typename... Ts>
-  bool is_one_of(TokenType type1, TokenType type2, Ts... ks) const noexcept {
-    return is_type(type1) || is_one_of(type2, ks...);
+  bool isOneOf(TokenType type1, TokenType type2, Ts... ks) const noexcept {
+    return isType(type1) || isOneOf(type2, ks...);
   }
 
-  TokenType get_type();
-  bool is_type(TokenType in_type) const noexcept;
-  bool is_one_of(TokenType in_type1, TokenType in_type2) const noexcept;
-  std::string_view get_value() const noexcept;
-  void set_value(std::string_view in_value) noexcept;
+  TokenType type() const noexcept;
+  bool isType(TokenType in_type) const noexcept;
+  bool isOneOf(TokenType type1, TokenType type2) const noexcept;
+  std::string_view val() const noexcept;
 
 private:
   // curly bracker means initialize to default value (example: 0)
