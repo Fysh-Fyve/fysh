@@ -1,6 +1,12 @@
 # Fysh Programming Language Compiler
 
-`></*>`
+Requires CMake and a C++ compiler.
+
+## Testing
+
+Run `make test` to run the unit tests.
+
+## `></*>`
 
 ```c++
 // the fysh's body represents the value of the fysh
