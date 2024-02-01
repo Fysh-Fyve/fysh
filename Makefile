@@ -1,5 +1,8 @@
-all: test/doctest.h | build
+all: test/doctest.h build/Makefile
 	cd build && $(MAKE) -s
+
+build/Makefile:
+	cd build && cmake ..
 
 test/doctest.h:
 	wget -O $@ https://raw.githubusercontent.com/doctest/doctest/master/doctest/doctest.h
