@@ -1,4 +1,4 @@
-all: test/doctest.h
+all: test/doctest.h | build
 	cd build && $(MAKE) -s
 
 test/doctest.h:
