@@ -5,5 +5,5 @@
 TEST_CASE("nextToken") {
   std::string_view input{"<3"};
   FyshLexer lexer{input};
-  CHECK(lexer.nextToken().isType(TokenType::HEART_MULTIPLY));
+  CHECK(lexer.nextToken() == TokenType::HEART_MULTIPLY);
 }

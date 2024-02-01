@@ -1,3 +1,4 @@
+#include <ostream>
 #include <string_view>
 
 enum class TokenType {
@@ -72,16 +73,27 @@ public:
   // This seems hella unoptimized, I'll modify it once we have a testbench
   template <typename... Ts>
   bool isOneOf(TokenType type1, TokenType type2, Ts... ks) const noexcept {
-    return isType(type1) || isOneOf(type2, ks...);
+    return tokenType == type1 || isOneOf(type2, ks...);
   }
 
   TokenType type() const noexcept;
-  bool isType(TokenType in_type) const noexcept;
   bool isOneOf(TokenType type1, TokenType type2) const noexcept;
   std::string_view val() const noexcept;
+
+  bool operator==(const TokenType &type) const noexcept {
+    return tokenType == type;
+  }
+
+  bool operator==(const Token &other) const noexcept {
+    return other.tokenType == tokenType && other.value == value;
+  }
+
+  const char *toString() const { return "fish"; }
 
 private:
   // curly bracker means initialize to default value (example: 0)
   TokenType tokenType{};
   std::string_view value{};
 };
+
+std::ostream &operator<<(std::ostream &os, const Token &value);
