@@ -73,7 +73,7 @@ public:
   // This seems hella unoptimized, I'll modify it once we have a testbench
   template <typename... Ts>
   bool isOneOf(Species type1, Species type2, Ts... ks) const noexcept {
-    return Species == type1 || isOneOf(type2, ks...);
+    return species == type1 || isOneOf(type2, ks...);
   }
 
   Species type() const noexcept;
