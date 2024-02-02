@@ -3,15 +3,15 @@
 
 Species Fysh::get_species() const noexcept { return species; }
 
-bool Fysh::isOneOf(Species type1, Species type2) const noexcept {
-  return species == type1 || species == type2;
+bool Fysh::isOneOf(Species species1, Species species2) const noexcept {
+  return species == species1 || species == species2;
 }
 
-std::string_view Fysh::val() const noexcept { return value; }
+std::string_view Fysh::get_scales() const noexcept { return scales; }
 
 // string representation of token type (for testing)
-constexpr const char *debugType(const Species &type) {
-  switch (type) {
+constexpr const char *debugType(const Species &species) {
+  switch (species) {
   case Species::FYSH_LITERAL:
     return "LITERAL";
   case Species::FYSH_IDENTIFIER:

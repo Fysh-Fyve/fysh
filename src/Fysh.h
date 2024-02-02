@@ -2,7 +2,7 @@
 #include <string_view>
 
 enum class Species {
-  FYSH_LITERAL,    // binary value
+  FYSH_LITERAL,    // binary scales
   FYSH_IDENTIFIER, // variable
   HEART_MULTIPLY,  // <3 or ♡
   DIVIDE,          // </3 or 💔
@@ -56,43 +56,43 @@ public:
   //-----------------Constructors---------------------
 
   // only the Species is given: useful for brackets and stuff since there is
-  // only one possible value
+  // only one possible scales
   Fysh(Species inType) noexcept : species{inType} {}
 
   // Species, pointer to first element in char array and length of char array
-  // is given stores the string_view of the element into value
+  // is given stores the string_view of the element into scales
   Fysh(Species inType, const char *start, std::size_t len) noexcept
-      : species{inType}, value(start, len) {}
+      : species{inType}, scales(start, len) {}
 
   // Species, pointer to start of char array, pointer to end of char array.
   // gets length and stores into string_view
   Fysh(Species inType, const char *start, const char *end) noexcept
-      : species{inType}, value(start, std::distance(start, end)) {}
+      : species{inType}, scales(start, std::distance(start, end)) {}
 
   // -----------------------METHODS-----------------------
   // This seems hella unoptimized, I'll modify it once we have a testbench
   template <typename... Ts>
-  bool isOneOf(Species type1, Species type2, Ts... ks) const noexcept {
-    return species == type1 || isOneOf(type2, ks...);
+  bool isOneOf(Species species1, Species species2, Ts... ks) const noexcept {
+    return species == species1 || isOneOf(species2, ks...);
   }
 
   Species get_species() const noexcept;
 
   bool isOneOf(Species type1, Species type2) const noexcept;
-  std::string_view val() const noexcept;
+  std::string_view get_scales() const noexcept;
 
-  bool operator==(const Species &type) const noexcept {
-    return species == type;
+  bool operator==(const Species &in_species) const noexcept {
+    return species == in_species;
   }
 
   bool operator==(const Fysh &other) const noexcept {
-    return other.species == species && other.value == value;
+    return other.species == species && other.scales == scales;
   }
 
 private:
-  // curly bracker means initialize to default value (example: 0)
+  // curly bracker means initialize to default scales (example: 0)
   Species species{};
-  std::string_view value{};
+  std::string_view scales{};
 };
 
-std::ostream &operator<<(std::ostream &os, const Fysh &value);
+std::ostream &operator<<(std::ostream &os, const Fysh &scales);
