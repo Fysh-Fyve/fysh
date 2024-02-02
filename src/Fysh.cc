@@ -7,12 +7,12 @@ bool Fysh::isOneOf(Species species1, Species species2) const noexcept {
   return species == species1 || species == species2;
 }
 
-std::string_view Fysh::getScales() const noexcept { return scales; }
+std::string_view Fysh::getBody() const noexcept { return body; }
 
 // string representation of token type (for testing)
 constexpr const char *debugType(const Species &species) {
   switch (species) {
-  case Species::FYSH_LITERAL:
+  case Species::FYSH_SCALES:
     return "LITERAL";
   case Species::FYSH_IDENTIFIER:
     return "IDENT";
@@ -60,6 +60,6 @@ constexpr const char *debugType(const Species &species) {
 }
 
 std::ostream &operator<<(std::ostream &os, const Fysh &value) {
-  os << "'" << debugType(value.type()) << "'" << value.val();
+  os << "'" << debugType(value.getSpecies()) << "'" << value.getBody();
   return os;
 }

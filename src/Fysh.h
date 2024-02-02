@@ -1,17 +1,20 @@
 /*
+Reference:
+https://gist.github.com/arrieta/1a309138689e09375b90b3b1aa768e20
 
 Definitions for the Fysh class
 Species: enum class for the different types of Fysh tokens 
-Scales: string_view for each token (the actual value of the token)
-Fysh: an object with a species and scales
+body: string_view for each token (the actual value of the token)
+Fysh: an object with a species and body
 Stream: the input string
+Current: the current position in the input string
 */
 
 #include <ostream>
 #include <string_view>
 
 enum class Species {
-  FYSH_LITERAL,    // binary scales
+  FYSH_SCALES,    // binary value
   FYSH_IDENTIFIER, // variable
   HEART_MULTIPLY,  // <3 or ♡
   DIVIDE,          // </3 or 💔
@@ -44,10 +47,10 @@ public:
   Fysh(Species inType) noexcept : species{inType} {}
 
   Fysh(Species inType, const char *start, std::size_t len) noexcept
-      : species{inType}, scales(start, len) {}
+      : species{inType}, body(start, len) {}
 
   Fysh(Species inType, const char *start, const char *end) noexcept
-      : species{inType}, scales(start, std::distance(start, end)) {}
+      : species{inType}, body(start, std::distance(start, end)) {}
 
   // -----------------------METHODS-----------------------
 
@@ -61,7 +64,7 @@ public:
   }
 
   Species getSpecies() const noexcept;
-  std::string_view getScales() const noexcept;
+  std::string_view getBody() const noexcept;
 
 
   // -----------------------OPERATORS-----------------------
@@ -70,34 +73,94 @@ public:
   }
   
   bool operator==(const Fysh &other) const noexcept {
-    return other.species == species && other.scales == scales;
+    return other.species == species && other.body == body;
   }
 
 private:
   Species species{};
-  std::string_view scales{};
+  std::string_view body{};
 };
 
 
 class FyshLexer {
 public:
   // stream is the start of the input string
-  FyshLexer(const char *streamStart) noexcept : stream{streamStart} {}
+  FyshLexer(const char *streamStart) noexcept : current{streamStart} {}
 
   Fysh nextFysh() noexcept;
 
   private:
   Fysh identifier() noexcept;
   Fysh number() noexcept;
+  Fysh scales() noexcept;
   Fysh slash_or_comment() noexcept;
   Fysh atom(Species) noexcept;
 
-  char peek() const noexcept { return *stream; }
-  char get() noexcept { return *stream++; }
+  char peek() const noexcept { return *current; }
+  char get() noexcept { return *current++; }
 
-  const char* stream = nullptr;
+  const char* current = nullptr;
 };
+
+bool isSpace(char c) noexcept {
+  switch (c) {
+    case ' ':
+    case '\t':
+    case '\r':
+    case '\n':
+      return true;
+    default:
+      return false;
+  }
+}
+
+bool isScale(char c) noexcept { 
+  switch (c) {
+    case '(':
+    case ')':
+    case '{':
+    case '}':
+      return true;
+    default:
+      return false;
+  }
+} 
+
+
+Fysh FyshLexer::scales() noexcept {
+  const char *start = current;
+  get();
+  while (isScale(peek())) get();
+  if (peek() == 'o'){
+    get();
+    if (peek() == '>'){
+      // positive
+    } else {
+      // error
+    }
+  }
+  else if (peek() == '>'){
+    // negative
+  }
+  else {
+    // error
+  }
+  return Fysh(Species::FYSH_SCALES, start, current);
+}
+/*
+Token Lexer::number() noexcept {
+  const char* start = m_beg;
+  get();
+  while (is_digit(peek())) get();
+  return Token(Token::Kind::Number, start, m_beg);
+}*/
+
+
+
+
+
+
 
 
 // string representation of token type (for testing)
-std::ostream &operator<<(std::ostream &os, const Fysh &scales);
+std::ostream &operator<<(std::ostream &os, const Fysh &body);
