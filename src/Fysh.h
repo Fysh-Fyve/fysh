@@ -73,10 +73,11 @@ public:
   // This seems hella unoptimized, I'll modify it once we have a testbench
   template <typename... Ts>
   bool isOneOf(Species type1, Species type2, Ts... ks) const noexcept {
-    return Species == type1 || isOneOf(type2, ks...);
+    return species == type1 || isOneOf(type2, ks...);
   }
 
-  Species type() const noexcept;
+  Species get_species() const noexcept;
+
   bool isOneOf(Species type1, Species type2) const noexcept;
   std::string_view val() const noexcept;
 
@@ -87,8 +88,6 @@ public:
   bool operator==(const Fysh &other) const noexcept {
     return other.species == species && other.value == value;
   }
-
-  const char *toString() const { return "fish"; }
 
 private:
   // curly bracker means initialize to default value (example: 0)

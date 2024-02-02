@@ -1,7 +1,7 @@
 #include "Fysh.h"
 #include <cassert>
 
-Species Fysh::type() const noexcept { return species; }
+Species Fysh::get_species() const noexcept { return species; }
 
 bool Fysh::isOneOf(Species type1, Species type2) const noexcept {
   return species == type1 || species == type2;
@@ -9,6 +9,7 @@ bool Fysh::isOneOf(Species type1, Species type2) const noexcept {
 
 std::string_view Fysh::val() const noexcept { return value; }
 
+// string representation of token type (for testing)
 constexpr const char *debugType(const Species &type) {
   switch (type) {
   case Species::FYSH_LITERAL:
