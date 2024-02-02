@@ -13,4 +13,4 @@ bool is_space(char c) noexcept {
 }
 
 // TODO: Implement!
-Token FyshLexer::nextToken() { return Token{TokenType::EQUAL}; }
+Fysh FyshLexer::nextFysh() { return Fysh{Species::EQUAL}; }
