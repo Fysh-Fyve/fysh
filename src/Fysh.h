@@ -4,6 +4,7 @@ Definitions for the Fysh class
 Species: enum class for the different types of Fysh tokens 
 Scales: string_view for each token (the actual value of the token)
 Fysh: an object with a species and scales
+Stream: the input string
 */
 
 #include <ostream>
@@ -76,6 +77,27 @@ private:
   Species species{};
   std::string_view scales{};
 };
+
+
+class FyshLexer {
+public:
+  // stream is the start of the input string
+  FyshLexer(const char *streamStart) noexcept : stream{streamStart} {}
+
+  Fysh nextFysh() noexcept;
+
+  private:
+  Fysh identifier() noexcept;
+  Fysh number() noexcept;
+  Fysh slash_or_comment() noexcept;
+  Fysh atom(Species) noexcept;
+
+  char peek() const noexcept { return *stream; }
+  char get() noexcept { return *stream++; }
+
+  const char* stream = nullptr;
+};
+
 
 // string representation of token type (for testing)
 std::ostream &operator<<(std::ostream &os, const Fysh &scales);
