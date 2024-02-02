@@ -1,10 +1,10 @@
 #include "Fysh.h"
 #include <cassert>
 
-Species Fysh::type() const noexcept { return Species; }
+Species Fysh::type() const noexcept { return species; }
 
 bool Fysh::isOneOf(Species type1, Species type2) const noexcept {
-  return Species == type1 || Species == type2;
+  return species == type1 || species == type2;
 }
 
 std::string_view Fysh::val() const noexcept { return value; }
