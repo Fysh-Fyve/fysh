@@ -3,6 +3,7 @@
 --! @cond Doxygen_Suppress
 library ieee;
 use ieee.std_logic_1164.all;
+use work.rom.rom_arr;
 --! @endcond
 
 
@@ -68,13 +69,15 @@ begin
     rom_out         when '0',
     (others => 'X') when others;
 
-  rom_inst : entity work.mem(rtl) port map (
-    clk_i        => clk_i,
-    read_addr_i  => addr_i(MEM_SPLIT-1 downto 2),
-    write_addr_i => addr_i(MEM_SPLIT-1 downto 2),
-    write_en_i   => rom_write_en,
-    d_i          => d_i,
-    d_o          => rom_out);
+  rom_inst : entity work.mem(rtl)
+    generic map (DATA => rom_arr)
+    port map (
+      clk_i        => clk_i,
+      read_addr_i  => addr_i(MEM_SPLIT-1 downto 2),
+      write_addr_i => addr_i(MEM_SPLIT-1 downto 2),
+      write_en_i   => rom_write_en,
+      d_i          => d_i,
+      d_o          => rom_out);
 
   ram_inst : entity work.mem(rtl) port map (
     clk_i        => clk_i,

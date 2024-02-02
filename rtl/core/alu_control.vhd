@@ -58,6 +58,20 @@ architecture rtl of alu_control is
   signal alu      : std_ulogic_vector (31 downto 0) := (others => '0');
   signal pc       : std_ulogic_vector (31 downto 0) := (others => '0');
 begin
+
+  print : process(clk_i)
+    use std.textio.all;
+    variable l : line;
+  begin
+    write(l, string'("clk_i: "));
+    write(l, clk_i);
+    write(l, string'(" pc_clk: "));
+    write(l, pc_clk);
+    write(l, string'(" pc: "));
+    write(l, to_hstring(pc));
+    writeline(output, l);
+  end process print;
+
   imm_sx_inst : entity work.imm_sx(rtl) port map (
     instruction_i => instruction_i,
     imm_val_o     => imm_ex);

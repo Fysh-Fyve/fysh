@@ -53,9 +53,9 @@ begin
 
   main : process
     use std.textio.all;
-    variable my_line : line;
+    variable l : line;
   begin
-    wait for 5 ns;
+    wait for 1 us;
     stop;
   end process main;
 end test_bench;

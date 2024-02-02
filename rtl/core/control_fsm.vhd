@@ -36,35 +36,49 @@ entity control_fsm is
 end control_fsm;
 
 architecture rtl of control_fsm is
+  --! TODO: Use this?
+  type state_t is (decode, drive);
   signal pc_clk       : std_ulogic := '0';
   signal ir_clk       : std_ulogic := '0';
   signal mem_write_en : std_ulogic := '0';
+
+  signal state : state_t := decode;
 begin
-  alu_b_sel_o   <= not opcode_i(5);     -- immediate value ('1') or rs2 ('0')
-  -- TODO: Figure this out
-  alu_a_sel_o   <= opcode_i(0);         -- pc ('1') or rs1 ('0')
-  addr_sel_o    <= opcode_i(0);         -- alu ('1') or pc ('0')
-  pc_alu_sel_o  <= opcode_i(0);         -- 4 ('1') or immediate value ('0')
-  pc_next_sel_o <= opcode_i(0);         -- alu ('1') or pc alu ('0')
-  rd_sel_o      <= opcode_i(1 downto 0);  -- mem_sx ("11"), alu ("01"), or pc alu ("00")
-
-  sub_sra_o <= sub_sra_i;
-  op_bits_o <= opcode_i(2 downto 0);    -- TODO: correct!
-  sx_size_o <= opcode_i(2 downto 0);    -- TODO: correct!
-
-  -- TODO!!
-  rd_clk_o <= opcode_i(0);
-  reset_o  <= opcode_i(0);
-
-  drive_clock : process(clk_i, pc_clk, ir_clk, mem_write_en)
+  drive_clock : process(clk_i, opcode_i, pc_clk, ir_clk, mem_write_en)
+    use std.textio.all;
+    variable l : line;
   begin
-    if rising_edge(clk_i) then
-      pc_clk       <= not pc_clk;
-      ir_clk       <= not ir_clk;
-      mem_write_en <= not mem_write_en;
+    if clk_i'event then
+      --! TODO: Decode kinda like 410
+      case state is
+        when decode =>
+          alu_b_sel_o   <= not opcode_i(5);  -- immediate value ('1') or rs2 ('0')
+          -- TODO: Figure this out
+          alu_a_sel_o   <= opcode_i(0);      -- pc ('1') or rs1 ('0')
+          addr_sel_o    <= opcode_i(0);      -- alu ('1') or pc ('0')
+          pc_alu_sel_o  <= '1';         -- 4 ('1') or immediate value ('0')
+          pc_next_sel_o <= opcode_i(0);      -- alu ('1') or pc alu ('0')
+          rd_sel_o      <= opcode_i(1 downto 0);  -- mem_sx ("11"), alu ("01"), or pc alu ("00")
+
+          sub_sra_o <= sub_sra_i;
+          op_bits_o <= opcode_i(2 downto 0);  -- TODO: correct!
+          sx_size_o <= opcode_i(2 downto 0);  -- TODO: correct!
+
+          -- TODO!!
+          rd_clk_o <= opcode_i(0);
+          state    <= drive;
+        when drive =>
+          pc_clk       <= not pc_clk;
+          ir_clk       <= not ir_clk;
+          mem_write_en <= not mem_write_en;
+          state        <= decode;
+      end case;
     end if;
     pc_clk_o       <= pc_clk;
     ir_clk_o       <= ir_clk;
     mem_write_en_o <= mem_write_en;
+
+    -- Hardwire to 1 for now...
+    reset_o <= '1';
   end process drive_clock;
 end rtl;

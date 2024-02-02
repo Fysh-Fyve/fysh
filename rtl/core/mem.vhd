@@ -4,7 +4,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-use work.fysh.ram_t;
+use work.fysh.mem_t;
 --! @endcond
 
 --! Block Memory. \n
@@ -18,7 +18,7 @@ entity mem is
     NUM_WORDS : integer := (2**ADDR_W);
 
     --! Data array, can be hardwired
-    DATA : ram_t (0 to NUM_WORDS-1) := (others => (31 downto 0 => '0'))
+    DATA : mem_t (0 to NUM_WORDS-1) := (others => (31 downto 0 => '0'))
     );
 
   port(
@@ -31,11 +31,11 @@ entity mem is
 end mem;
 
 architecture rtl of mem is
-  signal RAM : ram_t (0 to NUM_WORDS-1) := DATA;
+  signal RAM : mem_t (0 to NUM_WORDS-1) := DATA;
 begin
   process(clk_i)
   begin
-    if rising_edge(clk_i) then
+    if clk_i'event then
       if write_en_i = '1' then
         RAM(to_integer(unsigned(write_addr_i))) <= d_i;
       end if;

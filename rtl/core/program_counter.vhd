@@ -15,7 +15,7 @@ entity program_counter is
     pc_clk_i      : in std_ulogic := '0';  --! Program Counter Clock Signal.
     reset_i       : in std_ulogic := '0';  --! Reset Signal.
     pc_next_sel_i : in std_ulogic := '0';  --! Flag for selecting the next instruction.
-    pc_alu_sel_i  : in std_ulogic := '0';  --! Flag to increment the value of PC with either an immediate value or 4.
+    pc_alu_sel_i  : in std_ulogic := '1';  --! Flag to increment the value of PC with either an immediate value or 4.
 
     imm_x_i : in std_ulogic_vector (31 downto 0) := (others => '0');  -- PC increment immediate value.
     alu_i   : in std_ulogic_vector (31 downto 0) := (others => '0');  --! ALU Output. (use better name such as alu_out_i)
@@ -25,7 +25,11 @@ entity program_counter is
 end program_counter;
 
 architecture rtl of program_counter is
-  signal next_ins, pc, pc_alu, pc_alu_result, pc_increment : std_ulogic_vector(31 downto 0);
+  signal next_ins      : std_ulogic_vector(31 downto 0) := (others => '0');
+  signal pc            : std_ulogic_vector(31 downto 0) := (others => '0');
+  signal pc_alu        : std_ulogic_vector(31 downto 0) := (others => '0');
+  signal pc_alu_result : std_ulogic_vector(31 downto 0) := (others => '0');
+  signal pc_increment  : std_ulogic_vector(31 downto 0) := (others => '0');
 begin
   pc_increment <= x"00000004";  -- hardwire program counter increment to 4
 
@@ -44,10 +48,15 @@ begin
   pc_o            <= pc;
 
   process(reset_i, pc_clk_i)
+    use std.textio.all;
+    variable l : line;
   begin
-    if (reset_i = '0') then
+    write(l, string'("next_ins: "));
+    write(l, next_ins);
+    writeline(output, l);
+    if falling_edge(reset_i) then
       pc <= (others => '0');
-    elsif rising_edge(pc_clk_i) then
+    elsif pc_clk_i'event then
       pc <= next_ins;
     end if;
   end process;

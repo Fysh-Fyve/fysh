@@ -61,6 +61,7 @@ mem_tb: $(TEST_DIR)/mem_tb.vhd $(MEM)
 _MEMORY := memory \
 	   $(_MEM) \
 	   phy_map \
+	   rom_pkg \
 	   mbr_sx \
 	   register_file \
 

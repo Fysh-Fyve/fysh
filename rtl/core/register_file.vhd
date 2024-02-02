@@ -32,7 +32,7 @@ begin
   for i in 1 to 31 generate
     register_write : process(reset_i, rd_clk_i)
     begin
-      if (reset_i = '0') then
+      if falling_edge(reset_i) then
         reg_file(i) <= (others => '0');
       elsif rising_edge(rd_clk_i) then
         if (i = to_integer(unsigned(dest_reg_i))) then
@@ -48,7 +48,7 @@ begin
 
   register_read : process(rd_clk_i)
   begin
-    if rising_edge(rd_clk_i) then
+    if rd_clk_i'event then
       reg_val_1_o <= reg_file(to_integer(unsigned(reg_sel_1_i)));
       reg_val_2_o <= reg_file(to_integer(unsigned(reg_sel_2_i)));
     end if;
