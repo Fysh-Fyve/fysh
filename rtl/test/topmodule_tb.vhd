@@ -11,9 +11,12 @@ entity topmodule_tb is
 end topmodule_tb;
 
 architecture test_bench of topmodule_tb is
-  signal clk : std_ulogic;
+  signal clk  : std_ulogic;
+  signal gpio : std_ulogic_vector (31 downto 0);
 begin
-  topmodule_inst : entity work.topmodule(rtl) port map (clk => clk);
+  topmodule_inst : entity work.topmodule(rtl) port map (
+    clk  => clk,
+    gpio => gpio);
   process
   begin
     wait for 1 ns;

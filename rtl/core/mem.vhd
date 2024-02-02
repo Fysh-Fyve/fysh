@@ -4,6 +4,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.fysh.ram_t;
 --! @endcond
 
 --! Block Memory. \n
@@ -11,19 +12,26 @@ use ieee.numeric_std.all;
 entity mem is
   generic (
     --! Address width
-    ADDR_W    : integer := 15;
+    ADDR_W : integer := 15;
+
     --! Number of words in physical RAM
-    NUM_WORDS : integer := (2**ADDR_W));
+    NUM_WORDS : integer := (2**ADDR_W);
+
+    --! Data array, can be hardwired
+    DATA : ram_t (0 to NUM_WORDS-1) := (others => (31 downto 0 => '0'))
+    );
+
   port(
-    d_i                       : in  std_ulogic_vector (31 downto 0);
-    read_addr_i, write_addr_i : in  std_ulogic_vector (ADDR_W-1 downto 0);
-    clk_i, write_en_i         : in  std_ulogic;
-    d_o                       : out std_ulogic_vector (31 downto 0));
+    d_i               : in  std_ulogic_vector (31 downto 0);
+    read_addr_i       : in  std_ulogic_vector (ADDR_W-1 downto 0) := (others => '0');
+    write_addr_i      : in  std_ulogic_vector (ADDR_W-1 downto 0) := (others => '0');
+    clk_i, write_en_i : in  std_ulogic;
+    d_o               : out std_ulogic_vector (31 downto 0));
+
 end mem;
 
 architecture rtl of mem is
-  type ram_t is array (NUM_WORDS-1 downto 0) of std_logic_vector(31 downto 0);
-  signal RAM : ram_t := (others => (31 downto 0 => '0'));
+  signal RAM : ram_t (0 to NUM_WORDS-1) := DATA;
 begin
   process(clk_i)
   begin

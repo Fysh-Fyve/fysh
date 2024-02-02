@@ -12,17 +12,16 @@ use ieee.numeric_std.all;
 --! when branching.
 entity program_counter is
   port (
+    pc_clk_i      : in std_ulogic := '0';  --! Program Counter Clock Signal.
+    reset_i       : in std_ulogic := '0';  --! Reset Signal.
+    pc_next_sel_i : in std_ulogic := '0';  --! Flag for selecting the next instruction.
+    pc_alu_sel_i  : in std_ulogic := '0';  --! Flag to increment the value of PC with either an immediate value or 4.
 
-    pc_clk_i      : in std_ulogic;      --! Program Counter Clock Signal.
-    reset_i       : in std_ulogic;      --! Reset Signal.
-    pc_next_sel_i : in std_ulogic;  --! Flag for selecting the next instruction.
-    pc_alu_sel_i  : in std_ulogic;  --! Flag to increment the value of PC with either an immediate value or 4.
+    imm_x_i : in std_ulogic_vector (31 downto 0) := (others => '0');  -- PC increment immediate value.
+    alu_i   : in std_ulogic_vector (31 downto 0) := (others => '0');  --! ALU Output. (use better name such as alu_out_i)
 
-    imm_x_i : in std_ulogic_vector (31 downto 0);  -- PC increment immediate value.
-    alu_i   : in std_ulogic_vector (31 downto 0);  --! ALU Output. (use better name such as alu_out_i)
-
-    pc_o            : out std_ulogic_vector (31 downto 0);  --! Program Counter
-    pc_alu_result_o : out std_ulogic_vector (31 downto 0));  --! Program Counter ALU Result.
+    pc_o            : out std_ulogic_vector (31 downto 0) := (others => '0');  --! Program Counter
+    pc_alu_result_o : out std_ulogic_vector (31 downto 0) := (others => '0'));  --! Program Counter ALU Result.
 end program_counter;
 
 architecture rtl of program_counter is

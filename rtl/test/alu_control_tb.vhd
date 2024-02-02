@@ -3,6 +3,7 @@
 --! @cond Doxygen_Suppress
 library ieee;
 use ieee.std_logic_1164.all;
+use std.env.stop;
 --! @endcond
 
 --! Test bench for the ALU-Control module.
@@ -10,8 +11,9 @@ entity alu_control_tb is
 end alu_control_tb;
 
 architecture test_bench of alu_control_tb is
-  signal insn             : std_ulogic_vector (31 downto 0) := (others => '0');
-  signal rs1_val, rs2_val : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal insn    : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal rs1_val : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal rs2_val : std_ulogic_vector (31 downto 0) := (others => '0');
 
   -- Clock Signals
   signal clk          : std_ulogic := '0';
@@ -19,11 +21,20 @@ architecture test_bench of alu_control_tb is
   signal ir_clk       : std_ulogic := '0';
   signal mem_write_en : std_ulogic := '0';
 
-  signal alu, pc, pc_alu : std_ulogic_vector (31 downto 0) := (others => '0');
-  signal rd_sel          : std_ulogic_vector (1 downto 0)  := (others => '0');
-  signal reset, addr_sel : std_ulogic                      := '0';
-  signal sx_size         : std_ulogic_vector (2 downto 0)  := (others => '0');
+  signal alu      : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal pc       : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal pc_alu   : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal rd_sel   : std_ulogic_vector (1 downto 0)  := (others => '0');
+  signal reset    : std_ulogic                      := '0';
+  signal addr_sel : std_ulogic                      := '0';
+  signal sx_size  : std_ulogic_vector (2 downto 0)  := (others => '0');
 begin
+  clock : process
+  begin
+    clk <= not clk;
+    wait for 1 ns;
+  end process clock;
+
   alu_control_inst : entity work.alu_control(rtl) port map (
     clk_i           => clk,
     instruction_i   => insn,
@@ -39,4 +50,12 @@ begin
     mem_write_en_o  => mem_write_en,
     rd_sel_o        => rd_sel,
     sx_size_o       => sx_size);
+
+  main : process
+    use std.textio.all;
+    variable my_line : line;
+  begin
+    wait for 5 ns;
+    stop;
+  end process main;
 end test_bench;

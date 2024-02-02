@@ -10,23 +10,24 @@ use ieee.std_logic_1164.all;
 --! Also includes the Program Counter and the Immediate Value sign extender.
 entity alu_control is
   port (
-    clk_i         : in std_ulogic;      --! Clock signal.
-    instruction_i : in std_ulogic_vector (31 downto 0);  --! Instruction to be executed.
-    reg_val_1_i   : in std_ulogic_vector (31 downto 0);  --! Value from first selected register
-    reg_val_2_i   : in std_ulogic_vector (31 downto 0);  --! Value from second selected register
+    clk_i : in std_ulogic := '0';       --! Clock signal.
 
-    rd_clk_o       : out std_ulogic;    --! register file clock signal
-    mem_write_en_o : out std_ulogic;    --! memory clock signal
-    ir_clk_o       : out std_ulogic;    --! instruction register clock signal
+    instruction_i : in std_ulogic_vector (31 downto 0) := (others => '0');  --! Instruction to be executed.
+    reg_val_1_i   : in std_ulogic_vector (31 downto 0) := (others => '0');  --! Value from first selected register
+    reg_val_2_i   : in std_ulogic_vector (31 downto 0) := (others => '0');  --! Value from second selected register
 
-    alu_o           : out std_ulogic_vector (31 downto 0);  --! ALU output
-    pc_o            : out std_ulogic_vector (31 downto 0);  --! Program Counter output
-    pc_alu_result_o : out std_ulogic_vector (31 downto 0);  --! Program Counter's ALU output
+    rd_clk_o       : out std_ulogic := '0';  --! register file clock signal
+    mem_write_en_o : out std_ulogic := '0';  --! memory clock signal
+    ir_clk_o       : out std_ulogic := '0';  --! instruction register clock signal
 
-    reset_o    : out std_ulogic;        --! Reset signal
-    addr_sel_o : out std_ulogic;        --! ALU & PC address select signal
-    rd_sel_o   : out std_ulogic_vector (1 downto 0);  --! Register File write select
-    sx_size_o  : out std_ulogic_vector (2 downto 0));  --! Memory fetch size
+    alu_o           : out std_ulogic_vector (31 downto 0) := (others => '0');  --! ALU output
+    pc_o            : out std_ulogic_vector (31 downto 0) := (others => '0');  --! Program Counter output
+    pc_alu_result_o : out std_ulogic_vector (31 downto 0) := (others => '0');  --! Program Counter's ALU output
+
+    reset_o    : out std_ulogic                     := '0';  --! Reset signal
+    addr_sel_o : out std_ulogic                     := '0';  --! ALU & PC address select signal
+    rd_sel_o   : out std_ulogic_vector (1 downto 0) := (others => '0');  --! Register File write select
+    sx_size_o  : out std_ulogic_vector (2 downto 0) := (others => '0'));  --! Memory fetch size
 end alu_control;
 
 architecture rtl of alu_control is
@@ -50,10 +51,12 @@ architecture rtl of alu_control is
   signal alu_a_sel : std_ulogic := '0';
   signal alu_b_sel : std_ulogic := '0';
 
-  signal reset, addr_sel : std_ulogic;
-  signal rd_sel          : std_ulogic_vector (1 downto 0);
-  signal sx_size         : std_ulogic_vector (2 downto 0);
-  signal alu, pc         : std_ulogic_vector (31 downto 0);
+  signal reset    : std_ulogic                      := '0';
+  signal addr_sel : std_ulogic                      := '0';
+  signal rd_sel   : std_ulogic_vector (1 downto 0)  := (others => '0');
+  signal sx_size  : std_ulogic_vector (2 downto 0)  := (others => '0');
+  signal alu      : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal pc       : std_ulogic_vector (31 downto 0) := (others => '0');
 begin
   imm_sx_inst : entity work.imm_sx(rtl) port map (
     instruction_i => instruction_i,

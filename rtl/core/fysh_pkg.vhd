@@ -1,12 +1,13 @@
---! \file alu_operations_pkg.vhd
+--! \file fysh_pkg.vhd
 --! \author Charles Ancheta
 --! @cond Doxygen_Suppress
 library ieee;
 use ieee.std_logic_1164.all;
 --! @endcond
 
---! A package containing constants representing the ALU operations.\n
-package alu_operations is
+--! A package containing shared stuff. Should probably be broken down.\n
+package fysh is
+  -- Constants representing the ALU operations.
   subtype op_t is std_ulogic_vector (2 downto 0);
   constant OP_ADD_SUB            : op_t := "000";  --! A + B or A - B
   constant OP_SHIFT_LEFT         : op_t := "001";  --! A << B(4:0)
@@ -16,4 +17,6 @@ package alu_operations is
   constant OP_SHIFT_RIGHT        : op_t := "101";  --! A >> B(4:0)
   constant OP_OR                 : op_t := "110";  --! A | B
   constant OP_AND                : op_t := "111";  --! A & B
-end package alu_operations;
+
+  type ram_t is array (natural range <>) of std_logic_vector(31 downto 0);
+end package fysh;

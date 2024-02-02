@@ -8,9 +8,8 @@ use ieee.std_logic_1164.all;
 --! The top module that brings all the components together.\n
 entity topmodule is
   port (
-    clk   : in  std_ulogic;
-    --! Temporary output until we fully define the execution environment
-    alu_o : out std_ulogic_vector (7 downto 0));
+    clk  : in    std_ulogic;
+    gpio : inout std_ulogic_vector (31 downto 0));
 end topmodule;
 
 architecture rtl of topmodule is
@@ -22,9 +21,6 @@ architecture rtl of topmodule is
   signal rd_sel                                        : std_ulogic_vector (1 downto 0)  := (others => '0');
   signal sx_size                                       : std_ulogic_vector (2 downto 0)  := (others => '0');
 begin
-  -- This is so weird
-  alu_o <= alu(7 downto 0);
-
   alu_control_inst : entity work.alu_control(rtl) port map (
     clk_i           => clk,
     instruction_i   => insn,
@@ -55,5 +51,6 @@ begin
     pc_alu_out_i => pc_alu,
     insn_o       => insn,
     reg_val_1_o  => rs1_val,
-    reg_val_2_o  => rs2_val);
+    reg_val_2_o  => rs2_val,
+    gpio         => gpio);
 end rtl;

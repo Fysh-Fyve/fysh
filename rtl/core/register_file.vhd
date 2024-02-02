@@ -17,8 +17,8 @@ entity register_file is
     rd_clk_i       : in  std_ulogic;    --! Register File Clock Signal
     reset_i        : in  std_ulogic;    --! Reset Signal
     dest_reg_i     : in  std_ulogic_vector (4 downto 0);  --! Destination Register
-    reg_sel_1_i    : in  std_ulogic_vector (4 downto 0);  --! First Register Select
-    reg_sel_2_i    : in  std_ulogic_vector (4 downto 0);  --! Second Register Select
+    reg_sel_1_i    : in  std_ulogic_vector (4 downto 0) := (others => '0');  --! First Register Select
+    reg_sel_2_i    : in  std_ulogic_vector (4 downto 0) := (others => '0');  --! Second Register Select
     dest_reg_val_i : in  std_ulogic_vector (31 downto 0);  --! Value to write to the Destination Register
     reg_val_1_o    : out std_ulogic_vector (31 downto 0);  --! Value of Register Select 1
     reg_val_2_o    : out std_ulogic_vector (31 downto 0));  --! Value of Register Select 2
@@ -26,7 +26,7 @@ end register_file;
 
 architecture rtl of register_file is
   type reg_file_t is array (31 downto 0) of std_ulogic_vector(31 downto 0);  -- 32 32-bit registers
-  signal reg_file : reg_file_t;
+  signal reg_file : reg_file_t := (others => (31 downto 0 => '0'));
 begin
   registers_g :
   for i in 1 to 31 generate

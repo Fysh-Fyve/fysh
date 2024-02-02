@@ -6,7 +6,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 library work;
-use work.alu_operations.all;
+use work.fysh.all;
 --! @endcond
 
 -- Before I forget and have to scour Google for this again
@@ -18,7 +18,8 @@ use work.alu_operations.all;
 --! xor, and signed and unsigned comparisons.
 entity alu is
   port (
-    operand_a_i, operand_b_i  : in  std_ulogic_vector (31 downto 0);  --! input operands
+    operand_a_i               : in  std_ulogic_vector (31 downto 0) := (others => '0');  --! input operand A
+    operand_b_i               : in  std_ulogic_vector (31 downto 0) := (others => '0');  --! input operand B
     op_bits_i                 : in  std_ulogic_vector (2 downto 0);  --! Determines the operation to perform.
     sub_sra_i                 : in  std_ulogic;  --! Control signal for subtraction/arithmetic right shift
     alu_result_o              : out std_ulogic_vector (31 downto 0);  --! Result of the operation.
@@ -29,13 +30,13 @@ end alu;
 
 
 architecture rtl of alu is
-  signal add_sub_result   : signed (31 downto 0);
-  signal left_shifted     : std_ulogic_vector (31 downto 0);
-  signal right_shifted    : std_ulogic_vector (31 downto 0);
-  signal unsigned_shift_a : std_ulogic_vector (31 downto 0);
-  signal signed_shift_a   : std_ulogic_vector (31 downto 0);
-  signal lt_unsigned_flag : std_ulogic;
-  signal lt_signed_flag   : std_ulogic;
+  signal add_sub_result   : signed (31 downto 0)            := (others => '0');
+  signal left_shifted     : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal right_shifted    : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal unsigned_shift_a : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal signed_shift_a   : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal lt_unsigned_flag : std_ulogic                      := '0';
+  signal lt_signed_flag   : std_ulogic                      := '0';
 
   -- converts a std_ulogic to a std_ulogic_vector (32 bits)
   function int_from_bit(x : std_ulogic) return std_ulogic_vector is
@@ -72,8 +73,6 @@ architecture rtl of alu is
     -- Compare 32nd bit separately because `to_integer` is limited to 31 bits
     return (lt and (a(31) or not b(31))) or (a(31) and not b(31));
   end function less_than_signed;
-
-
 begin
   -- select operation
   with op_bits_i select alu_result_o <=
