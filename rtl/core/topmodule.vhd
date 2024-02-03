@@ -16,10 +16,15 @@ architecture rtl of topmodule is
   signal insn             : std_ulogic_vector (31 downto 0) := (others => '0');
   signal rs1_val, rs2_val : std_ulogic_vector (31 downto 0) := (others => '0');
 
-  signal alu, pc, pc_alu                               : std_ulogic_vector (31 downto 0) := (others => '0');
-  signal reset, addr_sel, rd_clk, mem_write_en, ir_clk : std_ulogic                      := '0';
-  signal rd_sel                                        : std_ulogic_vector (1 downto 0)  := (others => '0');
-  signal sx_size                                       : std_ulogic_vector (2 downto 0)  := (others => '0');
+  signal alu, pc, pc_alu : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal rd_sel          : std_ulogic_vector (1 downto 0)  := (others => '0');
+  signal sx_size         : std_ulogic_vector (2 downto 0)  := (others => '0');
+
+  signal reset        : std_ulogic := '0';
+  signal addr_sel     : std_ulogic := '0';
+  signal rd_clk       : std_ulogic := '0';
+  signal mem_write_en : std_ulogic := '0';
+  signal ir_clk       : std_ulogic := '0';
 begin
   alu_control_inst : entity work.alu_control(rtl) port map (
     clk_i           => clk,

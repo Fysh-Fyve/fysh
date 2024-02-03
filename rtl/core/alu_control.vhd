@@ -63,13 +63,13 @@ begin
     use std.textio.all;
     variable l : line;
   begin
-    write(l, string'("clk_i: "));
-    write(l, clk_i);
-    write(l, string'(" pc_clk: "));
-    write(l, pc_clk);
-    write(l, string'(" pc: "));
-    write(l, to_hstring(pc));
-    writeline(output, l);
+    if rising_edge(clk_i) then
+      write(l, string'("pc_clk: "));
+      write(l, pc_clk);
+      write(l, string'(" pc: "));
+      write(l, to_hstring(pc));
+      writeline(output, l);
+    end if;
   end process print;
 
   imm_sx_inst : entity work.imm_sx(rtl) port map (

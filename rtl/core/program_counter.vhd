@@ -52,7 +52,7 @@ begin
     variable l : line;
   begin
     write(l, string'("next_ins: "));
-    write(l, next_ins);
+    write(l, to_hstring(next_ins));
     writeline(output, l);
     if falling_edge(reset_i) then
       pc <= (others => '0');

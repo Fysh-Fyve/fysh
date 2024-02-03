@@ -10,9 +10,9 @@ VHDL_TEST_BENCHES := $(patsubst $(TEST_DIR)/%.vhd, %, $(VHDL_TEST_SRC))
 
 FMT_SRC := $(patsubst %, fmt-%,$(VHDL_SRC) $(VHDL_TEST_SRC))
 
-GHDL_FLAGS := compile --std=08
+export GHDL_FLAGS := compile --std=08
 # GHDL_FLAGS += -frelaxed
-# RUN_FLAGS := --assert-level=warning # If you wanna be super strict
+# export RUN_FLAGS := --assert-level=warning # If you wanna be super strict
 
 test: $(VHDL_TEST_BENCHES)
 
@@ -20,9 +20,7 @@ clean:
 	rm -fv **/*~
 
 %_tb: $(TEST_DIR)/%_tb.vhd $(SRC_DIR)/%.vhd
-	@echo -----------------------------------------------------------------
-	@echo TEST $@
-	@ghdl $(GHDL_FLAGS) $^ -r $@ $(RUN_FLAGS)
+	@TB="$@" ./scripts/run_test.sh $^
 
 _ALU := alu \
 	fysh_pkg \
@@ -38,15 +36,11 @@ ALU_CONTROL := $(patsubst %, $(SRC_DIR)/%.vhd, $(_ALU_CONTROL)) \
 	$(ALU) \
 
 alu_tb: $(TEST_DIR)/alu_tb.vhd $(ALU)
-	@echo -----------------------------------------------------------------
-	@echo TEST $@
-	@ghdl $(GHDL_FLAGS) $^ -r $@ $(RUN_FLAGS)
+	@TB="$@" ./scripts/run_test.sh $^
 
 
 alu_control_tb: $(TEST_DIR)/alu_control_tb.vhd $(ALU_CONTROL)
-	@echo -----------------------------------------------------------------
-	@echo TEST $@
-	@ghdl $(GHDL_FLAGS) $^ -r $@ $(RUN_FLAGS)
+	@TB="$@" ./scripts/run_test.sh $^
 
 _MEM := mem \
 	fysh_pkg \
@@ -54,9 +48,7 @@ _MEM := mem \
 MEM := $(patsubst %, $(SRC_DIR)/%.vhd, $(_MEM))
 
 mem_tb: $(TEST_DIR)/mem_tb.vhd $(MEM)
-	@echo -----------------------------------------------------------------
-	@echo TEST $@
-	@ghdl $(GHDL_FLAGS) $^ -r $@ $(RUN_FLAGS)
+	@TB="$@" ./scripts/run_test.sh $^
 
 _MEMORY := memory \
 	   $(_MEM) \
@@ -68,16 +60,12 @@ _MEMORY := memory \
 MEMORY := $(patsubst %, $(SRC_DIR)/%.vhd, $(_MEMORY))
 
 memory_tb: $(TEST_DIR)/memory_tb.vhd $(MEMORY)
-	@echo -----------------------------------------------------------------
-	@echo TEST $@
-	@ghdl $(GHDL_FLAGS) $^ -r $@ $(RUN_FLAGS)
+	@TB="$@" ./scripts/run_test.sh $^
 
 topmodule_tb: $(TEST_DIR)/topmodule_tb.vhd \
 	$(SRC_DIR)/topmodule.vhd \
 	$(ALU_CONTROL) $(MEMORY)
-	@echo -----------------------------------------------------------------
-	@echo TEST $@
-	@ghdl $(GHDL_FLAGS) $^ -r $@ $(RUN_FLAGS)
+	@TB="$@" ./scripts/run_test.sh $^
 
 fmt: $(FMT_SRC)
 
