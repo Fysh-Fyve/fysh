@@ -59,7 +59,6 @@ bool isPositiveScale(char c) noexcept {
 }
 
 Fysh FyshLexer::nextFysh() noexcept {
-  get();
   while (isSpace(peek())) get();
   switch (peek()) {
     case '\0':
