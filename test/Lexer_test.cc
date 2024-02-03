@@ -9,3 +9,13 @@ TEST_CASE("nextFysh") {
 
   CHECK(lexer.nextFysh() == Species::HEART_MULTIPLY);
 }
+
+TEST_CASE("positiveFyshMultiply") {
+  std::string_view input{"><{{({(o> <3 ><{{({(o>"};
+  // Assuming `input` is a std::string or std::string_view
+  FyshLexer lexer{input.data()};
+
+  CHECK(lexer.nextFysh() == Species::FYSH_SCALES);
+  CHECK(lexer.nextFysh() == Species::HEART_MULTIPLY);
+  CHECK(lexer.nextFysh() == Species::FYSH_SCALES);
+}

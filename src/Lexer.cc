@@ -1,4 +1,5 @@
 #include "Lexer.h"
+#include <iostream>
 
 
 bool isSpace(char c) noexcept {
@@ -67,6 +68,7 @@ Fysh FyshLexer::nextFysh() noexcept {
     case '>':
       return fyshOutline();
   }
+  std::cout << peek() << std::endl;
   return Fysh(Species::END);
 }
 
