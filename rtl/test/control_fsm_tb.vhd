@@ -42,6 +42,7 @@ begin
 
   control_fsm_inst : entity work.control_fsm(rtl) port map (
     clk_i     => clk,
+    reset_i   => reset,
     halt_i    => halt,
     eq_i      => eq,
     lt_i      => lt,
@@ -63,8 +64,7 @@ begin
     pc_clk_o       => pc_clk,
     ir_clk_o       => ir_clk,
     pc_alu_sel_o   => pc_alu_sel,
-    pc_next_sel_o  => pc_next_sel,
-    reset_o        => reset);
+    pc_next_sel_o  => pc_next_sel);
   main : process
     use std.textio.all;
     variable my_line : line;

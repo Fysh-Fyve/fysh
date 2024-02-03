@@ -12,6 +12,7 @@ entity control_fsm is
   port (
     clk_i     : in std_ulogic;          --! Clock Signal.
     halt_i    : in std_ulogic;
+    reset_i   : in std_ulogic;
     eq_i      : in std_ulogic;          --! Equal flag (A == B).
     lt_i      : in std_ulogic;          --! Less than flag (A < B).
     ltu_i     : in std_ulogic;  --! Unsigned less than flag (A < B (unsigned)).
@@ -33,7 +34,6 @@ entity control_fsm is
     ir_clk_o       : out std_ulogic := '0';
     pc_alu_sel_o   : out std_ulogic := '0';
     pc_next_sel_o  : out std_ulogic := '0';
-    reset_o        : out std_logic  := '0';
     done_o         : out std_logic  := '0');  --! The CPU is done executing
 end control_fsm;
 
@@ -49,7 +49,10 @@ begin
     use std.textio.all;
     variable l : line;
   begin
-    if halt_i then
+    if falling_edge(reset_i) then
+      state  <= decode;
+      done_o <= '0';
+    elsif rising_edge(halt_i) then
       state <= done;
     elsif clk_i'event then
       --! TODO: Decode kinda like 410
@@ -82,8 +85,5 @@ begin
     pc_clk_o       <= pc_clk;
     ir_clk_o       <= ir_clk;
     mem_write_en_o <= mem_write_en;
-
-    -- Hardwire to 1 for now...
-    reset_o <= '1';
   end process drive_clock;
 end rtl;

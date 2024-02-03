@@ -10,9 +10,10 @@ use ieee.std_logic_1164.all;
 --! Also includes the Program Counter and the Immediate Value sign extender.
 entity alu_control is
   port (
-    clk_i : in std_ulogic := '0';       --! Clock signal.
+    clk_i   : in std_ulogic := '0';     --! Clock signal.
+    reset_i : in std_ulogic := '0';     --! Reset signal
 
-    instruction_i : in std_ulogic_vector (31 downto 0) := (others => '0');  --! Instruction to be executed.
+    instruction_i : in std_ulogic_vector (31 downto 0);  --! Instruction to be executed.
     reg_val_1_i   : in std_ulogic_vector (31 downto 0) := (others => '0');  --! Value from first selected register
     reg_val_2_i   : in std_ulogic_vector (31 downto 0) := (others => '0');  --! Value from second selected register
 
@@ -24,7 +25,6 @@ entity alu_control is
     pc_o            : out std_ulogic_vector (31 downto 0) := (others => '0');  --! Program Counter output
     pc_alu_result_o : out std_ulogic_vector (31 downto 0) := (others => '0');  --! Program Counter's ALU output
 
-    reset_o    : out std_ulogic                     := '0';  --! Reset signal
     addr_sel_o : out std_ulogic                     := '0';  --! ALU & PC address select signal
     rd_sel_o   : out std_ulogic_vector (1 downto 0) := (others => '0');  --! Register File write select
     sx_size_o  : out std_ulogic_vector (2 downto 0) := (others => '0'));  --! Memory fetch size
@@ -51,7 +51,6 @@ architecture rtl of alu_control is
   signal alu_a_sel : std_ulogic := '0';
   signal alu_b_sel : std_ulogic := '0';
 
-  signal reset    : std_ulogic                      := '0';
   signal addr_sel : std_ulogic                      := '0';
   signal rd_sel   : std_ulogic_vector (1 downto 0)  := (others => '0');
   signal sx_size  : std_ulogic_vector (2 downto 0)  := (others => '0');
@@ -78,7 +77,7 @@ begin
 
   program_counter_inst : entity work.program_counter(rtl) port map (
     pc_clk_i        => pc_clk,
-    reset_i         => reset,
+    reset_i         => reset_i,
     pc_next_sel_i   => pc_next_sel,
     pc_alu_sel_i    => pc_alu_sel,
     imm_x_i         => imm_ex,
@@ -98,6 +97,7 @@ begin
 
   control_fsm_inst : entity work.control_fsm(rtl) port map(
     clk_i     => clk_i,
+    reset_i   => reset_i,
     halt_i    => nor instruction_i,
     eq_i      => eq,
     lt_i      => lt,
@@ -118,10 +118,8 @@ begin
     pc_clk_o       => pc_clk,
     ir_clk_o       => ir_clk_o,
     pc_alu_sel_o   => pc_alu_sel,
-    pc_next_sel_o  => pc_next_sel,
-    reset_o        => reset);
+    pc_next_sel_o  => pc_next_sel);
 
-  reset_o    <= reset;
   addr_sel_o <= addr_sel;
   rd_sel_o   <= rd_sel;
   sx_size_o  <= sx_size;

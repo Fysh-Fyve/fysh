@@ -37,10 +37,10 @@ begin
 
   alu_control_inst : entity work.alu_control(rtl) port map (
     clk_i           => clk,
+    reset_i         => reset,
     instruction_i   => insn,
     reg_val_1_i     => rs1_val,
     reg_val_2_i     => rs2_val,
-    reset_o         => reset,
     alu_o           => alu,
     pc_o            => pc,
     pc_alu_result_o => pc_alu,
