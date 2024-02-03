@@ -98,6 +98,7 @@ begin
 
   control_fsm_inst : entity work.control_fsm(rtl) port map(
     clk_i     => clk_i,
+    halt_i    => nor instruction_i,
     eq_i      => eq,
     lt_i      => lt,
     ltu_i     => ltu,

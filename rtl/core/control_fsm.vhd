@@ -11,6 +11,7 @@ use ieee.std_logic_1164.all;
 entity control_fsm is
   port (
     clk_i     : in std_ulogic;          --! Clock Signal.
+    halt_i    : in std_ulogic;
     eq_i      : in std_ulogic;          --! Equal flag (A == B).
     lt_i      : in std_ulogic;          --! Less than flag (A < B).
     ltu_i     : in std_ulogic;  --! Unsigned less than flag (A < B (unsigned)).
@@ -32,23 +33,25 @@ entity control_fsm is
     ir_clk_o       : out std_ulogic := '0';
     pc_alu_sel_o   : out std_ulogic := '0';
     pc_next_sel_o  : out std_ulogic := '0';
-    reset_o        : out std_logic  := '0');
+    reset_o        : out std_logic  := '0';
+    done_o         : out std_logic  := '0');  --! The CPU is done executing
 end control_fsm;
 
 architecture rtl of control_fsm is
-  --! TODO: Use this?
-  type state_t is (decode, drive);
+  type state_t is (decode, drive, done);
   signal pc_clk       : std_ulogic := '0';
   signal ir_clk       : std_ulogic := '0';
   signal mem_write_en : std_ulogic := '0';
 
   signal state : state_t := decode;
 begin
-  drive_clock : process(clk_i, opcode_i, pc_clk, ir_clk, mem_write_en)
+  drive_clock : process(clk_i, halt_i, opcode_i, pc_clk, ir_clk, mem_write_en)
     use std.textio.all;
     variable l : line;
   begin
-    if clk_i'event then
+    if halt_i then
+      state <= done;
+    elsif clk_i'event then
       --! TODO: Decode kinda like 410
       case state is
         when decode =>
@@ -72,6 +75,8 @@ begin
           ir_clk       <= not ir_clk;
           mem_write_en <= not mem_write_en;
           state        <= decode;
+        when done =>
+          done_o <= '1';
       end case;
     end if;
     pc_clk_o       <= pc_clk;
