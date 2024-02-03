@@ -1,5 +1,4 @@
 #include <string_view>
-
 #include "Fysh.h"
 
 // code is based off of this:
@@ -7,11 +6,21 @@
 
 class FyshLexer {
 public:
-  // Fyshize everything (modularize it)
-  FyshLexer(std::string_view s) : source(s){};
-  Fysh nextFysh();
+  // stream is the start of the input string
+  FyshLexer(const char *streamStart) noexcept : current{streamStart} {}
 
-private:
-  std::string_view source;
-  // peak and consume
+  Fysh nextFysh() noexcept;
+
+  private:
+  Fysh identifier() noexcept;
+  Fysh number() noexcept;
+  Fysh scales() noexcept;
+  Fysh slashOrComment() noexcept;
+  Fysh atom(Species) noexcept;
+  Fysh fyshOutline() noexcept;
+
+  char peek() const noexcept { return *current; }
+  char get() noexcept { return *current++; }
+
+  const char* current = nullptr;
 };

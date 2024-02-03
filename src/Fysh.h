@@ -14,7 +14,7 @@ Current: the current position in the input string
 #include <string_view>
 
 enum class Species {
-  FYSH_SCALES,    // binary value
+  FYSH_SCALES,     // binary value
   FYSH_IDENTIFIER, // variable
   HEART_MULTIPLY,  // <3 or ♡
   DIVIDE,          // </3 or 💔
@@ -35,6 +35,7 @@ enum class Species {
   COMMENT,         // ><//> Comment
   OPENING_COMMENT, // ></*> Comment
   CLOSING_COMMENT, // Comment <*/><
+  END,             // End of the input
 
   // TODO bit manipulation
 };
@@ -80,87 +81,6 @@ private:
   Species species{};
   std::string_view body{};
 };
-
-
-class FyshLexer {
-public:
-  // stream is the start of the input string
-  FyshLexer(const char *streamStart) noexcept : current{streamStart} {}
-
-  Fysh nextFysh() noexcept;
-
-  private:
-  Fysh identifier() noexcept;
-  Fysh number() noexcept;
-  Fysh scales() noexcept;
-  Fysh slash_or_comment() noexcept;
-  Fysh atom(Species) noexcept;
-
-  char peek() const noexcept { return *current; }
-  char get() noexcept { return *current++; }
-
-  const char* current = nullptr;
-};
-
-bool isSpace(char c) noexcept {
-  switch (c) {
-    case ' ':
-    case '\t':
-    case '\r':
-    case '\n':
-      return true;
-    default:
-      return false;
-  }
-}
-
-bool isScale(char c) noexcept { 
-  switch (c) {
-    case '(':
-    case ')':
-    case '{':
-    case '}':
-      return true;
-    default:
-      return false;
-  }
-} 
-
-
-Fysh FyshLexer::scales() noexcept {
-  const char *start = current;
-  get();
-  while (isScale(peek())) get();
-  if (peek() == 'o'){
-    get();
-    if (peek() == '>'){
-      // positive
-    } else {
-      // error
-    }
-  }
-  else if (peek() == '>'){
-    // negative
-  }
-  else {
-    // error
-  }
-  return Fysh(Species::FYSH_SCALES, start, current);
-}
-/*
-Token Lexer::number() noexcept {
-  const char* start = m_beg;
-  get();
-  while (is_digit(peek())) get();
-  return Token(Token::Kind::Number, start, m_beg);
-}*/
-
-
-
-
-
-
-
 
 // string representation of token type (for testing)
 std::ostream &operator<<(std::ostream &os, const Fysh &body);
