@@ -37,7 +37,12 @@ architecture rtl of phy_map is
   signal gpio_out, mem_out, ram_out, rom_out : std_ulogic_vector (31 downto 0);
 
   signal gpio_addr_start : std_ulogic;
+
+  signal le_data_in  : std_ulogic_vector (31 downto 0);
+  signal le_data_out : std_ulogic_vector (31 downto 0);
 begin
+  d_o          <= le_data_out(7 downto 0) & le_data_out(15 downto 8) & le_data_out(23 downto 16) & le_data_out(31 downto 24);
+  le_data_in   <= d_i(7 downto 0) & d_i(15 downto 8) & d_i(23 downto 16) & d_i(31 downto 24);
   ram_write_en <= (not mem_sel) and write_en_i;
   rom_write_en <= '0';                  -- Disable writing
 
@@ -48,13 +53,13 @@ begin
   begin
     if rising_edge(clk_i) then
       if gpio_write_en = '1' then
-        gpio <= d_i;
+        gpio <= le_data_in;
       end if;
     end if;
     gpio_out <= gpio;
   end process gpio_clk;
 
-  with mem_sel select d_o <=
+  with mem_sel select le_data_out <=
     gpio_out        when '1',
     mem_out         when '0',
     (others => 'X') when others;
@@ -76,7 +81,7 @@ begin
       read_addr_i  => addr_i(MEM_SPLIT-1 downto 2),
       write_addr_i => addr_i(MEM_SPLIT-1 downto 2),
       write_en_i   => rom_write_en,
-      d_i          => d_i,
+      d_i          => le_data_in,
       d_o          => rom_out);
 
   ram_inst : entity work.mem(rtl) port map (
@@ -84,6 +89,6 @@ begin
     read_addr_i  => addr_i(MEM_SPLIT-1 downto 2),
     write_addr_i => addr_i(MEM_SPLIT-1 downto 2),
     write_en_i   => ram_write_en,
-    d_i          => d_i,
+    d_i          => le_data_in,
     d_o          => ram_out);
 end rtl;

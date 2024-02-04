@@ -5,3 +5,5 @@ proj
 vivado*.jou
 vivado*.log
 .Xil
+# Auto-generated!
+rtl/core/rom_pkg.vhd

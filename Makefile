@@ -19,6 +19,15 @@ test: $(VHDL_TEST_BENCHES)
 clean:
 	rm -fv **/*~
 
+rtl/core/rom_pkg.vhd: scripts/asm/main.go \
+	scripts/rom/main.go \
+	scripts/rom/rom_pkg.part1.vhd \
+	scripts/rom/rom_pkg.part2.vhd
+	{ cat scripts/rom/rom_pkg.part1.vhd; \
+		go run scripts/asm/main.go | go run scripts/rom/main.go; \
+		cat scripts/rom/rom_pkg.part2.vhd; } > $@
+
+
 %_tb: $(TEST_DIR)/%_tb.vhd $(SRC_DIR)/%.vhd
 	@TB="$@" ./scripts/run_test.sh $^
 
