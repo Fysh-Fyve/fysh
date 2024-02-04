@@ -1,28 +1,27 @@
 #include "Lexer.h"
 #include <iostream>
 
-
 bool isSpace(char c) noexcept {
   switch (c) {
-    case ' ':
-    case '\t':
-    case '\r':
-    case '\n':
-      return true;
-    default:
-      return false;
+  case ' ':
+  case '\t':
+  case '\r':
+  case '\n':
+    return true;
+  default:
+    return false;
   }
 }
 
 bool isScale(char c) noexcept {
   switch (c) {
-    case '(':
-    case ')':
-    case '{':
-    case '}':
-      return true;
-    default:
-      return false;
+  case '(':
+  case ')':
+  case '{':
+  case '}':
+    return true;
+  default:
+    return false;
   }
 }
 
@@ -51,22 +50,23 @@ bool isNegativeScale(char c) noexcept {
 
 bool isPositiveScale(char c) noexcept {
   switch (c) {
-    case '(':
-    case '{':
-      return true;
-    default:
-      return false;
+  case '(':
+  case '{':
+    return true;
+  default:
+    return false;
   }
 }
 
 Fysh FyshLexer::nextFysh() noexcept {
-  while (isSpace(peek())) get();
+  while (isSpace(peek()))
+    get();
   switch (peek()) {
-    case '\0':
-      return Fysh(Species::END);
-    case '<':
-    case '>':
-      return fyshOutline();
+  case '\0':
+    return Fysh(Species::END);
+  case '<':
+  case '>':
+    return fyshOutline();
   }
   std::cout << peek() << std::endl;
   return Fysh(Species::END);
@@ -96,7 +96,7 @@ Fysh FyshLexer::fyshOutline() noexcept {
     get();
     if (isPositiveScale(peek())) {
       return scales();
-    } 
+    }
     /*else if (peek() == '!') {
       return openWTF();
     } else if (peek() == '/') {
@@ -116,7 +116,7 @@ Fysh FyshLexer::fyshOutline() noexcept {
     if (isNegativeScale(peek())){
       return negativeFysh();
     }
-  } 
+  }
   // get positive scale fysh
   else if (start* == '>' && peek() == '<') {
     get();
@@ -130,11 +130,10 @@ Fysh FyshLexer::fyshOutline() noexcept {
 Fysh FyshLexer::scales() noexcept {
   const char *start = current;
   get();
-  while (isScale(peek())) get();
+  while (isScale(peek()))
+    get();
   return Fysh(Species::FYSH_SCALES, start, current);
 }
-
-
 
 /*Fysh FyshLexer::scales() noexcept {
   const char *start = current;
@@ -164,7 +163,5 @@ Token Lexer::number() noexcept {
   return Token(Token::Kind::Number, start, m_beg);
 }*/
 
-
-
 // TODO: Implement!
-//Fysh FyshLexer::nextFysh() { return Fysh{Species::EQUAL}; }
+// Fysh FyshLexer::nextFysh() { return Fysh{Species::EQUAL}; }

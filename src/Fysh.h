@@ -3,7 +3,7 @@ Reference:
 https://gist.github.com/arrieta/1a309138689e09375b90b3b1aa768e20
 
 Definitions for the Fysh class
-Species: enum class for the different types of Fysh tokens 
+Species: enum class for the different types of Fysh tokens
 body: string_view for each token (the actual value of the token)
 Fysh: an object with a species and body
 Stream: the input string
@@ -42,9 +42,7 @@ enum class Species {
 
 class Fysh {
 public:
-
   //-----------------Constructors---------------------
-  
   Fysh(Species inType) noexcept : species{inType} {}
 
   Fysh(Species inType, const char *start, std::size_t len) noexcept
@@ -67,12 +65,11 @@ public:
   Species getSpecies() const noexcept;
   std::string_view getBody() const noexcept;
 
-
   // -----------------------OPERATORS-----------------------
   bool operator==(const Species &in_species) const noexcept {
     return species == in_species;
   }
-  
+
   bool operator==(const Fysh &other) const noexcept {
     return other.species == species && other.body == body;
   }

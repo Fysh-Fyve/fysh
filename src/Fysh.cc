@@ -9,7 +9,6 @@ bool Fysh::isOneOf(Species species1, Species species2) const noexcept {
 
 std::string_view Fysh::getBody() const noexcept { return body; }
 
-
 // string representation of token type (for testing)
 constexpr const char *debugType(const Species &species) {
   switch (species) {
@@ -57,7 +56,7 @@ constexpr const char *debugType(const Species &species) {
     return "*/";
   case Species::END:
     return "END";
-  } 
+  }
 
   assert(false);
 }

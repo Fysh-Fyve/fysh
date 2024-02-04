@@ -1,4 +1,3 @@
-#include <string_view>
 #include "Fysh.h"
 
 // code is based off of this:
@@ -11,7 +10,7 @@ public:
 
   Fysh nextFysh() noexcept;
 
-  private:
+private:
   Fysh identifier() noexcept;
   Fysh number() noexcept;
   Fysh scales() noexcept;
@@ -22,5 +21,5 @@ public:
   char peek() const noexcept { return *current; }
   char get() noexcept { return *current++; }
 
-  const char* current = nullptr;
+  const char *current = nullptr;
 };
