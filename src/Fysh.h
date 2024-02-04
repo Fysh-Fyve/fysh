@@ -35,6 +35,8 @@ enum class Species {
   COMMENT,         // ><//> Comment
   OPENING_COMMENT, // ></*> Comment
   CLOSING_COMMENT, // Comment <*/><
+  INVALID,         // Invalid token!
+  CONTINUE,        // Continue trying to parse unicode
   END,             // End of the input
 
   // TODO bit manipulation
@@ -43,6 +45,7 @@ enum class Species {
 class Fysh {
 public:
   //-----------------Constructors---------------------
+  Fysh() noexcept : species{Species::INVALID} {}
   Fysh(Species inType) noexcept : species{inType} {}
 
   Fysh(Species inType, const char *start, std::size_t len) noexcept

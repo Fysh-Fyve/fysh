@@ -16,6 +16,8 @@ private:
   Fysh scales() noexcept;
   Fysh slashOrComment() noexcept;
   Fysh atom(Species) noexcept;
+  Fysh unicode() noexcept;
+  Fysh tryUnicode(const char *bytes, Species s) noexcept;
   Fysh fyshOutline() noexcept;
 
   char peek() const noexcept { return *current; }

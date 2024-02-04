@@ -54,6 +54,10 @@ constexpr const char *debugType(const Species &species) {
     return "/*";
   case Species::CLOSING_COMMENT:
     return "*/";
+  case Species::INVALID:
+    return "INVALID";
+  case Species::CONTINUE:
+    return "CONTINUE";
   case Species::END:
     return "END";
   }

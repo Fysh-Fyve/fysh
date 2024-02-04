@@ -2,6 +2,22 @@
 
 #include "doctest.h"
 
+TEST_CASE("single heart multiply") {
+  std::string_view input{"♡"};
+  // Assuming `input` is a std::string or std::string_view
+  FyshLexer lexer{input.data()};
+
+  CHECK(lexer.nextFysh() == Species::HEART_MULTIPLY);
+}
+
+TEST_CASE("single divide") {
+  std::string_view input{"💔"};
+  // Assuming `input` is a std::string or std::string_view
+  FyshLexer lexer{input.data()};
+
+  CHECK(lexer.nextFysh() == Species::DIVIDE);
+}
+
 TEST_CASE("nextFysh") {
   std::string_view input{"<3"};
   // Assuming `input` is a std::string or std::string_view
