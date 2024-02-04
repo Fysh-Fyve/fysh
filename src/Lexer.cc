@@ -182,12 +182,19 @@ Fysh FyshLexer::fyshOutline() noexcept {
   return Fysh(Species::END);
 }
 
+// TODO: Handle negative case
 Fysh FyshLexer::scales() noexcept {
-  const char *start = current;
-  get();
-  while (isScale(peek()))
-    get();
-  return Fysh(Species::FYSH_SCALES, start, current);
+  auto c{get()};
+  uint32_t value{c == '{' || c == '}'};
+  while (isScale(peek())) {
+    auto c{get()};
+    value = (value << 1) | (c == '{' || c == '}');
+  }
+  // Parse the head of the positive fysh
+  if (get() != 'o' || get() != '>') {
+    return Fysh{Species::INVALID};
+  }
+  return Fysh{value};
 }
 
 /*Fysh FyshLexer::scales() noexcept {

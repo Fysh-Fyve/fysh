@@ -19,7 +19,7 @@ TEST_CASE("positive fysh multiply") {
   // Assuming `input` is a std::string or std::string_view
   FyshLexer lexer{input.data()};
 
-  CHECK(lexer.nextFysh() == Species::FYSH_SCALES);
+  CHECK(lexer.nextFysh() == 0b011010);
   CHECK(lexer.nextFysh() == Species::HEART_MULTIPLY);
-  CHECK(lexer.nextFysh() == Species::FYSH_SCALES);
+  CHECK(lexer.nextFysh() == 0b011010);
 }

@@ -10,6 +10,7 @@ Stream: the input string
 Current: the current position in the input string
 */
 
+#include <optional>
 #include <ostream>
 #include <string_view>
 
@@ -48,6 +49,9 @@ public:
   Fysh() noexcept : species{Species::INVALID} {}
   Fysh(Species inType) noexcept : species{inType} {}
 
+  Fysh(uint32_t integer) noexcept
+      : species{Species::FYSH_SCALES}, value{integer} {}
+
   Fysh(Species inType, const char *start, std::size_t len) noexcept
       : species{inType}, body(start, len) {}
 
@@ -74,12 +78,18 @@ public:
   }
 
   bool operator==(const Fysh &other) const noexcept {
-    return other.species == species && other.body == body;
+    return other.species == species && other.body == body &&
+           other.value == value;
+  }
+
+  bool operator==(const uint32_t &other) const noexcept {
+    return species == Species::FYSH_SCALES && value == other;
   }
 
 private:
   Species species{};
   std::string_view body{};
+  std::optional<uint32_t> value{};
 };
 
 // string representation of token type (for testing)
