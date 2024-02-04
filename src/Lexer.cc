@@ -58,7 +58,7 @@ bool isPositiveScale(char c) noexcept {
   }
 }
 
-Fysh FyshLexer::tryUnicode(const char *bytes, Species s) noexcept {
+fysh::Fysh fysh::FyshLexer::tryUnicode(const char *bytes, Species s) noexcept {
   bool touched{false};
   for (size_t i = 0; (unsigned char)bytes[i] != 0x00; i++) {
     if ((unsigned char)peek() == (unsigned char)bytes[i]) {
@@ -78,7 +78,7 @@ Fysh FyshLexer::tryUnicode(const char *bytes, Species s) noexcept {
 
 struct Unicode {
   const char *codePoint;
-  Species species;
+  fysh::Species species;
 };
 
 /**!
@@ -97,7 +97,7 @@ struct Unicode {
  * Maybe we can implement this with a Trie, but it doesn't seem worth it
  * for only two tokens.
  */
-Fysh FyshLexer::unicode() noexcept {
+fysh::Fysh fysh::FyshLexer::unicode() noexcept {
   static const struct Unicode chars[] = {
       {"💔", Species::DIVIDE},
       {"♡", Species::HEART_MULTIPLY},
@@ -113,7 +113,7 @@ Fysh FyshLexer::unicode() noexcept {
   return Fysh(Species::INVALID);
 }
 
-Fysh FyshLexer::nextFysh() noexcept {
+fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
   while (isSpace(peek()))
     get();
   switch (peek()) {
@@ -127,7 +127,7 @@ Fysh FyshLexer::nextFysh() noexcept {
   }
 }
 
-Fysh FyshLexer::fyshOutline() noexcept {
+fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
   const char *start = current;
   get();
 
@@ -183,7 +183,7 @@ Fysh FyshLexer::fyshOutline() noexcept {
 }
 
 // TODO: Handle negative case
-Fysh FyshLexer::scales() noexcept {
+fysh::Fysh fysh::FyshLexer::scales() noexcept {
   auto c{get()};
   uint32_t value{c == '{' || c == '}'};
   while (isScale(peek())) {

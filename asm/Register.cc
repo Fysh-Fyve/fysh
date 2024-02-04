@@ -1,7 +1,8 @@
+#include "Register.h"
 #include <string_view>
 #include <unordered_map>
 
-int8_t lookupRegister(std::string_view reg) {
+int8_t fasm::lookupRegister(std::string_view reg) {
   static std::unordered_map<std::string_view, int8_t> registers = {
       {"x0", 0},
       {"x1", 1},

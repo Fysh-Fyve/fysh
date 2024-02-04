@@ -2,6 +2,8 @@
 
 #include "doctest.h"
 
+using namespace fasm;
+
 TEST_CASE("lookupRegister") {
   CHECK(lookupRegister("x0") == 0);
   CHECK(lookupRegister("zero") == 0);

@@ -1,16 +1,18 @@
 #include "Fysh.h"
 #include <cassert>
 
-Species Fysh::getSpecies() const noexcept { return species; }
+fysh::Species fysh::Fysh::getSpecies() const noexcept { return species; }
 
-bool Fysh::isOneOf(Species species1, Species species2) const noexcept {
+bool fysh::Fysh::isOneOf(fysh::Species species1,
+                         fysh::Species species2) const noexcept {
   return species == species1 || species == species2;
 }
 
-std::string_view Fysh::getBody() const noexcept { return body; }
+std::string_view fysh::Fysh::getBody() const noexcept { return body; }
 
 // string representation of token type (for testing)
-constexpr const char *debugType(const Species &species) {
+constexpr const char *debugType(const fysh::Species &species) {
+  using fysh::Species;
   switch (species) {
   case Species::FYSH_SCALES:
     return "LITERAL";
@@ -65,7 +67,7 @@ constexpr const char *debugType(const Species &species) {
   assert(false);
 }
 
-std::ostream &operator<<(std::ostream &os, const Fysh &value) {
+std::ostream &fysh::operator<<(std::ostream &os, const fysh::Fysh &value) {
   os << "'" << debugType(value.getSpecies()) << "'" << value.getBody();
   return os;
 }

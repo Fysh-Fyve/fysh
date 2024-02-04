@@ -2,6 +2,8 @@
 
 #include "doctest.h"
 
+using namespace fysh;
+
 TEST_CASE("operators") {
   std::string_view input{"♡ "
                          "<3 "

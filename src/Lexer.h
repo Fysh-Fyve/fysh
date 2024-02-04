@@ -1,5 +1,7 @@
 #include "Fysh.h"
 
+namespace fysh {
+
 // code is based off of this:
 // https://gist.github.com/arrieta/1a309138689e09375b90b3b1aa768e20
 
@@ -25,3 +27,5 @@ private:
 
   const char *current = nullptr;
 };
+
+}; // namespace fysh

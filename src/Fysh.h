@@ -14,6 +14,8 @@ Current: the current position in the input string
 #include <ostream>
 #include <string_view>
 
+namespace fysh {
+
 enum class Species {
   FYSH_SCALES,     // binary value
   FYSH_IDENTIFIER, // variable
@@ -94,3 +96,5 @@ private:
 
 // string representation of token type (for testing)
 std::ostream &operator<<(std::ostream &os, const Fysh &body);
+
+}; // namespace fysh
