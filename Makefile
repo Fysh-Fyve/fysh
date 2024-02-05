@@ -26,7 +26,7 @@ all: doctest/doctest.h build/compile_commands.json
 	cd build && $(BUILD)
 
 fmt: $(SRC)
-	for i in $(SRC); do clang-format -i $$i; done
+	clang-format -i $^
 
 build/compile_commands.json: build
 	cd build && cmake $(CMAKE_FLAGS) ..
