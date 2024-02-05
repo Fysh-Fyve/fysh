@@ -6,7 +6,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 library work;
-use work.fysh.all;
+use work.fysh_fyve.all;
 --! @endcond
 
 -- Before I forget and have to scour Google for this again

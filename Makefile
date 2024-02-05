@@ -32,7 +32,7 @@ rtl/core/rom_pkg.vhd: scripts/asm/main.go \
 	@TB="$@" ./scripts/run_test.sh $^
 
 _ALU := alu \
-	fysh_pkg \
+	fysh_fyve_pkg \
 
 ALU := $(patsubst %, $(SRC_DIR)/%.vhd, $(_ALU))
 
@@ -52,7 +52,7 @@ alu_control_tb: $(TEST_DIR)/alu_control_tb.vhd $(ALU_CONTROL)
 	@TB="$@" ./scripts/run_test.sh $^
 
 _MEM := mem \
-	fysh_pkg \
+	fysh_fyve_pkg \
 
 MEM := $(patsubst %, $(SRC_DIR)/%.vhd, $(_MEM))
 

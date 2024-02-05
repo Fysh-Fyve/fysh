@@ -4,7 +4,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-use work.fysh.mem_t;
+use work.fysh_fyve.mem_t;
 --! @endcond
 
 --! Block Memory. \n

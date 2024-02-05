@@ -1,4 +1,4 @@
---! \file fysh_pkg.vhd
+--! \file fysh_fyve_pkg.vhd
 --! \author Charles Ancheta
 --! @cond Doxygen_Suppress
 library ieee;
@@ -6,7 +6,7 @@ use ieee.std_logic_1164.all;
 --! @endcond
 
 --! A package containing shared stuff. Should probably be broken down.\n
-package fysh is
+package fysh_fyve is
   subtype dword_t is std_ulogic_vector (31 downto 0);
   -- Constants representing the ALU operations.
   subtype op_t is std_ulogic_vector (2 downto 0);
@@ -23,4 +23,4 @@ package fysh is
 
   constant ROM_ADDR_W    : integer := 15;
   constant ROM_NUM_WORDS : integer := 2**ROM_ADDR_W;
-end package fysh;
+end package fysh_fyve;
