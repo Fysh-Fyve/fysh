@@ -38,3 +38,13 @@ TEST_CASE("fysh open & wtf open") {
   CHECK(lexer.nextFysh() == Species::FYSH_OPEN);
   CHECK(lexer.nextFysh() == Species::WTF_OPEN);
 }
+
+TEST_CASE("heart break") {
+  std::string_view input{"</3 <3 </3 <3"};
+  // Assuming `input` is a std::string or std::string_view
+  FyshLexer lexer{input.data()};
+  CHECK(lexer.nextFysh() == Species::DIVIDE);
+  CHECK(lexer.nextFysh() == Species::HEART_MULTIPLY);
+  CHECK(lexer.nextFysh() == Species::DIVIDE);
+  CHECK(lexer.nextFysh() == Species::HEART_MULTIPLY);
+}

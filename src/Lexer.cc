@@ -180,13 +180,13 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
   }
 
   // get divide token
-  /*else if (*start == '<' && peek() == '/') {
+  else if (*start == '<' && peek() == '/') {
     get();
     if (peek() == '3') {
       get();
       return Fysh(Species::DIVIDE, start, current);
     }
-  }*/
+  }
 
   // swim right
   else if (*start == '>' && peek() == '<') {
