@@ -44,28 +44,25 @@ bool isScale(char c) noexcept {
   }
 }
 
-/*
-
-bool isFyshEye(char c) noexcept {
-  switch (c) {
-    case 'o':
-    case '°':
-      return true;
-    default:
-      return false;
+bool fysh::FyshLexer::isFyshEye() noexcept {
+  switch (get()) {
+  case 'o':
+    // case '°': UNICODE
+    return true;
+  default:
+    return false;
   }
 }
 
-
 bool isNegativeScale(char c) noexcept {
   switch (c) {
-    case ')':
-    case '}':
-      return true;
-    default:
-      return false;
+  case ')':
+  case '}':
+    return true;
+  default:
+    return false;
   }
-}*/
+}
 
 bool isPositiveScale(char c) noexcept {
   switch (c) {
@@ -184,26 +181,33 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
       get();
       return Fysh(Species::DIVIDE, start, current);
     }
+    return Fysh(
+        Species::INVALID); // should be fixed since comments have slashes too
   }
 
   // swim right
   else if (*start == '>' && peek() == '<') {
     get();
     if (isPositiveScale(peek())) {
-      return scales();
-    } else if (peek() == '>') {
+      return scales();          // rename
+    } else if (peek() == '>') { // ><>
       return fyshOpen();
-    } else if (peek() == '!') {
+    } else if (peek() == '!') { // ><!@#$>
       return openWTF();
-    } else if (peek() == '/') {
+    } else if (peek() == '/') { // TODO: ></*> or ><//>
       return slashOrComment();
-    } else if (peek() == '>') {
-      return Fysh(Species::FYSH_OPEN, start, current);
     } else {
       return identifier();
     }
   }
-
+  /*
+    // swim left
+    else if (*start == '<') {
+      get();
+      if (isFyshEye(peek())) {
+        return negativeScales();
+      }
+    }*/
   /*
   // get negative scale fysh
   else if (start* == '<' && isFyshEye(peek())) {
@@ -212,14 +216,7 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
     if (isNegativeScale(peek())){
       return negativeFysh();
     }
-  }
-  // get positive scale fysh
-  else if (start* == '>' && peek() == '<') {
-    get();
-    if (isPositiveScale(peek())){
-      return positiveFysh();
-    }
-  } */
+  }*/
   return Fysh(Species::END);
 }
 
@@ -232,36 +229,8 @@ fysh::Fysh fysh::FyshLexer::scales() noexcept {
     value = (value << 1) | (c == '{' || c == '}');
   }
   // Parse the head of the positive fysh
-  if (get() != 'o' || get() != '>') {
+  if (!isFyshEye() || get() != '>') {
     return Fysh{Species::INVALID};
   }
   return Fysh{value};
 }
-
-/*Fysh FyshLexer::scales() noexcept {
-  const char *start = current;
-  get();
-  while (isScale(peek())) get();
-  if (peek() == 'o'){
-    get();
-    if (peek() == '>'){
-      // positive
-    } else {
-      // error
-    }
-  }
-  else if (peek() == '>'){
-    // negative
-  }
-  else {
-    // error
-  }
-  return Fysh(Species::FYSH_SCALES, start, current);
-}*/
-/*
-Token Lexer::number() noexcept {
-  const char* start = m_beg;
-  get();
-  while (is_digit(peek())) get();
-  return Token(Token::Kind::Number, start, m_beg);
-}*/
