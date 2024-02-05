@@ -64,8 +64,8 @@ bool isNegativeScale(char c) noexcept {
   }
 }
 
-bool isPositiveScale(char c) noexcept {
-  switch (c) {
+bool fysh::FyshLexer::isPositiveScale() noexcept {
+  switch (peek()) {
   case '(':
   case '{':
     return true;
@@ -188,15 +188,17 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
   // swim right
   else if (*start == '>' && peek() == '<') {
     get();
-    if (isPositiveScale(peek())) {
-      return scales();          // rename
-    } else if (peek() == '>') { // ><>
+    switch (peek()) {
+    case '{':
+    case '(':
+      return scales(); // rename
+    case '>':
       return fyshOpen();
-    } else if (peek() == '!') { // ><!@#$>
+    case '!':
       return openWTF();
-    } else if (peek() == '/') { // TODO: ></*> or ><//>
+    case '/':
       return slashOrComment();
-    } else {
+    default:
       return identifier();
     }
   }

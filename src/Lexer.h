@@ -46,6 +46,7 @@ private:
   Fysh openWTF() noexcept;
   Fysh fyshOpen() noexcept;
   bool isFyshEye() noexcept;
+  bool isPositiveScale() noexcept;
   char peek() const noexcept { return *current; }
   char get() noexcept { return *current++; }
 
