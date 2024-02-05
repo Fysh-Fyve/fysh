@@ -132,6 +132,25 @@ fysh::Fysh fysh::FyshLexer::unicode() noexcept {
   return Fysh(Species::INVALID);
 }
 
+
+  fysh::Fysh fysh::FyshLexer::openWTF() noexcept {
+    const char *start = current;
+    if (get() == '!' && get() == '@' && get() == '#' && get() == '$' && get() == '>'){
+      return Fysh(Species::WTF_OPEN, start, current);
+    }
+    return Fysh(Species::INVALID);
+  }
+
+  fysh::Fysh fysh::FyshLexer::slashOrComment() noexcept {
+    return Fysh(Species::INVALID);
+  }
+
+  fysh::Fysh fysh::FyshLexer::identifier() noexcept {
+    return Fysh(Species::INVALID);
+  }
+
+
+
 fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
   while (isSpace(peek()))
     get();
@@ -145,6 +164,10 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     return unicode();
   }
 }
+ fysh::Fysh fysh::FyshLexer::fyshOpen() noexcept {
+    get();
+    return Fysh(Species::FYSH_OPEN);
+ }
 
 fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
   const char *start = current;
@@ -170,8 +193,9 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
     get();
     if (isPositiveScale(peek())) {
       return scales();
-    }
-    /*else if (peek() == '!') {
+    } else if (peek() == '>') {
+      return fyshOpen();
+    } else if (peek() == '!') {
       return openWTF();
     } else if (peek() == '/') {
       return slashOrComment();
@@ -179,8 +203,11 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
       return Fysh(Species::FYSH_OPEN, start, current);
     } else {
       return identifier();
-    } */
+    }
   }
+
+
+
 
   /*
   // get negative scale fysh

@@ -43,6 +43,8 @@ private:
   Fysh unicode() noexcept;
   Fysh tryUnicode(const char *bytes, Species s) noexcept;
   Fysh fyshOutline() noexcept;
+  Fysh openWTF() noexcept;
+  Fysh fyshOpen() noexcept;
 
   char peek() const noexcept { return *current; }
   char get() noexcept { return *current++; }

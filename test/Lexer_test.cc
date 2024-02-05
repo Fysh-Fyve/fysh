@@ -25,3 +25,16 @@ TEST_CASE("positive fysh multiply") {
   CHECK(lexer.nextFysh() == Species::HEART_MULTIPLY);
   CHECK(lexer.nextFysh() == 0b011010);
 }
+
+TEST_CASE("fysh open & wtf open") {
+  std::string_view input{"><> <3 ><{{({(o> ><!@#$> ><> ><!@#$>"};
+  // Assuming `input` is a std::string or std::string_view
+  FyshLexer lexer{input.data()};
+
+  CHECK(lexer.nextFysh() == Species::FYSH_OPEN);
+  CHECK(lexer.nextFysh() == Species::HEART_MULTIPLY);
+  CHECK(lexer.nextFysh() == 0b011010);
+  CHECK(lexer.nextFysh() == Species::WTF_OPEN);
+  CHECK(lexer.nextFysh() == Species::FYSH_OPEN);
+  CHECK(lexer.nextFysh() == Species::WTF_OPEN);
+}
