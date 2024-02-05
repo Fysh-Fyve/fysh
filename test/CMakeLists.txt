@@ -1,5 +1,5 @@
 # https://lesleylai.info/en/unit-test-with-cmake/
-set(DOCTEST_INCLUDE_DIR .)
+set(DOCTEST_INCLUDE_DIR ../doctest)
 add_library(DocTest INTERFACE)
 target_include_directories(DocTest INTERFACE ${DOCTEST_INCLUDE_DIR})
 

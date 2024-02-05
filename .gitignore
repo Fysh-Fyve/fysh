@@ -1,4 +1,4 @@
 .cache
 build
-test/doctest.h
+doctest/doctest.h
 *.json
