@@ -57,7 +57,7 @@ begin
   register_file_inst : entity work.register_file(rtl) port map (
     rd_clk_i       => rd_clk_i,
     reset_i        => reset_i,
-    dest_reg_i     => insn(24 downto 20),
+    dest_reg_i     => insn(11 downto 7),
     reg_sel_1_i    => insn(19 downto 15),
     reg_sel_2_i    => insn(24 downto 20),
     dest_reg_val_i => rd_val,
