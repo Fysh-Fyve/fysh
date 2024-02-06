@@ -20,5 +20,12 @@ done_o         : out std_logic
 | ----------- | ------- | ------- | ---- | ----- | ----- | ------------ | ------ | ------ | ------ | ------ | ------- | ---- |
 | lui         | 01      | 0       | 1    | [1]   | 1     | 0            | dr     | dr     | dr     | 1      | 0       | 0    |
 | auipc       | 01      | 0       | 1    | 1     | 1     | 0            | dr     | dr     | dr     | 0      | 0       | 0    |
+| addi        | 01      | 0       | 1    | 0     | 1     | 0            | dr     | dr     | dr     | 1      | 0       | 0    |
+
+| A     | B                  | A ^ B    |
+| ----- | ------------------ | -------- |
+| lui   | auipc              | bit 5    | -- LUI is just immediate
+| auipc | register-immediate | bit 2    |
+| lui   | register-immediate | bit 2, 5 |
 
 [^1] This somehow has to be pointing to 0! how? and the op bits should be add!

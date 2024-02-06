@@ -51,12 +51,12 @@ begin
     use std.textio.all;
     variable l : line;
   begin
-    write(l, string'("next_ins: "));
-    write(l, to_hstring(next_ins));
-    writeline(output, l);
     if falling_edge(reset_i) then
       pc <= (others => '0');
-    elsif pc_clk_i'event then
+    elsif rising_edge(pc_clk_i) then
+      write(l, string'("next_ins: "));
+      write(l, to_hstring(next_ins));
+      writeline(output, l);
       pc <= next_ins;
     end if;
   end process;

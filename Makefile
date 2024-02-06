@@ -12,6 +12,7 @@ FMT_SRC := $(patsubst %, fmt-%,$(VHDL_SRC) $(VHDL_TEST_SRC))
 
 export GHDL_FLAGS := compile --std=08
 # GHDL_FLAGS += -frelaxed
+export RUN_FLAGS := --ieee-asserts=disable # If you wanna silence annoying errors
 # export RUN_FLAGS := --assert-level=warning # If you wanna be super strict
 
 test: $(VHDL_TEST_BENCHES)
@@ -29,6 +30,14 @@ rtl/core/rom_pkg.vhd: scripts/asm/main.go \
 
 
 %_tb: $(TEST_DIR)/%_tb.vhd $(SRC_DIR)/%.vhd
+	@TB="$@" ./scripts/run_test.sh $^
+
+_CONTROLLER := control_fsm \
+	       fysh_fyve_pkg \
+
+CONTROLLER := $(patsubst %, $(SRC_DIR)/%.vhd, $(_CONTROLLER))
+
+control_fsm_tb: $(TEST_DIR)/control_fsm_tb.vhd $(CONTROLLER)
 	@TB="$@" ./scripts/run_test.sh $^
 
 _ALU := alu \

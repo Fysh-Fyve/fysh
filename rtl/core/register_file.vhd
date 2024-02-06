@@ -31,11 +31,18 @@ begin
   registers_g :
   for i in 1 to 31 generate
     register_write : process(reset_i, rd_clk_i)
+      use std.textio.all;
+      variable l : line;
     begin
       if falling_edge(reset_i) then
         reg_file(i) <= (others => '0');
       elsif rising_edge(rd_clk_i) then
         if (i = to_integer(unsigned(dest_reg_i))) then
+          write(l, string'("wrote value "));
+          write(l, to_hstring(dest_reg_val_i));
+          write(l, string'(" to register"));
+          write(l, i);
+          writeline(output, l);
           reg_file(i) <= dest_reg_val_i;
         end if;
       end if;

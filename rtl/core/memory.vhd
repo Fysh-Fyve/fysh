@@ -32,14 +32,14 @@ architecture rtl of memory is
   signal addr, mem_out, mem_sx : std_ulogic_vector (31 downto 0);
   signal reg_val_1, reg_val_2  : std_ulogic_vector (31 downto 0);
 begin
-  wtf : process(insn_o)
-    use std.textio.all;
-    variable l : line;
-  begin
-    write(l, string'("insn_o: "));
-    write(l, insn_o);
-    writeline(output, l);
-  end process wtf;
+  -- wtf : process(insn_o)
+  --   use std.textio.all;
+  --   variable l : line;
+  -- begin
+  --   write(l, string'("insn_o: "));
+  --   write(l, insn_o);
+  --   writeline(output, l);
+  -- end process wtf;
 
   mem_inst : entity work.phy_map(rtl) port map (
     clk_i      => clk_i,
@@ -66,7 +66,8 @@ begin
 
   reg_val_2_o <= reg_val_2;
   reg_val_1_o <= reg_val_1;
-  insn_o      <= insn;
+
+  insn_o <= insn;
 
   with addr_sel_i select addr <=
     pc_out_i        when '1',

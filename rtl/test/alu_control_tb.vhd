@@ -27,6 +27,8 @@ architecture test_bench of alu_control_tb is
   signal rd_sel   : std_ulogic_vector (1 downto 0)  := (others => '0');
   signal reset    : std_ulogic                      := '0';
   signal addr_sel : std_ulogic                      := '0';
+
+  signal rs1_or_zero : std_ulogic_vector (31 downto 0);
 begin
   clock : process
   begin
@@ -34,11 +36,12 @@ begin
     wait for 1 ns;
   end process clock;
 
+
   alu_control_inst : entity work.alu_control(rtl) port map (
     clk_i           => clk,
     reset_i         => reset,
     instruction_i   => insn,
-    reg_val_1_i     => rs1_val,
+    reg_val_1_i     => rs1_or_zero,
     reg_val_2_i     => rs2_val,
     alu_o           => alu,
     pc_o            => pc,
