@@ -16,8 +16,9 @@ architecture test_bench of register_file_tb is
 
   signal rd, rs1, rs2 : std_ulogic_vector (4 downto 0) := (others => '0');
 
-  signal rd_val           : std_ulogic_vector (31 downto 0);
-  signal rs1_val, rs2_val : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal rd_val  : std_ulogic_vector (31 downto 0);
+  signal rs1_val : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal rs2_val : std_ulogic_vector (31 downto 0) := (others => '0');
 begin
   register_file_inst : entity work.register_file(rtl) port map(
     rd_clk_i       => rd_clk,
@@ -70,14 +71,18 @@ begin
   --! This only works on GHDL unfortunately.
   --! Well, you can directly inspect the waveforms on Vivado.
 
--- print_out : process (rd_clk)
---   use std.textio.all;
---   variable my_line : line;
--- begin
---   write(my_line, rd_clk, left, 5);
---   write(my_line, loop_count, left, 5);
---   write(my_line, to_hstring(rs1_val), left, 10);
---   write(my_line, to_hstring(rs2_val), left, 10);
---   writeline(output, my_line);
--- end process print_out;
+  print_out : process (rd_clk)
+    use std.textio.all;
+    variable my_line : line;
+  begin
+    write(my_line, rd_clk);
+    write(my_line, ht);
+    write(my_line, loop_count);
+    write(my_line, ht);
+    write(my_line, to_hstring(rs1_val));
+    write(my_line, ht);
+    write(my_line, to_hstring(rs2_val));
+    write(my_line, ht);
+    writeline(output, my_line);
+  end process print_out;
 end test_bench;

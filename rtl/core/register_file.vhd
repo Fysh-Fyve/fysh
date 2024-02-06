@@ -46,11 +46,10 @@ begin
   -- https://five-embeddev.com/riscv-isa-manual/latest/rv32.html#gprs
   reg_file(0) <= (others => '0');
 
-  register_read : process(rd_clk_i)
+  -- Async! hell yeah I am not sure if this works
+  register_read : process(reg_sel_1_i, reg_sel_2_i, rd_clk_i)
   begin
-    if rd_clk_i'event then
-      reg_val_1_o <= reg_file(to_integer(unsigned(reg_sel_1_i)));
-      reg_val_2_o <= reg_file(to_integer(unsigned(reg_sel_2_i)));
-    end if;
+    reg_val_1_o <= reg_file(to_integer(unsigned(reg_sel_1_i)));
+    reg_val_2_o <= reg_file(to_integer(unsigned(reg_sel_2_i)));
   end process register_read;
 end rtl;
