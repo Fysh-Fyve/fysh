@@ -68,9 +68,6 @@ begin
     stop;
   end process reg_file_testing;
 
-  --! This only works on GHDL unfortunately.
-  --! Well, you can directly inspect the waveforms on Vivado.
-
   print_out : process (rd_clk)
     use std.textio.all;
     variable my_line : line;

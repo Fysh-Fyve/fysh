@@ -8,7 +8,6 @@ use work.rom.rom_arr;
 
 
 --! Creates physical maps to memory\n
---! TODO: Implement!\n
 --! 0x00000000 - 0x0001FFFF (ROM)\n
 --! 0x00020000 - 0x0003FFFF (RAM)\n
 --! 0xDEADBEEC - 0xDEADBEEF (GPIO)\n
@@ -20,6 +19,7 @@ entity phy_map is
     addr_i : in    std_ulogic_vector (31 downto 0);   --! Read & Write Address
     d_i    : in    std_ulogic_vector (31 downto 0);   --! Data Output
     d_o    : out   std_ulogic_vector (31 downto 0);   --! Data Output
+    -- TODO: GPIO PIN Mode???
     gpio   : inout std_ulogic_vector (31 downto 0));  --! GPIO Pins
 
 end phy_map;
@@ -34,17 +34,29 @@ architecture rtl of phy_map is
   signal gpio_write_en : std_ulogic;
   signal rom_write_en  : std_ulogic;
 
-  signal gpio_out, mem_out, ram_out, rom_out : std_ulogic_vector (31 downto 0);
+  signal gpio_out : std_ulogic_vector (31 downto 0);
+  signal mem_out  : std_ulogic_vector (31 downto 0);
+  signal ram_out  : std_ulogic_vector (31 downto 0);
+  signal rom_out  : std_ulogic_vector (31 downto 0);
 
   signal gpio_addr_start : std_ulogic;
 
   signal le_data_in  : std_ulogic_vector (31 downto 0);
   signal le_data_out : std_ulogic_vector (31 downto 0);
 begin
-  d_o          <= le_data_out(7 downto 0) & le_data_out(15 downto 8) & le_data_out(23 downto 16) & le_data_out(31 downto 24);
-  le_data_in   <= d_i(7 downto 0) & d_i(15 downto 8) & d_i(23 downto 16) & d_i(31 downto 24);
+  d_o <= le_data_out(7 downto 0)
+         & le_data_out(15 downto 8)
+         & le_data_out(23 downto 16)
+         & le_data_out(31 downto 24);
+
+  le_data_in <= d_i(7 downto 0)
+                & d_i(15 downto 8)
+                & d_i(23 downto 16)
+                & d_i(31 downto 24);
+
+  rom_write_en <= '0';                  -- Disable writing to ROM
+
   ram_write_en <= (not mem_sel) and write_en_i;
-  rom_write_en <= '0';                  -- Disable writing
 
   gpio_addr_start <= '1' when (addr_i = x"DEADBEEC") else '0';
   gpio_write_en   <= mem_sel and write_en_i and gpio_addr_start;

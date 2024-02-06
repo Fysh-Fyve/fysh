@@ -52,6 +52,7 @@ alu_control_tb: $(TEST_DIR)/alu_control_tb.vhd $(ALU_CONTROL)
 	@TB="$@" ./scripts/run_test.sh $^
 
 _MEM := mem \
+	rom_pkg \
 	fysh_fyve_pkg \
 
 MEM := $(patsubst %, $(SRC_DIR)/%.vhd, $(_MEM))
@@ -62,7 +63,6 @@ mem_tb: $(TEST_DIR)/mem_tb.vhd $(MEM)
 _MEMORY := memory \
 	   $(_MEM) \
 	   phy_map \
-	   rom_pkg \
 	   mbr_sx \
 	   register_file \
 
