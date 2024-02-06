@@ -19,7 +19,6 @@ architecture rtl of topmodule is
 
   signal alu, pc, pc_alu : std_ulogic_vector (31 downto 0) := (others => '0');
   signal rd_sel          : std_ulogic_vector (1 downto 0)  := (others => '0');
-  signal sx_size         : std_ulogic_vector (2 downto 0)  := (others => '0');
 
   signal addr_sel     : std_ulogic := '0';
   signal rd_clk       : std_ulogic := '0';
@@ -39,8 +38,7 @@ begin
     rd_clk_o        => rd_clk,
     mem_write_en_o  => mem_write_en,
     ir_clk_o        => ir_clk,
-    rd_sel_o        => rd_sel,
-    sx_size_o       => sx_size);
+    rd_sel_o        => rd_sel);
 
   memory_inst : entity work.memory(rtl) port map (
     clk_i        => clk,
@@ -49,7 +47,6 @@ begin
     insn_clk_i   => ir_clk,
     addr_sel_i   => addr_sel,
     reset_i      => reset,
-    sx_size_i    => sx_size,
     rd_sel_i     => rd_sel,
     alu_out_i    => alu,
     pc_out_i     => pc,

@@ -21,7 +21,6 @@ entity control_fsm is
     sub_sra_i : in std_ulogic;  --! subtract or shift right arithmetic flag (0 = add, logical shift right; 1 = subtract, arithmetic shift right).
 
     op_bits_o : out std_ulogic_vector (2 downto 0) := (others => '0');
-    sx_size_o : out std_ulogic_vector (2 downto 0) := (others => '0');
     rd_sel_o  : out std_ulogic_vector (1 downto 0) := (others => '0');
 
     sub_sra_o      : out std_ulogic := '0';
@@ -69,7 +68,6 @@ begin
 
           sub_sra_o <= sub_sra_i;
           op_bits_o <= op_bits_i(2 downto 0);
-          sx_size_o <= opcode_i(2 downto 0);  -- TODO: correct!
 
           -- TODO!!
           rd_clk_o <= opcode_i(0);

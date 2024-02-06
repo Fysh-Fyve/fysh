@@ -16,7 +16,6 @@ entity memory is
 
     addr_sel_i   : in std_ulogic;       --! ALU & PC address select signal
     reset_i      : in std_ulogic;       --! Reset signal
-    sx_size_i    : in std_ulogic_vector (2 downto 0);
     rd_sel_i     : in std_ulogic_vector (1 downto 0);  --! Register File write select
     alu_out_i    : in std_ulogic_vector (31 downto 0);  --! Output of the ALU.
     pc_out_i     : in std_ulogic_vector (31 downto 0);  --! Output of the Program Counter. (same as above)
@@ -52,9 +51,8 @@ begin
     );
 
   mbr_sx_inst : entity work.mbr_sx(rtl) port map (
-    mbr_i  => mem_out,
-    size_i => sx_size_i,
-    sx_o   => mem_sx);
+    mbr_i => mem_out,
+    sx_o  => mem_sx);
 
   register_file_inst : entity work.register_file(rtl) port map (
     rd_clk_i       => rd_clk_i,

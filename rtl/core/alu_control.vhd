@@ -26,8 +26,7 @@ entity alu_control is
     pc_alu_result_o : out std_ulogic_vector (31 downto 0) := (others => '0');  --! Program Counter's ALU output
 
     addr_sel_o : out std_ulogic                     := '0';  --! ALU & PC address select signal
-    rd_sel_o   : out std_ulogic_vector (1 downto 0) := (others => '0');  --! Register File write select
-    sx_size_o  : out std_ulogic_vector (2 downto 0) := (others => '0'));  --! Memory fetch size
+    rd_sel_o   : out std_ulogic_vector (1 downto 0) := (others => '0'));  --! Register File write select
 end alu_control;
 
 architecture rtl of alu_control is
@@ -53,7 +52,6 @@ architecture rtl of alu_control is
 
   signal addr_sel : std_ulogic                      := '0';
   signal rd_sel   : std_ulogic_vector (1 downto 0)  := (others => '0');
-  signal sx_size  : std_ulogic_vector (2 downto 0)  := (others => '0');
   signal alu      : std_ulogic_vector (31 downto 0) := (others => '0');
   signal pc       : std_ulogic_vector (31 downto 0) := (others => '0');
 begin
@@ -108,7 +106,6 @@ begin
 
     sub_sra_o      => sub_sra,
     op_bits_o      => op_bits,
-    sx_size_o      => sx_size,
     addr_sel_o     => addr_sel,
     alu_a_sel_o    => alu_a_sel,
     alu_b_sel_o    => alu_b_sel,
@@ -122,7 +119,6 @@ begin
 
   addr_sel_o <= addr_sel;
   rd_sel_o   <= rd_sel;
-  sx_size_o  <= sx_size;
   alu_o      <= alu;
   pc_o       <= pc;
 

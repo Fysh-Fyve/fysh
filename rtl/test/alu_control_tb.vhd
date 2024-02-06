@@ -27,7 +27,6 @@ architecture test_bench of alu_control_tb is
   signal rd_sel   : std_ulogic_vector (1 downto 0)  := (others => '0');
   signal reset    : std_ulogic                      := '0';
   signal addr_sel : std_ulogic                      := '0';
-  signal sx_size  : std_ulogic_vector (2 downto 0)  := (others => '0');
 begin
   clock : process
   begin
@@ -48,8 +47,7 @@ begin
     rd_clk_o        => rd_clk,
     ir_clk_o        => ir_clk,
     mem_write_en_o  => mem_write_en,
-    rd_sel_o        => rd_sel,
-    sx_size_o       => sx_size);
+    rd_sel_o        => rd_sel);
 
   main : process
     use std.textio.all;

@@ -22,8 +22,7 @@ architecture test_bench of control_fsm_tb is
   signal sub_sra_i : std_ulogic;  -- subtract or shift right arithmetic flag (0 = add, logical shift right; 1 = subtract, arithmetic shift right).
   signal sub_sra_o : std_ulogic;
 
-  signal sx_size : std_ulogic_vector (2 downto 0) := (others => '0');
-  signal rd_sel  : std_ulogic_vector (1 downto 0) := (others => '0');
+  signal rd_sel : std_ulogic_vector (1 downto 0) := (others => '0');
 
   signal addr_sel     : std_ulogic := '0';
   signal alu_a_sel    : std_ulogic := '0';
@@ -48,7 +47,6 @@ begin
     sub_sra_i => sub_sra_i,
 
     op_bits_o => op_bits_o,
-    sx_size_o => sx_size,
     rd_sel_o  => rd_sel,
 
     sub_sra_o      => sub_sra_o,
