@@ -18,7 +18,7 @@ entity control_fsm is
     ltu_i     : in std_ulogic;  --! Unsigned less than flag (A < B (unsigned)).
     opcode_i  : in std_ulogic_vector (6 downto 0) := (others => '0');
     op_bits_i : in std_ulogic_vector (2 downto 0);
-    sub_sra_i : in std_ulogic;  -- subtract or shift right arithmetic flag (0 = add, logical shift right; 1 = subtract, arithmetic shift right).
+    sub_sra_i : in std_ulogic;  --! subtract or shift right arithmetic flag (0 = add, logical shift right; 1 = subtract, arithmetic shift right).
 
     op_bits_o : out std_ulogic_vector (2 downto 0) := (others => '0');
     sx_size_o : out std_ulogic_vector (2 downto 0) := (others => '0');
@@ -45,6 +45,7 @@ architecture rtl of control_fsm is
 
   signal state : state_t := decode;
 begin
+
   drive_clock : process(clk_i, halt_i, opcode_i, pc_clk, ir_clk, mem_write_en)
     use std.textio.all;
     variable l : line;
@@ -67,7 +68,7 @@ begin
           rd_sel_o      <= opcode_i(1 downto 0);  -- mem_sx ("11"), alu ("01"), or pc alu ("00")
 
           sub_sra_o <= sub_sra_i;
-          op_bits_o <= opcode_i(2 downto 0);  -- TODO: correct!
+          op_bits_o <= op_bits_i(2 downto 0);
           sx_size_o <= opcode_i(2 downto 0);  -- TODO: correct!
 
           -- TODO!!
