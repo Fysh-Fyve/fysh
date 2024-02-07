@@ -35,7 +35,7 @@ begin
     reset <= '0';
     wait for 1 ns;
     reset <= '1';
-    wait for 30 ns;
+    wait for 70 ns;
     stop;
   end process;
 end test_bench;
