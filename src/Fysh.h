@@ -96,10 +96,17 @@ public:
 
   Species getSpecies() const noexcept;
   std::string_view getBody() const noexcept;
+  std::optional<uint32_t> getValue() const noexcept;
 
   // -----------------------OPERATORS-----------------------
   bool operator==(const Species &in_species) const noexcept {
     return species == in_species;
+  }
+
+  bool operator==(const char *other) const noexcept {
+    return (species == Species::FYSH_IDENTIFIER ||
+            species == Species::INVALID) &&
+           body == other;
   }
 
   bool operator==(const Fysh &other) const noexcept {

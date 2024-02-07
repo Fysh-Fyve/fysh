@@ -1,7 +1,6 @@
 #include "../src/Lexer.h"
 
 #include "doctest.h"
-#include <iostream>
 
 using namespace fysh;
 
@@ -43,13 +42,13 @@ TEST_CASE("fysh open & wtf open") {
 }
 
 TEST_CASE("random fysh") {
-  std::string_view input{"><##> ><###> ><####> <###><"};
+  std::string_view input{"><##> ><###> ><####> <###>< "};
   // Assuming `input` is a std::string or std::string_view
   FyshLexer lexer{input.data()};
-  CHECK(lexer.nextFysh() == Species::INVALID);
+  CHECK(lexer.nextFysh() == "><##>");
   CHECK(lexer.nextFysh() == Species::RANDOM);
-  CHECK(lexer.nextFysh() == Species::INVALID);
-  CHECK(lexer.nextFysh() == Species::INVALID);
+  CHECK(lexer.nextFysh() == "><####>");
+  CHECK(lexer.nextFysh() == "<###><");
 }
 
 TEST_CASE("negative fysh") {
@@ -73,27 +72,28 @@ TEST_CASE("weird fysh") {
   CHECK(lexer.nextFysh() == 0b011);
 }
 
-TEST_CASE("Bad fysh") { 
-  std::string_view input{
-      "><{{({(o><DQHUD ><{{({(o>< ><{{((>< ><{{{< ><o{{}}>< ><{{({(o <o{{}}o ><>"};
+TEST_CASE("Bad fysh") {
+  std::string_view input{"><{{({(o><DQHUD ><{{({(o>< ><{{((>< ><{{{< ><o{{}}>< "
+                         "><{{({(o <o{{}}o ><>"};
   // Assuming `input` is a std::string or std::string_view
   FyshLexer lexer{input.data()};
-  CHECK(lexer.nextFysh() == Species::INVALID);
-  CHECK(lexer.nextFysh() == Species::INVALID);
-  CHECK(lexer.nextFysh() == Species::INVALID);
-  CHECK(lexer.nextFysh() == Species::INVALID);
-  CHECK(lexer.nextFysh() == Species::INVALID);
-  CHECK(lexer.nextFysh() == Species::INVALID);
-  CHECK(lexer.nextFysh() == Species::INVALID);
+  CHECK(lexer.nextFysh() == "><{{({(o><DQHUD");
+  CHECK(lexer.nextFysh() == "><{{({(o><");
+  CHECK(lexer.nextFysh() == "><{{((><");
+  CHECK(lexer.nextFysh() == "><{{{<");
+  CHECK(lexer.nextFysh() == "><o{{}}><");
+  CHECK(lexer.nextFysh() == "><{{({(o");
+  CHECK(lexer.nextFysh() == "<o{{}}o");
   CHECK(lexer.nextFysh() == Species::FYSH_OPEN); // fails here
 }
 
 TEST_CASE("Swim Left") {
-  std::string_view input{"<!@#$>< <>< <!@%$>< <!@#$>"};
+  std::string_view input{"<!@#$>< <>< <!@%$>< <!@#$> <>< "};
   // Assuming `input` is a std::string or std::string_view
   FyshLexer lexer{input.data()};
   CHECK(lexer.nextFysh() == Species::WTF_CLOSE);
   CHECK(lexer.nextFysh() == Species::FYSH_CLOSE);
-  CHECK(lexer.nextFysh() == Species::INVALID);
-  CHECK(lexer.nextFysh() == Species::INVALID);
+  CHECK(lexer.nextFysh() == "<!@%$><");
+  CHECK(lexer.nextFysh() == "<!@#$>");
+  CHECK(lexer.nextFysh() == Species::FYSH_CLOSE);
 }

@@ -21,6 +21,7 @@
 #include <cassert>
 
 fysh::Species fysh::Fysh::getSpecies() const noexcept { return species; }
+std::optional<uint32_t> fysh::Fysh::getValue() const noexcept { return value; }
 
 bool fysh::Fysh::isOneOf(fysh::Species species1,
                          fysh::Species species2) const noexcept {
@@ -88,7 +89,27 @@ constexpr const char *debugType(const fysh::Species &species) {
   assert(false);
 }
 
-std::ostream &fysh::operator<<(std::ostream &os, const fysh::Fysh &value) {
-  os << "'" << debugType(value.getSpecies()) << "'" << value.getBody();
+std::ostream &fysh::operator<<(std::ostream &os, const fysh::Fysh &f) {
+  using fysh::Species;
+  switch (f.getSpecies()) {
+  case Species::FYSH_LITERAL: {
+    auto val{f.getValue()};
+    os << "(";
+    if (val.has_value()) {
+      os << val.value();
+    } else {
+      os << "None";
+    }
+    os << ")";
+    break;
+  }
+  case Species::FYSH_IDENTIFIER:
+  case Species::INVALID: {
+    os << debugType(f.getSpecies()) << "`" << f.getBody() << "`";
+    break;
+  }
+  default:
+    os << "'" << debugType(f.getSpecies()) << "'";
+  }
   return os;
 }

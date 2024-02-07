@@ -19,15 +19,27 @@
  */
 
 #include "Lexer.h"
+
+#ifdef FYSH_DEBUG
 #include <iostream>
+
+void fysh::FyshLexer::printRest() { std::cerr << rest() << std::endl; }
+char fysh::FyshLexer::peek(int line) const noexcept {
+  if (line > 0) {
+    std::cerr << "Current (line:" << line << "): " << *current << std::endl;
+  }
+  return *current;
+}
+#define peek() peek(__LINE__)
+#endif
 
 // -------------- Utility functions --------------
 static bool isSpace(char c) noexcept {
-    return c == ' ' || c == '\t' || c == '\r' || c == '\n';
+  return c == ' ' || c == '\t' || c == '\r' || c == '\n';
 }
 
 static bool isScale(char c) noexcept {
-        return c == '(' || c == ')' || c == '{' || c == '}';
+  return c == '(' || c == ')' || c == '{' || c == '}';
 }
 
 void fysh::FyshLexer::skipWhitespace() noexcept {
@@ -46,7 +58,7 @@ void fysh::FyshLexer::gotoEndOfToken() noexcept {
 bool fysh::FyshLexer::isFyshEye(char c) noexcept {
   switch (c) {
   case 'o':
-    // case '°': UNICODE 
+    // case '°': UNICODE
     return true;
   default:
     return false;
@@ -61,14 +73,14 @@ fysh::Fysh fysh::FyshLexer::tryUnicode(const char *bytes, Species s) noexcept {
       touched = true;
     } else {
       if (touched) {
-        return Fysh{Species::INVALID};
+        return cullDeformedFysh();
       } else {
         // Contiue looping through the characters
-        return Fysh{Species::CONTINUE};
+        return fysh::Fysh{Species::CONTINUE};
       }
     }
   }
-  return Fysh{s};
+  return fysh::Fysh{s};
 }
 
 // -------------- Token functions --------------
@@ -100,213 +112,213 @@ fysh::Fysh fysh::FyshLexer::unicode() noexcept {
       {"♡", Species::HEART_MULTIPLY},
   };
   for (const struct Unicode &c : chars) {
-    Fysh fysh{tryUnicode(c.codePoint, c.species)};
+    fysh::Fysh fysh{tryUnicode(c.codePoint, c.species)};
     // We either get an invalid token or a non-continue token
     if (fysh == Species::INVALID || !(fysh == Species::CONTINUE)) {
       return fysh;
     }
   }
-  std::cout << peek() << '(' << +peek() << ')' << std::endl;
-  return Fysh(Species::INVALID);
+
+  return cullDeformedFysh();
+}
+
+fysh::Fysh fysh::FyshLexer::cullDeformedFysh() noexcept {
+  gotoEndOfToken();
+  auto fyshEnd{current};
+  return fysh::Fysh{Species::INVALID, fyshStart, fyshEnd};
 }
 
 // <3 or ♡
 fysh::Fysh fysh::FyshLexer::heart() noexcept {
+  ;
   get();
-  return fysh::Fysh(Species::HEART_MULTIPLY);
+  return fysh::Fysh{Species::HEART_MULTIPLY};
 }
 
 // </3 or 💔
 fysh::Fysh fysh::FyshLexer::heartBreak() noexcept {
-  const char *start = current;
   get();
-    if (peek() == '3') {
-      get();
-      return Fysh(Species::HEART_DIVIDE, start, current);
-    }
-    return Fysh(Species::INVALID);
+  if (peek() == '3') {
+    get();
+    return fysh::Fysh{Species::HEART_DIVIDE};
+  }
+  return cullDeformedFysh();
 }
-
 
 // opening for error handling ><!@#$>
 fysh::Fysh fysh::FyshLexer::openWTF() noexcept {
-  const char *start = current;
   if (get() == '!' && get() == '@' && get() == '#' && get() == '$' &&
-      get() == '>') {
-    return Fysh(Species::WTF_OPEN, start, current);
+      peek() == '>') {
+    get();
+    return fysh::Fysh{Species::WTF_OPEN};
   }
-  return Fysh(Species::INVALID);
+  return cullDeformedFysh();
 }
 
 // closing for error handling <!@#$><
 fysh::Fysh fysh::FyshLexer::closeWTF() noexcept {
-  const char *start = current;
   if (get() == '!' && get() == '@' && get() == '#' && get() == '$' &&
-      get() == '>' && get() == '<'){
-    return Fysh(Species::WTF_CLOSE, start, current);
+      get() == '>' && peek() == '<') {
+    get();
+    return fysh::Fysh{Species::WTF_CLOSE};
   }
-  return Fysh(Species::INVALID);
+  return cullDeformedFysh();
 }
 
 // ><>
 fysh::Fysh fysh::FyshLexer::fyshOpen() noexcept {
   get();
-  return Fysh(Species::FYSH_OPEN);
+  return fysh::Fysh{Species::FYSH_OPEN};
 }
 
 // <><
 fysh::Fysh fysh::FyshLexer::fyshClose() noexcept {
-  get(); 
+  get();
   if (peek() == '<') {
-    return Fysh(Species::FYSH_CLOSE);
+    get();
+    return fysh::Fysh{Species::FYSH_CLOSE};
   }
-  return Fysh(Species::INVALID);
-
+  return cullDeformedFysh();
 }
 
 fysh::Fysh fysh::FyshLexer::slashOrComment() noexcept {
-  return Fysh(Species::INVALID);
+  return fysh::Fysh{Species::INVALID};
 }
 
 fysh::Fysh fysh::FyshLexer::identifier() noexcept {
-  return Fysh(Species::INVALID);
+  return fysh::Fysh{Species::INVALID};
 }
-
 
 fysh::Fysh fysh::FyshLexer::random() noexcept {
   for (size_t i = 0; i < 3; i++) {
-    if (get() != '#') {
-      gotoEndOfToken();
-      return Fysh(Species::INVALID);
+    if (peek() != '#') {
+      return cullDeformedFysh();
     }
+    get();
   }
   if (peek() == '>') {
     get();
-    return Fysh(Species::RANDOM);
+    return fysh::Fysh{Species::RANDOM};
   }
-  gotoEndOfToken();
-  return Fysh(Species::INVALID);
+  return cullDeformedFysh();
 }
 
 fysh::Fysh fysh::FyshLexer::scales(bool positive = true) noexcept {
   // gets all the scales and converts them to a binary number
   char c = get();
-  uint32_t value{c == '{' || c == '}'}; // stores the first scale as a binary number
+  uint32_t value{c == '{' ||
+                 c == '}'}; // stores the first scale as a binary number
   while (isScale(peek())) {
     c = get();
-    value = (value << 1) | (c == '{' || c == '}'); // shifts the bits to the left and stores the next scale using bitwise OR
+    value = (value << 1) |
+            (c == '{' || c == '}'); // shifts the bits to the left and stores
+                                    // the next scale using bitwise OR
   }
 
   c = get(); // stores the value after the last scale
-  
+
   // check if the current character is an eye or >
   if (!(isFyshEye(c) && peek() == '>') && c != '>') {
-    gotoEndOfToken();
-    return Fysh{Species::INVALID};
+    return cullDeformedFysh();
   }
 
   // check if its the end of the token or not (2nd character after the scales)
   if (!isSpace(peek())) {
-    c = get();
-    if ((positive  && (c != '>')) ||  // checks for '°>' (fysh head)
-        (!positive && (c != '<'))) {  // checks for '><' (fysh tail)
-      gotoEndOfToken();
-      return Fysh{Species::INVALID};
+    c = peek();
+    if ((positive && (c != '>')) ||  // checks for '°>' (fysh head)
+        (!positive && (c != '<'))) { // checks for '><' (fysh tail)
+      return cullDeformedFysh();
     }
+    get();
   }
 
   // make sure the token ends
   if (!isSpace(peek()) && peek() != '\0') {
-    gotoEndOfToken();
-    return Fysh{Species::INVALID};
+    return cullDeformedFysh();
   }
 
-  return positive ? Fysh{value} : Fysh{~value};
+  // TODO: Check if this is the real intention.
+  // ~ operator is bitwise not, not integer negate
+  return positive ? fysh::Fysh{value} : fysh::Fysh{~value};
 }
 
-fysh::Fysh fysh::FyshLexer::positiveScales() noexcept {
-  return scales(true);
-}
+fysh::Fysh fysh::FyshLexer::positiveScales() noexcept { return scales(true); }
 
-fysh::Fysh fysh::FyshLexer::negativeScales() noexcept {
-  return scales(false);
-}
-
+fysh::Fysh fysh::FyshLexer::negativeScales() noexcept { return scales(false); }
 
 // --------------------------Check for the token--------------------------------
 
-
 // Token starts with '<' or '>'
 fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
-  char c = get();
-
-  switch (c) {
+  switch (peek()) {
   case ('<'):
+    get();
     switch (peek()) {
-      case ('3'):
-        return heart(); // <3 multiplication heart
-      case ('/'):
-        return heartBreak(); // </3 division heart
-      default:
-        return swimLeft(); // a fysh swimming left
+    case ('3'):
+      return heart(); // <3 multiplication heart
+    case ('/'):
+      return heartBreak(); // </3 division heart
+    default:
+      return swimLeft(); // a fysh swimming left
     }
   case '>':
+    get();
     switch (peek()) {
-      case ('<'):
-        return swimRight(); // a fysh swimming right
-      default:
-        return Fysh(Species::INVALID);
+    case ('<'):
+      return swimRight(); // a fysh swimming right
+    default:
+      return cullDeformedFysh();
     }
   default:
-    return Fysh(Species::END);
+    return cullDeformedFysh();
   }
 }
 
 fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
   // current is the 2nd character of the token
   switch (peek()) {
-    case ('{'):
-    case ('('):
-    case ('}'):
-    case (')'):
-    case ('o'):
-      return negativeScales(); // negative fysh literal <°)})}><
-    case ('>'):
-      return fyshClose(); // close curly bracket
-    case ('!'):
-      return closeWTF(); // error handling close tag
+  case ('{'):
+  case ('('):
+  case ('}'):
+  case (')'):
+  case ('o'):
+    return negativeScales(); // negative fysh literal <°)})}><
+  case ('>'):
+    return fyshClose(); // close curly bracket
+  case ('!'):
+    return closeWTF(); // error handling close tag
   }
-  return Fysh(Species::INVALID);
+  return cullDeformedFysh();
 }
 
 // all fysh that start with >< are swimming right e.g. ><>
 fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
   get(); // 2nd swim right character '<'
   switch (peek()) {
-    case ('{'):
-    case ('('):
-    case ('}'):
-    case (')'):
-      return positiveScales(); // fysh literal ><{{({(°>
-    case ('>'):
-      return fyshOpen(); // open curly bracket
-    case ('!'):
-      return openWTF(); // error handling
-    case ('/'):
-      return slashOrComment(); // comment
-    case ('#'):
-      return random(); // random number
+  case ('{'):
+  case ('('):
+  case ('}'):
+  case (')'):
+    return positiveScales(); // fysh literal ><{{({(°>
+  case ('>'):
+    return fyshOpen(); // open curly bracket
+  case ('!'):
+    return openWTF(); // error handling
+  case ('/'):
+    return slashOrComment(); // comment
+  case ('#'):
+    return random(); // random number
   }
-  return Fysh(Species::INVALID);
+  return cullDeformedFysh();
 }
 
 // Where the magic happens
 fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
-  while (isSpace(peek()))
-    get();
+  skipWhitespace();
+  fyshStart = current;
   switch (peek()) {
   case '\0':
-    return Fysh(Species::END);
+    return fysh::Fysh{Species::END};
   case '<':
   case '>':
     return fyshOutline();
