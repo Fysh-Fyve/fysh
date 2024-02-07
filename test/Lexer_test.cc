@@ -41,6 +41,18 @@ TEST_CASE("fysh open & wtf open") {
   CHECK(lexer.nextFysh() == Species::WTF_OPEN);
 }
 
+
+TEST_CASE("random fysh") {
+  std::string_view input{"><##> ><###> ><####> <###><"};
+  // Assuming `input` is a std::string or std::string_view
+  FyshLexer lexer{input.data()};
+  CHECK(lexer.nextFysh() == Species::INVALID);
+  CHECK(lexer.nextFysh() == Species::RANDOM);
+  CHECK(lexer.nextFysh() == Species::INVALID);
+  CHECK(lexer.nextFysh() == Species::INVALID);
+}
+
+
 TEST_CASE("negative fysh") {
   std::string_view input{"><{{({(o> <3 <o})}>< <o})}><"};
   // Assuming `input` is a std::string or std::string_view
@@ -72,6 +84,3 @@ TEST_CASE("Bad fysh") {
   CHECK(lexer.nextFysh() == Species::INVALID);
   CHECK(lexer.nextFysh() == Species::INVALID);
 }
-
-
-

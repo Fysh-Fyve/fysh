@@ -57,6 +57,7 @@ enum class Species {
   FYSH_CLOSE,      // <>< (same as closing curly bracket '}' )
   WTF_OPEN,        // WHAT THE FYSH (Throw error opening) ><!@#$>
   WTF_CLOSE,       // WHAT THE FYSH (Throw error closing) <!@#$><
+  RANDOM,          // Random fysh ><###>
   COMMENT,         // ><//> Comment
   OPENING_COMMENT, // ></*> Comment
   CLOSING_COMMENT, // Comment <*/><

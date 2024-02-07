@@ -178,8 +178,10 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
       return openWTF();
     case '/':
       return slashOrComment();
+    case '#':
+      return random();
     default:
-      return identifier();
+      return Fysh(Species::INVALID);
     }
   }
   
@@ -189,11 +191,27 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
       if (isFyshEye(c) || isScale(c)) {
         return scales(false); // false for negative
       }
+      return Fysh(Species::INVALID);
     }
   return Fysh(Species::END);
 }
 
-// TODO: Handle negative case
+fysh::Fysh fysh::FyshLexer::random() noexcept {
+  for (size_t i = 0; i < 3; i++) {
+    if (get() != '#') {
+      gotoEndOfToken();
+      return Fysh(Species::INVALID);
+    }
+  }
+  if (peek() == '>') {
+    get();
+    return Fysh(Species::RANDOM);
+  }
+  gotoEndOfToken();
+  return Fysh(Species::INVALID);
+}
+
+
 fysh::Fysh fysh::FyshLexer::scales(bool positive = true) noexcept {
   auto c{get()};
   uint32_t value{c == '{' || c == '}'};
@@ -217,7 +235,7 @@ fysh::Fysh fysh::FyshLexer::scales(bool positive = true) noexcept {
     gotoEndOfToken();
     return Fysh{Species::INVALID};
   }
-  
+
   // check if its the end of the token or not (2nd end character)
   if (!isSpace(peek())) {
     c = get();

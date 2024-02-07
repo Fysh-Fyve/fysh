@@ -69,6 +69,8 @@ constexpr const char *debugType(const fysh::Species &species) {
     return "WTF(";
   case Species::WTF_CLOSE:
     return ")WTF";
+  case Species::RANDOM:
+    return "RANDOM";
   case Species::COMMENT:
     return "//";
   case Species::OPENING_COMMENT:
