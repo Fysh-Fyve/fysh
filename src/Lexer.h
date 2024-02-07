@@ -61,8 +61,9 @@ private:
   Fysh heartBreak() noexcept;
   Fysh swimRight() noexcept;
   Fysh swimLeft() noexcept;
+  Fysh positiveScales() noexcept;
+  Fysh negativeScales() noexcept;
   bool isFyshEye(char) noexcept;
-  bool isPositiveScale() noexcept;
   
 #ifdef FYSH_DEBUG
   char peek(int line = -1) const noexcept {

@@ -51,7 +51,7 @@ void fysh::FyshLexer::gotoEndOfToken() noexcept {
   }
 }
 
-
+// o or ° (eye of the fysh)
 bool fysh::FyshLexer::isFyshEye(char c) noexcept {
   switch (c) {
   case 'o':
@@ -117,11 +117,13 @@ fysh::Fysh fysh::FyshLexer::unicode() noexcept {
   return Fysh(Species::INVALID);
 }
 
+// <3 or ♡
 fysh::Fysh fysh::FyshLexer::heart() noexcept {
   get();
   return fysh::Fysh(Species::HEART_MULTIPLY);
 }
 
+// </3 or 💔
 fysh::Fysh fysh::FyshLexer::heartBreak() noexcept {
   const char *start = current;
   get();
@@ -174,11 +176,13 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     return unicode();
   }
 }
+// ><>
 fysh::Fysh fysh::FyshLexer::fyshOpen() noexcept {
   get();
   return Fysh(Species::FYSH_OPEN);
 }
 
+// <><
 fysh::Fysh fysh::FyshLexer::fyshClose() noexcept {
   get(); 
   if (peek() == '<') {
@@ -220,7 +224,7 @@ fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
     case ('}'):
     case (')'):
     case ('o'):
-      return scales(false); // false for negative
+      return negativeScales(); // negative fysh literal <°)})}><
     case ('>'):
       return fyshClose();
     case ('!'):
@@ -237,15 +241,15 @@ fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
     case ('('):
     case ('}'):
     case (')'):
-      return scales(true); // true for positive
+      return positiveScales(); // fysh literal ><{{({(°>
     case ('>'):
-      return fyshOpen();
+      return fyshOpen(); // open curly bracket
     case ('!'):
-      return openWTF();
+      return openWTF(); // error handling
     case ('/'):
-      return slashOrComment();
+      return slashOrComment(); // comment
     case ('#'):
-      return random();
+      return random(); // random number
   }
   return Fysh(Species::INVALID);
 }
@@ -274,14 +278,6 @@ fysh::Fysh fysh::FyshLexer::scales(bool positive = true) noexcept {
     auto c{get()};
     value = (value << 1) | (c == '{' || c == '}');
   }
-
-  /*
-  validate end of fysh
-  valid ends:
-  >
-  o>
-  ><
-  */
 
   c = get(); // eye or end
 
@@ -314,3 +310,10 @@ fysh::Fysh fysh::FyshLexer::scales(bool positive = true) noexcept {
   }
 }
 
+fysh::Fysh fysh::FyshLexer::positiveScales() noexcept {
+  return scales(true);
+}
+
+fysh::Fysh fysh::FyshLexer::negativeScales() noexcept {
+  return scales(false);
+}
