@@ -189,8 +189,10 @@ fysh::Fysh fysh::FyshLexer::fyshClose() noexcept {
     return Fysh(Species::FYSH_CLOSE);
   }
   return Fysh(Species::INVALID);
+
 }
 
+// Token starts with '<' or '>'
 fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
   char c = get();
 
@@ -198,16 +200,16 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
   case ('<'):
     switch (peek()) {
       case ('3'):
-        return heart();
+        return heart(); // <3 multiplication heart
       case ('/'):
-        return heartBreak();
+        return heartBreak(); // </3 division heart
       default:
-        return swimLeft();
+        return swimLeft(); // a fysh swimming left
     }
   case '>':
     switch (peek()) {
       case ('<'):
-        return swimRight(); 
+        return swimRight(); // a fysh swimming right
       default:
         return Fysh(Species::INVALID);
     }
@@ -226,9 +228,9 @@ fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
     case ('o'):
       return negativeScales(); // negative fysh literal <°)})}><
     case ('>'):
-      return fyshClose();
+      return fyshClose(); // close curly bracket
     case ('!'):
-      return closeWTF();
+      return closeWTF(); // error handling close tag
   }
   return Fysh(Species::INVALID);
 }
@@ -269,29 +271,28 @@ fysh::Fysh fysh::FyshLexer::random() noexcept {
   return Fysh(Species::INVALID);
 }
 
-
-
 fysh::Fysh fysh::FyshLexer::scales(bool positive = true) noexcept {
-  auto c{get()};
-  uint32_t value{c == '{' || c == '}'};
+  // gets all the scales and converts them to a binary number
+  char c = get();
+  uint32_t value{c == '{' || c == '}'}; // stores the first scale as a binary number
   while (isScale(peek())) {
-    auto c{get()};
-    value = (value << 1) | (c == '{' || c == '}');
+    c = get();
+    value = (value << 1) | (c == '{' || c == '}'); // shifts the bits to the left and stores the next scale using bitwise OR
   }
 
-  c = get(); // eye or end
+  c = get(); // stores the value after the last scale
 
   // check if the current character is an eye or >
-  if (!isFyshEye(c) && c != '>') {
+  if (!(isFyshEye(c) && peek() == '>') && c != '>') {
     gotoEndOfToken();
     return Fysh{Species::INVALID};
   }
 
-  // check if its the end of the token or not (2nd end character)
+  // check if its the end of the token or not (2nd character after the scales)
   if (!isSpace(peek())) {
     c = get();
-    if ((positive && (c != '>' || c == '<')) ||
-        (!positive && (c != '<' || c == '>'))) {
+    if ((positive  && (c != '>')) ||  // checks for '°>' (fysh head)
+        (!positive && (c != '<'))) {  // checks for '><' (fysh tail)
       gotoEndOfToken();
       return Fysh{Species::INVALID};
     }

@@ -73,9 +73,9 @@ TEST_CASE("weird fysh") {
   CHECK(lexer.nextFysh() == 0b011);
 }
 
-TEST_CASE("Bad fysh") {
+TEST_CASE("Bad fysh") { 
   std::string_view input{
-      "><{{({(o><DQHUD ><{{({(o>< ><{{((>< ><{{{< ><o{{}}><"};
+      "><{{({(o><DQHUD ><{{({(o>< ><{{((>< ><{{{< ><o{{}}>< ><{{({(o <o{{}}o ><>"};
   // Assuming `input` is a std::string or std::string_view
   FyshLexer lexer{input.data()};
   CHECK(lexer.nextFysh() == Species::INVALID);
@@ -83,6 +83,9 @@ TEST_CASE("Bad fysh") {
   CHECK(lexer.nextFysh() == Species::INVALID);
   CHECK(lexer.nextFysh() == Species::INVALID);
   CHECK(lexer.nextFysh() == Species::INVALID);
+  CHECK(lexer.nextFysh() == Species::INVALID);
+  CHECK(lexer.nextFysh() == Species::INVALID);
+  CHECK(lexer.nextFysh() == Species::FYSH_OPEN); // fails here
 }
 
 TEST_CASE("Swim Left") {
