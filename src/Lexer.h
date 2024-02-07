@@ -55,6 +55,9 @@ private:
   Fysh fyshOpen() noexcept;
   Fysh tadpole() noexcept;
   Fysh random() noexcept;
+  Fysh heart() noexcept;
+  Fysh heartBreak() noexcept;
+  Fysh swimRight() noexcept;
   bool isFyshEye(char) noexcept;
   bool isPositiveScale() noexcept;
 #ifdef FYSH_DEBUG

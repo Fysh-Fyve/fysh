@@ -44,6 +44,14 @@ bool isScale(char c) noexcept {
   }
 }
 
+// moves the current pointer to the next space character
+void fysh::FyshLexer::gotoEndOfToken() noexcept {
+  while (!isSpace(peek())) {
+    get();
+  }
+}
+
+
 bool fysh::FyshLexer::isFyshEye(char c) noexcept {
   switch (c) {
   case 'o':
@@ -109,6 +117,23 @@ fysh::Fysh fysh::FyshLexer::unicode() noexcept {
   return Fysh(Species::INVALID);
 }
 
+fysh::Fysh fysh::FyshLexer::heart() noexcept {
+  get();
+  return fysh::Fysh(Species::HEART_MULTIPLY);
+}
+
+fysh::Fysh fysh::FyshLexer::heartBreak() noexcept {
+  const char *start = current;
+  get();
+    if (peek() == '3') {
+      get();
+      return Fysh(Species::DIVIDE, start, current);
+    }
+    return Fysh(Species::INVALID);
+}
+
+
+// opening for error handling ><!@#$>
 fysh::Fysh fysh::FyshLexer::openWTF() noexcept {
   const char *start = current;
   if (get() == '!' && get() == '@' && get() == '#' && get() == '$' &&
@@ -145,55 +170,56 @@ fysh::Fysh fysh::FyshLexer::fyshOpen() noexcept {
 }
 
 fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
-  const char *start = current;
-  get();
+  //const char *start = current;
+  char c = get();
 
-  // get multiply token
-  if (*start == '<' && peek() == '3') {
-    get();
-    return Fysh(Species::HEART_MULTIPLY, start, current);
-  }
-
-  // get divide token
-  else if (*start == '<' && peek() == '/') {
-    get();
-    if (peek() == '3') {
-      get();
-      return Fysh(Species::DIVIDE, start, current);
-    }
-    // should be fixed since comments have slashes too
-    return Fysh(Species::INVALID);
-  }
-
-  // swim right
-  else if (*start == '>' && peek() == '<') {
-    get();
+  switch (c) {
+  case ('<'):
     switch (peek()) {
-    case '{':
-    case '(':
-      return scales(true); // rename
-    case '>':
-      return fyshOpen();
-    case '!':
-      return openWTF();
-    case '/':
-      return slashOrComment();
-    case '#':
-      return random();
-    default:
-      return Fysh(Species::INVALID);
+      case ('3'):
+        return heart();
+      case ('/'):
+        return heartBreak();
+      case ('('):
+      case ('{'):
+      case ('}'):
+      case (')'):
+      case ('o'):
+        return scales(false); // false for negative
+      default:
+        return Fysh(Species::INVALID);
     }
+  case '>':
+    switch (peek()) {
+      case ('<'):
+        return swimRight(); // all fysh that start with >< are swimming right ><>
+      default:
+        return Fysh(Species::INVALID);
+    }
+  default:
+    return Fysh(Species::END);
   }
+}
 
-  // swim left
-  else if (*start == '<') {
-    char c = peek();
-    if (isFyshEye(c) || isScale(c)) {
-      return scales(false); // false for negative
-    }
-    return Fysh(Species::INVALID);
+
+fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
+  get();
+  switch (peek()) {
+    case ('{'):
+    case ('('):
+    case ('}'):
+    case (')'):
+      return scales(true); // true for positive
+    case ('>'):
+      return fyshOpen();
+    case ('!'):
+      return openWTF();
+    case ('/'):
+      return slashOrComment();
+    case ('#'):
+      return random();
   }
-  return Fysh(Species::END);
+  return Fysh(Species::INVALID);
 }
 
 fysh::Fysh fysh::FyshLexer::random() noexcept {
@@ -210,6 +236,8 @@ fysh::Fysh fysh::FyshLexer::random() noexcept {
   gotoEndOfToken();
   return Fysh(Species::INVALID);
 }
+
+
 
 fysh::Fysh fysh::FyshLexer::scales(bool positive = true) noexcept {
   auto c{get()};
@@ -258,8 +286,3 @@ fysh::Fysh fysh::FyshLexer::scales(bool positive = true) noexcept {
   }
 }
 
-void fysh::FyshLexer::gotoEndOfToken() noexcept {
-  while (!isSpace(peek())) {
-    get();
-  }
-}
