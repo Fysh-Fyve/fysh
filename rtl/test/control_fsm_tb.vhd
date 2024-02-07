@@ -12,7 +12,6 @@ end control_fsm_tb;
 
 architecture test_bench of control_fsm_tb is
   signal clk       : std_ulogic;        --! Clock Signal.
-  signal halt      : std_ulogic;        --! Halt Signal.
   signal eq        : std_ulogic;        --! Equal flag (A == B).
   signal lt        : std_ulogic;        --! Less than flag (A < B).
   signal ltu       : std_ulogic;  --! Unsigned less than flag (A < B (unsigned)).
@@ -38,7 +37,6 @@ begin
   control_fsm_inst : entity work.control_fsm(rtl) port map (
     clk_i     => clk,
     reset_i   => reset,
-    halt_i    => halt,
     eq_i      => eq,
     lt_i      => lt,
     ltu_i     => ltu,

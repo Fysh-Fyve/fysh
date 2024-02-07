@@ -12,7 +12,6 @@ use work.fysh_fyve.all;
 entity control_fsm is
   port (
     clk_i     : in std_ulogic;          --! Clock Signal.
-    halt_i    : in std_ulogic;
     reset_i   : in std_ulogic;
     eq_i      : in std_ulogic;          --! Equal flag (A == B).
     lt_i      : in std_ulogic;          --! Less than flag (A < B).
@@ -58,15 +57,13 @@ begin
     op_bits_i(2 downto 0) when others;
   sub_sra_o <= sub_sra_i and not opcode_i(2);
 
-  drive_clock : process(clk_i, halt_i, opcode_i, pc_clk, ir_clk, mem_write_en)
+  drive_clock : process(clk_i, opcode_i, pc_clk, ir_clk, mem_write_en)
     use std.textio.all;
     variable l : line;
   begin
-    if falling_edge(reset_i) then
+    if reset_i = '0' then
       state  <= init;
       done_o <= '0';
-    elsif rising_edge(halt_i) then
-      state <= done;
     elsif rising_edge(clk_i) then
       --! TODO: Decode kinda like 410
       case state is

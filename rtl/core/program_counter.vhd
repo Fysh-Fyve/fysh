@@ -51,7 +51,7 @@ begin
     use std.textio.all;
     variable l : line;
   begin
-    if falling_edge(reset_i) then
+    if reset_i = '0' then
       pc <= (others => '0');
     elsif rising_edge(pc_clk_i) then
       write(l, string'("next_ins: "));

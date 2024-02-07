@@ -35,7 +35,7 @@ architecture rtl of mem is
 begin
   process(clk_i)
   begin
-    if clk_i'event then
+    if falling_edge(clk_i) then
       if write_en_i = '1' then
         RAM(to_integer(unsigned(write_addr_i))) <= d_i;
       end if;

@@ -83,7 +83,7 @@ begin
 
   insn_register : process(reset_i, insn_clk_i)
   begin
-    if falling_edge(reset_i) then
+    if reset_i = '0' then
       insn <= (others => '0');
     elsif rising_edge(insn_clk_i) then
       insn <= mem_out;
