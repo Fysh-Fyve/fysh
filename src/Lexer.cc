@@ -20,10 +20,6 @@
 #include "Lexer.h"
 #include <iostream>
 
-// debugging help!
-// prints the line number of where the peek is called
-// #define peek() peek(__LINE__)
-
 bool isSpace(char c) noexcept {
   switch (c) {
   case ' ':

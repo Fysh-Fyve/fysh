@@ -18,10 +18,16 @@
  * \file Lexer.h
  */
 #include "Fysh.h"
-#include <iostream>
 
 #ifndef FYSH_LEXER_H_
 #define FYSH_LEXER_H_
+
+// Uncomment to print the current line where peek is called
+// #define FYSH_DEBUG
+
+#ifdef FYSH_DEBUG
+#include <iostream>
+#endif // FYSH_DEBUG
 
 namespace fysh {
 
@@ -51,10 +57,14 @@ private:
   Fysh random() noexcept;
   bool isFyshEye(char) noexcept;
   bool isPositiveScale() noexcept;
+#ifdef FYSH_DEBUG
   char peek(int line = -1) const noexcept {
     if (line > 0) {
       std::cout << "Current (line " << line << "): " << *current << std::endl;
     }
+#else
+  char peek() const noexcept {
+#endif // FYSH_DEBUG
     return *current;
   }
   char get() noexcept { return *current++; }
@@ -64,5 +74,9 @@ private:
 };
 
 }; // namespace fysh
+
+#ifdef FYSH_DEBUG
+#define peek() peek(__LINE__)
+#endif
 
 #endif // !FYSH_LEXER_H_
