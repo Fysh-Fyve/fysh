@@ -203,7 +203,7 @@ fysh::Fysh fysh::FyshLexer::random() noexcept {
   return cullDeformedFysh();
 }
 
-fysh::Fysh fysh::FyshLexer::scales(bool positive = true) noexcept {
+fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
   // gets all the scales and converts them to a binary number
   char c = get();
   uint32_t value{c == '{' ||
@@ -225,8 +225,10 @@ fysh::Fysh fysh::FyshLexer::scales(bool positive = true) noexcept {
   // check if its the end of the token or not (2nd character after the scales)
   if (!isSpace(peek())) {
     c = peek();
-    if ((positive && (c != '>')) ||  // checks for '°>' (fysh head)
-        (!positive && (c != '<'))) { // checks for '><' (fysh tail)
+    if ((dir == FyshDirection::RIGHT &&
+         c != '>') || // checks for '°>' (fysh head)
+        (dir == FyshDirection::LEFT &&
+         c != '<')) { // checks for '><' (fysh tail)
       return cullDeformedFysh();
     }
     get();
@@ -238,13 +240,9 @@ fysh::Fysh fysh::FyshLexer::scales(bool positive = true) noexcept {
   }
 
   fysh::Fysh ret{value};
-  ret.negate = !positive;
+  ret.negate = dir == FyshDirection::LEFT;
   return ret;
 }
-
-fysh::Fysh fysh::FyshLexer::positiveScales() noexcept { return scales(true); }
-
-fysh::Fysh fysh::FyshLexer::negativeScales() noexcept { return scales(false); }
 
 // --------------------------Check for the token--------------------------------
 
@@ -282,7 +280,7 @@ fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
   case ('}'):
   case (')'):
   case ('o'):
-    return negativeScales(); // negative fysh literal <°)})}><
+    return scales(FyshDirection::LEFT); // negative fysh literal <°)})}><
   case ('>'):
     return fyshClose(); // close curly bracket
   case ('!'):
@@ -299,7 +297,7 @@ fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
   case ('('):
   case ('}'):
   case (')'):
-    return positiveScales(); // fysh literal ><{{({(°>
+    return scales(FyshDirection::RIGHT); // fysh literal ><{{({(°>
   case ('>'):
     return fyshOpen(); // open curly bracket
   case ('!'):

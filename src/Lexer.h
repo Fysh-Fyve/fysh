@@ -27,6 +27,8 @@
 
 namespace fysh {
 
+enum class FyshDirection { RIGHT, LEFT };
+
 // code is based off of this:
 // https://gist.github.com/arrieta/1a309138689e09375b90b3b1aa768e20
 
@@ -61,10 +63,8 @@ private:
   Fysh closeWTF() noexcept;
   Fysh fyshOpen() noexcept;
   Fysh fyshClose() noexcept;
-  Fysh scales(bool positive) noexcept;
-  Fysh positiveScales() noexcept;
-  Fysh negativeScales() noexcept;
   Fysh fyshOutline() noexcept;
+  Fysh scales(FyshDirection dir) noexcept;
   Fysh swimLeft() noexcept;
   Fysh swimRight() noexcept;
   Fysh random() noexcept;
