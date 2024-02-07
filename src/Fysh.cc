@@ -39,7 +39,7 @@ constexpr const char *debugType(const fysh::Species &species) {
     return "IDENT";
   case Species::HEART_MULTIPLY:
     return "*";
-  case Species::DIVIDE:
+  case Species::HEART_DIVIDE:
     return "/";
   case Species::TADPOLE_LT:
     return "<";

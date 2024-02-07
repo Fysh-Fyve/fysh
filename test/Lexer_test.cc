@@ -15,8 +15,8 @@ TEST_CASE("operators") {
 
   CHECK(lexer.nextFysh() == Species::HEART_MULTIPLY);
   CHECK(lexer.nextFysh() == Species::HEART_MULTIPLY);
-  CHECK(lexer.nextFysh() == Species::DIVIDE);
-  CHECK(lexer.nextFysh() == Species::DIVIDE);
+  CHECK(lexer.nextFysh() == Species::HEART_DIVIDE);
+  CHECK(lexer.nextFysh() == Species::HEART_DIVIDE);
 }
 
 TEST_CASE("positive fysh multiply") {

@@ -103,7 +103,7 @@ struct Unicode {
  */
 fysh::Fysh fysh::FyshLexer::unicode() noexcept {
   static const struct Unicode chars[] = {
-      {"💔", Species::DIVIDE},
+      {"💔", Species::HEART_DIVIDE},
       {"♡", Species::HEART_MULTIPLY},
   };
   for (const struct Unicode &c : chars) {
@@ -127,7 +127,7 @@ fysh::Fysh fysh::FyshLexer::heartBreak() noexcept {
   get();
     if (peek() == '3') {
       get();
-      return Fysh(Species::DIVIDE, start, current);
+      return Fysh(Species::HEART_DIVIDE, start, current);
     }
     return Fysh(Species::INVALID);
 }

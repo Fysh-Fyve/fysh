@@ -42,7 +42,7 @@ enum class Species {
   FYSH_LITERAL,      // binary value
   FYSH_IDENTIFIER, // variable
   HEART_MULTIPLY,  // <3 or ♡
-  DIVIDE,          // </3 or 💔
+  HEART_DIVIDE,          // </3 or 💔
   TADPOLE_LT,      // ~o (less than    '<' )
   TADPOLE_GT,      // o~ (greater than '>' )
   TADPOLE_LTE,     // ~o≈ (less than equal to    '<=' )
