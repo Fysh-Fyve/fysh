@@ -37,7 +37,7 @@ public:
 private:
   Fysh identifier() noexcept;
   Fysh number() noexcept;
-  Fysh scales() noexcept;
+  Fysh scales(bool) noexcept;
   Fysh slashOrComment() noexcept;
   Fysh atom(Species) noexcept;
   Fysh unicode() noexcept;
@@ -45,10 +45,11 @@ private:
   Fysh fyshOutline() noexcept;
   Fysh openWTF() noexcept;
   Fysh fyshOpen() noexcept;
-  bool isFyshEye() noexcept;
+  bool isFyshEye(char) noexcept;
   bool isPositiveScale() noexcept;
   char peek() const noexcept { return *current; }
   char get() noexcept { return *current++; }
+  void gotoEndOfToken() noexcept;
 
   const char *current = nullptr;
 };

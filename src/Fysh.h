@@ -39,7 +39,7 @@ Current: the current position in the input string
 namespace fysh {
 
 enum class Species {
-  FYSH_SCALES,     // binary value
+  FYSH_VALUE,      // binary value
   FYSH_IDENTIFIER, // variable
   HEART_MULTIPLY,  // <3 or ♡
   DIVIDE,          // </3 or 💔
@@ -74,7 +74,7 @@ public:
   Fysh(Species inType) noexcept : species{inType} {}
 
   Fysh(uint32_t integer) noexcept
-      : species{Species::FYSH_SCALES}, value{integer} {}
+      : species{Species::FYSH_VALUE}, value{integer} {}
 
   Fysh(Species inType, const char *start, std::size_t len) noexcept
       : species{inType}, body(start, len) {}
@@ -107,7 +107,7 @@ public:
   }
 
   bool operator==(const uint32_t &other) const noexcept {
-    return species == Species::FYSH_SCALES && value == other;
+    return species == Species::FYSH_VALUE && value == other;
   }
 
 private:

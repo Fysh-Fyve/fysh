@@ -44,30 +44,10 @@ bool isScale(char c) noexcept {
   }
 }
 
-bool fysh::FyshLexer::isFyshEye() noexcept {
-  switch (get()) {
+bool fysh::FyshLexer::isFyshEye(char c) noexcept {
+  switch (c) {
   case 'o':
     // case '°': UNICODE
-    return true;
-  default:
-    return false;
-  }
-}
-
-bool isNegativeScale(char c) noexcept {
-  switch (c) {
-  case ')':
-  case '}':
-    return true;
-  default:
-    return false;
-  }
-}
-
-bool fysh::FyshLexer::isPositiveScale() noexcept {
-  switch (peek()) {
-  case '(':
-  case '{':
     return true;
   default:
     return false;
@@ -191,7 +171,7 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
     switch (peek()) {
     case '{':
     case '(':
-      return scales(); // rename
+      return scales(true); // rename
     case '>':
       return fyshOpen();
     case '!':
@@ -202,37 +182,67 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
       return identifier();
     }
   }
-  /*
+  
     // swim left
     else if (*start == '<') {
-      get();
-      if (isFyshEye(peek())) {
-        return negativeScales();
+      char c = peek();
+      if (isFyshEye(c) || isScale(c)) {
+        return scales(false); // false for negative
       }
-    }*/
-  /*
-  // get negative scale fysh
-  else if (start* == '<' && isFyshEye(peek())) {
-    get();
-    // get identifier token
-    if (isNegativeScale(peek())){
-      return negativeFysh();
     }
-  }*/
   return Fysh(Species::END);
 }
 
 // TODO: Handle negative case
-fysh::Fysh fysh::FyshLexer::scales() noexcept {
+fysh::Fysh fysh::FyshLexer::scales(bool positive = true) noexcept {
   auto c{get()};
   uint32_t value{c == '{' || c == '}'};
   while (isScale(peek())) {
     auto c{get()};
     value = (value << 1) | (c == '{' || c == '}');
   }
-  // Parse the head of the positive fysh
-  if (!isFyshEye() || get() != '>') {
+  
+  /*
+  validate end of fysh
+  valid ends:
+  >
+  o>
+  ><
+  */
+
+  c = get(); // eye or end
+
+  // check if the current character is an eye or >
+  if (!isFyshEye(c) && c != '>') {
+    gotoEndOfToken();
     return Fysh{Species::INVALID};
   }
-  return Fysh{value};
+  
+  // check if its the end of the token or not (2nd end character)
+  if (!isSpace(peek())) {
+    c = get();
+    if ((c != '>') && (c != '<' && !positive)) {
+      gotoEndOfToken();
+      return Fysh{Species::INVALID};
+    }
+  }
+
+  // make sure the token ends
+  if (!isSpace(peek()) && peek() != '\0'){
+    gotoEndOfToken();
+    return Fysh{Species::INVALID};
+  }
+
+  if (positive) {
+    return Fysh{value};
+  } else {
+    return Fysh{~value};
+  }
+}
+
+void fysh::FyshLexer::gotoEndOfToken() noexcept {
+  while (!isSpace(peek())) {
+    get();
+  }
+
 }

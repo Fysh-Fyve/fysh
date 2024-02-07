@@ -40,3 +40,38 @@ TEST_CASE("fysh open & wtf open") {
   CHECK(lexer.nextFysh() == Species::FYSH_OPEN);
   CHECK(lexer.nextFysh() == Species::WTF_OPEN);
 }
+
+TEST_CASE("negative fysh") {
+  std::string_view input{"><{{({(o> <3 <o})}>< <o})}><"};
+  // Assuming `input` is a std::string or std::string_view
+  FyshLexer lexer{input.data()};
+  CHECK(lexer.nextFysh() == 0b011010);
+  CHECK(lexer.nextFysh() == Species::HEART_MULTIPLY);
+  CHECK(lexer.nextFysh() == ~0b0101);
+}
+
+TEST_CASE("weird fysh") {
+  std::string_view input{"><{{({(> ><{)()}{)()}> <o{}{()}>< <{}{()}>< ><{}o>"};
+  // Assuming `input` is a std::string or std::string_view
+  FyshLexer lexer{input.data()};
+
+  CHECK(lexer.nextFysh() == 0b011010);
+  CHECK(lexer.nextFysh() == 0b01000110001);
+  CHECK(lexer.nextFysh() == ~0b0111001);
+  CHECK(lexer.nextFysh() == ~0b0111001);
+  CHECK(lexer.nextFysh() == 0b011);
+}
+
+TEST_CASE("Bad fysh") {
+  std::string_view input{"><{{({(o><DQHUD ><{{({(o>< ><{{((>< ><{{{< ><o{{}}><"};
+  // Assuming `input` is a std::string or std::string_view
+  FyshLexer lexer{input.data()};
+  CHECK(lexer.nextFysh() == Species::INVALID);
+  CHECK(lexer.nextFysh() == Species::INVALID);
+  CHECK(lexer.nextFysh() == Species::INVALID); // this keeps failing for some reason
+  CHECK(lexer.nextFysh() == Species::INVALID);
+  CHECK(lexer.nextFysh() == Species::INVALID);
+}
+
+
+
