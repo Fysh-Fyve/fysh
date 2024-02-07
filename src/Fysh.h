@@ -29,6 +29,7 @@ Stream: the input string
 Current: the current position in the input string
 */
 
+#include <cstdint>
 #include <optional>
 #include <ostream>
 #include <string_view>
@@ -115,8 +116,15 @@ public:
   }
 
   bool operator==(const uint32_t &other) const noexcept {
-    return species == Species::FYSH_LITERAL && value == other;
+    if (!value.has_value()) {
+      return false;
+    }
+    uint32_t intValue = value.value();
+    return species == Species::FYSH_LITERAL &&
+           (negate ? -intValue : intValue) == other;
   }
+
+  bool negate;
 
 private:
   Species species{};

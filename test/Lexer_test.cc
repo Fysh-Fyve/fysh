@@ -57,7 +57,8 @@ TEST_CASE("negative fysh") {
   FyshLexer lexer{input.data()};
   CHECK(lexer.nextFysh() == 0b011010);
   CHECK(lexer.nextFysh() == Species::HEART_MULTIPLY);
-  CHECK(lexer.nextFysh() == ~0b0101);
+  CHECK(lexer.nextFysh() == -0b0101);
+  CHECK(lexer.nextFysh() == -0b0101);
 }
 
 TEST_CASE("weird fysh") {
@@ -67,8 +68,8 @@ TEST_CASE("weird fysh") {
 
   CHECK(lexer.nextFysh() == 0b011010);
   CHECK(lexer.nextFysh() == 0b01000110001);
-  CHECK(lexer.nextFysh() == ~0b0111001);
-  CHECK(lexer.nextFysh() == ~0b0111001);
+  CHECK(lexer.nextFysh() == -0b0111001);
+  CHECK(lexer.nextFysh() == -0b0111001);
   CHECK(lexer.nextFysh() == 0b011);
 }
 

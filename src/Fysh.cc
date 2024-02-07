@@ -95,6 +95,9 @@ std::ostream &fysh::operator<<(std::ostream &os, const fysh::Fysh &f) {
   case Species::FYSH_LITERAL: {
     auto val{f.getValue()};
     os << "(";
+    if (f.negate) {
+      os << "-";
+    }
     if (val.has_value()) {
       os << val.value();
     } else {

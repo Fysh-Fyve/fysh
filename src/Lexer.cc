@@ -124,7 +124,7 @@ fysh::Fysh fysh::FyshLexer::unicode() noexcept {
 
 fysh::Fysh fysh::FyshLexer::cullDeformedFysh() noexcept {
   gotoEndOfToken();
-  auto fyshEnd{current};
+  const char *fyshEnd{current};
   return fysh::Fysh{Species::INVALID, fyshStart, fyshEnd};
 }
 
@@ -237,9 +237,9 @@ fysh::Fysh fysh::FyshLexer::scales(bool positive = true) noexcept {
     return cullDeformedFysh();
   }
 
-  // TODO: Check if this is the real intention.
-  // ~ operator is bitwise not, not integer negate
-  return positive ? fysh::Fysh{value} : fysh::Fysh{~value};
+  fysh::Fysh ret{value};
+  ret.negate = !positive;
+  return ret;
 }
 
 fysh::Fysh fysh::FyshLexer::positiveScales() noexcept { return scales(true); }
