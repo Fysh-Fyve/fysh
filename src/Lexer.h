@@ -63,16 +63,18 @@ private:
   Fysh swimLeft() noexcept;
   bool isFyshEye(char) noexcept;
   bool isPositiveScale() noexcept;
+  
 #ifdef FYSH_DEBUG
   char peek(int line = -1) const noexcept {
     if (line > 0) {
       std::cout << "Current (line " << line << "): " << *current << std::endl;
+      return *current;
     }
-#else
-  char peek() const noexcept {
-#endif // FYSH_DEBUG
-    return *current;
   }
+#else
+  char peek() const noexcept { return *current;}
+#endif // FYSH_DEBUG
+    
   char get() noexcept { return *current++; }
   void gotoEndOfToken() noexcept;
 
