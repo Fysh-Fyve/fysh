@@ -33,7 +33,7 @@ std::string_view fysh::Fysh::getBody() const noexcept { return body; }
 constexpr const char *debugType(const fysh::Species &species) {
   using fysh::Species;
   switch (species) {
-  case Species::FYSH_VALUE:
+  case Species::FYSH_LITERAL:
     return "LITERAL";
   case Species::FYSH_IDENTIFIER:
     return "IDENT";
