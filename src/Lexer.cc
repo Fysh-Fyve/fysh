@@ -143,6 +143,16 @@ fysh::Fysh fysh::FyshLexer::openWTF() noexcept {
   return Fysh(Species::INVALID);
 }
 
+// closing for error handling <!@#$><
+fysh::Fysh fysh::FyshLexer::closeWTF() noexcept {
+  const char *start = current;
+  if (get() == '!' && get() == '@' && get() == '#' && get() == '$' &&
+      get() == '>' && get() == '<'){
+    return Fysh(Species::WTF_CLOSE, start, current);
+  }
+  return Fysh(Species::INVALID);
+}
+
 fysh::Fysh fysh::FyshLexer::slashOrComment() noexcept {
   return Fysh(Species::INVALID);
 }
@@ -169,8 +179,15 @@ fysh::Fysh fysh::FyshLexer::fyshOpen() noexcept {
   return Fysh(Species::FYSH_OPEN);
 }
 
+fysh::Fysh fysh::FyshLexer::fyshClose() noexcept {
+  get(); 
+  if (peek() == '<') {
+    return Fysh(Species::FYSH_CLOSE);
+  }
+  return Fysh(Species::INVALID);
+}
+
 fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
-  //const char *start = current;
   char c = get();
 
   switch (c) {
@@ -180,19 +197,13 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
         return heart();
       case ('/'):
         return heartBreak();
-      case ('('):
-      case ('{'):
-      case ('}'):
-      case (')'):
-      case ('o'):
-        return scales(false); // false for negative
       default:
-        return Fysh(Species::INVALID);
+        return swimLeft();
     }
   case '>':
     switch (peek()) {
       case ('<'):
-        return swimRight(); // all fysh that start with >< are swimming right ><>
+        return swimRight(); 
       default:
         return Fysh(Species::INVALID);
     }
@@ -201,9 +212,26 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
   }
 }
 
+fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
+  // current is the 2nd character of the token
+  switch (peek()) {
+    case ('{'):
+    case ('('):
+    case ('}'):
+    case (')'):
+    case ('o'):
+      return scales(false); // false for negative
+    case ('>'):
+      return fyshClose();
+    case ('!'):
+      return closeWTF();
+  }
+  return Fysh(Species::INVALID);
+}
 
+// all fysh that start with >< are swimming right e.g. ><>
 fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
-  get();
+  get(); // 2nd swim right character '<'
   switch (peek()) {
     case ('{'):
     case ('('):

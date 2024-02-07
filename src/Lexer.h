@@ -52,12 +52,15 @@ private:
   Fysh tryUnicode(const char *bytes, Species s) noexcept;
   Fysh fyshOutline() noexcept;
   Fysh openWTF() noexcept;
+  Fysh closeWTF() noexcept;
   Fysh fyshOpen() noexcept;
+  Fysh fyshClose() noexcept;
   Fysh tadpole() noexcept;
   Fysh random() noexcept;
   Fysh heart() noexcept;
   Fysh heartBreak() noexcept;
   Fysh swimRight() noexcept;
+  Fysh swimLeft() noexcept;
   bool isFyshEye(char) noexcept;
   bool isPositiveScale() noexcept;
 #ifdef FYSH_DEBUG

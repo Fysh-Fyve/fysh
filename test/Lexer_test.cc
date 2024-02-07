@@ -84,3 +84,13 @@ TEST_CASE("Bad fysh") {
   CHECK(lexer.nextFysh() == Species::INVALID);
   CHECK(lexer.nextFysh() == Species::INVALID);
 }
+
+TEST_CASE("Swim Left") {
+  std::string_view input{"<!@#$>< <>< <!@%$>< <!@#$>"};
+  // Assuming `input` is a std::string or std::string_view
+  FyshLexer lexer{input.data()};
+  CHECK(lexer.nextFysh() == Species::WTF_CLOSE);
+  CHECK(lexer.nextFysh() == Species::FYSH_CLOSE);
+  CHECK(lexer.nextFysh() == Species::INVALID);
+  CHECK(lexer.nextFysh() == Species::INVALID);
+}
