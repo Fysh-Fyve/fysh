@@ -20,6 +20,10 @@
 #include "Lexer.h"
 #include <iostream>
 
+// debugging help!
+// prints the line number of where the peek is called
+// #define peek() peek(__LINE__)
+
 bool isSpace(char c) noexcept {
   switch (c) {
   case ' ':
@@ -161,8 +165,8 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
       get();
       return Fysh(Species::DIVIDE, start, current);
     }
-    return Fysh(
-        Species::INVALID); // should be fixed since comments have slashes too
+    // should be fixed since comments have slashes too
+    return Fysh(Species::INVALID);
   }
 
   // swim right
@@ -184,15 +188,15 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
       return Fysh(Species::INVALID);
     }
   }
-  
-    // swim left
-    else if (*start == '<') {
-      char c = peek();
-      if (isFyshEye(c) || isScale(c)) {
-        return scales(false); // false for negative
-      }
-      return Fysh(Species::INVALID);
+
+  // swim left
+  else if (*start == '<') {
+    char c = peek();
+    if (isFyshEye(c) || isScale(c)) {
+      return scales(false); // false for negative
     }
+    return Fysh(Species::INVALID);
+  }
   return Fysh(Species::END);
 }
 
@@ -211,7 +215,6 @@ fysh::Fysh fysh::FyshLexer::random() noexcept {
   return Fysh(Species::INVALID);
 }
 
-
 fysh::Fysh fysh::FyshLexer::scales(bool positive = true) noexcept {
   auto c{get()};
   uint32_t value{c == '{' || c == '}'};
@@ -219,7 +222,7 @@ fysh::Fysh fysh::FyshLexer::scales(bool positive = true) noexcept {
     auto c{get()};
     value = (value << 1) | (c == '{' || c == '}');
   }
-  
+
   /*
   validate end of fysh
   valid ends:
@@ -239,14 +242,15 @@ fysh::Fysh fysh::FyshLexer::scales(bool positive = true) noexcept {
   // check if its the end of the token or not (2nd end character)
   if (!isSpace(peek())) {
     c = get();
-    if ((c != '>') && (c != '<' && !positive)) {
+    if ((positive && (c != '>' || c == '<')) ||
+        (!positive && (c != '<' || c == '>'))) {
       gotoEndOfToken();
       return Fysh{Species::INVALID};
     }
   }
 
   // make sure the token ends
-  if (!isSpace(peek()) && peek() != '\0'){
+  if (!isSpace(peek()) && peek() != '\0') {
     gotoEndOfToken();
     return Fysh{Species::INVALID};
   }
@@ -262,5 +266,4 @@ void fysh::FyshLexer::gotoEndOfToken() noexcept {
   while (!isSpace(peek())) {
     get();
   }
-
 }

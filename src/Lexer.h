@@ -18,6 +18,7 @@
  * \file Lexer.h
  */
 #include "Fysh.h"
+#include <iostream>
 
 #ifndef FYSH_LEXER_H_
 #define FYSH_LEXER_H_
@@ -33,6 +34,7 @@ public:
   FyshLexer(const char *streamStart) noexcept : current{streamStart} {}
 
   Fysh nextFysh() noexcept;
+  const char *rest() const noexcept { return current; }
 
 private:
   Fysh identifier() noexcept;
@@ -49,7 +51,12 @@ private:
   Fysh random() noexcept;
   bool isFyshEye(char) noexcept;
   bool isPositiveScale() noexcept;
-  char peek() const noexcept { return *current; }
+  char peek(int line = -1) const noexcept {
+    if (line > 0) {
+      std::cout << "Current (line " << line << "): " << *current << std::endl;
+    }
+    return *current;
+  }
   char get() noexcept { return *current++; }
   void gotoEndOfToken() noexcept;
 
