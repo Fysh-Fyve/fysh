@@ -17,34 +17,25 @@
 /**
  * \file Lexer.cc
  */
+
 #include "Lexer.h"
 #include <iostream>
 
-bool isSpace(char c) noexcept {
-  switch (c) {
-  case ' ':
-  case '\t':
-  case '\r':
-  case '\n':
-    return true;
-  default:
-    return false;
+// -------------- Utility functions --------------
+static bool isSpace(char c) noexcept {
+    return c == ' ' || c == '\t' || c == '\r' || c == '\n';
+}
+
+static bool isScale(char c) noexcept {
+        return c == '(' || c == ')' || c == '{' || c == '}';
+}
+
+void fysh::FyshLexer::skipWhitespace() noexcept {
+  while (isSpace(peek())) {
+    get();
   }
 }
 
-bool isScale(char c) noexcept {
-  switch (c) {
-  case '(':
-  case ')':
-  case '{':
-  case '}':
-    return true;
-  default:
-    return false;
-  }
-}
-
-// moves the current pointer to the next space character
 void fysh::FyshLexer::gotoEndOfToken() noexcept {
   while (!isSpace(peek())) {
     get();
@@ -55,7 +46,7 @@ void fysh::FyshLexer::gotoEndOfToken() noexcept {
 bool fysh::FyshLexer::isFyshEye(char c) noexcept {
   switch (c) {
   case 'o':
-    // case '°': UNICODE
+    // case '°': UNICODE 
     return true;
   default:
     return false;
@@ -79,6 +70,8 @@ fysh::Fysh fysh::FyshLexer::tryUnicode(const char *bytes, Species s) noexcept {
   }
   return Fysh{s};
 }
+
+// -------------- Token functions --------------
 
 struct Unicode {
   const char *codePoint;
@@ -155,27 +148,6 @@ fysh::Fysh fysh::FyshLexer::closeWTF() noexcept {
   return Fysh(Species::INVALID);
 }
 
-fysh::Fysh fysh::FyshLexer::slashOrComment() noexcept {
-  return Fysh(Species::INVALID);
-}
-
-fysh::Fysh fysh::FyshLexer::identifier() noexcept {
-  return Fysh(Species::INVALID);
-}
-
-fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
-  while (isSpace(peek()))
-    get();
-  switch (peek()) {
-  case '\0':
-    return Fysh(Species::END);
-  case '<':
-  case '>':
-    return fyshOutline();
-  default:
-    return unicode();
-  }
-}
 // ><>
 fysh::Fysh fysh::FyshLexer::fyshOpen() noexcept {
   get();
@@ -191,6 +163,78 @@ fysh::Fysh fysh::FyshLexer::fyshClose() noexcept {
   return Fysh(Species::INVALID);
 
 }
+
+fysh::Fysh fysh::FyshLexer::slashOrComment() noexcept {
+  return Fysh(Species::INVALID);
+}
+
+fysh::Fysh fysh::FyshLexer::identifier() noexcept {
+  return Fysh(Species::INVALID);
+}
+
+
+fysh::Fysh fysh::FyshLexer::random() noexcept {
+  for (size_t i = 0; i < 3; i++) {
+    if (get() != '#') {
+      gotoEndOfToken();
+      return Fysh(Species::INVALID);
+    }
+  }
+  if (peek() == '>') {
+    get();
+    return Fysh(Species::RANDOM);
+  }
+  gotoEndOfToken();
+  return Fysh(Species::INVALID);
+}
+
+fysh::Fysh fysh::FyshLexer::scales(bool positive = true) noexcept {
+  // gets all the scales and converts them to a binary number
+  char c = get();
+  uint32_t value{c == '{' || c == '}'}; // stores the first scale as a binary number
+  while (isScale(peek())) {
+    c = get();
+    value = (value << 1) | (c == '{' || c == '}'); // shifts the bits to the left and stores the next scale using bitwise OR
+  }
+
+  c = get(); // stores the value after the last scale
+  
+  // check if the current character is an eye or >
+  if (!(isFyshEye(c) && peek() == '>') && c != '>') {
+    gotoEndOfToken();
+    return Fysh{Species::INVALID};
+  }
+
+  // check if its the end of the token or not (2nd character after the scales)
+  if (!isSpace(peek())) {
+    c = get();
+    if ((positive  && (c != '>')) ||  // checks for '°>' (fysh head)
+        (!positive && (c != '<'))) {  // checks for '><' (fysh tail)
+      gotoEndOfToken();
+      return Fysh{Species::INVALID};
+    }
+  }
+
+  // make sure the token ends
+  if (!isSpace(peek()) && peek() != '\0') {
+    gotoEndOfToken();
+    return Fysh{Species::INVALID};
+  }
+
+  return positive ? Fysh{value} : Fysh{~value};
+}
+
+fysh::Fysh fysh::FyshLexer::positiveScales() noexcept {
+  return scales(true);
+}
+
+fysh::Fysh fysh::FyshLexer::negativeScales() noexcept {
+  return scales(false);
+}
+
+
+// --------------------------Check for the token--------------------------------
+
 
 // Token starts with '<' or '>'
 fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
@@ -256,65 +300,17 @@ fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
   return Fysh(Species::INVALID);
 }
 
-fysh::Fysh fysh::FyshLexer::random() noexcept {
-  for (size_t i = 0; i < 3; i++) {
-    if (get() != '#') {
-      gotoEndOfToken();
-      return Fysh(Species::INVALID);
-    }
-  }
-  if (peek() == '>') {
+// Where the magic happens
+fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
+  while (isSpace(peek()))
     get();
-    return Fysh(Species::RANDOM);
+  switch (peek()) {
+  case '\0':
+    return Fysh(Species::END);
+  case '<':
+  case '>':
+    return fyshOutline();
+  default:
+    return unicode();
   }
-  gotoEndOfToken();
-  return Fysh(Species::INVALID);
-}
-
-fysh::Fysh fysh::FyshLexer::scales(bool positive = true) noexcept {
-  // gets all the scales and converts them to a binary number
-  char c = get();
-  uint32_t value{c == '{' || c == '}'}; // stores the first scale as a binary number
-  while (isScale(peek())) {
-    c = get();
-    value = (value << 1) | (c == '{' || c == '}'); // shifts the bits to the left and stores the next scale using bitwise OR
-  }
-
-  c = get(); // stores the value after the last scale
-
-  // check if the current character is an eye or >
-  if (!(isFyshEye(c) && peek() == '>') && c != '>') {
-    gotoEndOfToken();
-    return Fysh{Species::INVALID};
-  }
-
-  // check if its the end of the token or not (2nd character after the scales)
-  if (!isSpace(peek())) {
-    c = get();
-    if ((positive  && (c != '>')) ||  // checks for '°>' (fysh head)
-        (!positive && (c != '<'))) {  // checks for '><' (fysh tail)
-      gotoEndOfToken();
-      return Fysh{Species::INVALID};
-    }
-  }
-
-  // make sure the token ends
-  if (!isSpace(peek()) && peek() != '\0') {
-    gotoEndOfToken();
-    return Fysh{Species::INVALID};
-  }
-
-  if (positive) {
-    return Fysh{value};
-  } else {
-    return Fysh{~value};
-  }
-}
-
-fysh::Fysh fysh::FyshLexer::positiveScales() noexcept {
-  return scales(true);
-}
-
-fysh::Fysh fysh::FyshLexer::negativeScales() noexcept {
-  return scales(false);
 }

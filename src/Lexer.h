@@ -36,50 +36,37 @@ namespace fysh {
 
 class FyshLexer {
 public:
-  // stream is the start of the input string
   FyshLexer(const char *streamStart) noexcept : current{streamStart} {}
-
   Fysh nextFysh() noexcept;
-  const char *rest() const noexcept { return current; }
+  const char* rest() const noexcept { return current; }
 
 private:
-  Fysh identifier() noexcept;
-  Fysh number() noexcept;
-  Fysh scales(bool) noexcept;
-  Fysh slashOrComment() noexcept;
-  Fysh atom(Species) noexcept;
-  Fysh unicode() noexcept;
-  Fysh tryUnicode(const char *bytes, Species s) noexcept;
-  Fysh fyshOutline() noexcept;
-  Fysh openWTF() noexcept;
-  Fysh closeWTF() noexcept;
-  Fysh fyshOpen() noexcept;
-  Fysh fyshClose() noexcept;
-  Fysh tadpole() noexcept;
-  Fysh random() noexcept;
-  Fysh heart() noexcept;
-  Fysh heartBreak() noexcept;
-  Fysh swimRight() noexcept;
-  Fysh swimLeft() noexcept;
-  Fysh positiveScales() noexcept;
-  Fysh negativeScales() noexcept;
-  bool isFyshEye(char) noexcept;
-  
-#ifdef FYSH_DEBUG
-  char peek(int line = -1) const noexcept {
-    if (line > 0) {
-      std::cout << "Current (line " << line << "): " << *current << std::endl;
-      return *current;
-    }
-  }
-#else
-  char peek() const noexcept { return *current;}
-#endif // FYSH_DEBUG
-    
-  char get() noexcept { return *current++; }
-  void gotoEndOfToken() noexcept;
+    const char* current = nullptr;
 
-  const char *current = nullptr;
+    char get()  noexcept {return *current++;};
+    char peek() noexcept {return *current;};
+    void skipWhitespace() noexcept;
+    void gotoEndOfToken() noexcept;
+    bool isFyshEye(char c) noexcept;
+    Fysh tryUnicode(const char* bytes, Species s) noexcept;
+    Fysh unicode() noexcept;
+    Fysh heart() noexcept;
+    Fysh heartBreak() noexcept;
+    Fysh openWTF() noexcept;
+    Fysh closeWTF() noexcept;
+    Fysh fyshOpen() noexcept;
+    Fysh fyshClose() noexcept;
+    Fysh scales(bool positive) noexcept;
+    Fysh positiveScales() noexcept;
+    Fysh negativeScales() noexcept;
+    Fysh fyshOutline() noexcept;
+    Fysh swimLeft() noexcept;
+    Fysh swimRight() noexcept;
+    Fysh random() noexcept;
+    Fysh slashOrComment() noexcept;
+    Fysh identifier() noexcept;
+    Fysh isScaleChar(char c) noexcept;
+    Fysh convertScaleToBinary(bool positive) noexcept;
 };
 
 }; // namespace fysh
