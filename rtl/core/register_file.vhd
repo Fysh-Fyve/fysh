@@ -40,7 +40,7 @@ begin
         if (i = to_integer(unsigned(dest_reg_i))) then
           write(l, string'("wrote value "));
           write(l, to_hstring(dest_reg_val_i));
-          write(l, string'(" to register"));
+          write(l, string'(" to register "));
           write(l, i);
           writeline(output, l);
           reg_file(i) <= dest_reg_val_i;

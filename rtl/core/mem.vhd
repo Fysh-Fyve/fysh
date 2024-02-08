@@ -34,9 +34,16 @@ architecture rtl of mem is
   signal RAM : mem_t (0 to NUM_WORDS-1) := DATA;
 begin
   process(clk_i)
+    use std.textio.all;
+    variable l : line;
   begin
     if falling_edge(clk_i) then
       if write_en_i = '1' then
+        write(l, string'("writing value "));
+        write(l, to_hstring(d_i));
+        write(l, string'(" to address 0x"));
+        write(l, to_hstring(write_addr_i));
+        writeline(output, l);
         RAM(to_integer(unsigned(write_addr_i))) <= d_i;
       end if;
       d_o <= RAM(to_integer(unsigned(read_addr_i)));
