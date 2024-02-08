@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	projectName      = "492"
+	projectName      = "fysh-five.github.io"
 	deploymentBranch = "gh-pages"
 )
 
@@ -48,7 +48,8 @@ func mkTmpDir() (string, func()) {
 }
 
 func main() {
-	originUrl := getCmdOutput("git config --get remote.origin.url")
+	originUrl := "git@github.com:Fysh-Fyve/Fysh-Fyve.github.io"
+	getCmdOutput("git config --get remote.origin.url")
 	latestHash := getCmdOutput("git rev-parse HEAD")
 
 	src, err := filepath.Abs("html")
