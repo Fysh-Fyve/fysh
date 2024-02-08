@@ -66,6 +66,7 @@ enum class Species {
   CONTINUE,        // Continue trying to parse unicode
   END,             // End of the input
   BITWISE_AND,     // &
+  BITWISE_OR,      // |
 
   // TODO bit manipulation
 };
