@@ -1,9 +1,4 @@
----
-title: ECE 492 Preliminary Design Document
-author: Charles Ancheta, Yahya Al-Shamali, Kyle Prince
-csl: ieee-with-url.csl
-link-citations: yes
----
+# Preliminary Design: FPGA-Based RISC-V CPU and Fysh Programming Language and Compiler (System Name: Fysh-Fyve)
 
 <!-- This most likely does not need to be modified aside from removing the references -->
 
@@ -11,8 +6,6 @@ link-citations: yes
 
 \setcounter{secnumdepth}{0}
 \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
-
-# Preliminary Design: FPGA-Based RISC-V CPU and Fysh Programming Language and Compiler (System Name: Fysh-Fyve)
 
 ## Revisions
 
