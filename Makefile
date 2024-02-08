@@ -13,7 +13,9 @@ bins: $(GO_BINS)
 serve: docs
 	serve html
 
-pages: cmd/out/deploy docs
+pages: cmd/out/deploy
+	rm -rf html
+	$(MAKE) docs
 	cd docs/PDD && $(MAKE)
 	@cp docs/*.pdf docs/**/*.pdf html/
 	./$<
