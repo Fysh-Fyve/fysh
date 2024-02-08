@@ -1,0 +1,13 @@
+@startuml
+node "Dev Machine" {
+  file "Fysh Source ><>" as fs
+  component "Fysh Toolchain" as ft
+}
+
+node "Zybo Board" {
+  component "Zynq FPGA" as pl
+}
+
+fs -[dashed]-> ft
+ft -[dashed]-> pl
+@enduml

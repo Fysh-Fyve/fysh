@@ -1,0 +1,17 @@
+% A LaTeX table. The columns are separated by & and rows are separated by \\
+\begin{table}[H]
+	\begin{tabularx}{\textwidth}{| a | x |}
+		% Start table heading
+		\hline
+		% \textbf just makes the text boldfaced
+		\textbf{Acronym} & \textbf{Full Description}                                       \\
+		\hline
+		% Start table body
+		RISC             & Reduced Instruction Set Computer                                \\
+		FPGA             & Field Programmable Gate Array                                   \\
+		PL               & Programmable Logic, the FPGA part of the Zybo development Board \\
+		\hline
+	\end{tabularx}
+\end{table}
+
+% vim: ts=2 sts=2 sw=2

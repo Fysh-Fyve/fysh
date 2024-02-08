@@ -1,0 +1,108 @@
+% Custom LaTeX template for our document
+\documentclass[11pt]{article}
+% ... Need to change bottom margin because of the modified headsep
+\usepackage[letterpaper, margin=1in, bottom=1.75in]{geometry}
+% Remove ugly borders from hyperlinks
+\usepackage[hidelinks]{hyperref}
+\usepackage{titlesec}
+% Change font Calibri-compatible font
+\usepackage{fontspec}
+\setmainfont[Path=./ttf/,
+	BoldItalicFont=Carlito-BoldItalic.ttf,
+	BoldFont      =Carlito-Bold.ttf,
+	ItalicFont    =Carlito-Italic.ttf]{Carlito-Regular.ttf}
+% Remove heading from Table of Contents
+% https://tex.stackexchange.com/questions/55080/how-to-hide-the-table-of-contents-heading
+\makeatletter
+\renewcommand\tableofcontents{%
+	\@starttoc{toc}%
+}
+\makeatother
+
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newenvironment{cslreferences}%
+{\setlength{\parindent}{0pt}%
+	\everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces}%
+{\par}
+
+% Define colours
+\usepackage{xcolor,colortbl}
+\definecolor{enggblue}{RGB}{25,64,119}
+\definecolor{tplblue}{RGB}{141,179,226}
+\definecolor{tablebg}{RGB}{219,229,241}
+\definecolor{tablebgdark}{RGB}{79,129,189}
+\definecolor{tableborder}{RGB}{191,191,191}
+
+\newcolumntype{a}{>{\columncolor{tablebg}}l}
+\newcolumntype{b}{>{\columncolor{tablebgdark}}l}
+\newcolumntype{x}{>{\columncolor{tablebg}}X}
+
+\usepackage{colortbl}
+\arrayrulecolor{tableborder}
+
+% Create header
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\pagestyle{fancy}
+\fancyhf{}
+% Add page number at the bottom of the page
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0pt} % Remove header rule
+\fancyhead[L]{\includegraphics[width=3in]{ece.png}} % Logo on the left side
+\fancyhead[R]{
+	\color{enggblue}
+	\small
+	11-203 Donadeo Innovation Centre for Engineering \\
+	9211-116 Street NW \\
+	University of Alberta \\
+	Edmonton, Alberta \\
+	Canada T6G 1H9 \\
+}
+\setlength{\headsep}{1.25in}
+
+\usepackage{tabularx}
+
+% custom template text command
+\newcommand{\defaultcolour}{\colorlet{defaulttextcolor}{.}}
+\defaultcolour
+\usepackage{xspace}
+\newcommand{\tpl}[1]{\color{tplblue}<#1>\color{defaulttextcolor}\xspace}
+\newcommand{\bw}[1]{\color{white}\textbf{#1}\color{defaulttextcolor}}
+
+% no paragraph indent
+\setlength\parindent{0pt}
+\pagenumbering{arabic}
+
+% Change figure to always float
+\usepackage{float}
+\let\origfigure\figure
+\let\endorigfigure\endfigure
+\renewenvironment{figure}[1][2] {
+	\expandafter\origfigure\expandafter[H]
+} {
+	\endorigfigure
+}
+
+% For formatting numbers
+\usepackage{fmtcount}% http://ctan.org/pkg/fmtcount
+
+\newcounter{fyshcounter}%
+\renewcommand{\thefyshcounter}{%
+	\padzeroes[2]{%
+		\decimal{fyshcounter}%
+	}%
+}
+\newcommand{\rc}{\thefyshcounter\stepcounter{fyshcounter}}
+\newcommand{\resetfyshcounter}{\setcounter{fyshcounter}{1}}
+
+\usepackage{booktabs}
+
+\usepackage{longtable}
+
+% Include use case table command
+\input{tex/use-case}
+
+\begin{document}
+$body$
+\end{document}

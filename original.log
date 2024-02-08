@@ -1,0 +1,279 @@
+commit 391de89a81ead36cbdafd74ba50d23aedbe35ba0
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Thu Feb 8 12:01:19 2024 -0700
+
+    Remove references
+
+commit 1018b4ace7ea9c5854fdcb48ea16222e44d11c17
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Thu Feb 8 11:38:36 2024 -0700
+
+    Don't use PlantUML filter
+
+commit cd43573bc61c1bcd863e2005ca63a5fdf7bd9f92
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Thu Feb 8 09:54:46 2024 -0700
+
+    Simplify deployment diagram
+    
+    Further simplify diagram
+
+commit 20d85e8b8d76622c161253fe3ad569618057ce0d
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Thu Feb 8 08:33:07 2024 -0700
+
+    Break down system design
+
+commit a7d4490eb3a0f2130764ff4802c1deb0a24293ac
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Wed Feb 7 19:40:49 2024 -0700
+
+    Use new command
+
+commit 278af9a5e550a802d5e589157ab1f3115bba4124
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Wed Feb 7 19:22:48 2024 -0700
+
+    Start on functional requirements
+
+commit d73c507249f28f0f7ce68d071bae1ee578368a30
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Tue Feb 6 15:51:57 2024 -0700
+
+    Remove ><>
+
+commit 86fc8ad48a0e4ca076290a3d89fb913b498768aa
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Tue Feb 6 09:24:46 2024 -0700
+
+    (System Design) fynish deployment diagram
+
+commit 3fd221f2af4cb094def300089668bdf06dfb08db
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Tue Feb 6 08:02:42 2024 -0700
+
+    Update CPU
+    
+    RISC-V Phase 1 done
+
+commit 68a0c71622114c231acd79c9bbdb29e278810468
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Tue Feb 6 01:24:46 2024 -0700
+
+    Add more comments
+    
+    BE NOT AFRAID
+
+commit e0888319c8cad5d100e477d8c9c6dbb06949de58
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Tue Feb 6 00:29:36 2024 -0700
+
+    Move use case table to tex
+
+commit e17e214feabc5e7b95af752f1c50f45c7c2b3d6a
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Tue Feb 6 00:14:40 2024 -0700
+
+    Fix names
+
+commit df586d2fc93b65901277e7a625e040e01cece139
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Mon Feb 5 23:45:44 2024 -0700
+
+    WIP: Preliminary Design Document
+
+commit a7cb64bec19581f47d302bc2d7a7970f604995ac
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Mon Feb 5 23:11:37 2024 -0700
+
+    Break down document to multiple files
+
+commit b5a2a3f3c1933864bf4609d52d9768c9fde5c132
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Mon Feb 5 16:18:15 2024 -0700
+
+    Swim right
+
+commit 551754cd1163aeb28c9a6495713fad3fc498cb30
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Mon Feb 5 15:39:39 2024 -0700
+
+    Add formatter script
+
+commit 3fb43725fb99577cf1c0bd513aa16565c14737c5
+Author: KPrince77 <kylejprince7@gmail.com>
+Date:   Mon Feb 5 15:39:36 2024 -0700
+
+    Additional functional requirements
+
+commit 87bfbc14968081293fceba16e5974930bcd43237
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Mon Feb 5 15:26:55 2024 -0700
+
+    Add system budget
+
+commit 90d98f4cc8323fee1808ffb36bde3a19b9ad1bb4
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Mon Feb 5 15:25:54 2024 -0700
+
+    Add functional requirements number
+
+commit 3537cd5296eeaf66a2f40fb18ddcf4e4771a595b
+Author: Kyle Prince <kyle@MSI>
+Date:   Mon Feb 5 15:19:45 2024 -0700
+
+    adding functional requirments to PDD
+
+commit 6ff0358c8413f898f49bedf40c32a19af9d68764
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Mon Feb 5 14:06:52 2024 -0700
+
+    Rename fysh package
+
+commit 609af0069d6156916d6d5b177b76b62ac86cd9e8
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Mon Feb 5 13:47:30 2024 -0700
+
+    Change exclude pattern for doctest
+
+commit 5f9631e7cb8857916c1a73d03e6e0bd14f4a489f
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Sun Feb 4 12:17:44 2024 -0700
+
+    Move ROM generator to CPU
+
+commit fc9e7ec48f8aeb907432c3f91c699a0180c9df14
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Thu Feb 1 17:10:40 2024 -0700
+
+    Fysh
+    
+    More fysh
+    
+    Add fysh namespace
+    
+    Nice
+
+commit 64ee7b372ee1e1a4c50fdd33bed12fc8426a2c58
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Thu Feb 1 17:10:10 2024 -0700
+
+    Change doxygen config
+
+commit 36a520da7fa1805ab07701354f5c9a0d4b3141ec
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Thu Feb 1 10:25:53 2024 -0700
+
+    Add dev target
+    
+    I messed up
+
+commit 474ce8a32121784f0c91236b998e6f0a4cc7803d
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Thu Feb 1 10:25:47 2024 -0700
+
+    Update fysh submodule
+    
+    More fysh
+
+commit c386085b50cea798719232e0dd41811df5ee051b
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Sun Jan 14 01:56:33 2024 -0700
+
+    Add doxygen
+    
+    Split up top-level and functions
+    
+    Update gitmodule URLs
+    
+    Update cpu
+    
+    Update comment
+    
+    Add fysh submodule
+    
+    Nice
+    
+    Update cpu
+    
+    Move references here
+    
+    More bruh
+    
+    Dang
+    
+    Extract all
+    
+    Change name to Fysh compiler
+    
+    Fix docs
+    
+    Include current dir
+    
+    Remove PROPOSAL.md
+    
+    Update cpu
+    
+    Update CPU again
+    
+    Add example Gantt chart
+    
+    Add previous submissions
+    
+    WIP: Project Plan
+    
+    Change gitmodule paths
+    
+    Create PDD latex template
+    
+    Move deadline 18200 years forward
+    
+    Add bibliography
+    
+    Followed what Charles told me
+    
+    Add ~/.local/bin to PATH
+    
+    Move all scripts to cmd
+    
+    Format + cpu
+    
+    Why are you screaming?
+
+commit 77c51b760f681e644c03f904a072b8ac19e6b960
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Fri Jan 12 16:00:22 2024 -0700
+
+    Update Dew
+    
+    Update submodule
+
+commit 5a93c8187d0b0464a41d969ec51c3db2a319d4ad
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Thu Jan 11 08:24:23 2024 -0700
+
+    Add README.md
+
+commit 479f7f244038976a73d10822014b9acb33dfae91
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Thu Jan 11 08:09:36 2024 -0700
+
+    Update submodules
+
+commit 05df16eaa64faaa8600a0af2e20b55d08806879a
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Tue Jan 9 15:26:37 2024 -0700
+
+    Create proposal template
+
+commit fbbf4b031f6182a3e65bdb96c5e688a5b84b0f5d
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Tue Jan 9 15:08:26 2024 -0700
+
+    Add submodules
+
+commit 46a5fae39eabbfd43fa08477f52f671a9deacf5c
+Author: Charles Ancheta <55412395+cbebe@users.noreply.github.com>
+Date:   Tue Jan 9 15:01:44 2024 -0700
+
+    Initial commit

@@ -1,0 +1,24 @@
+\newcommand{\ucrow}[2]{
+	\bw{#1} & #2 \\ \hline
+}
+\newcommand{\ucindent}[0]{
+	\hspace*{24pt}
+}
+\newcommand{\usecase}[2]{
+	\bgroup
+
+	\begin{table}[H]
+		\begin{tabularx}{\textwidth}{| b | x |}
+			\hline
+			\rowcolor{tablebgdark}
+			\multicolumn{2}{l}{\bw{Use Case Description and Details}} \\
+			\hline
+			#1
+		\end{tabularx}
+		\caption{#2}
+	\end{table}
+
+	\egroup
+}
+
+% vim: ts=2 sts=2 sw=2

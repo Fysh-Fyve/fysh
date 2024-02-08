@@ -1,0 +1,22 @@
+\resetfyshcounter
+\newcommand{\pr}[2]{
+	\textbf{PR-\rc} & #1 & #2 \\
+	\hline
+}
+\begin{table}[H]
+	\begin{tabularx}{\textwidth}{| a | x | a |}
+		% Start table heading
+		\hline
+		% Changes the colour of the top row to tablebgdark.
+		% Colour is defined in custom.tex
+		\rowcolor{tablebgdark}
+		\bw{PR \#}     & \bw{Performance Requirement Description} & \bw{Related FRs}   \\
+		\hline
+		% Start table body
+		\pr{}{\tpl{zero or more}}
+		\pr{Example Description}{01}
+	\end{tabularx}
+	\caption{Performance Requirements}
+\end{table}
+
+% vim: ts=2 sts=2 sw=2

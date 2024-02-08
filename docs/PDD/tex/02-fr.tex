@@ -1,0 +1,27 @@
+\resetfyshcounter
+\newcommand{\fr}[1]{
+	\textbf{FR-\rc} & #1 \\
+	\hline
+}
+\begin{table}[H]
+	\begin{tabularx}{\textwidth}{| a | x |}
+		% Start table heading
+		\hline
+		% Changes the colour of the top row to tablebgdark.
+		% Colour is defined in custom.tex
+		\rowcolor{tablebgdark}
+		\bw{FR \#} & \bw{Functional Requirement Description} \\
+		\hline
+		% Start table body
+		\fr{The CPU Shall be compliant with the RV32I instruction set}
+		\fr{The CPU shall have general-purpose input/output pins}
+		\fr{Fysh shall support basic integer arithmetic}
+		\fr{Fysh shall support memory addressing}
+		\fr{Fysh shall have a programming construct for random number generation}
+		\fr{Fyshc shall convert Fysh source code to RV32I instructions}
+		\fr{Fyshc shall support all features of Fysh}
+	\end{tabularx}
+	\caption{Functional Requirements}
+\end{table}
+
+% vim: ts=2 sts=2 sw=2
