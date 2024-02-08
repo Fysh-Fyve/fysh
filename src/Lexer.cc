@@ -53,7 +53,10 @@ bool fysh::FyshLexer::isFyshEye(char c) noexcept {
   }
 }
 
-// dude this is just the species, there is no start/end so it will pass the testcase but wont contain the token
+// dude this is just the species, there is no start/end so it will pass the
+// testcase but wont contain the token
+//
+// Talk to me! - Charles
 fysh::Fysh fysh::FyshLexer::goFysh(Species s) noexcept {
   get();
   return Fysh{s};
@@ -315,7 +318,7 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
   case '>':
     return fyshOutline();
   case '&':
-    return fysh::Fysh{Species::BITWISE_AND};
+    return goFysh(Species::BITWISE_AND);
   default:
     return unicode();
   }
