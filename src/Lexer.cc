@@ -42,18 +42,6 @@ static bool isScale(char c) noexcept {
   return c == '(' || c == ')' || c == '{' || c == '}';
 }
 
-void fysh::FyshLexer::skipWhitespace() noexcept {
-  while (isSpace(peek())) {
-    get();
-  }
-}
-
-void fysh::FyshLexer::gotoEndOfToken() noexcept {
-  while (!isSpace(peek())) {
-    get();
-  }
-}
-
 // o or ° (eye of the fysh)
 bool fysh::FyshLexer::isFyshEye(char c) noexcept {
   switch (c) {
@@ -63,6 +51,11 @@ bool fysh::FyshLexer::isFyshEye(char c) noexcept {
   default:
     return false;
   }
+}
+
+fysh::Fysh fysh::FyshLexer::getAndReturn(Species s) noexcept {
+  get();
+  return Fysh{s};
 }
 
 fysh::Fysh fysh::FyshLexer::tryUnicode(const char *bytes, Species s) noexcept {
@@ -123,7 +116,10 @@ fysh::Fysh fysh::FyshLexer::unicode() noexcept {
 }
 
 fysh::Fysh fysh::FyshLexer::cullDeformedFysh() noexcept {
-  gotoEndOfToken();
+  while (!isSpace(peek())) {
+    get();
+  }
+
   const char *fyshEnd{current};
   return fysh::Fysh{Species::INVALID, fyshStart, fyshEnd};
 }
@@ -182,11 +178,11 @@ fysh::Fysh fysh::FyshLexer::fyshClose() noexcept {
 }
 
 fysh::Fysh fysh::FyshLexer::slashOrComment() noexcept {
-  return fysh::Fysh{Species::INVALID};
+  return getAndReturn(Species::INVALID);
 }
 
 fysh::Fysh fysh::FyshLexer::identifier() noexcept {
-  return fysh::Fysh{Species::INVALID};
+  return getAndReturn(Species::INVALID);
 }
 
 fysh::Fysh fysh::FyshLexer::random() noexcept {
@@ -312,7 +308,10 @@ fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
 
 // Where the magic happens
 fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
-  skipWhitespace();
+  while (isSpace(peek())) {
+    get();
+  }
+
   fyshStart = current;
   switch (peek()) {
   case '\0':

@@ -52,8 +52,7 @@ private:
 #else
   char peek() const noexcept { return *current; };
 #endif // FYSH_DEBUG
-  void skipWhitespace() noexcept;
-  void gotoEndOfToken() noexcept;
+  Fysh getAndReturn(Species species) noexcept;
   bool isFyshEye(char c) noexcept;
   Fysh tryUnicode(const char *bytes, Species s) noexcept;
   Fysh unicode() noexcept;
@@ -70,8 +69,6 @@ private:
   Fysh random() noexcept;
   Fysh slashOrComment() noexcept;
   Fysh identifier() noexcept;
-  Fysh isScaleChar(char c) noexcept;
-  Fysh convertScaleToBinary(bool positive) noexcept;
   Fysh cullDeformedFysh() noexcept;
 };
 
