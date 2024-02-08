@@ -53,6 +53,7 @@ bool fysh::FyshLexer::isFyshEye(char c) noexcept {
   }
 }
 
+// dude this is just the species, there is no start/end so it will pass the testcase but wont contain the token
 fysh::Fysh fysh::FyshLexer::goFysh(Species s) noexcept {
   get();
   return Fysh{s};
