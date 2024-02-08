@@ -84,6 +84,8 @@ constexpr const char *debugType(const fysh::Species &species) {
     return "CONTINUE";
   case Species::END:
     return "END";
+  case Species::BITWISE_AND:
+    return "&";
   }
 
   assert(false);

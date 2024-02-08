@@ -314,6 +314,8 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
   case '<':
   case '>':
     return fyshOutline();
+  case '&':
+    return fysh::Fysh{Species::BITWISE_AND};
   default:
     return unicode();
   }

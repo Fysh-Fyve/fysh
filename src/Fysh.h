@@ -65,6 +65,7 @@ enum class Species {
   INVALID,         // Invalid token!
   CONTINUE,        // Continue trying to parse unicode
   END,             // End of the input
+  BITWISE_AND,     // &
 
   // TODO bit manipulation
 };

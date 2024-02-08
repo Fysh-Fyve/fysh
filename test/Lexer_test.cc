@@ -98,3 +98,14 @@ TEST_CASE("Swim Left") {
   CHECK(lexer.nextFysh() == "<!@#$>");
   CHECK(lexer.nextFysh() == Species::FYSH_CLOSE);
 }
+
+TEST_CASE("Bitwise Operations") {
+  std::string_view input{"&"};
+  // Assuming `input` is a std::string or std::string_view
+  FyshLexer lexer{input.data()};
+  CHECK(lexer.nextFysh() == Species::BITWISE_AND);
+  /*CHECK(lexer.nextFysh() == Species::FYSH_CLOSE);
+  CHECK(lexer.nextFysh() == "<!@%$><");
+  CHECK(lexer.nextFysh() == "<!@#$>");
+  CHECK(lexer.nextFysh() == Species::FYSH_CLOSE);*/
+}
