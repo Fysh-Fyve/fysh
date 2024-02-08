@@ -24,13 +24,13 @@
 #include <iostream>
 
 void fysh::FyshLexer::printRest() { std::cerr << rest() << std::endl; }
-char fysh::FyshLexer::peek(int line) const noexcept {
+char fysh::FyshLexer::periscope(int line) const noexcept {
   if (line > 0) {
     std::cerr << "Current (line:" << line << "): " << *current << std::endl;
   }
   return *current;
 }
-#define peek() peek(__LINE__)
+#define periscope() periscope(__LINE__)
 #endif
 
 // -------------- Utility functions --------------
@@ -58,15 +58,15 @@ bool fysh::FyshLexer::isFyshEye(char c) noexcept {
 //
 // Talk to me! - Charles
 fysh::Fysh fysh::FyshLexer::goFysh(Species s) noexcept {
-  get();
+  reel();
   return Fysh{s};
 }
 
 fysh::Fysh fysh::FyshLexer::tryUnicode(const char *bytes, Species s) noexcept {
   bool touched{false};
   for (size_t i = 0; (unsigned char)bytes[i] != 0x00; i++) {
-    if ((unsigned char)peek() == (unsigned char)bytes[i]) {
-      get();
+    if ((unsigned char)periscope() == (unsigned char)bytes[i]) {
+      reel();
       touched = true;
     } else {
       if (touched) {
@@ -120,8 +120,8 @@ fysh::Fysh fysh::FyshLexer::unicode() noexcept {
 }
 
 fysh::Fysh fysh::FyshLexer::cullDeformedFysh() noexcept {
-  while (!isSpace(peek())) {
-    get();
+  while (!isSpace(periscope())) {
+    reel();
   }
 
   const char *fyshEnd{current};
@@ -135,8 +135,8 @@ fysh::Fysh fysh::FyshLexer::heart() noexcept {
 
 // </3 or 💔
 fysh::Fysh fysh::FyshLexer::heartBreak() noexcept {
-  get();
-  if (peek() == '3') {
+  reel();
+  if (periscope() == '3') {
     return goFysh(Species::HEART_DIVIDE);
   }
   return cullDeformedFysh();
@@ -144,8 +144,8 @@ fysh::Fysh fysh::FyshLexer::heartBreak() noexcept {
 
 // opening for error handling ><!@#$>
 fysh::Fysh fysh::FyshLexer::openWTF() noexcept {
-  if (get() == '!' && get() == '@' && get() == '#' && get() == '$' &&
-      peek() == '>') {
+  if (reel() == '!' && reel() == '@' && reel() == '#' && reel() == '$' &&
+      periscope() == '>') {
     return goFysh(Species::WTF_OPEN);
   }
   return cullDeformedFysh();
@@ -153,8 +153,8 @@ fysh::Fysh fysh::FyshLexer::openWTF() noexcept {
 
 // closing for error handling <!@#$><
 fysh::Fysh fysh::FyshLexer::closeWTF() noexcept {
-  if (get() == '!' && get() == '@' && get() == '#' && get() == '$' &&
-      get() == '>' && peek() == '<') {
+  if (reel() == '!' && reel() == '@' && reel() == '#' && reel() == '$' &&
+      reel() == '>' && periscope() == '<') {
     return goFysh(Species::WTF_CLOSE);
   }
   return cullDeformedFysh();
@@ -167,8 +167,8 @@ fysh::Fysh fysh::FyshLexer::fyshOpen() noexcept {
 
 // <><
 fysh::Fysh fysh::FyshLexer::fyshClose() noexcept {
-  get();
-  if (peek() == '<') {
+  reel();
+  if (periscope() == '<') {
     return goFysh(Species::FYSH_CLOSE);
   }
   return cullDeformedFysh();
@@ -186,12 +186,12 @@ fysh::Fysh fysh::FyshLexer::identifier() noexcept {
 
 fysh::Fysh fysh::FyshLexer::random() noexcept {
   for (size_t i = 0; i < 3; i++) {
-    if (peek() != '#') {
+    if (periscope() != '#') {
       return cullDeformedFysh();
     }
-    get();
+    reel();
   }
-  if (peek() == '>') {
+  if (periscope() == '>') {
     return goFysh(Species::RANDOM);
   }
   return cullDeformedFysh();
@@ -199,37 +199,37 @@ fysh::Fysh fysh::FyshLexer::random() noexcept {
 
 fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
   // gets all the scales and converts them to a binary number
-  char c = get();
+  char c = reel();
   uint32_t value{c == '{' ||
                  c == '}'}; // stores the first scale as a binary number
-  while (isScale(peek())) {
-    c = get();
+  while (isScale(periscope())) {
+    c = reel();
     value = (value << 1) |
             (c == '{' || c == '}'); // shifts the bits to the left and stores
                                     // the next scale using bitwise OR
   }
 
-  c = get(); // stores the value after the last scale
+  c = reel(); // stores the value after the last scale
 
   // check if the current character is an eye or >
-  if (!(isFyshEye(c) && peek() == '>') && c != '>') {
+  if (!(isFyshEye(c) && periscope() == '>') && c != '>') {
     return cullDeformedFysh();
   }
 
   // check if its the end of the token or not (2nd character after the scales)
-  if (!isSpace(peek())) {
-    c = peek();
+  if (!isSpace(periscope())) {
+    c = periscope();
     if ((dir == FyshDirection::RIGHT &&
          c != '>') || // checks for '°>' (fysh head)
         (dir == FyshDirection::LEFT &&
          c != '<')) { // checks for '><' (fysh tail)
       return cullDeformedFysh();
     }
-    get();
+    reel();
   }
 
   // make sure the token ends
-  if (!isSpace(peek()) && peek() != '\0') {
+  if (!isSpace(periscope()) && periscope() != '\0') {
     return cullDeformedFysh();
   }
 
@@ -242,10 +242,10 @@ fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
 
 // Token starts with '<' or '>'
 fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
-  switch (peek()) {
+  switch (periscope()) {
   case ('<'):
-    get();
-    switch (peek()) {
+    reel();
+    switch (periscope()) {
     case ('3'):
       return heart(); // <3 multiplication heart
     case ('/'):
@@ -254,8 +254,8 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
       return swimLeft(); // a fysh swimming left
     }
   case '>':
-    get();
-    switch (peek()) {
+    reel();
+    switch (periscope()) {
     case ('<'):
       return swimRight(); // a fysh swimming right
     default:
@@ -268,7 +268,7 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
 
 fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
   // current is the 2nd character of the token
-  switch (peek()) {
+  switch (periscope()) {
   case ('{'):
   case ('('):
   case ('}'):
@@ -285,8 +285,8 @@ fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
 
 // all fysh that start with >< are swimming right e.g. ><>
 fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
-  get(); // 2nd swim right character '<'
-  switch (peek()) {
+  reel(); // 2nd swim right character '<'
+  switch (periscope()) {
   case ('{'):
   case ('('):
   case ('}'):
@@ -306,12 +306,12 @@ fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
 
 // Where the magic happens
 fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
-  while (isSpace(peek())) {
-    get();
+  while (isSpace(periscope())) {
+    reel();
   }
 
   fyshStart = current;
-  switch (peek()) {
+  switch (periscope()) {
   case '\0':
     return fysh::Fysh{Species::END};
   case '<':

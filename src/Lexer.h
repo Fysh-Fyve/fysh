@@ -22,7 +22,7 @@
 #ifndef FYSH_LEXER_H_
 #define FYSH_LEXER_H_
 
-// Uncomment to print the current line where peek is called
+// Uncomment to print the current line where periscope is called
 // #define FYSH_DEBUG
 
 namespace fysh {
@@ -46,11 +46,11 @@ private:
   // Marks the start of the current fysh
   const char *fyshStart = nullptr;
 
-  char get() noexcept { return *current++; };
+  char reel() noexcept { return *current++; };
 #ifdef FYSH_DEBUG
-  char peek(int line = -1) const noexcept;
+  char periscope(int line = -1) const noexcept;
 #else
-  char peek() const noexcept { return *current; };
+  char periscope() const noexcept { return *current; };
 #endif // FYSH_DEBUG
   Fysh goFysh(Species species) noexcept;
   bool isFyshEye(char c) noexcept;
