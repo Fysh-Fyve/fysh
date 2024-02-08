@@ -52,7 +52,7 @@ private:
 #else
   char peek() const noexcept { return *current; };
 #endif // FYSH_DEBUG
-  Fysh getAndReturn(Species species) noexcept;
+  Fysh goFysh(Species species) noexcept;
   bool isFyshEye(char c) noexcept;
   Fysh tryUnicode(const char *bytes, Species s) noexcept;
   Fysh unicode() noexcept;

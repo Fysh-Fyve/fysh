@@ -53,7 +53,7 @@ bool fysh::FyshLexer::isFyshEye(char c) noexcept {
   }
 }
 
-fysh::Fysh fysh::FyshLexer::getAndReturn(Species s) noexcept {
+fysh::Fysh fysh::FyshLexer::goFysh(Species s) noexcept {
   get();
   return Fysh{s};
 }
@@ -126,17 +126,14 @@ fysh::Fysh fysh::FyshLexer::cullDeformedFysh() noexcept {
 
 // <3 or ♡
 fysh::Fysh fysh::FyshLexer::heart() noexcept {
-  ;
-  get();
-  return fysh::Fysh{Species::HEART_MULTIPLY};
+  return goFysh(Species::HEART_MULTIPLY);
 }
 
 // </3 or 💔
 fysh::Fysh fysh::FyshLexer::heartBreak() noexcept {
   get();
   if (peek() == '3') {
-    get();
-    return fysh::Fysh{Species::HEART_DIVIDE};
+    return goFysh(Species::HEART_DIVIDE);
   }
   return cullDeformedFysh();
 }
@@ -145,8 +142,7 @@ fysh::Fysh fysh::FyshLexer::heartBreak() noexcept {
 fysh::Fysh fysh::FyshLexer::openWTF() noexcept {
   if (get() == '!' && get() == '@' && get() == '#' && get() == '$' &&
       peek() == '>') {
-    get();
-    return fysh::Fysh{Species::WTF_OPEN};
+    return goFysh(Species::WTF_OPEN);
   }
   return cullDeformedFysh();
 }
@@ -155,34 +151,33 @@ fysh::Fysh fysh::FyshLexer::openWTF() noexcept {
 fysh::Fysh fysh::FyshLexer::closeWTF() noexcept {
   if (get() == '!' && get() == '@' && get() == '#' && get() == '$' &&
       get() == '>' && peek() == '<') {
-    get();
-    return fysh::Fysh{Species::WTF_CLOSE};
+    return goFysh(Species::WTF_CLOSE);
   }
   return cullDeformedFysh();
 }
 
 // ><>
 fysh::Fysh fysh::FyshLexer::fyshOpen() noexcept {
-  get();
-  return fysh::Fysh{Species::FYSH_OPEN};
+  return goFysh(Species::FYSH_OPEN);
 }
 
 // <><
 fysh::Fysh fysh::FyshLexer::fyshClose() noexcept {
   get();
   if (peek() == '<') {
-    get();
-    return fysh::Fysh{Species::FYSH_CLOSE};
+    return goFysh(Species::FYSH_CLOSE);
   }
   return cullDeformedFysh();
 }
 
 fysh::Fysh fysh::FyshLexer::slashOrComment() noexcept {
-  return getAndReturn(Species::INVALID);
+  // TODO: Implement
+  return goFysh(Species::INVALID);
 }
 
 fysh::Fysh fysh::FyshLexer::identifier() noexcept {
-  return getAndReturn(Species::INVALID);
+  // TODO: Implement
+  return goFysh(Species::INVALID);
 }
 
 fysh::Fysh fysh::FyshLexer::random() noexcept {
@@ -193,8 +188,7 @@ fysh::Fysh fysh::FyshLexer::random() noexcept {
     get();
   }
   if (peek() == '>') {
-    get();
-    return fysh::Fysh{Species::RANDOM};
+    return goFysh(Species::RANDOM);
   }
   return cullDeformedFysh();
 }
