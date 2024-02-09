@@ -15,6 +15,10 @@ illustrated by the following user stories and use cases.
 
 \tpl{Have at most 3 paragraphs per user story, preferably one}
 
+Only until 2020 did the ECE department teach about ARM ISA in the assembly
+language/computer architecture course (ECE 212). Before that, we had to learn
+about the 68k ISA, which did not change for over 30 years.
+
 ## Use Cases
 
 \tpl{Use UML diagrams and some annotation to present use cases. See this
@@ -24,21 +28,12 @@ Add descriptive text for each use case. Keep the number of use cases below 15; â
 description table. If a table is complicated, the use case is probably too
 low-level}
 
-<!-- PlantUML embed. We use a filter to automatically run PlantUML on these and generate the diagram. -->
+<!-- Insert use case -->
 
-```{.plantuml caption="Use Cases <an example use case diagram https://plantuml.com/use-case-diagram>"}
-left to right direction
-actor "ECE Student" as fc
-rectangle Restaurant {
-  usecase "Eat Food" as UC1
-  usecase "Pay for Food" as UC2
-  usecase "Drink" as UC3
-}
-fc --> UC1
-fc --> UC2
-fc --> UC3
-```
+\input{tex/use-case}
 
 <!-- Insert first use case table. -->
 
 \input{tex/uc-001}
+\input{tex/uc-002}
+\input{tex/uc-003}

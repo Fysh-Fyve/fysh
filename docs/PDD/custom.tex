@@ -78,10 +78,10 @@
 \usepackage{float}
 \let\origfigure\figure
 \let\endorigfigure\endfigure
-\renewenvironment{figure}[1][2] {
-	\expandafter\origfigure\expandafter[H]
-} {
-	\endorigfigure
+\renewenvironment{figure}[1][2] {%
+	\expandafter\origfigure\expandafter[H]%
+} {%
+	\endorigfigure%
 }
 
 % For formatting numbers
@@ -101,7 +101,7 @@
 \usepackage{longtable}
 
 % Include use case table command
-\input{tex/use-case}
+\input{tex/use-case-table}
 
 \begin{document}
 $body$

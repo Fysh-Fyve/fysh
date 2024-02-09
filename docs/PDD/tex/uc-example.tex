@@ -1,3 +1,22 @@
+% This is probably the most involved one because it uses the custom commands
+% from use-case-table.tex.
+%
+% You can take a look if you want but these should abstract most of the
+% low-level LaTeX stuff LaTeX commands can have zero or more arguments.Each
+% argument is wrapped inside {} (squirly braces).
+%
+% \usecase creates a Use Case Table. It takes in two arguments:
+% #1 - Table body: these should be filled with \ucrow instances.
+% #2 - Table caption
+%
+% \ucrow creates a Use Case Table row. It also takes in two arguments:
+% #1 - The left cell content. In this case it should be the detail name
+% #1 - The right cell content. In this case it should be the description
+%
+% \ucindent simply adds a horizontal indent. It takes no arguments.
+%
+% Unfortunately, because this is a table, you need to use the \newline command
+% to add newlines
 \usecase{
 	\ucrow{Number}{UC-001}
 
@@ -5,12 +24,10 @@
 
 	\ucrow{System}{\tpl{same as the system boundary name}}
 
-	\ucrow{Actors}{
-
-		1. \tpl{all actors associated with the system} \newline
-		2. \newline
-		3.
-
+	\ucrow{Actors}{%
+		1. \tpl{all actors associated with the system} \newline%
+		2. \newline%
+		3.%
 	}
 
 	\ucrow{Use Case Goal}{}
@@ -21,28 +38,19 @@
 
 	\ucrow{Postconditions}{}
 
-	\ucrow{Basic Flow}{
-
-		1. \newline
-		2. \newline
-		3.
-
+	\ucrow{Basic Flow}{%
+		1. \newline%
+		2. \newline%
+		3.%
 	}
 
-	\ucrow{Alternate Flows}{
-
-		A. \newline
-
-		\hspace*{24pt} 1. \newline
-
-		\hspace*{24pt} 2. \newline
-
-		\hspace*{24pt} 3. \newline
-
-		B. \newline
-
-		C.
-
+	\ucrow{Alternate Flows}{%
+		A. \newline%
+		\hspace*{24pt} 1. \newline%
+		\hspace*{24pt} 2. \newline%
+		\hspace*{24pt} 3. \newline%
+		B. \newline%
+		C.%
 	}
 
 }{Use Case – <use case name, same as the descriptor in the UML oval>}

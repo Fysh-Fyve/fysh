@@ -3,7 +3,7 @@
 In the table below, the "CPU" refers to the Fysh-Fyve CPU, the FPGA-Based RISC-V
 CPU for the Zybo development board. "Fysh" refers to the Fysh programming
 language, the custom-made esoteric programming language for this project.
-"Fyshc" refers to the Fysh Compyler, the compiler that targets RV32I with native
+"FyshSea" refers to the Fysh Compyler, the compiler that targets RV32I with native
 support for the custom RISC-V instruction.
 
 <!-- Insert functional requirements table. -->

@@ -1,7 +1,8 @@
 ### Hardware Components
 
-\tpl{Describe the main HW components in each deployment note; refer to
-appropriate figure. 1 page max}
+As stated in Section \ref{concept-of-operation}, the project shall be available
+to all ECE students, so minimal hardware is required. One only needs the Zybo
+development board to get started in creating projects.
 
 ### Firmware Components
 

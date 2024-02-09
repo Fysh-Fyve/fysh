@@ -19,9 +19,9 @@ the system at a very high level. E.g., “The Toddler Monitor system comprises t
 main subsystem, the user’s smartphone and the monitor. Major nodes and
 components in each subsystem are identified below”.}
 
-The overall system will have two parts as shown in figure \ref{fig:deployment}, the
-Fysh cross-compiler (Fyshc) in the development machine, and the RISC-V CPU
-(Fysh-Fyve) in the Zybo board.
+The overall system will have two parts as shown in figure \ref{fig:deployment},
+the Fysh toolchain in the development machine, and the RISC-V CPU in the Zybo
+board.
 
 ## System Architecture
 

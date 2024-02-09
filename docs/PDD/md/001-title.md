@@ -1,11 +1,11 @@
-# Preliminary Design: FPGA-Based RISC-V CPU and Fysh Programming Language and Compiler (System Name: Fysh-Fyve)
-
-<!-- This most likely does not need to be modified aside from removing the references -->
-
 <!-- Disables section numbers temporarily to not include these sections in the TOC -->
 
 \setcounter{secnumdepth}{0}
 \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
+
+# Preliminary Design: FPGA-Based RISC-V CPU and Fysh Programming Language and Compiler (System Name: Fysh-Fyve)
+
+<!-- This most likely does not need to be modified aside from removing the references -->
 
 ## Revisions
 
@@ -41,7 +41,7 @@ in the bibliography [@ppr] [@pp].
 
 \newpage
 
-<!-- NOW we start counting the sections. The tocdepth = 3 is for section 4 -->
+<!-- NOW we start counting the sections. The tocdepth = 3 is for the system design -->
 
 \setcounter{secnumdepth}{3}
 \addtocontents{toc}{\protect\setcounter{tocdepth}{3}}

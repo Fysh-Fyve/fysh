@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+actor "ECE Student" as fc
+rectangle "Fysh-Fyve Project" {
+  usecase "Learn RISC-V ISA" as UC1
+  usecase "Learn Fysh" as UC2
+  usecase "Create Hardware Projects" as UC3
+}
+fc --> UC1
+fc --> UC2
+fc --> UC3
+@enduml
