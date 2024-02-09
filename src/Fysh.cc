@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2024 Yahya Al-Shamali
+ * Copyright (C) 2024 Yahya Al-Shamali, Kyle Prince
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -88,6 +88,8 @@ constexpr const char *debugType(const fysh::Species &species) {
     return "&";
   case Species::BITWISE_OR:
     return "|";
+  case Species::BITWISE_XOR:
+    return "^";
   }
 
   assert(false);

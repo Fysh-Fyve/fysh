@@ -108,11 +108,12 @@ TEST_CASE("Swim Left") {
 }
 
 TEST_CASE("Bitwise Operations") {
-  std::string_view input{"& |"};
+  std::string_view input{"& | ^"};
   // Assuming `input` is a std::string or std::string_view
   FyshLexer lexer{input.data()};
   CHECK(lexer.nextFysh() == Species::BITWISE_AND);
   CHECK(lexer.nextFysh() == Species::BITWISE_OR);
+  CHECK(lexer.nextFysh() == Species::BITWISE_XOR);
   CHECK(lexer.nextFysh() == Species::END);
 
 }
