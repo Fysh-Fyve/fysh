@@ -34,11 +34,6 @@
 <!-- This is where the references would be placed in the document -->
 <div id="refs"></div>
 
-<!-- TODO: Remove this to only keep the references that we actually use -->
-
-References [@gitlab] must [@pandoc] be [@crack] used or else they don't show up
-in the bibliography [@ppr] [@pp].
-
 \newpage
 
 <!-- NOW we start counting the sections. The tocdepth = 3 is for the system design -->
