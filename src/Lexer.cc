@@ -144,8 +144,8 @@ fysh::Fysh fysh::FyshLexer::heartBreak() noexcept {
 
 // opening for error handling ><!@#$>
 fysh::Fysh fysh::FyshLexer::openWTF() noexcept {
-  if (reel() == '!' && reel() == '@' && reel() == '#' && reel() == '$' &&
-      periscope() == '>') {
+  reel();
+  if (reel() == '@' && reel() == '#' && reel() == '$' && periscope() == '>') {
     return goFysh(Species::WTF_OPEN);
   }
   return cullDeformedFysh();
@@ -153,8 +153,9 @@ fysh::Fysh fysh::FyshLexer::openWTF() noexcept {
 
 // closing for error handling <!@#$><
 fysh::Fysh fysh::FyshLexer::closeWTF() noexcept {
-  if (reel() == '!' && reel() == '@' && reel() == '#' && reel() == '$' &&
-      reel() == '>' && periscope() == '<') {
+  reel();
+  if (reel() == '@' && reel() == '#' && reel() == '$' && reel() == '>' &&
+      periscope() == '<') {
     return goFysh(Species::WTF_CLOSE);
   }
   return cullDeformedFysh();
@@ -185,7 +186,8 @@ fysh::Fysh fysh::FyshLexer::identifier() noexcept {
 }
 
 fysh::Fysh fysh::FyshLexer::random() noexcept {
-  for (size_t i = 0; i < 3; i++) {
+  reel();
+  for (size_t i = 1; i < 3; i++) {
     if (periscope() != '#') {
       return cullDeformedFysh();
     }
