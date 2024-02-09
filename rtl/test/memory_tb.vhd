@@ -32,7 +32,7 @@ begin
 
   process
   begin
-    wait for 1 ns;
+    wait for 10.6383 ns;
     stop;
   end process;
 end test_bench;

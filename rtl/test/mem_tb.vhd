@@ -21,7 +21,7 @@ architecture test_bench of mem_tb is
     use std.textio.all;
     variable my_line : line;
   begin
-    wait for 1 ns;
+    wait for 10.6383 ns;
     write(my_line, to_hstring(read_addr));
     write(my_line, ht);
     write(my_line, to_hstring(d_out));
@@ -43,7 +43,7 @@ begin
   clock : process
   begin
     clk <= not clk;
-    wait for 1 ns;
+    wait for 10.6383 ns;
   end process clock;
 
   print_mem : process

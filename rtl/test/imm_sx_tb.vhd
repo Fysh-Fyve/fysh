@@ -19,7 +19,7 @@ architecture test_bench of imm_sx_tb is
     use std.textio.all;
     variable my_line : line;
   begin
-    wait for 1 ns;
+    wait for 10.6383 ns;
     if not (imm_val = expected) then
       write(my_line, string'("unexpected value, want = "));
       write(my_line, to_hstring(expected));
@@ -28,7 +28,7 @@ architecture test_bench of imm_sx_tb is
       writeline(output, my_line);
       assert imm_val = expected;
     end if;
-    wait for 1 ns;
+    wait for 10.6383 ns;
   end procedure value_check;
 begin
   imm_sx_inst : entity work.imm_sx(rtl) port map (

@@ -33,13 +33,13 @@ begin
   clock : process
   begin
     rd_clk <= '0';
-    wait for 1 ns;
+    wait for 10.6383 ns;
     for i in 0 to 31 loop
       rd_clk     <= '1';
       loop_count <= i;
-      wait for 5 ns;
+      wait for 10.6383 ns;
       rd_clk     <= '0';
-      wait for 5 ns;
+      wait for 10.6383 ns;
     end loop;
     wait;
   end process clock;
@@ -52,17 +52,17 @@ begin
     rd_val <= (others => '0');
     rs1    <= (others => '0');
     rs2    <= (others => '0');
-    wait for 1 ns;
+    wait for 10.6383 ns;
 
     for i in 0 to 31 loop
       rd <= std_ulogic_vector(to_unsigned(i, 5));
-      wait for 5 ns;
+      wait for 10.6383 ns;
       if i > 2 then
         rs1 <= std_ulogic_vector(to_unsigned(i-1, 5));
         rs2 <= std_ulogic_vector(to_unsigned(i-2, 5));
       end if;
       rd_val <= std_ulogic_vector(to_unsigned(i + 1, 32));
-      wait for 5 ns;
+      wait for 10.6383 ns;
     end loop;
 
     stop;

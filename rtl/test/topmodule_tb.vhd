@@ -18,7 +18,7 @@ begin
   drive_clock : process
   begin
     clk <= not clk;
-    wait for 1 ns;
+    wait for 10.6383 ns;
   end process drive_clock;
 
   topmodule_inst : entity work.topmodule(rtl) port map (
@@ -27,15 +27,15 @@ begin
     reset => reset);
   process
   begin
-    wait for 1 ns;
+    wait for 10.6383 ns;
     reset <= '0';
-    wait for 1 ns;
+    wait for 10.6383 ns;
     reset <= '1';
-    wait for 1 ns;
+    wait for 10.6383 ns;
     reset <= '0';
-    wait for 1 ns;
+    wait for 10.6383 ns;
     reset <= '1';
-    wait for 70 ns;
+    wait for 1 us;
     stop;
   end process;
 end test_bench;

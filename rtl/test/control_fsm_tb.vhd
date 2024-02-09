@@ -63,13 +63,13 @@ begin
   begin
     clk   <= '0';
     reset <= '1';
-    wait for 1 ns;
+    wait for 10.6383 ns;
     clk   <= '1';
     reset <= '0';
-    wait for 1 ns;
+    wait for 10.6383 ns;
     clk   <= '0';
     reset <= '1';
-    wait for 1 ns;
+    wait for 10.6383 ns;
     stop;
   end process main;
 
