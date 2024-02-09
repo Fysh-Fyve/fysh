@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2024 Yahya Al-Shamali
+ * Copyright (C) 2024 Yahya Al-Shamali, Kyle Prince
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -67,6 +67,7 @@ enum class Species {
   END,             // End of the input
   BITWISE_AND,     // &
   BITWISE_OR,      // |
+  BITWISE_XOR,     // ^
 
   // TODO bit manipulation
 };
