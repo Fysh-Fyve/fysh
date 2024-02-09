@@ -1,12 +1,25 @@
 @startuml
 left to right direction
-actor "ECE Student" as fc
-rectangle "Fysh-Fyve Project" {
-  usecase "Learn RISC-V ISA" as UC1
-  usecase "Learn Fysh" as UC2
-  usecase "Create Hardware Projects" as UC3
+actor "CompE Student" as fc
+
+rectangle "Fysh Toolchain" {
+  usecase "Compyle Fysh" as UC1
+  usecase "Run Fysh" as UC2
+  usecase "Program Board" as UC3
 }
+
+rectangle "Zynq FPGA" {
+  usecase "Initialize Chyp" as UC4
+  usecase "Run CPU instructions" as UC5
+}
+
 fc --> UC1
 fc --> UC2
 fc --> UC3
+fc --> UC4
+
+UC1 -[dashed]- UC2
+
+UC5 .> UC2 : include
+UC5 .> UC3 : include
 @enduml
