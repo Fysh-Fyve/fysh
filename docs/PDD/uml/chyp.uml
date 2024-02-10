@@ -1,0 +1,19 @@
+@startuml
+component "Zynq FPGA" {
+  [Controller & ALU] as CLU
+  [Register File] as RF
+
+  frame "Memory Map" {
+    [Block RAM] as RAM
+    [GPIO Pins] as GPIO
+    note bottom
+      GPIO pins are mapped to specific addresses
+    end note
+  }
+}
+
+CLU -- RAM
+CLU -- GPIO
+CLU -- RF
+
+@enduml
