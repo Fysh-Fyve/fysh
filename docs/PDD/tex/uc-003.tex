@@ -1,26 +1,31 @@
 \usecase{
-	\ucrow{System}{Fysh-Fyve Project}
+	\ucrow{System}{Fysh Toolchain}
 
-	\ucrow{Actors}{%
-		1. ECE Student%
+	\ucrow{Actor}{CompE Student}
+
+	\ucrow{Use Case Goal}{Download Fysh fyrmware into the Fysh-Fyve chyp.}
+
+	\ucrow{Primary Actor}{CompE Student}
+
+	\ucrow{Preconditions}{%
+		Fysh program is successully compiled into RV32I machine code.%
 	}
 
-	\ucrow{Use Case Goal}{Create hardware project with Fysh and a RISC-V CPU}
-
-	\ucrow{Primary Actor}{ECE Student}
-
-	\ucrow{Preconditions}{None}
-
-	\ucrow{Postconditions}{The ECE student creates a hardware project using a RISC-V CPU}
+	\ucrow{Postconditions}{%
+		The Zynq FPGA has the firmware loaded into the Fysh-Fyve CPU.%
+	}
 
 	\ucrow{Basic Flow}{%
-		1. \newline%
-		2. \newline%
-		3.%
+		1. CompE student transforms the firmware binary into a format that is
+		usable by the Fysh-Fyve CPU.\newline%
+		2. CompE student downloads the FPGA-usable format into the FPGA.%
 	}
 
-	\ucrow{Alternate Flows}{None}
-
-}{UC-003}{Create Hardware Projects}
+	\ucrow{Alternate Flows}{
+		A. Firmware size is too large.\newline%
+		\hspace*{24pt} 1. FyshDude outputs an error message describing the error.\newline%
+		\hspace*{24pt} 1. FyshDude exits.
+	}
+}{UC-003}{Program Board}
 
 % vim:ft=tex ts=2 sts=2 sw=2

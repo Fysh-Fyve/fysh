@@ -4,13 +4,12 @@ actor "CompE Student" as student
 
 rectangle "Fysh Toolchain" {
   usecase "Compyle Fysh" as compyleFysh
-  usecase "Run Fysh" as runFysh
   usecase "Program Board" as programBoard
 }
 
 rectangle "Zynq FPGA" {
+  usecase "Run Fysh" as runFysh
   usecase "Initialize Chyp" as initialize
-  usecase "Run CPU instructions" as runCPU
 }
 
 compyleFysh -[dashed]- runFysh
@@ -19,7 +18,6 @@ compyleFysh -[dashed]- programBoard
 student --> compyleFysh
 student --> runFysh
 
-runFysh .> runCPU : include
-runCPU .> initialize : include
-runCPU .> programBoard : include
+runFysh .> initialize : include
+runFysh .> programBoard : include
 @enduml

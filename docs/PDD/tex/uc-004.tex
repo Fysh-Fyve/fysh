@@ -1,0 +1,30 @@
+\usecase{
+	\ucrow{System}{Zynq FPGA}
+
+	\ucrow{Actors}{CompE Student}
+
+	\ucrow{Use Case Goal}{Execute program written in Fysh.}
+
+	\ucrow{Primary Actor}{CompE Student}
+
+	\ucrow{Preconditions}{%
+		1. FPGA is initialized with Fysh-Fyve CPU.\newline%
+		2. Fysh program is compiled into a binary.\newline%
+		3. Fysh program is programmed into the development board.%
+	}
+
+	\ucrow{Postconditions}{Fysh program is running on a device.}
+
+	\ucrow{Basic Flow}{%
+		1. CompE student depresses the reset button on the development board. \newline%
+		2. CPU runs the instructions one by one.%
+	}
+
+	\ucrow{Alternate Flows}{
+		A. CPU encounters an exception.\newline%
+		\hspace*{24pt} 1. CPU halts execution.\newline%
+		\hspace*{24pt} 2. Error LED lights up.%
+	}
+}{UC-004}{Run Fysh}
+
+% vim:ft=tex ts=2 sts=2 sw=2

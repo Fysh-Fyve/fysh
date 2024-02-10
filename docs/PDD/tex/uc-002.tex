@@ -1,26 +1,28 @@
 \usecase{
-	\ucrow{System}{Fysh-Fyve Project}
+	\ucrow{System}{Fysh Toolchain}
 
-	\ucrow{Actors}{%
-		1. ECE Student%
+	\ucrow{Actor}{CompE Student}
+
+	\ucrow{Use Case Goal}{Compile Fysh source code into an executable format.}
+
+	\ucrow{Primary Actor}{CompE Student}
+
+	\ucrow{Preconditions}{Fysh source file exists.}
+
+	\ucrow{Postconditions}{%
+		RV32I machine code describing the Fysh source code is outputted.%
 	}
-
-	\ucrow{Use Case Goal}{Learn about the Fysh Programming Language}
-
-	\ucrow{Primary Actor}{ECE Student}
-
-	\ucrow{Preconditions}{None}
-
-	\ucrow{Postconditions}{The ECE student knows how to program in Fysh}
 
 	\ucrow{Basic Flow}{%
-		1. \newline%
-		2. \newline%
-		3.%
+		1. CompE student runs FyshSea, the Fysh Compyler, giving the Fysh source code as input. \newline%
+		2. FyshSea program exits and a binary file with RV32I format is outputted.%
 	}
 
-	\ucrow{Alternate Flows}{None}
-
-}{UC-002}{Learn Fysh}
+	\ucrow{Alternate Flows}{
+		A. Fysh source code has a syntax or type error.\newline%
+		\hspace*{24pt} 1. FyshSea outputs an error message describing the error.\newline%
+		\hspace*{24pt} 2. FyshSea exits.%
+	}
+}{UC-002}{Compyle Fysh}
 
 % vim:ft=tex ts=2 sts=2 sw=2
