@@ -1,5 +1,5 @@
 @startuml
-left to right direction
+top to bottom direction
 actor "CompE Student" as student
 
 rectangle "Fysh Toolchain" {
