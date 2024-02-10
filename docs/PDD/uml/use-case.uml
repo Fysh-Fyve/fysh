@@ -1,25 +1,25 @@
 @startuml
 left to right direction
-actor "CompE Student" as fc
+actor "CompE Student" as student
 
 rectangle "Fysh Toolchain" {
-  usecase "Compyle Fysh" as UC1
-  usecase "Run Fysh" as UC2
-  usecase "Program Board" as UC3
+  usecase "Compyle Fysh" as compyleFysh
+  usecase "Run Fysh" as runFysh
+  usecase "Program Board" as programBoard
 }
 
 rectangle "Zynq FPGA" {
-  usecase "Initialize Chyp" as UC4
-  usecase "Run CPU instructions" as UC5
+  usecase "Initialize Chyp" as initialize
+  usecase "Run CPU instructions" as runCPU
 }
 
-fc --> UC1
-fc --> UC2
-fc --> UC3
-fc --> UC4
+compyleFysh -[dashed]- runFysh
+compyleFysh -[dashed]- programBoard
 
-UC1 -[dashed]- UC2
+student --> compyleFysh
+student --> runFysh
 
-UC5 .> UC2 : include
-UC5 .> UC3 : include
+runFysh .> runCPU : include
+runCPU .> initialize : include
+runCPU .> programBoard : include
 @enduml

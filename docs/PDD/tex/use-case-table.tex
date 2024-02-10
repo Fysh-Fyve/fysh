@@ -4,7 +4,7 @@
 \newcommand{\ucindent}[0]{
 	\hspace*{24pt}
 }
-\newcommand{\usecase}[2]{
+\newcommand{\usecase}[3]{
 	\bgroup
 
 	\begin{table}[H]
@@ -13,9 +13,11 @@
 			\rowcolor{tablebgdark}
 			\multicolumn{2}{l}{\bw{Use Case Description and Details}} \\
 			\hline
+			\ucrow{Number}{#2}
+			\ucrow{Name (action)}{#3}
 			#1
 		\end{tabularx}
-		\caption{#2}
+		\caption{#2 - #3}
 	\end{table}
 
 	\egroup
