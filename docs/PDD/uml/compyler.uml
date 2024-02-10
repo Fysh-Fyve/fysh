@@ -1,0 +1,26 @@
+@startuml
+frame "Front end" {
+  [FyshLexer]
+  [FyshParser]
+}
+
+frame "Middle end" as ME {
+  [Semantic Analyzer] as SA
+  frame "LLVM/GCC Compiler Infrastructure" {
+    [Intermediate Representation] as IR #Yellow
+    [Optimization Passes] as OP #Yellow
+  }
+}
+
+frame "Back end" {
+  [Code Generator] as CG
+}
+
+
+FyshLexer -right-> FyshParser
+FyshParser -down-> SA
+SA -[dashed]-> IR
+IR --> OP
+OP -[dashed]-> CG
+SA -right-> CG
+@enduml

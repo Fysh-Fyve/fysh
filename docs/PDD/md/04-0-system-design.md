@@ -46,10 +46,4 @@ as specific component or node requirements; e.g., a simple inertial motion unit
 may be sufficient for a component that measures motion, or maybe something with
 9 degrees of freedom is needed… -->
 
-<!-- Deployment diagram PlantUML -->
-
-\input{tex/deployment}
-
-<!-- Component diagram PlantUML -->
-
-\input{tex/component}
+\input{tex/subsystems}

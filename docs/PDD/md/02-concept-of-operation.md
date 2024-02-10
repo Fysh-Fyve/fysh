@@ -11,12 +11,6 @@ illustrated by the following user stories and use cases.
 
 <!-- Have at most 3 paragraphs per user story, preferably one -->
 
-Only in 2020 did the ECE department begin to teach about ARM ISA in the assembly
-language/computer architecture course (ECE 212). Before that, we had to learn
-about the 68k ISA, which did not change for over 30 years. The Department of
-Computing Science already covers RISC-V ISA in their computer architecture
-class, but the ECE department
-
 ## Use Cases
 
 <!-- Use UML diagrams and some annotation to present use cases. See this
