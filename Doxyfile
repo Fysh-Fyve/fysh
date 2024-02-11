@@ -170,9 +170,7 @@ FILE_PATTERNS          = *.c \
                          *.ice
 RECURSIVE              = YES
 EXCLUDE_SYMLINKS       = NO
-EXCLUDE_PATTERNS       = */dew/tree-sitter/*
-EXCLUDE_PATTERNS       += */dew/tree-sitter-dew/*
-EXCLUDE_PATTERNS       += */fysh/build/*
+EXCLUDE_PATTERNS       = */fysh/build/*
 EXCLUDE_PATTERNS       += */fysh/doctest/doctest.h
 EXCLUDE_SYMBOLS        =
 EXAMPLE_PATH           =
