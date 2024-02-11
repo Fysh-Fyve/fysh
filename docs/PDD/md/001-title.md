@@ -3,9 +3,7 @@
 \setcounter{secnumdepth}{0}
 \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
 
-# Preliminary Design: FPGA-Based RISC-V CPU and Fysh Programming Language and Compiler (System Name: Fysh-Fyve)
-
-<!-- This most likely does not need to be modified aside from removing the references -->
+# Preliminary Design: FPGA-Based RISC-V CPU and Fysh Programming Language and Compiler
 
 ## Revisions
 

@@ -11,6 +11,25 @@ illustrated by the following user stories and use cases.
 
 <!-- Have at most 3 paragraphs per user story, preferably one -->
 
+Upon receiving the project list for this semester's capstone project, we were
+excited to see that there is a project described as "Likely the most difficult
+project on our list", a native C compiler for a single board computer with a
+custom CPU and instruction set. It was to our disappointment that the computer
+did not yet have an operating system, rendering the project infeasible and
+impractical.
+
+However, we insisted on still working on a compiler, this time targeting
+RISC-V[@riscv], an open standard ISA that is gaining popularity. We are also
+curious about the internals of real-world CPUs, only having encountered a "toy"
+VHDL implementation in ECE 410. We have also decided to unleash our creativity
+and design our own esoteric programming language instead of creating a compiler
+for an existing programming language.
+
+With a softcore microprocessor for the hardware aspect, and a compiler for the
+software, we have a real full-stack computer engineering project that can be
+proud of and can potentially aid in the learning of other computer engineering
+students.
+
 ## Use Cases
 
 <!-- Use UML diagrams and some annotation to present use cases. See this
