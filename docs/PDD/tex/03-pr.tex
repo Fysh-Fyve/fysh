@@ -13,8 +13,15 @@
 		\bw{PR \#} & \bw{Performance Requirement Description} & \bw{Related FRs} \\
 		\hline
 		% Start table body
-		\pr{The CPU shall perform 1 instruction every 2 clock cycles on average}{FR-06}
-		\pr{The Zybo development board shall have 128KB of RAM and 128KB or ROM}{FR-04}
+		\pr{The CPU shall perform 1 instruction every 2 clock cycles on average}%
+		{FR-01}
+
+		\pr{The CPU's hardware RNG shall generate a unique number every 4 clock
+			cycles on average}%
+		{FR-04}
+
+		\pr{The Zybo development board shall have 128KB of RAM and 128KB or ROM}%
+		{FR-03, FR-05}
 	\end{tabularx}
 	\caption{Performance Requirements}
 \end{table}

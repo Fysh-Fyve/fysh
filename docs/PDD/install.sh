@@ -7,5 +7,5 @@
 
 $cmd apt update
 $cmd apt -y upgrade
-$cmd apt install -y pandoc pandoc-citeproc texlive-xetex texlive-fonts-recommended textlive-extra-utils --no-install-recommends
+$cmd apt install -y pandoc pandoc-citeproc texlive-xetex texlive-fonts-recommended textlive-extra-utils plantuml --no-install-recommends
 
