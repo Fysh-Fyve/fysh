@@ -18,9 +18,9 @@ frame "Back end" {
 
 
 FyshLexer -right-> FyshParser
-FyshParser -down-> SA
+FyshParser -right-> SA
 SA -[dashed]-> IR
-IR --> OP
-OP -[dashed]-> CG
-SA -right-> CG
+IR -right-> (OP)
+OP -right-> (CG)
+SA -right-> (CG)
 @enduml

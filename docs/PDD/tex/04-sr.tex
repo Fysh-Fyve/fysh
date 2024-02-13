@@ -1,3 +1,8 @@
+\resetfyshcounter
+\newcommand{\sr}[4]{
+	\textbf{SR-\rc} & #1 & #2 & #3 & #4 \\
+	\hline
+}
 \begin{table}[H]
 	\begin{tabularx}{\textwidth}{| a | x | a | a | a |}
 		% Start table heading
@@ -5,15 +10,27 @@
 		% Changes the colour of the top row to tablebgdark.
 		% Colour is defined in custom.tex
 		\rowcolor{tablebgdark}
-		\bw{SR \#}     & \bw{System Requirement Desc} & \bw{FR \#} & \bw{PR \#} & \bw{Notes} \\
+
+		\bw{SR \#} & \bw{System Requirement Description} %
+		           & \bw{FR \#}                          %
+		           & \bw{PR \#}                          %
+		           & \bw{Notes}                          \\
 		\hline
 		% Start table body
-		\textbf{SR-NN} &                              &            &            &            \\
-		\hline
-		\textbf{SR-NN} &                              &            &            &            \\
-		\hline
-		\textbf{SR-NN} &                              &            &            &            \\
-		\hline
+		\sr{Zynq FPGA must have at least 256KB of Block RAM}% Description
+		{}% FR#
+		{PR-02}% PR#
+		{Zybo Z7-010 has 270KB of Block RAM} % Notes
+
+		\sr{Linux support for the Fysh toolchain}%
+		{}%
+		{}%
+		{May also support Windows and MacOS}
+
+		\sr{}%
+		{}%
+		{}%
+		{}
 	\end{tabularx}
 	\caption{System Requirements}
 \end{table}

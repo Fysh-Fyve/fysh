@@ -1,4 +1,5 @@
 @startuml
+left to right direction
 node "Dev Machine" {
   file "Fysh Source ><>" as fs
   component "Fysh Toolchain" as ft

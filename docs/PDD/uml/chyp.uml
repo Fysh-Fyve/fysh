@@ -18,14 +18,19 @@ component "Zynq FPGA" {
 }
 
 CTL -- ALU
-CTL -- GPIO
 CTL -- IR
 CTL -- PC
-CTL -- RAM
 CTL -- RF
 CTL -- RNG
+
+CTL -- RAM
 CTL -- ROM
+CTL -- GPIO
+
+IR -[dashed]- ALU
+PC -[dashed]- ALU
 PC -[dashed]- IR
 RF -[dashed]- ALU
+RNG -[dashed]- RF
 
 @enduml
