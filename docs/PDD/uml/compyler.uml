@@ -7,8 +7,8 @@ frame "Front end" {
 
 frame "Middle end" as ME {
   frame "LLVM/GCC Compiler Infrastructure" {
-    [Intermediate Representation] as IR #Yellow
-    [Optimization Passes] as OP #Yellow
+    [Intermediate Representation] as IR #Lightblue
+    [Optimization Passes] as OP #Lightblue
   }
 }
 
