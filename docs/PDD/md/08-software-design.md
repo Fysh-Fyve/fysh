@@ -17,7 +17,7 @@ From here we move on to the middle end of the compiler, which includes the
 **intermediate representation** and **optimization passes**, which are
 considered optional for our implementation. An intermediate representation is
 essentially a data structure representing source code, which may then be
-subjected to several optomization passes, some for analyzing, some for
+subjected to several optimization passes, some for analyzing, some for
 transforming, and other additional utility optimizations. Before moving on to
 the back end, we note once again that since the middle end is listed as
 optional, the compiler may move straight from semantic analysis to the back end.
