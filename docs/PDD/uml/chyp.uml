@@ -1,19 +1,31 @@
 @startuml
 component "Zynq FPGA" {
-  [Controller & ALU] as CLU
+  [Controller] as CTL
+  [ALU] as ALU
+  [Instruction Register] as IR
+  [Program Counter] as PC
+  [RNG Seeder] as RNG
   [Register File] as RF
 
   frame "Memory Map" {
-    [Block RAM] as RAM
     [GPIO Pins] as GPIO
     note bottom
       GPIO pins are mapped to specific addresses
     end note
+    [RAM] as RAM
+    [ROM] as ROM
   }
 }
 
-CLU -- RAM
-CLU -- GPIO
-CLU -- RF
+CTL -- ALU
+CTL -- GPIO
+CTL -- IR
+CTL -- PC
+CTL -- RAM
+CTL -- RF
+CTL -- RNG
+CTL -- ROM
+PC -[dashed]- IR
+RF -[dashed]- ALU
 
 @enduml

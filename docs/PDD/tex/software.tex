@@ -1,0 +1,31 @@
+\newcommand{\sw}[2]{%
+	\textbf{#1} & #2 \\%
+	\hline%
+}
+\begin{table}[H]
+	\begin{tabularx}{\textwidth}{| a | x |}
+		% Start table heading
+		\hline
+		% Changes the colour of the top row to tablebgdark.
+		% Colour is defined in custom.tex
+		\rowcolor{tablebgdark}
+		\bw{Component} & \bw{Description} \\
+		\hline
+		% Start table body
+		\sw{FyshLexer}{Transforms source code into a list of tokens.}
+		\sw{FyshParser}{Transforms a list of tokens into an AST.}
+		\sw{Semantic Analyzer}{%
+			Checks for correctness of the program by ensuring valid types, valid
+			operations, etc.}
+		\sw{Intermediate Representation}{%
+			Language-agnostic representation of the program that is subject to
+			multiple optimization passes.}
+		\sw{Optimization Passes}{%
+			Performs various optimizations on the IR such as combining instructions,
+			dead-code elimination, control flow analysis, etc.}
+		\sw{Code Generation}{Compiles the AST or IR to machine code.}
+	\end{tabularx}
+	\caption{Software Components}
+\end{table}
+
+% vim: ts=2 sts=2 sw=2
