@@ -375,6 +375,10 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
       // We already reeled in ~, do not go fysh.
       return Fysh{Species::TERMINATE};
     }
+  case '[':
+    return goFysh(Species::FYSH_TANK_OPEN);
+  case ']':
+    return goFysh(Species::FYSH_TANK_CLOSE);
   default:
     return unicode();
   }
