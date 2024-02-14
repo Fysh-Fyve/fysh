@@ -367,6 +367,14 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     // I think this has to change if not is also going to be ^
   case '^':
     return goFysh(Species::BITWISE_XOR);
+  case '~':
+    reel();
+    if (periscope() == '=') {
+      return goFysh(Species::NOT_EQUAL);
+    } else {
+      // We already reeled in ~, do not go fysh.
+      return Fysh{Species::TERMINATE};
+    }
   default:
     return unicode();
   }

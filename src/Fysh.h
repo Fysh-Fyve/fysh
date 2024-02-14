@@ -68,7 +68,7 @@ enum class Species {
   BITWISE_AND,     // &
   BITWISE_OR,      // |
   BITWISE_XOR,     // ^
-
+  TERMINATE,       // ~
   // TODO bit manipulation
 };
 
