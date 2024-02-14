@@ -8,7 +8,10 @@ TEST_CASE("operators") {
   std::string_view input{"♡ "
                          "<3 "
                          "💔 "
-                         "</3 "};
+                         "</3 "
+                         "& "
+                         "| "
+                         "^ "};
   // Assuming `input` is a std::string or std::string_view
   FyshLexer lexer{input.data()};
 
@@ -16,6 +19,11 @@ TEST_CASE("operators") {
   CHECK(lexer.nextFysh() == Species::HEART_MULTIPLY);
   CHECK(lexer.nextFysh() == Species::HEART_DIVIDE);
   CHECK(lexer.nextFysh() == Species::HEART_DIVIDE);
+
+  CHECK(lexer.nextFysh() == Species::BITWISE_AND);
+  CHECK(lexer.nextFysh() == Species::BITWISE_OR);
+  CHECK(lexer.nextFysh() == Species::BITWISE_XOR);
+
   CHECK(lexer.nextFysh() == Species::END);
 }
 
@@ -105,15 +113,4 @@ TEST_CASE("Swim Left") {
   CHECK(lexer.nextFysh() == "<!@#$>");
   CHECK(lexer.nextFysh() == Species::FYSH_CLOSE);
   CHECK(lexer.nextFysh() == Species::END);
-}
-
-TEST_CASE("Bitwise Operations") {
-  std::string_view input{"& | ^"};
-  // Assuming `input` is a std::string or std::string_view
-  FyshLexer lexer{input.data()};
-  CHECK(lexer.nextFysh() == Species::BITWISE_AND);
-  CHECK(lexer.nextFysh() == Species::BITWISE_OR);
-  CHECK(lexer.nextFysh() == Species::BITWISE_XOR);
-  CHECK(lexer.nextFysh() == Species::END);
-
 }
