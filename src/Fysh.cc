@@ -38,6 +38,8 @@ constexpr const char *debugType(const fysh::Species &species) {
     return "LITERAL";
   case Species::FYSH_IDENTIFIER:
     return "IDENT";
+  case Species::ASSIGN:
+    return "=";
   case Species::HEART_MULTIPLY:
     return "*";
   case Species::HEART_DIVIDE:
