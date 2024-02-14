@@ -210,7 +210,10 @@ fysh::Fysh fysh::FyshLexer::identifier(FyshDirection dir,
   if (increment) {
     return Fysh{Species::INCREMENT, identStart, identEnd};
   }
-  return Fysh{Species::FYSH_IDENTIFIER, identStart, identEnd};
+
+  Fysh fysh{Species::FYSH_IDENTIFIER, identStart, identEnd};
+  fysh.negate = dir == FyshDirection::LEFT;
+  return fysh;
 }
 
 fysh::Fysh fysh::FyshLexer::random() noexcept {
