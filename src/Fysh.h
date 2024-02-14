@@ -60,6 +60,7 @@ enum class Species {
   WTF_OPEN,        // WHAT THE FYSH (Throw error opening) ><!@#$>
   WTF_CLOSE,       // WHAT THE FYSH (Throw error closing) <!@#$><
   RANDOM,          // Random fysh ><###>
+  FYSH_LOOP,       // ><(((@>
   COMMENT,         // ><//> Comment
   OPENING_COMMENT, // ></*> Comment
   CLOSING_COMMENT, // Comment <*/><
