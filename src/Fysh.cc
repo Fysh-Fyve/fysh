@@ -112,6 +112,8 @@ std::ostream &fysh::operator<<(std::ostream &os, const fysh::Fysh &f) {
     os << ")";
     break;
   }
+  case Species::INCREMENT:
+  case Species::DECREMENT:
   case Species::FYSH_IDENTIFIER:
   case Species::INVALID: {
     os << debugType(f.getSpecies()) << "`" << f.getBody() << "`";

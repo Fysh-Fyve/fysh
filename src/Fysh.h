@@ -109,7 +109,8 @@ public:
 
   bool operator==(const char *other) const noexcept {
     return (species == Species::FYSH_IDENTIFIER ||
-            species == Species::INVALID) &&
+            species == Species::INVALID || species == Species::INCREMENT ||
+            species == Species::DECREMENT) &&
            body == other;
   }
 

@@ -68,7 +68,7 @@ private:
   Fysh swimRight() noexcept;
   Fysh random() noexcept;
   Fysh slashOrComment() noexcept;
-  Fysh identifier(FyshDirection dir) noexcept;
+  Fysh identifier(FyshDirection dir, bool increment = false) noexcept;
   Fysh cullDeformedFysh() noexcept;
 };
 

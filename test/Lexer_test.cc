@@ -122,3 +122,11 @@ TEST_CASE("identifiers") {
   CHECK(lexer.nextFysh() == "fysh");
   CHECK(lexer.nextFysh() == Species::END);
 }
+
+TEST_CASE("increment & decrement") {
+  std::string_view input{">><fysh> <fysh><< "};
+  FyshLexer lexer{input.data()};
+  CHECK(lexer.nextFysh() == "fysh");
+  CHECK(lexer.nextFysh() == "fysh");
+  CHECK(lexer.nextFysh() == Species::END);
+}
