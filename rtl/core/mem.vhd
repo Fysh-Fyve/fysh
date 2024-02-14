@@ -42,7 +42,7 @@ begin
         write(l, string'("writing value "));
         write(l, to_hstring(d_i));
         write(l, string'(" to address 0x"));
-        write(l, to_hstring(write_addr_i));
+        write(l, to_hstring(write_addr_i & "00"));
         writeline(output, l);
         RAM(to_integer(unsigned(write_addr_i))) <= d_i;
       end if;

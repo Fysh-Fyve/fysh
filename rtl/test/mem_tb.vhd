@@ -21,7 +21,6 @@ architecture test_bench of mem_tb is
     use std.textio.all;
     variable my_line : line;
   begin
-    wait for 10.6383 ns;
     write(my_line, to_hstring(read_addr));
     write(my_line, ht);
     write(my_line, to_hstring(d_out));
@@ -46,14 +45,26 @@ begin
     wait for 10.6383 ns;
   end process clock;
 
-  print_mem : process
+
+  woop : process
   begin
+    wait until rising_edge(clk);
     read_addr <= (others => '0');
-    print;
-    for i in 0 to 4 loop
-      read_addr <= std_ulogic_vector (signed(read_addr) + 4);
+    for i in 0 to 20 loop
+      wait until rising_edge(clk);
       print;
+      read_addr <= std_ulogic_vector (signed(read_addr) + 4);
+      wait until falling_edge(clk);
+    end loop;
+    write_en <= '1';
+    d_in <= (others => '1');
+    read_addr <= (others => '0');
+    wait until rising_edge(clk);
+    for i in 0 to 20 loop
+      wait until falling_edge(clk);
+      read_addr <= std_ulogic_vector (signed(read_addr) + 4);
+      wait until rising_edge(clk);
     end loop;
     stop;
-  end process print_mem;
+  end process woop;
 end test_bench;

@@ -19,7 +19,7 @@ done_o         : out std_logic
 | Instruction | rd[1:0] | sub_sra | addr | alu_a | alu_b | mem_write_en | rd_clk | pc_clk | ir_clk | pc_alu | pc_next |
 | ----------- | ------- | ------- | ---- | ----- | ----- | ------------ | ------ | ------ | ------ | ------ | ------- |
 | lui         | 01      | 0       | 1    | [1]   | 1     | 0            | dr     | dr     | dr     | 1      | 0       |
-| auipc       | 01      | 0       | 1    | 1     | 1     | 0            | dr     | dr     | dr     | 0      | 0       |
+| auipc       | 01      | 0       | 1    | 1     | 1     | 0            | dr     | dr     | dr     | 1      | 0       |
 | addi        | 01      | 0       | 1    | 0     | 1     | 0            | dr     | dr     | dr     | 1      | 0       |
 | sw          | XX      | 0       | 0    | 0     | 0     | 1            | no     | dr     | dr     | 1      | 0       |
 
