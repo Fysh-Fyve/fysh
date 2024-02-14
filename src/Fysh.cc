@@ -40,6 +40,8 @@ constexpr const char *debugType(const fysh::Species &species) {
     return "IDENT";
   case Species::ASSIGN:
     return "=";
+  case Species::FYSH_LOOP:
+    return "while";
   case Species::HEART_MULTIPLY:
     return "*";
   case Species::HEART_DIVIDE:

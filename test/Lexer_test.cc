@@ -164,3 +164,52 @@ TEST_CASE("Fysh Tank") {
   CHECK(lexer.nextFysh() == Species::FYSH_TANK_CLOSE);
   CHECK(lexer.nextFysh() == Species::END);
 }
+
+TEST_CASE("Fysh Factorial") {
+  std::string_view input{R"(
+><fysh>   = ><{({o> ~
+><result> = ><(({o> ~
+
+><(((@> [ ><fysh> o~ ><(({o> ]
+><>
+	><result> = ><result> ♡ ><fysh> ~
+	<fysh><< ~
+<><
+)"};
+  FyshLexer lexer{input.data()};
+
+  CHECK(lexer.nextFysh() == "fysh");
+  CHECK(lexer.nextFysh() == Species::ASSIGN);
+  CHECK(lexer.nextFysh() == 5);
+  CHECK(lexer.nextFysh() == Species::TERMINATE);
+
+  CHECK(lexer.nextFysh() == "result");
+  CHECK(lexer.nextFysh() == Species::ASSIGN);
+  CHECK(lexer.nextFysh() == 1);
+  CHECK(lexer.nextFysh() == Species::TERMINATE);
+
+  // Invalid for now
+  CHECK(lexer.nextFysh() == Species::FYSH_LOOP);
+
+  CHECK(lexer.nextFysh() == Species::FYSH_TANK_OPEN);
+  CHECK(lexer.nextFysh() == "fysh");
+  CHECK(lexer.nextFysh() == Species::TADPOLE_GT);
+  CHECK(lexer.nextFysh() == 1);
+  CHECK(lexer.nextFysh() == Species::FYSH_TANK_CLOSE);
+
+  CHECK(lexer.nextFysh() == Species::FYSH_OPEN);
+
+  CHECK(lexer.nextFysh() == "result");
+  CHECK(lexer.nextFysh() == Species::ASSIGN);
+  CHECK(lexer.nextFysh() == "result");
+  CHECK(lexer.nextFysh() == Species::HEART_MULTIPLY);
+  CHECK(lexer.nextFysh() == "fysh");
+  CHECK(lexer.nextFysh() == Species::TERMINATE);
+
+  CHECK(lexer.nextFysh() == "fysh");
+  CHECK(lexer.nextFysh() == Species::TERMINATE);
+
+  CHECK(lexer.nextFysh() == Species::FYSH_CLOSE);
+
+  CHECK(lexer.nextFysh() == Species::END);
+}

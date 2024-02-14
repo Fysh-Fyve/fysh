@@ -232,11 +232,23 @@ fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
   char c = reel();
   uint32_t value{c == '{' ||
                  c == '}'}; // stores the first scale as a binary number
+  int scaleCount = 1;
   while (isScale(periscope())) {
     c = reel();
     value = (value << 1) |
             (c == '{' || c == '}'); // shifts the bits to the left and stores
                                     // the next scale using bitwise OR
+    scaleCount++;
+  }
+  // Special loopy fysh
+  if (scaleCount == 3 && value == 0 && dir == FyshDirection::RIGHT &&
+      periscope() == '@') {
+    reel();
+    if (periscope() == '>') {
+      return goFysh(Species::FYSH_LOOP);
+    } else {
+      return cullDeformedFysh();
+    }
   }
 
   c = reel(); // stores the value after the last scale
