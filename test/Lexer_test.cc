@@ -12,7 +12,9 @@ TEST_CASE("operators") {
                          "& "
                          "| "
                          "^ "
-                         "~= "};
+                         "~= "
+                         "== "
+                         "= "};
   // Assuming `input` is a std::string or std::string_view
   FyshLexer lexer{input.data()};
 
@@ -26,6 +28,9 @@ TEST_CASE("operators") {
   CHECK(lexer.nextFysh() == Species::BITWISE_XOR);
 
   CHECK(lexer.nextFysh() == Species::NOT_EQUAL);
+  CHECK(lexer.nextFysh() == Species::EQUAL);
+
+  CHECK(lexer.nextFysh() == Species::ASSIGN);
 
   CHECK(lexer.nextFysh() == Species::END);
 }

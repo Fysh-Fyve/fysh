@@ -379,6 +379,14 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     return goFysh(Species::FYSH_TANK_OPEN);
   case ']':
     return goFysh(Species::FYSH_TANK_CLOSE);
+  case '=':
+    reel();
+    if (periscope() == '=') {
+      return goFysh(Species::EQUAL);
+    } else {
+      // We already reeled in =, do not go fysh.
+      return Fysh{Species::ASSIGN};
+    }
   default:
     return unicode();
   }

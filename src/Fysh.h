@@ -48,6 +48,7 @@ enum class Species {
   TADPOLE_GT,      // o~ (greater than '>' )
   TADPOLE_LTE,     // ~o≈ (less than equal to    '<=' )
   TADPOLE_GTE,     // o~≈ (greater than equal to '>=' )
+  ASSIGN,          // ≈
   EQUAL,           // ≈≈  (Equal to '==')
   NOT_EQUAL,       // ~≈  (Not equal to '!=')
   INCREMENT,       // >><fysh> (add 1 'fysh++')
