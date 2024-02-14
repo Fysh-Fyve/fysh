@@ -121,7 +121,7 @@ fysh::Fysh fysh::FyshLexer::unicode() noexcept {
 }
 
 fysh::Fysh fysh::FyshLexer::cullDeformedFysh() noexcept {
-  while (!isSpace(periscope())) {
+  while (!isSpace(periscope()) && periscope() != '\0') {
     reel();
   }
 
