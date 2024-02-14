@@ -20,22 +20,20 @@ using namespace fysh;
   } while (0)
 
 TEST_CASE("operators") {
-  std::string_view input{"♡ "
-                         "<3 "
-                         "💔 "
-                         "</3 "
-                         "& "
-                         "| "
-                         "^ "
-                         "~= "
-                         "== "
-                         "= "
-                         "o~ "
-                         "~o "
-                         "o~= "
-                         "~o= "};
-  // Assuming `input` is a std::string or std::string_view
-  FyshLexer lexer{input.data()};
+  FyshLexer lexer{"♡ "
+                  "<3 "
+                  "💔 "
+                  "</3 "
+                  "& "
+                  "| "
+                  "^ "
+                  "~= "
+                  "== "
+                  "= "
+                  "o~ "
+                  "~o "
+                  "o~= "
+                  "~o= "};
 
   T(Species::HEART_MULTIPLY);
   T(Species::HEART_MULTIPLY);
@@ -60,9 +58,7 @@ TEST_CASE("operators") {
 }
 
 TEST_CASE("positive fysh multiply") {
-  std::string_view input{"><{{({(o> <3 ><{{({(o>"};
-  // Assuming `input` is a std::string or std::string_view
-  FyshLexer lexer{input.data()};
+  FyshLexer lexer{"><{{({(o> <3 ><{{({(o>"};
 
   T(0b011010);
   T(Species::HEART_MULTIPLY);
@@ -71,9 +67,7 @@ TEST_CASE("positive fysh multiply") {
 }
 
 TEST_CASE("fysh open & wtf open") {
-  std::string_view input{"><> <3 ><{{({(o> ><!@#$> ><> ><!@#$>"};
-  // Assuming `input` is a std::string or std::string_view
-  FyshLexer lexer{input.data()};
+  FyshLexer lexer{"><> <3 ><{{({(o> ><!@#$> ><> ><!@#$>"};
 
   T(Species::FYSH_OPEN);
   T(Species::HEART_MULTIPLY);
@@ -85,9 +79,8 @@ TEST_CASE("fysh open & wtf open") {
 }
 
 TEST_CASE("random fysh") {
-  std::string_view input{"><##> ><###> ><####> <###>< "};
-  // Assuming `input` is a std::string or std::string_view
-  FyshLexer lexer{input.data()};
+  FyshLexer lexer{"><##> ><###> ><####> <###><"};
+
   INVALID("><##>");
   T(Species::RANDOM);
   INVALID("><####>");
@@ -96,9 +89,8 @@ TEST_CASE("random fysh") {
 }
 
 TEST_CASE("negative fysh") {
-  std::string_view input{"><{{({(o> <3 <o})}>< <o})}><"};
-  // Assuming `input` is a std::string or std::string_view
-  FyshLexer lexer{input.data()};
+  FyshLexer lexer{"><{{({(o> <3 <o})}>< <o})}><"};
+
   T(0b011010);
   T(Species::HEART_MULTIPLY);
   T(-0b0101);
@@ -107,9 +99,7 @@ TEST_CASE("negative fysh") {
 }
 
 TEST_CASE("weird fysh") {
-  std::string_view input{"><{{({(> ><{)()}{)()}> <o{}{()}>< <{}{()}>< ><{}o>"};
-  // Assuming `input` is a std::string or std::string_view
-  FyshLexer lexer{input.data()};
+  FyshLexer lexer{"><{{({(> ><{)()}{)()}> <o{}{()}>< <{}{()}>< ><{}o>"};
 
   T(0b011010);
   T(0b01000110001);
@@ -120,10 +110,9 @@ TEST_CASE("weird fysh") {
 }
 
 TEST_CASE("Bad fysh") {
-  std::string_view input{"><{{({(o><DQHUD ><{{({(o>< ><{{((>< ><{{{< ><o{{}}>< "
-                         "><{{({(o <o{{}}o ><>"};
-  // Assuming `input` is a std::string or std::string_view
-  FyshLexer lexer{input.data()};
+  FyshLexer lexer{"><{{({(o><DQHUD ><{{({(o>< ><{{((>< ><{{{< ><o{{}}>< "
+                  "><{{({(o <o{{}}o ><>"};
+
   INVALID("><{{({(o><DQHUD");
   INVALID("><{{({(o><");
   INVALID("><{{((><");
@@ -136,9 +125,8 @@ TEST_CASE("Bad fysh") {
 }
 
 TEST_CASE("Swim Left") {
-  std::string_view input{"<!@#$>< <>< <!@%$>< <!@#$> <>< "};
-  // Assuming `input` is a std::string or std::string_view
-  FyshLexer lexer{input.data()};
+  FyshLexer lexer{"<!@#$>< <>< <!@%$>< <!@#$> <><"};
+
   T(Species::WTF_CLOSE);
   T(Species::FYSH_CLOSE);
   INVALID("<!@%$><");
@@ -148,16 +136,14 @@ TEST_CASE("Swim Left") {
 }
 
 TEST_CASE("identifiers") {
-  std::string_view input{"><pos> <neg>< "};
-  FyshLexer lexer{input.data()};
-  auto fysh{lexer.nextFysh()};
+  FyshLexer lexer{"><pos> <neg><"};
 
+  auto fysh{lexer.nextFysh()};
   CHECK(fysh == "pos");
   CHECK(fysh == Species::FYSH_IDENTIFIER);
   CHECK(fysh.negate == false);
 
   fysh = lexer.nextFysh();
-
   CHECK(fysh == "neg");
   CHECK(fysh == Species::FYSH_IDENTIFIER);
   CHECK(fysh.negate == true);
@@ -166,8 +152,7 @@ TEST_CASE("identifiers") {
 }
 
 TEST_CASE("increment & decrement") {
-  std::string_view input{">><inc> <dec><< "};
-  FyshLexer lexer{input.data()};
+  FyshLexer lexer{">><inc> <dec><<"};
 
   auto fysh{lexer.nextFysh()};
   CHECK(fysh == "inc");
@@ -181,8 +166,8 @@ TEST_CASE("increment & decrement") {
 }
 
 TEST_CASE("Terminate") {
-  std::string_view input{"~ ~~ "};
-  FyshLexer lexer{input.data()};
+  FyshLexer lexer{"~ ~~"};
+
   T(Species::TERMINATE);
   T(Species::TERMINATE);
   T(Species::TERMINATE);
@@ -190,15 +175,15 @@ TEST_CASE("Terminate") {
 }
 
 TEST_CASE("Fysh Tank") {
-  std::string_view input{"[] "};
-  FyshLexer lexer{input.data()};
+  FyshLexer lexer{"[]"};
+
   T(Species::FYSH_TANK_OPEN);
   T(Species::FYSH_TANK_CLOSE);
   T(Species::END);
 }
 
 TEST_CASE("Fysh Factorial") {
-  std::string_view input{R"(
+  FyshLexer lexer{R"(
 ><fysh>   = ><{({o> ~
 ><result> = ><(({o> ~
 
@@ -208,7 +193,6 @@ TEST_CASE("Fysh Factorial") {
 	<fysh><< ~
 <><
 )"};
-  FyshLexer lexer{input.data()};
 
   IDENT("fysh");
   T(Species::ASSIGN);
