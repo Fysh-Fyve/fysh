@@ -371,6 +371,14 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     reel();
     if (periscope() == '=') {
       return goFysh(Species::NOT_EQUAL);
+    } else if (periscope() == 'o') {
+      reel();
+      if (periscope() == '=') {
+        return goFysh(Species::TADPOLE_LTE);
+      } else {
+        // We already reeled in o, do not go fysh.
+        return Fysh{Species::TADPOLE_LT};
+      }
     } else {
       // We already reeled in ~, do not go fysh.
       return Fysh{Species::TERMINATE};
@@ -386,6 +394,19 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     } else {
       // We already reeled in =, do not go fysh.
       return Fysh{Species::ASSIGN};
+    }
+  case 'o':
+    reel();
+    if (periscope() == '~') {
+      reel();
+      if (periscope() == '=') {
+        return goFysh(Species::TADPOLE_GTE);
+      } else {
+        // We already reeled in ~, do not go fysh.
+        return Fysh{Species::TADPOLE_GT};
+      }
+    } else {
+      return cullDeformedFysh();
     }
   default:
     return unicode();

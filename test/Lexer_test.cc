@@ -14,7 +14,11 @@ TEST_CASE("operators") {
                          "^ "
                          "~= "
                          "== "
-                         "= "};
+                         "= "
+                         "o~ "
+                         "~o "
+                         "o~= "
+                         "~o= "};
   // Assuming `input` is a std::string or std::string_view
   FyshLexer lexer{input.data()};
 
@@ -31,6 +35,11 @@ TEST_CASE("operators") {
   CHECK(lexer.nextFysh() == Species::EQUAL);
 
   CHECK(lexer.nextFysh() == Species::ASSIGN);
+
+  CHECK(lexer.nextFysh() == Species::TADPOLE_GT);
+  CHECK(lexer.nextFysh() == Species::TADPOLE_LT);
+  CHECK(lexer.nextFysh() == Species::TADPOLE_GTE);
+  CHECK(lexer.nextFysh() == Species::TADPOLE_LTE);
 
   CHECK(lexer.nextFysh() == Species::END);
 }
