@@ -181,7 +181,11 @@ fysh::Fysh fysh::FyshLexer::slashOrComment() noexcept {
   return goFysh(Species::INVALID);
 }
 
-fysh::Fysh fysh::FyshLexer::identifier(FyshDirection dir) noexcept {
+fysh::Fysh fysh::FyshLexer::identifier(FyshDirection dir,
+                                       bool increment) noexcept {
+  if (increment) {
+    reel();
+  }
   const char *identStart{current};
   reel();
   while (std::isalnum(periscope())) {
@@ -197,7 +201,14 @@ fysh::Fysh fysh::FyshLexer::identifier(FyshDirection dir) noexcept {
       return cullDeformedFysh();
     } else {
       reel();
+      if (periscope() == '<') {
+        reel();
+        return Fysh{Species::DECREMENT, identStart, identEnd};
+      }
     }
+  }
+  if (increment) {
+    return Fysh{Species::INCREMENT, identStart, identEnd};
   }
   return Fysh{Species::FYSH_IDENTIFIER, identStart, identEnd};
 }
@@ -277,6 +288,9 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
     switch (periscope()) {
     case ('<'):
       return swimRight(); // a fysh swimming right
+    case ('>'):
+      reel();
+      return identifier(FyshDirection::RIGHT, true);
     default:
       return cullDeformedFysh();
     }
