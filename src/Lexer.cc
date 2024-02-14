@@ -19,6 +19,7 @@
  */
 
 #include "Lexer.h"
+#include <cctype>
 
 #ifdef FYSH_DEBUG
 #include <iostream>
@@ -180,9 +181,25 @@ fysh::Fysh fysh::FyshLexer::slashOrComment() noexcept {
   return goFysh(Species::INVALID);
 }
 
-fysh::Fysh fysh::FyshLexer::identifier() noexcept {
-  // TODO: Implement
-  return goFysh(Species::INVALID);
+fysh::Fysh fysh::FyshLexer::identifier(FyshDirection dir) noexcept {
+  const char *identStart{current};
+  reel();
+  while (std::isalnum(periscope())) {
+    reel();
+  }
+  if (periscope() != '>') {
+    return cullDeformedFysh();
+  }
+  const char *identEnd{current};
+  reel();
+  if (dir == FyshDirection::LEFT) {
+    if (periscope() != '<') {
+      return cullDeformedFysh();
+    } else {
+      reel();
+    }
+  }
+  return Fysh{Species::FYSH_IDENTIFIER, identStart, identEnd};
 }
 
 fysh::Fysh fysh::FyshLexer::random() noexcept {
@@ -281,8 +298,13 @@ fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
     return fyshClose(); // close curly bracket
   case ('!'):
     return closeWTF(); // error handling close tag
+  default:
+    if (std::isalpha(periscope())) {
+      return identifier(FyshDirection::LEFT);
+    } else {
+      return cullDeformedFysh();
+    }
   }
-  return cullDeformedFysh();
 }
 
 // all fysh that start with >< are swimming right e.g. ><>
@@ -302,8 +324,13 @@ fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
     return slashOrComment(); // comment
   case ('#'):
     return random(); // random number
+  default:
+    if (std::isalpha(periscope()) && periscope() != 'o') {
+      return identifier(FyshDirection::RIGHT);
+    } else {
+      return cullDeformedFysh();
+    }
   }
-  return cullDeformedFysh();
 }
 
 // Where the magic happens

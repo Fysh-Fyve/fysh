@@ -114,3 +114,11 @@ TEST_CASE("Swim Left") {
   CHECK(lexer.nextFysh() == Species::FYSH_CLOSE);
   CHECK(lexer.nextFysh() == Species::END);
 }
+
+TEST_CASE("identifiers") {
+  std::string_view input{"><fysh> <fysh>< "};
+  FyshLexer lexer{input.data()};
+  CHECK(lexer.nextFysh() == "fysh");
+  CHECK(lexer.nextFysh() == "fysh");
+  CHECK(lexer.nextFysh() == Species::END);
+}
