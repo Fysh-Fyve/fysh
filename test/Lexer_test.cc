@@ -4,6 +4,21 @@
 
 using namespace fysh;
 
+#define T(x) CHECK(lexer.nextFysh() == (x));
+#define IDENT(x)                                                               \
+  do {                                                                         \
+    auto fysh{lexer.nextFysh()};                                               \
+    CHECK(fysh == (x));                                                        \
+    CHECK(fysh == Species::FYSH_IDENTIFIER);                                   \
+  } while (0)
+
+#define INVALID(x)                                                             \
+  do {                                                                         \
+    auto fysh{lexer.nextFysh()};                                               \
+    CHECK(fysh == (x));                                                        \
+    CHECK(fysh == Species::INVALID);                                           \
+  } while (0)
+
 TEST_CASE("operators") {
   std::string_view input{"♡ "
                          "<3 "
@@ -22,26 +37,26 @@ TEST_CASE("operators") {
   // Assuming `input` is a std::string or std::string_view
   FyshLexer lexer{input.data()};
 
-  CHECK(lexer.nextFysh() == Species::HEART_MULTIPLY);
-  CHECK(lexer.nextFysh() == Species::HEART_MULTIPLY);
-  CHECK(lexer.nextFysh() == Species::HEART_DIVIDE);
-  CHECK(lexer.nextFysh() == Species::HEART_DIVIDE);
+  T(Species::HEART_MULTIPLY);
+  T(Species::HEART_MULTIPLY);
+  T(Species::HEART_DIVIDE);
+  T(Species::HEART_DIVIDE);
 
-  CHECK(lexer.nextFysh() == Species::BITWISE_AND);
-  CHECK(lexer.nextFysh() == Species::BITWISE_OR);
-  CHECK(lexer.nextFysh() == Species::BITWISE_XOR);
+  T(Species::BITWISE_AND);
+  T(Species::BITWISE_OR);
+  T(Species::BITWISE_XOR);
 
-  CHECK(lexer.nextFysh() == Species::NOT_EQUAL);
-  CHECK(lexer.nextFysh() == Species::EQUAL);
+  T(Species::NOT_EQUAL);
+  T(Species::EQUAL);
 
-  CHECK(lexer.nextFysh() == Species::ASSIGN);
+  T(Species::ASSIGN);
 
-  CHECK(lexer.nextFysh() == Species::TADPOLE_GT);
-  CHECK(lexer.nextFysh() == Species::TADPOLE_LT);
-  CHECK(lexer.nextFysh() == Species::TADPOLE_GTE);
-  CHECK(lexer.nextFysh() == Species::TADPOLE_LTE);
+  T(Species::TADPOLE_GT);
+  T(Species::TADPOLE_LT);
+  T(Species::TADPOLE_GTE);
+  T(Species::TADPOLE_LTE);
 
-  CHECK(lexer.nextFysh() == Species::END);
+  T(Species::END);
 }
 
 TEST_CASE("positive fysh multiply") {
@@ -49,10 +64,10 @@ TEST_CASE("positive fysh multiply") {
   // Assuming `input` is a std::string or std::string_view
   FyshLexer lexer{input.data()};
 
-  CHECK(lexer.nextFysh() == 0b011010);
-  CHECK(lexer.nextFysh() == Species::HEART_MULTIPLY);
-  CHECK(lexer.nextFysh() == 0b011010);
-  CHECK(lexer.nextFysh() == Species::END);
+  T(0b011010);
+  T(Species::HEART_MULTIPLY);
+  T(0b011010);
+  T(Species::END);
 }
 
 TEST_CASE("fysh open & wtf open") {
@@ -60,35 +75,35 @@ TEST_CASE("fysh open & wtf open") {
   // Assuming `input` is a std::string or std::string_view
   FyshLexer lexer{input.data()};
 
-  CHECK(lexer.nextFysh() == Species::FYSH_OPEN);
-  CHECK(lexer.nextFysh() == Species::HEART_MULTIPLY);
-  CHECK(lexer.nextFysh() == 0b011010);
-  CHECK(lexer.nextFysh() == Species::WTF_OPEN);
-  CHECK(lexer.nextFysh() == Species::FYSH_OPEN);
-  CHECK(lexer.nextFysh() == Species::WTF_OPEN);
-  CHECK(lexer.nextFysh() == Species::END);
+  T(Species::FYSH_OPEN);
+  T(Species::HEART_MULTIPLY);
+  T(0b011010);
+  T(Species::WTF_OPEN);
+  T(Species::FYSH_OPEN);
+  T(Species::WTF_OPEN);
+  T(Species::END);
 }
 
 TEST_CASE("random fysh") {
   std::string_view input{"><##> ><###> ><####> <###>< "};
   // Assuming `input` is a std::string or std::string_view
   FyshLexer lexer{input.data()};
-  CHECK(lexer.nextFysh() == "><##>");
-  CHECK(lexer.nextFysh() == Species::RANDOM);
-  CHECK(lexer.nextFysh() == "><####>");
-  CHECK(lexer.nextFysh() == "<###><");
-  CHECK(lexer.nextFysh() == Species::END);
+  INVALID("><##>");
+  T(Species::RANDOM);
+  INVALID("><####>");
+  INVALID("<###><");
+  T(Species::END);
 }
 
 TEST_CASE("negative fysh") {
   std::string_view input{"><{{({(o> <3 <o})}>< <o})}><"};
   // Assuming `input` is a std::string or std::string_view
   FyshLexer lexer{input.data()};
-  CHECK(lexer.nextFysh() == 0b011010);
-  CHECK(lexer.nextFysh() == Species::HEART_MULTIPLY);
-  CHECK(lexer.nextFysh() == -0b0101);
-  CHECK(lexer.nextFysh() == -0b0101);
-  CHECK(lexer.nextFysh() == Species::END);
+  T(0b011010);
+  T(Species::HEART_MULTIPLY);
+  T(-0b0101);
+  T(-0b0101);
+  T(Species::END);
 }
 
 TEST_CASE("weird fysh") {
@@ -96,12 +111,12 @@ TEST_CASE("weird fysh") {
   // Assuming `input` is a std::string or std::string_view
   FyshLexer lexer{input.data()};
 
-  CHECK(lexer.nextFysh() == 0b011010);
-  CHECK(lexer.nextFysh() == 0b01000110001);
-  CHECK(lexer.nextFysh() == -0b0111001);
-  CHECK(lexer.nextFysh() == -0b0111001);
-  CHECK(lexer.nextFysh() == 0b011);
-  CHECK(lexer.nextFysh() == Species::END);
+  T(0b011010);
+  T(0b01000110001);
+  T(-0b0111001);
+  T(-0b0111001);
+  T(0b011);
+  T(Species::END);
 }
 
 TEST_CASE("Bad fysh") {
@@ -109,60 +124,77 @@ TEST_CASE("Bad fysh") {
                          "><{{({(o <o{{}}o ><>"};
   // Assuming `input` is a std::string or std::string_view
   FyshLexer lexer{input.data()};
-  CHECK(lexer.nextFysh() == "><{{({(o><DQHUD");
-  CHECK(lexer.nextFysh() == "><{{({(o><");
-  CHECK(lexer.nextFysh() == "><{{((><");
-  CHECK(lexer.nextFysh() == "><{{{<");
-  CHECK(lexer.nextFysh() == "><o{{}}><");
-  CHECK(lexer.nextFysh() == "><{{({(o");
-  CHECK(lexer.nextFysh() == "<o{{}}o");
-  CHECK(lexer.nextFysh() == Species::FYSH_OPEN);
-  CHECK(lexer.nextFysh() == Species::END);
+  INVALID("><{{({(o><DQHUD");
+  INVALID("><{{({(o><");
+  INVALID("><{{((><");
+  INVALID("><{{{<");
+  INVALID("><o{{}}><");
+  INVALID("><{{({(o");
+  INVALID("<o{{}}o");
+  T(Species::FYSH_OPEN);
+  T(Species::END);
 }
 
 TEST_CASE("Swim Left") {
   std::string_view input{"<!@#$>< <>< <!@%$>< <!@#$> <>< "};
   // Assuming `input` is a std::string or std::string_view
   FyshLexer lexer{input.data()};
-  CHECK(lexer.nextFysh() == Species::WTF_CLOSE);
-  CHECK(lexer.nextFysh() == Species::FYSH_CLOSE);
-  CHECK(lexer.nextFysh() == "<!@%$><");
-  CHECK(lexer.nextFysh() == "<!@#$>");
-  CHECK(lexer.nextFysh() == Species::FYSH_CLOSE);
-  CHECK(lexer.nextFysh() == Species::END);
+  T(Species::WTF_CLOSE);
+  T(Species::FYSH_CLOSE);
+  INVALID("<!@%$><");
+  INVALID("<!@#$>");
+  T(Species::FYSH_CLOSE);
+  T(Species::END);
 }
 
 TEST_CASE("identifiers") {
-  std::string_view input{"><fysh> <fysh>< "};
+  std::string_view input{"><pos> <neg>< "};
   FyshLexer lexer{input.data()};
-  CHECK(lexer.nextFysh() == "fysh");
-  CHECK(lexer.nextFysh() == "fysh");
-  CHECK(lexer.nextFysh() == Species::END);
+  auto fysh{lexer.nextFysh()};
+
+  CHECK(fysh == "pos");
+  CHECK(fysh == Species::FYSH_IDENTIFIER);
+  CHECK(fysh.negate == false);
+
+  fysh = lexer.nextFysh();
+
+  CHECK(fysh == "neg");
+  CHECK(fysh == Species::FYSH_IDENTIFIER);
+  CHECK(fysh.negate == true);
+
+  T(Species::END);
 }
 
 TEST_CASE("increment & decrement") {
-  std::string_view input{">><fysh> <fysh><< "};
+  std::string_view input{">><inc> <dec><< "};
   FyshLexer lexer{input.data()};
-  CHECK(lexer.nextFysh() == "fysh");
-  CHECK(lexer.nextFysh() == "fysh");
-  CHECK(lexer.nextFysh() == Species::END);
+
+  auto fysh{lexer.nextFysh()};
+  CHECK(fysh == "inc");
+  CHECK(fysh == Species::INCREMENT);
+
+  fysh = lexer.nextFysh();
+  CHECK(fysh == "dec");
+  CHECK(fysh == Species::DECREMENT);
+
+  T(Species::END);
 }
 
 TEST_CASE("Terminate") {
   std::string_view input{"~ ~~ "};
   FyshLexer lexer{input.data()};
-  CHECK(lexer.nextFysh() == Species::TERMINATE);
-  CHECK(lexer.nextFysh() == Species::TERMINATE);
-  CHECK(lexer.nextFysh() == Species::TERMINATE);
-  CHECK(lexer.nextFysh() == Species::END);
+  T(Species::TERMINATE);
+  T(Species::TERMINATE);
+  T(Species::TERMINATE);
+  T(Species::END);
 }
 
 TEST_CASE("Fysh Tank") {
   std::string_view input{"[] "};
   FyshLexer lexer{input.data()};
-  CHECK(lexer.nextFysh() == Species::FYSH_TANK_OPEN);
-  CHECK(lexer.nextFysh() == Species::FYSH_TANK_CLOSE);
-  CHECK(lexer.nextFysh() == Species::END);
+  T(Species::FYSH_TANK_OPEN);
+  T(Species::FYSH_TANK_CLOSE);
+  T(Species::END);
 }
 
 TEST_CASE("Fysh Factorial") {
@@ -178,38 +210,39 @@ TEST_CASE("Fysh Factorial") {
 )"};
   FyshLexer lexer{input.data()};
 
-  CHECK(lexer.nextFysh() == "fysh");
-  CHECK(lexer.nextFysh() == Species::ASSIGN);
-  CHECK(lexer.nextFysh() == 5);
-  CHECK(lexer.nextFysh() == Species::TERMINATE);
+  IDENT("fysh");
+  T(Species::ASSIGN);
+  T(5);
+  T(Species::TERMINATE);
 
-  CHECK(lexer.nextFysh() == "result");
-  CHECK(lexer.nextFysh() == Species::ASSIGN);
-  CHECK(lexer.nextFysh() == 1);
-  CHECK(lexer.nextFysh() == Species::TERMINATE);
+  IDENT("result");
+  T(Species::ASSIGN);
+  T(1);
+  T(Species::TERMINATE);
 
-  // Invalid for now
-  CHECK(lexer.nextFysh() == Species::FYSH_LOOP);
+  T(Species::FYSH_LOOP);
 
-  CHECK(lexer.nextFysh() == Species::FYSH_TANK_OPEN);
-  CHECK(lexer.nextFysh() == "fysh");
-  CHECK(lexer.nextFysh() == Species::TADPOLE_GT);
-  CHECK(lexer.nextFysh() == 1);
-  CHECK(lexer.nextFysh() == Species::FYSH_TANK_CLOSE);
+  T(Species::FYSH_TANK_OPEN);
+  IDENT("fysh");
+  T(Species::TADPOLE_GT);
+  T(1);
+  T(Species::FYSH_TANK_CLOSE);
 
-  CHECK(lexer.nextFysh() == Species::FYSH_OPEN);
+  T(Species::FYSH_OPEN);
 
-  CHECK(lexer.nextFysh() == "result");
-  CHECK(lexer.nextFysh() == Species::ASSIGN);
-  CHECK(lexer.nextFysh() == "result");
-  CHECK(lexer.nextFysh() == Species::HEART_MULTIPLY);
-  CHECK(lexer.nextFysh() == "fysh");
-  CHECK(lexer.nextFysh() == Species::TERMINATE);
+  IDENT("result");
+  T(Species::ASSIGN);
+  IDENT("result");
+  T(Species::HEART_MULTIPLY);
+  IDENT("fysh");
+  T(Species::TERMINATE);
 
-  CHECK(lexer.nextFysh() == "fysh");
-  CHECK(lexer.nextFysh() == Species::TERMINATE);
+  auto fysh{lexer.nextFysh()};
+  CHECK(fysh == "fysh");
+  CHECK(fysh == Species::DECREMENT);
+  T(Species::TERMINATE);
 
-  CHECK(lexer.nextFysh() == Species::FYSH_CLOSE);
+  T(Species::FYSH_CLOSE);
 
-  CHECK(lexer.nextFysh() == Species::END);
+  T(Species::END);
 }
