@@ -135,10 +135,18 @@ TEST_CASE("increment & decrement") {
 }
 
 TEST_CASE("Terminate") {
-  std::string_view input{"~ ~~"};
+  std::string_view input{"~ ~~ "};
   FyshLexer lexer{input.data()};
   CHECK(lexer.nextFysh() == Species::TERMINATE);
   CHECK(lexer.nextFysh() == Species::TERMINATE);
   CHECK(lexer.nextFysh() == Species::TERMINATE);
+  CHECK(lexer.nextFysh() == Species::END);
+}
+
+TEST_CASE("Fysh Tank") {
+  std::string_view input{"[] "};
+  FyshLexer lexer{input.data()};
+  CHECK(lexer.nextFysh() == Species::FYSH_TANK_OPEN);
+  CHECK(lexer.nextFysh() == Species::FYSH_TANK_CLOSE);
   CHECK(lexer.nextFysh() == Species::END);
 }
