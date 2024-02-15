@@ -1,0 +1,23 @@
+\newcommand{\ch}[2]{%
+	\textbf{#1} & #2 \\%
+	\hline%
+}
+\begin{table}[H]
+	\begin{tabularx}{\textwidth}{| a | x |}
+		% Start table heading
+		\hline
+		% Changes the colour of the top row to tablebgdark.
+		% Colour is defined in custom.tex
+		\rowcolor{tablebgdark}
+		\bw{Component} & \bw{Purpose} \\
+		\hline
+		% Start table body
+		\ch{}{}
+		\ch{Hardware RNG}{}
+		\ch{GPIO}{}
+	\end{tabularx}
+	\label{Tab:chyp}
+	\caption{Fysh-Fyve Minimum Design}
+\end{table}
+
+% vim: ts=2 sts=2 sw=2
