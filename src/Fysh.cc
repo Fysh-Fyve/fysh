@@ -21,7 +21,9 @@
 #include <cassert>
 
 fysh::Species fysh::Fysh::getSpecies() const noexcept { return species; }
-std::optional<uint32_t> fysh::Fysh::getValue() const noexcept { return value; }
+std::optional<std::uint32_t> fysh::Fysh::getValue() const noexcept {
+  return value;
+}
 
 bool fysh::Fysh::isOneOf(fysh::Species species1,
                          fysh::Species species2) const noexcept {

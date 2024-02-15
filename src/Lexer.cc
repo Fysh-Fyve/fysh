@@ -233,8 +233,8 @@ fysh::Fysh fysh::FyshLexer::random() noexcept {
 fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
   // gets all the scales and converts them to a binary number
   char c = reel();
-  uint32_t value{c == '{' ||
-                 c == '}'}; // stores the first scale as a binary number
+  std::uint32_t value{c == '{' ||
+                      c == '}'}; // stores the first scale as a binary number
   int scaleCount = 1;
   while (isScale(periscope())) {
     c = reel();
