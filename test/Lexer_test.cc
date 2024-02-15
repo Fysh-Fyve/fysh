@@ -33,7 +33,9 @@ TEST_CASE("operators") {
                   "o~ "
                   "~o "
                   "o~= "
-                  "~o= "};
+                  "~o= "
+                  ">> "
+                  "<< "};
 
   T(Species::HEART_MULTIPLY);
   T(Species::HEART_MULTIPLY);
@@ -53,6 +55,9 @@ TEST_CASE("operators") {
   T(Species::TADPOLE_LT);
   T(Species::TADPOLE_GTE);
   T(Species::TADPOLE_LTE);
+
+  T(Species::SHIFT_RIGHT);
+  T(Species::SHIFT_LEFT);
 
   T(Species::END);
 }

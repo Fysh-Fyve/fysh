@@ -69,9 +69,10 @@ enum class Species {
   END,             // End of the input
   BITWISE_AND,     // &
   BITWISE_OR,      // |
-  CARET,     // ^
+  CARET,           // ^
   TERMINATE,       // ~
-  // TODO bit manipulation
+  SHIFT_LEFT,      // <<
+  SHIFT_RIGHT,     // >>
 };
 
 class Fysh {
