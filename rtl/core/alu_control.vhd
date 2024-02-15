@@ -70,10 +70,12 @@ begin
       write(l, rd_clk);
       write(l, string'(" pc: "));
       write(l, to_hstring(pc));
-      write(l, string'(" instruction_i: "));
+      write(l, string'(" ins: "));
       write(l, to_hstring(instruction_i));
       write(l, string'(" func3: "));
-      write(l, instruction_i(14 downto 12));
+      write(l, op_bits);
+      write(l, string'(" opcode: "));
+      write(l, instruction_i(6 downto 2));
       write(l, string'(" alu_a_op: "));
       write(l, to_hstring(alu_a_op));
       write(l, string'(" alu_b_op: "));
@@ -89,8 +91,8 @@ begin
     imm_val_o     => imm_ex);
 
   -- Hacky way to make rs1_val hardwire to 0
-  with instruction_i(6 downto 0) select rs1_or_zero <=
-    (others => '0') when "0110111",
+  with instruction_i(6 downto 2) select rs1_or_zero <=
+    (others => '0') when "01101",
     reg_val_1_i     when others;
 
   program_counter_inst : entity work.program_counter(rtl) port map (

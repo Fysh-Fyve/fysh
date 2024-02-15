@@ -8,7 +8,6 @@ use work.fysh_fyve.all;
 
 --! The Big Brain of the CPU.\n
 
---! TODO: Implement
 entity control_fsm is
   port (
     clk_i     : in std_ulogic;          --! Clock Signal.
@@ -38,24 +37,74 @@ end control_fsm;
 
 architecture rtl of control_fsm is
   type state_t is (init, decode, drive, done);
+  type write_dest_t is (mem, reg, none);
+
   signal pc_clk       : std_ulogic := '0';
   signal ir_clk       : std_ulogic := '0';
   signal rd_clk       : std_ulogic := '0';
   signal mem_write_en : std_ulogic := '0';
 
-  signal write_mem : std_ulogic := '0';
-  signal write_reg : std_ulogic := '0';
+  signal write_dest : write_dest_t := none;
+  signal state      : state_t      := init;
 
-  signal state : state_t := init;
+  -- 1 alu_a
+  -- 1 alu_b
+  -- 1 addr_sel
+  -- 1 pc_alu
+  -- 1 pc_next
+  -- 2 rd_sel
+  signal mux_sels : std_ulogic_vector(6 downto 0);
+
+  procedure write (l : inout std.textio.line; wd : in write_dest_t) is
+    use std.textio.all;
+  begin
+    case wd is
+      when mem  => write(l, string'("mem"));
+      when reg  => write(l, string'("reg"));
+      when none => write(l, string'("none"));
+    end case;
+  end write;
 begin
-  alu_a_sel_o <= opcode_i(2) and not opcode_i(5);
-  alu_b_sel_o <= opcode_i(2) or not opcode_i(5);
-  addr_sel_o  <= '1';
+  with opcode_i(6 downto 2) select write_dest <=
+    reg  when OPCODE_LUI | OPCODE_AUIPC | OPCODE_REG_IM | OPCODE_REG_REG,
+    mem  when OPCODE_STORE,
+    none when others;
 
-  with opcode_i(2) select op_bits_o <=
-    OP_OR                 when '1',
-    op_bits_i(2 downto 0) when others;
-  sub_sra_o <= sub_sra_i and not opcode_i(2);
+  with opcode_i(6 downto 2) select sub_sra_o <=
+    '0'       when OPCODE_AUIPC,        -- 0 for sure
+    sub_sra_i when OPCODE_REG_IM | OPCODE_REG_REG,
+    '0'       when others;
+
+  with opcode_i(6 downto 2) select op_bits_o <=
+    op_bits_i  when OPCODE_REG_IM | OPCODE_REG_REG,
+    OP_OR      when OPCODE_LUI,
+    OP_ADD_SUB when OPCODE_AUIPC,
+    "000"      when others;
+
+  with opcode_i(6 downto 2) select mux_sels <=
+    "011" & "10" & "01" when OPCODE_LUI,
+    "111" & "10" & "01" when OPCODE_AUIPC,
+    "011" & "10" & "01" when OPCODE_REG_IM,
+    "001" & "10" & "01" when OPCODE_REG_REG,
+
+    -- Because I'm sleeping on these
+    "ZZZ" & "ZZ" & "ZZ" when OPCODE_FENCE,
+    "ZZZ" & "ZZ" & "ZZ" when OPCODE_ATOMIC,
+
+    -- TODO: Implement
+    "000" & "00" & "00" when OPCODE_LOAD,
+    "000" & "00" & "ZZ" when OPCODE_STORE,
+    "000" & "00" & "00" when OPCODE_JAL,
+    "000" & "00" & "00" when OPCODE_JALR,
+    "000" & "00" & "00" when OPCODE_BRANCH,
+    (others => 'X')     when others;
+
+  alu_a_sel_o   <= mux_sels(6);
+  alu_b_sel_o   <= mux_sels(5);
+  addr_sel_o    <= mux_sels(4);
+  pc_alu_sel_o  <= mux_sels(3);
+  pc_next_sel_o <= mux_sels(2);
+  rd_sel_o      <= mux_sels(1 downto 0);
 
   drive_clock : process(clk_i, opcode_i, pc_clk, ir_clk, mem_write_en)
     use std.textio.all;
@@ -65,38 +114,23 @@ begin
       state  <= init;
       done_o <= '0';
     elsif rising_edge(clk_i) then
-      --! TODO: Decode kinda like 410
       case state is
         when init =>
           state <= decode;
         when decode =>
-          case opcode_i(2) is
-            when '1' =>                 -- LUI/AUIPC (for now!)
-              -- TODO: Handle the case where it's not!
-              rd_sel_o      <= "01";
-              write_reg     <= '1';
-              pc_alu_sel_o  <= '1';
-              pc_next_sel_o <= '0';
-            when others =>              -- The typical ALU stuff
-              rd_sel_o      <= "01";  -- mem_sx ("11"), alu ("01"), or pc alu ("00")
-              write_reg     <= '1';
-              pc_alu_sel_o  <= '1';     -- 4 ('1') or immediate value ('0')
-              pc_next_sel_o <= '0';     -- alu ('1') or pc alu ('0')
-          end case;
           mem_write_en <= '0';
           rd_clk       <= '0';
           ir_clk       <= '1';
           pc_clk       <= '0';
           state        <= drive;
         when drive =>
-          if (write_mem = '1') then
-            mem_write_en <= '1';
-            write_mem    <= '0';
-          end if;
-          if (write_reg = '1') then
-            rd_clk    <= '1';
-            write_reg <= '0';
-          end if;
+          case write_dest is
+            when mem =>
+              mem_write_en <= '1';
+            when reg =>
+              rd_clk     <= '1';
+            when none =>
+          end case;
           ir_clk <= '0';
           pc_clk <= '1';
           state  <= decode;
