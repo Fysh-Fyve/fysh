@@ -81,7 +81,7 @@ public:
   Fysh() noexcept : species{Species::INVALID} {}
   Fysh(Species inType) noexcept : species{inType} {}
 
-  Fysh(uint32_t integer) noexcept
+  Fysh(std::uint32_t integer) noexcept
       : species{Species::FYSH_LITERAL}, value{integer} {}
 
   Fysh(Species inType, const char *start, std::size_t len) noexcept
@@ -103,7 +103,7 @@ public:
 
   Species getSpecies() const noexcept;
   std::string_view getBody() const noexcept;
-  std::optional<uint32_t> getValue() const noexcept;
+  std::optional<std::uint32_t> getValue() const noexcept;
 
   // -----------------------OPERATORS-----------------------
   bool operator==(const Species &in_species) const noexcept {
@@ -122,11 +122,11 @@ public:
            other.value == value;
   }
 
-  bool operator==(const uint32_t &other) const noexcept {
+  bool operator==(const std::uint32_t &other) const noexcept {
     if (!value.has_value()) {
       return false;
     }
-    uint32_t intValue = value.value();
+    std::uint32_t intValue = value.value();
     return species == Species::FYSH_LITERAL &&
            (negate ? -intValue : intValue) == other;
   }
@@ -136,7 +136,7 @@ public:
 private:
   Species species{};
   std::string_view body{};
-  std::optional<uint32_t> value{};
+  std::optional<std::uint32_t> value{};
 };
 
 // string representation of token type (for testing)
