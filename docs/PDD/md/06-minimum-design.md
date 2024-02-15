@@ -14,9 +14,8 @@ synthesized and that the basic peripherals can be implemented and tested.
 
 ### Fysh (Esoteric Language Compiler)
 
-A compiler that can handle basic arithmetic, bitwise operations, bit
-manipulation, memory addressing and loops. The purpose is to demonstrate that
-the compiler can generate RISC-V assembly code and that the code can be executed
-on the Fysh-Fyve processor.
+A compiler that can handle basic arithmetic, bit manipulation, memory addressing
+and loops. The purpose is to demonstrate that the compiler can generate RISC-V
+assembly code and that the code can be executed on the Fysh-Fyve processor.
 
 \input{tex/min-fysh}
