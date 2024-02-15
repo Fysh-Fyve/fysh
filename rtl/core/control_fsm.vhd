@@ -90,7 +90,7 @@ begin
 
     -- TODO: Implement
     "001" & "10" & "01" when OPCODE_LOAD,
-    "011" & "10" & "01" when OPCODE_STORE,
+    "010" & "10" & "01" when OPCODE_STORE,
     "001" & "10" & "01" when OPCODE_JAL,
     "001" & "10" & "01" when OPCODE_JALR,
     "001" & "10" & "01" when OPCODE_BRANCH,
