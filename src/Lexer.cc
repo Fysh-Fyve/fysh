@@ -381,7 +381,7 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     return goFysh(Species::BITWISE_OR);
     // I think this has to change if not is also going to be ^
   case '^':
-    return goFysh(Species::BITWISE_XOR);
+    return goFysh(Species::CARET);
   case '~':
     reel();
     if (periscope() == '=') {
