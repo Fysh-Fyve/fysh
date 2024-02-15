@@ -16,11 +16,12 @@ entity phy_map is
     clk_i      : in std_ulogic;         --! Clock signal
     write_en_i : in std_ulogic;         --! Write enable
 
-    addr_i : in    std_ulogic_vector (31 downto 0);   --! Read & Write Address
-    d_i    : in    std_ulogic_vector (31 downto 0);   --! Data Output
-    d_o    : out   std_ulogic_vector (31 downto 0);   --! Data Output
+    raddr_i : in    std_ulogic_vector (31 downto 0);   --! Read Address
+    waddr_i : in    std_ulogic_vector (31 downto 0);   --! Write Address
+    d_i     : in    std_ulogic_vector (31 downto 0);   --! Data Output
+    d_o     : out   std_ulogic_vector (31 downto 0);   --! Data Output
     -- TODO: GPIO PIN Mode???
-    gpio   : inout std_ulogic_vector (31 downto 0));  --! GPIO Pins
+    gpio    : inout std_ulogic_vector (31 downto 0));  --! GPIO Pins
 
 end phy_map;
 
@@ -58,8 +59,8 @@ begin
 
   ram_write_en <= (not mem_sel) and write_en_i;
 
-  gpio_addr_start <= '1' when (addr_i = x"DEADBEEC") else '0';
-  gpio_write_en   <= mem_sel and write_en_i and gpio_addr_start;
+  gpio_addr_start <= '1' when (waddr_i = x"DEADBEEC") else '0';
+  gpio_write_en   <= write_en_i and gpio_addr_start;
 
   gpio_clk : process(clk_i)
   begin
@@ -76,12 +77,12 @@ begin
     mem_out         when '0',
     (others => 'X') when others;
 
-  with addr_i(31 downto 20) select mem_sel <=
+  with raddr_i(31 downto 20) select mem_sel <=
     '1' when x"DEA",
     '0' when x"000",
     'X' when others;
 
-  with addr_i(MEM_SPLIT) select mem_out <=
+  with raddr_i(MEM_SPLIT) select mem_out <=
     ram_out         when '1',
     rom_out         when '0',
     (others => 'X') when others;
@@ -90,16 +91,16 @@ begin
     generic map (DATA => rom_arr)
     port map (
       clk_i        => clk_i,
-      read_addr_i  => addr_i(MEM_SPLIT-1 downto 2),
-      write_addr_i => addr_i(MEM_SPLIT-1 downto 2),
+      read_addr_i  => raddr_i(MEM_SPLIT-1 downto 2),
+      write_addr_i => waddr_i(MEM_SPLIT-1 downto 2),
       write_en_i   => rom_write_en,
       d_i          => le_data_in,
       d_o          => rom_out);
 
   ram_inst : entity work.mem(rtl) port map (
     clk_i        => clk_i,
-    read_addr_i  => addr_i(MEM_SPLIT-1 downto 2),
-    write_addr_i => addr_i(MEM_SPLIT-1 downto 2),
+    read_addr_i  => raddr_i(MEM_SPLIT-1 downto 2),
+    write_addr_i => waddr_i(MEM_SPLIT-1 downto 2),
     write_en_i   => ram_write_en,
     d_i          => le_data_in,
     d_o          => ram_out);

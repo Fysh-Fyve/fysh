@@ -23,7 +23,8 @@ architecture test_bench of control_fsm_tb is
 
   signal rd_sel : std_ulogic_vector (1 downto 0) := (others => '0');
 
-  signal addr_sel     : std_ulogic := '0';
+  signal raddr_sel     : std_ulogic := '0';
+  signal waddr_sel     : std_ulogic := '0';
   signal alu_a_sel    : std_ulogic := '0';
   signal alu_b_sel    : std_ulogic := '0';
   signal mem_write_en : std_ulogic := '0';
@@ -48,7 +49,8 @@ begin
     rd_sel_o  => rd_sel,
 
     sub_sra_o      => sub_sra_o,
-    addr_sel_o     => addr_sel,
+    raddr_sel_o    => raddr_sel,
+    waddr_sel_o    => waddr_sel,
     alu_a_sel_o    => alu_a_sel,
     alu_b_sel_o    => alu_b_sel,
     mem_write_en_o => mem_write_en,
@@ -80,7 +82,8 @@ begin
         & ", opcode = " & to_string(opcode)
         & ", rd_sel = " & to_string(rd_sel)
         & ", sub_sra_o = " & to_string(sub_sra_o)
-        & ", addr_sel = " & to_string(addr_sel)
+        & ", raddr_sel = " & to_string(raddr_sel)
+        & ", waddr_sel = " & to_string(waddr_sel)
         & ", alu_a_sel = " & to_string(alu_a_sel)
         & ", alu_b_sel = " & to_string(alu_b_sel)
         & ", mem_write_en = " & to_string(mem_write_en)

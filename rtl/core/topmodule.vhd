@@ -45,14 +45,15 @@ architecture rtl of topmodule is
   signal alu_a_sel : std_ulogic := '0';
   signal alu_b_sel : std_ulogic := '0';
 
-  signal addr_sel : std_ulogic                      := '0';
-  signal rd_clk   : std_ulogic                      := '0';
-  signal rd_sel   : std_ulogic_vector (1 downto 0)  := (others => '0');
-  signal alu      : std_ulogic_vector (31 downto 0) := (others => '0');
-  signal pc       : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal raddr_sel : std_ulogic                      := '0';
+  signal waddr_sel : std_ulogic                      := '0';
+  signal rd_clk    : std_ulogic                      := '0';
+  signal rd_sel    : std_ulogic_vector (1 downto 0)  := (others => '0');
+  signal alu       : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal pc        : std_ulogic_vector (31 downto 0) := (others => '0');
 
-  signal rd_val          : std_ulogic_vector (31 downto 0);
-  signal addr, mem_out, mem_sx : std_ulogic_vector (31 downto 0);
+  signal rd_val                        : std_ulogic_vector (31 downto 0);
+  signal raddr, waddr, mem_out, mem_sx : std_ulogic_vector (31 downto 0);
 begin
   print : process(clk)
     use std.textio.all;
@@ -88,7 +89,7 @@ begin
   -- Hacky way to make rs1_val hardwire to 0
   with insn(6 downto 2) select rs1_or_zero <=
     (others => '0') when "01101",
-    rs1_val     when others;
+    rs1_val         when others;
 
   program_counter_inst : entity work.program_counter(rtl) port map (
     pc_clk_i        => pc_clk,
@@ -122,7 +123,8 @@ begin
 
     sub_sra_o      => sub_sra,
     op_bits_o      => op_bits,
-    addr_sel_o     => addr_sel,
+    waddr_sel_o    => waddr_sel,
+    raddr_sel_o    => raddr_sel,
     alu_a_sel_o    => alu_a_sel,
     alu_b_sel_o    => alu_b_sel,
     rd_sel_o       => rd_sel,
@@ -140,13 +142,14 @@ begin
     (others => 'X') when others;
 
   with alu_b_sel select alu_b_op <=
-    rs2_val     when '0',
+    rs2_val         when '0',
     imm_ex          when '1',
     (others => 'X') when others;
 
   mem_inst : entity work.phy_map(rtl) port map (
     clk_i      => clk,
-    addr_i     => addr,
+    raddr_i    => raddr,
+    waddr_i    => waddr,
     write_en_i => mem_write_en,
     d_i        => rs2_val,
     d_o        => mem_out,
@@ -168,16 +171,21 @@ begin
     reg_val_2_o    => rs2_val);
 
 
-  with addr_sel select addr <=
-    pc        when '1',
-    alu       when '0',
+  with raddr_sel select raddr <=
+    pc              when '1',
+    alu             when '0',
+    (others => 'X') when others;
+
+  with waddr_sel select waddr <=
+    pc              when '1',
+    alu             when '0',
     (others => 'X') when others;
 
   with rd_sel select rd_val <=
     mem_sx          when "11",
     (others => 'X') when "10",          -- could be where our RNG is gonna be
-    alu       when "01",
-    pc_alu    when "00",
+    alu             when "01",
+    pc_alu          when "00",
     (others => 'X') when others;
 
   insn_register : process(reset, ir_clk, mem_write_en)
