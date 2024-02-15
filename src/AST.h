@@ -20,8 +20,10 @@
 #ifndef FYSH_AST_H_
 #define FYSH_AST_H_
 
-#include <memory>
+#include "Box.h"
+#include <cstdint>
 #include <string_view>
+#include <variant>
 #include <vector>
 
 namespace fysh::ast {
@@ -44,77 +46,56 @@ enum class FyshUnary {
   Neg,
 };
 
-class FyshExpr {
-public:
-  virtual ~FyshExpr() = default;
-};
+struct FyshBinaryExpr;
+struct FyshUnaryExpr;
 
-class FyshBinaryExpr : public FyshExpr {
-public:
-  FyshBinaryExpr(std::unique_ptr<FyshExpr> left, FyshBinary op,
-                 std::unique_ptr<FyshExpr> right)
-      : left(std::move(left)), right(std::move(right)), op(op) {}
-  std::unique_ptr<FyshExpr> left;
-  std::unique_ptr<FyshExpr> right;
-  FyshBinary op;
-};
-
-class FyshIdentifier : public FyshExpr {
-public:
-  FyshIdentifier(std::string_view name) : name(name) {}
+struct FyshIdentifier {
   std::string_view name;
 };
 
-class FyshLiteral : public FyshExpr {
-public:
-  FyshLiteral(uint64_t num) : num(num) {}
-  uint64_t num;
+struct FyshLiteral {
+  std::uint64_t num;
 };
 
-class FyshStmt {
-public:
-  virtual ~FyshStmt() = default;
+using FyshExpr = std::variant<Box<FyshBinaryExpr>, FyshIdentifier, FyshLiteral>;
+
+struct FyshUnaryExpr {
+  FyshUnary op;
+  FyshExpr expr;
 };
 
-class FyshExprStmt : public FyshStmt {
-public:
-  FyshExprStmt(std::unique_ptr<FyshExpr> expr) : expr(std::move(expr)) {}
-  std::unique_ptr<FyshExpr> expr;
-};
-class FyshIncrementStmt : public FyshStmt {
-public:
-  FyshIncrementStmt(std::unique_ptr<FyshExpr> expr) : expr(std::move(expr)) {}
-  std::unique_ptr<FyshExpr> expr;
-};
-class FyshDecrementStmt : public FyshStmt {
-public:
-  FyshDecrementStmt(std::unique_ptr<FyshExpr> expr) : expr(std::move(expr)) {}
-  std::unique_ptr<FyshExpr> expr;
+struct FyshBinaryExpr {
+  FyshExpr left;
+  FyshExpr right;
+  FyshBinary op;
 };
 
-class FyshAssignmentStmt : public FyshStmt {
-public:
-  FyshAssignmentStmt(std::unique_ptr<FyshExpr> left,
-                     std::unique_ptr<FyshExpr> right)
-      : left(std::move(left)), right(std::move(right)) {}
-  std::unique_ptr<FyshExpr> left;
-  std::unique_ptr<FyshExpr> right;
+struct FyshIncrementStmt {
+  FyshExpr expr;
 };
 
-class FyshBlock : public FyshStmt {
-public:
-  FyshBlock(std::vector<FyshStmt> statements)
-      : statements(std::move(statements)) {}
-  std::vector<FyshStmt> statements;
+struct FyshDecrementStmt {
+  FyshExpr expr;
 };
 
-class FyshLoopStmt : public FyshStmt {
-public:
-  FyshLoopStmt(std::unique_ptr<FyshExpr> condition,
-               std::unique_ptr<FyshBlock> body)
-      : condition(std::move(condition)), body(std::move(body)) {}
-  std::unique_ptr<FyshExpr> condition;
-  std::unique_ptr<FyshBlock> body;
+struct FyshAssignmentStmt {
+  FyshExpr left;
+  FyshExpr right;
+};
+
+struct FyshBlock;
+struct FyshLoopStmt;
+
+using FyshStmt = std::variant<FyshExpr, FyshIncrementStmt, FyshDecrementStmt,
+                              FyshAssignmentStmt, FyshBlock, FyshLoopStmt>;
+
+struct FyshBlock : public std::vector<FyshStmt> {
+  using std::vector<FyshStmt>::vector;
+};
+
+struct FyshLoopStmt {
+  FyshExpr condition;
+  FyshBlock body;
 };
 
 }; // namespace fysh::ast
