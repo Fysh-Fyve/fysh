@@ -7,6 +7,15 @@
 
 using namespace fysh::ast;
 
+void check_program(std::vector<FyshStmt> program, std::size_t size) {
+  if (program.size() == 1) {
+    if (std::holds_alternative<Error>(program[0])) {
+      FAIL(std::get<Error>(program[0]).getraw());
+    }
+  }
+  REQUIRE(program.size() == size);
+}
+
 template <typename T> T get_stmt(FyshStmt stmt) {
   REQUIRE(std::holds_alternative<T>(stmt));
   return std::get<T>(stmt);
@@ -24,19 +33,17 @@ template <typename T> T get_expr(FyshExpr expr) {
 }
 
 template <typename T> void check_ident(T expr, const char *name) {
-  auto ident{get_expr<FyshIdentifier>(expr)};
-  CHECK(ident.name == name);
+  CHECK(get_expr<FyshIdentifier>(expr).name == name);
 }
 
 template <typename T> void check_num(T expr, std::uint64_t value) {
-  auto literal{get_expr<FyshLiteral>(expr)};
-  CHECK(literal.num == value);
+  CHECK(get_expr<FyshLiteral>(expr).num == value);
 }
 
 TEST_CASE("Assignment Statement") {
   fysh::FyshParser p{fysh::FyshLexer{"><fysh> = ><(({o> ~"}};
-  std::vector<FyshStmt> program{p.parseProgram()};
-  REQUIRE(program.size() == 1);
+  auto program{p.parseProgram()};
+  check_program(program, 1);
   auto stmt{get_stmt<FyshAssignmentStmt>(program[0])};
   check_ident(stmt.left, "fysh");
   check_num(stmt.right, 1);
@@ -48,9 +55,8 @@ TEST_CASE("Expression Statements") {
 ><fysh> ~
 ><fysh> <3 ><{({o> ~
 )"}};
-  std::vector<FyshStmt> program{p.parseProgram()};
-  REQUIRE(program.size() == 3);
-
+  auto program{p.parseProgram()};
+  check_program(program, 3);
   check_num(program[0], 1);
   check_ident(program[1], "fysh");
 
@@ -62,16 +68,16 @@ TEST_CASE("Expression Statements") {
 
 TEST_CASE("Increment Statement") {
   fysh::FyshParser p{fysh::FyshLexer{">><fysh> ~"}};
-  std::vector<FyshStmt> program{p.parseProgram()};
-  REQUIRE(program.size() == 1);
+  auto program{p.parseProgram()};
+  check_program(program, 1);
   auto stmt{get_stmt<FyshIncrementStmt>(program[0])};
   check_ident(stmt.expr, "fysh");
 }
 
 TEST_CASE("Decrement Statement") {
   fysh::FyshParser p{fysh::FyshLexer{"<fysh><< ~"}};
-  std::vector<FyshStmt> program{p.parseProgram()};
-  REQUIRE(program.size() == 1);
+  auto program{p.parseProgram()};
+  check_program(program, 1);
   auto stmt{get_stmt<FyshDecrementStmt>(program[0])};
   check_ident(stmt.expr, "fysh");
 }

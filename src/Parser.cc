@@ -21,10 +21,71 @@
 #include "Parser.h"
 #include "AST.h"
 
+#include <variant>
 #include <vector>
 
-fysh::FyshParser::FyshParser(fysh::FyshLexer lexer) : lexer(lexer) {}
+fysh::FyshParser::FyshParser(fysh::FyshLexer lexer) : lexer(lexer) {
+  nextFysh(); // curFysh
+  nextFysh(); // peekFysh
+}
+
+void fysh::FyshParser::nextFysh() {
+  curFysh = peekFysh;
+  peekFysh = lexer.nextFysh();
+}
+
+fysh::ast::FyshStmt fysh::FyshParser::parseStatement() {
+  if (curFysh == Species::INCREMENT) {
+    if (peekFysh != Species::TERMINATE) {
+      return ast::FyshStmt{ast::Error{"Expected terminator"}};
+    } else {
+      ast::FyshIdentifier ident{curFysh.getBody()};
+      nextFysh();
+      nextFysh();
+      return ast::FyshStmt{ast::FyshIncrementStmt{ident}};
+    }
+  } else if (curFysh == Species::DECREMENT) {
+    if (peekFysh != Species::TERMINATE) {
+      return ast::FyshStmt{ast::Error{"Expected terminator"}};
+    } else {
+      ast::FyshIdentifier ident{curFysh.getBody()};
+      nextFysh();
+      nextFysh();
+      return ast::FyshStmt{ast::FyshDecrementStmt{ident}};
+    }
+  } else if (curFysh == Species::FYSH_IDENTIFIER &&
+             peekFysh == Species::ASSIGN) {
+    ast::FyshIdentifier ident{curFysh.getBody()};
+    nextFysh();
+    nextFysh();
+    // TODO: Parse expression, not just a literal.
+    if (curFysh != Species::FYSH_LITERAL) {
+      return ast::FyshStmt{ast::Error{"Expected literal"}};
+    }
+    ast::FyshLiteral value{curFysh.getValue().value()};
+    nextFysh();
+    if (curFysh != Species::TERMINATE) {
+      return ast::FyshStmt{ast::Error{"Expected terminator"}};
+    } else {
+      nextFysh();
+      return ast::FyshStmt{ast::FyshAssignmentStmt{ident, value}};
+    }
+  }
+
+  return ast::FyshStmt{ast::Error{"unimplemented"}};
+}
 
 std::vector<fysh::ast::FyshStmt> fysh::FyshParser::parseProgram() {
-  return std::vector<fysh::ast::FyshStmt>{};
+  std::vector<fysh::ast::FyshStmt> program{};
+
+  while (curFysh != Species::END) {
+    auto stmt{parseStatement()};
+    if (!std::holds_alternative<ast::Error>(stmt)) {
+      program.push_back(stmt);
+    } else {
+      return std::vector<fysh::ast::FyshStmt>{stmt};
+    }
+  }
+
+  return program;
 }

@@ -25,6 +25,7 @@
 #include <iostream>
 
 void fysh::FyshLexer::printRest() { std::cerr << rest() << std::endl; }
+
 char fysh::FyshLexer::periscope(int line) const noexcept {
   if (line > 0) {
     std::cerr << "Current (line:" << line << "): " << *current << std::endl;

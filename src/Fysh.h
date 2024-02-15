@@ -106,6 +106,10 @@ public:
   std::optional<std::uint32_t> getValue() const noexcept;
 
   // -----------------------OPERATORS-----------------------
+  template <typename T> bool operator!=(const T &other) const noexcept {
+    return !(*this == other);
+  }
+
   bool operator==(const Species &in_species) const noexcept {
     return species == in_species;
   }
