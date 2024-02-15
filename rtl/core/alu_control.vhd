@@ -3,6 +3,7 @@
 --! @cond Doxygen_Suppress
 library ieee;
 use ieee.std_logic_1164.all;
+use work.fysh_fyve.all;
 --! @endcond
 
 --! A higher-level module that combines the ALU and the Control FSM.\n
@@ -73,9 +74,9 @@ begin
       write(l, string'(" ins: "));
       write(l, to_hstring(instruction_i));
       write(l, string'(" func3: "));
-      write(l, op_bits);
+      write_func3(l, op_bits);
       write(l, string'(" opcode: "));
-      write(l, instruction_i(6 downto 2));
+      write_opcode(l, instruction_i(6 downto 2));
       write(l, string'(" alu_a_op: "));
       write(l, to_hstring(alu_a_op));
       write(l, string'(" alu_b_op: "));

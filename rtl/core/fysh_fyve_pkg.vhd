@@ -48,25 +48,42 @@ package fysh_fyve is
   constant OPCODE_BRANCH  : opcode_t := "11000";
 
   procedure write_opcode (l : inout std.textio.line; oc : in opcode_t);
+  procedure write_func3 (l  : inout std.textio.line; f3 : in alu_op_t);
 end package fysh_fyve;
 
 package body fysh_fyve is
+  procedure write_func3 (l : inout std.textio.line; f3 : in alu_op_t) is
+    use std.textio.all;
+  begin
+    case f3 is
+      when OP_ADD_SUB            => write(l, string'("ADD"));
+      when OP_SHIFT_LEFT         => write(l, string'(" SL"));
+      when OP_LESS_THAN          => write(l, string'(" LT"));
+      when OP_LESS_THAN_UNSIGNED => write(l, string'("LTU"));
+      when OP_XOR                => write(l, string'("XOR"));
+      when OP_SHIFT_RIGHT        => write(l, string'(" SR"));
+      when OP_OR                 => write(l, string'(" OR"));
+      when OP_AND                => write(l, string'("AND"));
+      when others                => write(l, string'("ERR"));
+    end case;
+  end write_func3;
+
   procedure write_opcode (l : inout std.textio.line; oc : in opcode_t) is
     use std.textio.all;
   begin
     case oc is
-      when OPCODE_LUI     => write(l, string'("LUI"));
-      when OPCODE_AUIPC   => write(l, string'("AUIPC"));
-      when OPCODE_REG_IM  => write(l, string'("REG_IM"));
-      when OPCODE_REG_REG => write(l, string'("REG_REG"));
-      when OPCODE_FENCE   => write(l, string'("FENCE"));
+      when OPCODE_LUI     => write(l, string'("LUI   "));
+      when OPCODE_AUIPC   => write(l, string'("AUIPC "));
+      when OPCODE_REG_IM  => write(l, string'("REGIM "));
+      when OPCODE_REG_REG => write(l, string'("REGREG"));
+      when OPCODE_FENCE   => write(l, string'("FENCE "));
       when OPCODE_ATOMIC  => write(l, string'("ATOMIC"));
-      when OPCODE_LOAD    => write(l, string'("LOAD"));
-      when OPCODE_STORE   => write(l, string'("STORE"));
-      when OPCODE_JAL     => write(l, string'("JAL"));
-      when OPCODE_JALR    => write(l, string'("JALR"));
+      when OPCODE_LOAD    => write(l, string'("LOAD  "));
+      when OPCODE_STORE   => write(l, string'("STORE "));
+      when OPCODE_JAL     => write(l, string'("JAL   "));
+      when OPCODE_JALR    => write(l, string'("JALR  "));
       when OPCODE_BRANCH  => write(l, string'("BRANCH"));
-      when others         => write(l, string'("INVALID"));
+      when others         => write(l, string'("ERROR "));
     end case;
   end write_opcode;
 end package body fysh_fyve;

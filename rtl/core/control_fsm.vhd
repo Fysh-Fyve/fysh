@@ -47,12 +47,6 @@ architecture rtl of control_fsm is
   signal write_dest : write_dest_t := none;
   signal state      : state_t      := init;
 
-  -- 1 alu_a
-  -- 1 alu_b
-  -- 1 addr_sel
-  -- 1 pc_alu
-  -- 1 pc_next
-  -- 2 rd_sel
   signal mux_sels : std_ulogic_vector(6 downto 0);
 
   procedure write (l : inout std.textio.line; wd : in write_dest_t) is
@@ -81,6 +75,9 @@ begin
     OP_ADD_SUB when OPCODE_AUIPC,
     "000"      when others;
 
+  -- alu_a, alu_b, addr_sel
+  -- pc_alu, pc_next
+  -- rd_sel
   with opcode_i(6 downto 2) select mux_sels <=
     "011" & "10" & "01" when OPCODE_LUI,
     "111" & "10" & "01" when OPCODE_AUIPC,
@@ -92,11 +89,11 @@ begin
     "ZZZ" & "ZZ" & "ZZ" when OPCODE_ATOMIC,
 
     -- TODO: Implement
-    "000" & "00" & "00" when OPCODE_LOAD,
-    "000" & "00" & "ZZ" when OPCODE_STORE,
-    "000" & "00" & "00" when OPCODE_JAL,
-    "000" & "00" & "00" when OPCODE_JALR,
-    "000" & "00" & "00" when OPCODE_BRANCH,
+    "001" & "10" & "01" when OPCODE_LOAD,
+    "011" & "10" & "01" when OPCODE_STORE,
+    "001" & "10" & "01" when OPCODE_JAL,
+    "001" & "10" & "01" when OPCODE_JALR,
+    "001" & "10" & "01" when OPCODE_BRANCH,
     (others => 'X')     when others;
 
   alu_a_sel_o   <= mux_sels(6);
