@@ -295,6 +295,8 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
       return heart(); // <3 multiplication heart
     case ('/'):
       return heartBreak(); // </3 division heart
+    case ('<'):
+      return goFysh(Species::SHIFT_LEFT);
     default:
       return swimLeft(); // a fysh swimming left
     }
@@ -305,7 +307,11 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
       return swimRight(); // a fysh swimming right
     case ('>'):
       reel();
-      return identifier(FyshDirection::RIGHT, true);
+      if (periscope() == '<') {
+        return identifier(FyshDirection::RIGHT, true);
+      } else {
+        return Fysh{Species::SHIFT_RIGHT};
+      }
     default:
       return cullDeformedFysh();
     }
