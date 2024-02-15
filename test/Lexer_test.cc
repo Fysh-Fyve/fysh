@@ -42,7 +42,7 @@ TEST_CASE("operators") {
 
   T(Species::BITWISE_AND);
   T(Species::BITWISE_OR);
-  T(Species::BITWISE_XOR);
+  T(Species::CARET);
 
   T(Species::NOT_EQUAL);
   T(Species::EQUAL);
