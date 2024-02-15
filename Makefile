@@ -45,8 +45,7 @@ _ALU := alu \
 
 ALU := $(patsubst %, $(SRC_DIR)/%.vhd, $(_ALU))
 
-_ALU_CONTROL := alu_control \
-		imm_sx \
+_ALU_CONTROL := imm_sx \
 		program_counter \
 		control_fsm \
 
@@ -57,9 +56,6 @@ alu_tb: $(TEST_DIR)/alu_tb.vhd $(ALU)
 	@TB="$@" ./scripts/run_test.sh $^
 
 
-alu_control_tb: $(TEST_DIR)/alu_control_tb.vhd $(ALU_CONTROL)
-	@TB="$@" ./scripts/run_test.sh $^
-
 _MEM := mem \
 	rom_pkg \
 	fysh_fyve_pkg \
@@ -69,16 +65,12 @@ MEM := $(patsubst %, $(SRC_DIR)/%.vhd, $(_MEM))
 mem_tb: $(TEST_DIR)/mem_tb.vhd $(MEM)
 	@TB="$@" ./scripts/run_test.sh $^
 
-_MEMORY := memory \
-	   $(_MEM) \
+_MEMORY := $(_MEM) \
 	   phy_map \
 	   mbr_sx \
 	   register_file \
 
 MEMORY := $(patsubst %, $(SRC_DIR)/%.vhd, $(_MEMORY))
-
-memory_tb: $(TEST_DIR)/memory_tb.vhd $(MEMORY)
-	@TB="$@" ./scripts/run_test.sh $^
 
 topmodule_tb: $(TEST_DIR)/topmodule_tb.vhd \
 	$(SRC_DIR)/topmodule.vhd \
