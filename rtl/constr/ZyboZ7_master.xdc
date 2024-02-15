@@ -2,7 +2,7 @@ set_property -dict {PACKAGE_PIN K17 IOSTANDARD LVCMOS33} [get_ports { clk }];
 create_clock -period 8.000 -name sys_clk_pin -waveform {0.000 4.000} -add [get_ports { clk }];
 
 ##Buttons
-set_property -dict { PACKAGE_PIN K18 IOSTANDARD LVCMOS33 } [get_ports { gpio[0] }];
+set_property -dict { PACKAGE_PIN K18 IOSTANDARD LVCMOS33 } [get_ports { reset }];
 set_property -dict { PACKAGE_PIN P16 IOSTANDARD LVCMOS33 } [get_ports { gpio[1] }];
 set_property -dict { PACKAGE_PIN K19 IOSTANDARD LVCMOS33 } [get_ports { gpio[2] }];
 set_property -dict { PACKAGE_PIN Y16 IOSTANDARD LVCMOS33 } [get_ports { gpio[3] }];
@@ -14,7 +14,7 @@ set_property -dict { PACKAGE_PIN W13 IOSTANDARD LVCMOS33 } [get_ports { gpio[6] 
 set_property -dict { PACKAGE_PIN T16 IOSTANDARD LVCMOS33 } [get_ports { gpio[7] }];
 
 ##LEDs
-#set_property -dict { PACKAGE_PIN M14 IOSTANDARD LVCMOS33 } [get_ports { gpio[4] }];
+set_property -dict { PACKAGE_PIN M14 IOSTANDARD LVCMOS33 } [get_ports { gpio[0] }];
 #set_property -dict { PACKAGE_PIN M15 IOSTANDARD LVCMOS33 } [get_ports { gpio[5] }];
 #set_property -dict { PACKAGE_PIN G14 IOSTANDARD LVCMOS33 } [get_ports { gpio[6] }];
 #set_property -dict { PACKAGE_PIN D18 IOSTANDARD LVCMOS33 } [get_ports { gpio[7] }];

@@ -78,6 +78,9 @@ begin
       write(l, to_hstring(alu_b_op));
       write(l, string'(" alu_o: "));
       write(l, to_hstring(alu));
+      write(l, string'(" rd_sel: "));
+      write(l, rd_sel);
+      writeline(output, l);
       writeline(output, l);
     end if;
   end process print;

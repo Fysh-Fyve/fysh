@@ -21,7 +21,7 @@ package fysh_fyve is
 
   type mem_t is array (natural range <>) of dword_t;
 
-  constant ROM_ADDR_W    : integer := 15;
+  constant ROM_ADDR_W    : integer := 14;
   constant ROM_NUM_WORDS : integer := 2**ROM_ADDR_W;
 
   -- Constants representing the opcodes.

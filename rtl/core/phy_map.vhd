@@ -3,12 +3,13 @@
 --! @cond Doxygen_Suppress
 library ieee;
 use ieee.std_logic_1164.all;
+use work.fysh_fyve.ROM_ADDR_W;
 use work.rom.rom_arr;
 --! @endcond
 
 
 --! Creates physical maps to memory\n
---! 0x00000000 - 0x0001FFFF (ROM)\n
+--! 0x00000000 - 0x0000FFFF (ROM)\n
 --! 0x00020000 - 0x0003FFFF (RAM)\n
 --! 0xDEADBEEC - 0xDEADBEEF (GPIO)\n
 entity phy_map is
@@ -88,20 +89,22 @@ begin
     (others => 'X') when others;
 
   rom_inst : entity work.mem(rtl)
-    generic map (DATA => rom_arr)
+    generic map (
+      DATA   => rom_arr,
+      ADDR_W => ROM_ADDR_W)
+    port map (
+      clk_i       => clk_i,
+      read_addr_i => raddr_i(ROM_ADDR_W+1 downto 2),
+      write_en_i  => rom_write_en,
+      d_i         => le_data_in,
+      d_o         => rom_out);
+
+  ram_inst : entity work.mem(rtl)
     port map (
       clk_i        => clk_i,
       read_addr_i  => raddr_i(MEM_SPLIT-1 downto 2),
       write_addr_i => waddr_i(MEM_SPLIT-1 downto 2),
-      write_en_i   => rom_write_en,
+      write_en_i   => ram_write_en,
       d_i          => le_data_in,
-      d_o          => rom_out);
-
-  ram_inst : entity work.mem(rtl) port map (
-    clk_i        => clk_i,
-    read_addr_i  => raddr_i(MEM_SPLIT-1 downto 2),
-    write_addr_i => waddr_i(MEM_SPLIT-1 downto 2),
-    write_en_i   => ram_write_en,
-    d_i          => le_data_in,
-    d_o          => ram_out);
+      d_o          => ram_out);
 end rtl;

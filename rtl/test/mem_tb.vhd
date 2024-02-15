@@ -6,6 +6,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use std.env.stop;
 use work.rom.rom_arr;
+use work.fysh_fyve.ROM_ADDR_W;
 --! @endcond
 
 --! Test Bench for the low-level memory component.
@@ -28,12 +29,12 @@ architecture test_bench of mem_tb is
   end procedure print;
 begin
   mem_inst : entity work.mem(rtl)
-    generic map (DATA => rom_arr)
+    generic map (DATA => rom_arr, ADDR_W => ROM_ADDR_W)
     port map (
       clk_i        => clk,
       d_i          => d_in,
-      read_addr_i  => read_addr(16 downto 2),
-      write_addr_i => write_addr(16 downto 2),
+      read_addr_i  => read_addr(ROM_ADDR_W+1 downto 2),
+      write_addr_i => write_addr(ROM_ADDR_W+1 downto 2),
       write_en_i   => write_en,
       d_o          => d_out);
 

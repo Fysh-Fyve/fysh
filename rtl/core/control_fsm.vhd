@@ -91,7 +91,7 @@ begin
     "ZZ" & "ZZ" & "ZZ" & "ZZ" when OPCODE_ATOMIC,
 
     -- TODO: Implement
-    "01" & "00" & "10" & "11" when OPCODE_LOAD,
+    "01" & "10" & "10" & "11" when OPCODE_LOAD,
     "01" & "10" & "10" & "01" when OPCODE_STORE,
     "00" & "11" & "10" & "01" when OPCODE_JAL,
     "00" & "11" & "10" & "01" when OPCODE_JALR,

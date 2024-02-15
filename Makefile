@@ -13,6 +13,7 @@ FMT_SRC := $(patsubst %, fmt-%,$(VHDL_SRC) $(VHDL_TEST_SRC))
 export GHDL_FLAGS := compile --std=08
 # GHDL_FLAGS += -frelaxed
 export RUN_FLAGS := --ieee-asserts=disable # If you wanna silence annoying errors
+# RUN_FLAGS += --wave=wave.ghw
 # export RUN_FLAGS := --assert-level=warning # If you wanna be super strict
 
 test: $(VHDL_TEST_BENCHES)
