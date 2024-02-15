@@ -81,11 +81,16 @@ begin
     pc_alu_out_i    when "00",
     (others => 'X') when others;
 
-  insn_register : process(reset_i, insn_clk_i)
+  insn_register : process(reset_i, insn_clk_i, write_en_i)
+    use std.textio.all;
+    variable l : line;
   begin
     if reset_i = '0' then
       insn <= (others => '0');
-    elsif rising_edge(insn_clk_i) then
+    elsif rising_edge(insn_clk_i) and write_en_i = '0' then
+      write(l, string'("mem_out: "));
+      write(l, to_hstring(mem_out));
+      writeline(output, l);
       insn <= mem_out;
     end if;
   end process insn_register;

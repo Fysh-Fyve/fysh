@@ -60,7 +60,7 @@ architecture rtl of control_fsm is
   end write;
 begin
   with opcode_i(6 downto 2) select write_dest <=
-    reg  when OPCODE_LUI | OPCODE_AUIPC | OPCODE_REG_IM | OPCODE_REG_REG,
+    reg  when OPCODE_LUI | OPCODE_AUIPC | OPCODE_REG_IM | OPCODE_REG_REG | OPCODE_LOAD,
     mem  when OPCODE_STORE,
     none when others;
 
@@ -89,7 +89,7 @@ begin
     "ZZZ" & "ZZ" & "ZZ" when OPCODE_ATOMIC,
 
     -- TODO: Implement
-    "001" & "10" & "01" when OPCODE_LOAD,
+    "010" & "10" & "11" when OPCODE_LOAD,
     "010" & "10" & "01" when OPCODE_STORE,
     "001" & "10" & "01" when OPCODE_JAL,
     "001" & "10" & "01" when OPCODE_JALR,
