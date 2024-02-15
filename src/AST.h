@@ -27,6 +27,9 @@
 #include <vector>
 
 namespace fysh::ast {
+// TODO: Maybe make this more sophisticated?
+using Error = Box<std::string>;
+
 // TODO: Fill these up with more operations
 enum class FyshBinary {
   Add,
@@ -57,7 +60,8 @@ struct FyshLiteral {
   std::uint64_t num;
 };
 
-using FyshExpr = std::variant<Box<FyshBinaryExpr>, FyshIdentifier, FyshLiteral>;
+using FyshExpr =
+    std::variant<Error, Box<FyshBinaryExpr>, FyshIdentifier, FyshLiteral>;
 
 struct FyshUnaryExpr {
   FyshUnary op;
@@ -86,8 +90,9 @@ struct FyshAssignmentStmt {
 struct FyshBlock;
 struct FyshLoopStmt;
 
-using FyshStmt = std::variant<FyshExpr, FyshIncrementStmt, FyshDecrementStmt,
-                              FyshAssignmentStmt, FyshBlock, FyshLoopStmt>;
+using FyshStmt =
+    std::variant<Error, FyshExpr, FyshIncrementStmt, FyshDecrementStmt,
+                 FyshAssignmentStmt, FyshBlock, FyshLoopStmt>;
 
 struct FyshBlock : public std::vector<FyshStmt> {
   using std::vector<FyshStmt>::vector;

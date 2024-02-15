@@ -31,7 +31,11 @@ public:
   std::vector<ast::FyshStmt> parseProgram();
 
 private:
+  void nextFysh();
+  ast::FyshStmt parseStatement();
   FyshLexer lexer;
+  Fysh curFysh;
+  Fysh peekFysh;
 };
 }; // namespace fysh
 
