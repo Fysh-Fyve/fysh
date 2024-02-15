@@ -92,7 +92,7 @@ constexpr const char *debugType(const fysh::Species &species) {
     return "&";
   case Species::BITWISE_OR:
     return "|";
-  case Species::BITWISE_XOR:
+  case Species::CARET:
     return "^";
   case Species::TERMINATE:
     return "~";
