@@ -8,7 +8,7 @@ opportunity for early feedback.
 
 ### Fysh-Fyve (RISC-V Processor)
 
-Hardware RNG, UART, GPIO, and SPI. The purpose is to demonstrate that the processor can be synthesized and that the basic peripherals can be implemented and tested.
+Hardware RNG and GPIO. The purpose is to demonstrate that the processor can be synthesized and that the basic peripherals can be implemented and tested.
 
 ### Fysh (Esoteric Language Compiler)
 A compiler that can handle basic arithmetic, bitwise operations, bit manipulation, memory addressing and loops. The purpose is to demonstrate that the compiler can generate RISC-V assembly code and that the code can be executed on the Fysh-Fyve processor.
