@@ -104,19 +104,19 @@ Steve doesn’t give a flying fysh about their scale direction. ≈ for variable
 <><
 ```
 
-##### Navigating through decision streams, if and else statements flow naturally. ><(((^> marks the if, \><(((*> ><(((^> for else if, and \><(((*> for the uncharted else.
+##### Navigating through decision streams, if and else statements flow naturally. \><(((^\> marks the if, \><(((\*\> \><(((^\> for else if, and \><(((\*\> for the uncharted else.
 ```
 ><(((^> [ ><steven> o~ ><{((°> ]
 ><>
 	<steven><< ~
 <><
 
-\><(((*> ><(((^> [ ><steven> ~o ><{((°> ] 
+><(((*> ><(((^> [ ><steven> ~o ><{((°> ] 
 ><>
 	>><steven> ~
 <><
 
-\><(((*>
+><(((*>
 ><>
 	><steven> ≈ ><(((°> ~
 <><
