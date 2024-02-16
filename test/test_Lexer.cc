@@ -187,6 +187,33 @@ TEST_CASE("Fysh Tank") {
   T(Species::END);
 }
 
+TEST_CASE("Fysh If Else") {
+  FyshLexer lexer{R"(
+><(((^> [ ><fysh> ] ><> <><
+><(((*> ><(((^> [ ><result> ] ><> <><
+><(((*> ><> <><
+)"};
+
+  T(Species::IF);
+  T(Species::FYSH_TANK_OPEN);
+  IDENT("fysh");
+  T(Species::FYSH_TANK_CLOSE);
+  T(Species::FYSH_OPEN);
+  T(Species::FYSH_CLOSE);
+
+  T(Species::ELSE);
+  T(Species::IF);
+  T(Species::FYSH_TANK_OPEN);
+  IDENT("result");
+  T(Species::FYSH_TANK_CLOSE);
+  T(Species::FYSH_OPEN);
+  T(Species::FYSH_CLOSE);
+
+  T(Species::ELSE);
+  T(Species::FYSH_OPEN);
+  T(Species::FYSH_CLOSE);
+}
+
 TEST_CASE("Fysh Factorial") {
   FyshLexer lexer{R"(
 ><fysh>   = ><{({o> ~

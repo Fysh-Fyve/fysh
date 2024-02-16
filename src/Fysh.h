@@ -73,6 +73,8 @@ enum class Species {
   TERMINATE,       // ~
   SHIFT_LEFT,      // <<
   SHIFT_RIGHT,     // >>
+  IF,              // ><(((^>
+  ELSE,            // ><(((*>
 };
 
 class Fysh {
