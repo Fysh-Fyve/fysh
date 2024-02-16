@@ -102,6 +102,10 @@ constexpr const char *debugType(const fysh::Species &species) {
     return "<<";
   case Species::SHIFT_RIGHT:
     return ">>";
+  case Species::IF:
+    return "if";
+  case Species::ELSE:
+    return "else";
   }
 
   assert(false);

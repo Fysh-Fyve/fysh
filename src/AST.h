@@ -22,6 +22,7 @@
 
 #include "Box.h"
 #include <cstdint>
+#include <optional>
 #include <string_view>
 #include <variant>
 #include <vector>
@@ -89,10 +90,11 @@ struct FyshAssignmentStmt {
 
 struct FyshBlock;
 struct FyshLoopStmt;
+struct FyshIfStmt;
 
 using FyshStmt =
     std::variant<Error, FyshExpr, FyshIncrementStmt, FyshDecrementStmt,
-                 FyshAssignmentStmt, FyshBlock, FyshLoopStmt>;
+                 FyshAssignmentStmt, FyshBlock, FyshLoopStmt, FyshIfStmt>;
 
 struct FyshBlock : public std::vector<FyshStmt> {
   using std::vector<FyshStmt>::vector;
@@ -101,6 +103,12 @@ struct FyshBlock : public std::vector<FyshStmt> {
 struct FyshLoopStmt {
   FyshExpr condition;
   FyshBlock body;
+};
+
+struct FyshIfStmt {
+  FyshExpr condition;
+  FyshBlock consequence;
+  std::optional<FyshBlock> alternative;
 };
 
 }; // namespace fysh::ast
