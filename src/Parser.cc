@@ -21,6 +21,7 @@
 #include "Parser.h"
 #include "AST.h"
 
+#include <sstream>
 #include <variant>
 #include <vector>
 
@@ -34,25 +35,21 @@ void fysh::FyshParser::nextFysh() {
   peekFysh = lexer.nextFysh();
 }
 
+fysh::ast::Error fysh::expectFysh(fysh::Species species) {
+  std::stringstream ss;
+  ss << "Expected " << species;
+  return ss.str();
+}
+
 fysh::ast::FyshStmt fysh::FyshParser::parseStatement() {
   if (curFysh == Species::INCREMENT) {
-    if (peekFysh != Species::TERMINATE) {
-      return ast::FyshStmt{ast::Error{"Expected terminator"}};
-    } else {
-      ast::FyshIdentifier ident{curFysh.getBody()};
-      nextFysh();
-      nextFysh();
-      return ast::FyshStmt{ast::FyshIncrementStmt{ident}};
-    }
+    ast::FyshIdentifier ident{curFysh.getBody()};
+    nextFysh();
+    return terminateStatement(ast::FyshIncrementStmt{ident});
   } else if (curFysh == Species::DECREMENT) {
-    if (peekFysh != Species::TERMINATE) {
-      return ast::FyshStmt{ast::Error{"Expected terminator"}};
-    } else {
-      ast::FyshIdentifier ident{curFysh.getBody()};
-      nextFysh();
-      nextFysh();
-      return ast::FyshStmt{ast::FyshDecrementStmt{ident}};
-    }
+    ast::FyshIdentifier ident{curFysh.getBody()};
+    nextFysh();
+    return terminateStatement(ast::FyshDecrementStmt{ident});
   } else if (curFysh == Species::FYSH_IDENTIFIER &&
              peekFysh == Species::ASSIGN) {
     ast::FyshIdentifier ident{curFysh.getBody()};
@@ -60,31 +57,25 @@ fysh::ast::FyshStmt fysh::FyshParser::parseStatement() {
     nextFysh();
     // TODO: Parse expression, not just a literal.
     if (curFysh != Species::FYSH_LITERAL) {
-      return ast::FyshStmt{ast::Error{"Expected literal"}};
+      return expectFysh(Species::FYSH_LITERAL);
     }
     ast::FyshLiteral value{curFysh.getValue().value()};
     nextFysh();
-    if (curFysh != Species::TERMINATE) {
-      return ast::FyshStmt{ast::Error{"Expected terminator"}};
-    } else {
-      nextFysh();
-      return ast::FyshStmt{ast::FyshAssignmentStmt{ident, value}};
-    }
+    return terminateStatement(ast::FyshAssignmentStmt{ident, value});
   }
 
-  return ast::FyshStmt{ast::Error{"unimplemented"}};
+  return ast::Error{"unimplemented"};
 }
 
 std::vector<fysh::ast::FyshStmt> fysh::FyshParser::parseProgram() {
-  std::vector<fysh::ast::FyshStmt> program{};
+  std::vector<fysh::ast::FyshStmt> program;
 
   while (curFysh != Species::END) {
     auto stmt{parseStatement()};
-    if (!std::holds_alternative<ast::Error>(stmt)) {
-      program.push_back(stmt);
-    } else {
-      return std::vector<fysh::ast::FyshStmt>{stmt};
+    if (std::holds_alternative<ast::Error>(stmt)) {
+      return {stmt};
     }
+    program.push_back(stmt);
   }
 
   return program;

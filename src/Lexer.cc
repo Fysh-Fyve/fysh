@@ -61,7 +61,7 @@ bool fysh::FyshLexer::isFyshEye(char c) noexcept {
 // Talk to me! - Charles
 fysh::Fysh fysh::FyshLexer::goFysh(Species s) noexcept {
   reel();
-  return Fysh{s};
+  return s;
 }
 
 fysh::Fysh fysh::FyshLexer::tryUnicode(const char *bytes, Species s) noexcept {
@@ -75,11 +75,11 @@ fysh::Fysh fysh::FyshLexer::tryUnicode(const char *bytes, Species s) noexcept {
         return cullDeformedFysh();
       } else {
         // Contiue looping through the characters
-        return fysh::Fysh{Species::CONTINUE};
+        return Species::CONTINUE;
       }
     }
   }
-  return fysh::Fysh{s};
+  return {s};
 }
 
 // -------------- Token functions --------------
@@ -127,7 +127,7 @@ fysh::Fysh fysh::FyshLexer::cullDeformedFysh() noexcept {
   }
 
   const char *fyshEnd{current};
-  return fysh::Fysh{Species::INVALID, fyshStart, fyshEnd};
+  return {Species::INVALID, fyshStart, fyshEnd};
 }
 
 // <3 or ♡
@@ -204,12 +204,12 @@ fysh::Fysh fysh::FyshLexer::identifier(FyshDirection dir,
       reel();
       if (periscope() == '<') {
         reel();
-        return Fysh{Species::DECREMENT, identStart, identEnd};
+        return {Species::DECREMENT, identStart, identEnd};
       }
     }
   }
   if (increment) {
-    return Fysh{Species::INCREMENT, identStart, identEnd};
+    return {Species::INCREMENT, identStart, identEnd};
   }
 
   Fysh fysh{Species::FYSH_IDENTIFIER, identStart, identEnd};
@@ -311,7 +311,7 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
       if (periscope() == '<') {
         return identifier(FyshDirection::RIGHT, true);
       } else {
-        return Fysh{Species::SHIFT_RIGHT};
+        return Species::SHIFT_RIGHT;
       }
     default:
       return cullDeformedFysh();
@@ -378,7 +378,7 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
   fyshStart = current;
   switch (periscope()) {
   case '\0':
-    return fysh::Fysh{Species::END};
+    return Species::END;
   case '<':
   case '>':
     return fyshOutline();
@@ -399,11 +399,11 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
         return goFysh(Species::TADPOLE_LTE);
       } else {
         // We already reeled in o, do not go fysh.
-        return Fysh{Species::TADPOLE_LT};
+        return Species::TADPOLE_LT;
       }
     } else {
       // We already reeled in ~, do not go fysh.
-      return Fysh{Species::TERMINATE};
+      return Species::TERMINATE;
     }
   case '[':
     return goFysh(Species::FYSH_TANK_OPEN);
@@ -415,7 +415,7 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
       return goFysh(Species::EQUAL);
     } else {
       // We already reeled in =, do not go fysh.
-      return Fysh{Species::ASSIGN};
+      return Species::ASSIGN;
     }
   case 'o':
     reel();
@@ -425,7 +425,7 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
         return goFysh(Species::TADPOLE_GTE);
       } else {
         // We already reeled in ~, do not go fysh.
-        return Fysh{Species::TADPOLE_GT};
+        return Species::TADPOLE_GT;
       }
     } else {
       return cullDeformedFysh();

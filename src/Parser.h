@@ -25,7 +25,9 @@
 #include "Lexer.h"
 
 namespace fysh {
+ast::Error expectFysh(Species species);
 class FyshParser {
+
 public:
   FyshParser(FyshLexer lexer);
   std::vector<ast::FyshStmt> parseProgram();
@@ -33,6 +35,15 @@ public:
 private:
   void nextFysh();
   ast::FyshStmt parseStatement();
+
+  template <typename T> ast::FyshStmt terminateStatement(T node) {
+    if (curFysh != Species::TERMINATE) {
+      return expectFysh(Species::TERMINATE);
+    }
+    nextFysh();
+    return node;
+  }
+
   FyshLexer lexer;
   Fysh curFysh;
   Fysh peekFysh;
