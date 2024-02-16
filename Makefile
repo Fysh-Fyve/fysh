@@ -13,10 +13,15 @@ FMT_SRC := $(patsubst %, fmt-%,$(VHDL_SRC) $(VHDL_TEST_SRC))
 export GHDL_FLAGS := compile --std=08
 # GHDL_FLAGS += -frelaxed
 export RUN_FLAGS := --ieee-asserts=disable # If you wanna silence annoying errors
-# RUN_FLAGS += --wave=wave.ghw
+ifdef WAVE
+RUN_FLAGS += --wave=wave.ghw
+endif
 # export RUN_FLAGS := --assert-level=warning # If you wanna be super strict
 
 test: $(VHDL_TEST_BENCHES)
+
+wave:
+	WAVE=1 $(MAKE) topmodule_tb
 
 clean:
 	rm -fv **/*~
