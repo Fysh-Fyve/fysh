@@ -122,7 +122,7 @@ Steve doesn’t give a flying fysh about their scale direction. ≈ for variable
 <><
 ```
 
-##### For those seeking the fortune of randomness, ><###> unveils a 32-bit treasure, while \><//\> whispers single-line comment and \></*\>, <*/\>< span multiline scriptures.
+##### For those seeking the fortune of randomness, ><###> unveils a 32-bit treasure, while \><//\> whispers single-line comment and \></\*\>, <\*/\>< span multiline scriptures.
 ```
 ><###> ~
 
