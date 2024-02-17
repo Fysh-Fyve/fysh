@@ -91,8 +91,7 @@ begin
     "ZZ" & "ZZZ" & "ZZ" & "ZZ" when OPCODE_FENCE,
     "ZZ" & "ZZZ" & "ZZ" & "ZZ" when OPCODE_ATOMIC,
 
-    -- TODO: Implement
-    "01" & "110" & "10" & "11" when OPCODE_LOAD,
+    "01" & "011" & "10" & "11" when OPCODE_LOAD,
     "01" & "110" & "10" & "01" when OPCODE_STORE,
     "00" & "111" & "10" & "01" when OPCODE_JAL,
     "00" & "111" & "10" & "01" when OPCODE_JALR,

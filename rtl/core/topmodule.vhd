@@ -207,10 +207,20 @@ begin
     if reset = '0' then
       insn <= (others => '0');
     elsif rising_edge(ir_clk) and mem_write_en = '0' then
-      write(l, string'("imem_out: "));
-      write(l, to_hstring(imem_out));
-      writeline(output, l);
       insn <= imem_out;
     end if;
   end process insn_register;
+
+  print_reg : process(ir_clk)
+    use std.textio.all;
+    variable l : line;
+  begin
+    if ir_clk'event then
+      write(l, string'("dmem_out: "));
+      write(l, to_hstring(dmem_out));
+      write(l, string'(" imem_out: "));
+      write(l, to_hstring(imem_out));
+      writeline(output, l);
+    end if;
+  end process print_reg;
 end rtl;
