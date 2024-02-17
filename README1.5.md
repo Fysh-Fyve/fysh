@@ -148,6 +148,9 @@ rearranged. Given it's 2024, a time when open-mindedness prevails, Steven has a 
 ><steven> << ><{((°> ~
 ><steven> >> ><{((°> ~
 ```
+
+## Control Structures
+
 ### While Loop
 In the whirlpool of fysh logic, the while loop, symbolized by `><(((@>`,
 ensnares conditions within `[ ]` , with `><>` and `<><` encapsulating the
