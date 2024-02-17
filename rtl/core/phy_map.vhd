@@ -63,7 +63,7 @@ begin
   gpio_addr_start <= '1' when (waddr_i = x"DEADBEEC") else '0';
   gpio_write_en   <= write_en_i and gpio_addr_start;
 
-  gpio_clk : process(clk_i)
+  gpio_clk : process(clk_i, gpio)
   begin
     if rising_edge(clk_i) then
       if gpio_write_en = '1' then

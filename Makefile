@@ -26,6 +26,8 @@ wave:
 clean:
 	rm -fv **/*~
 
+rom: rtl/core/rom_pkg.vhd
+
 rtl/core/rom_pkg.vhd: scripts/asm/main.go \
 	scripts/rom/main.go \
 	scripts/rom/rom_pkg.part1.vhd \
@@ -102,4 +104,4 @@ $(VIVADO_PROJECT_FILE):
 clean-project:
 	rm -rf $(VIVADO_PROJECT_DIR)
 
-.PHONY: clean fmt test tcl clean-project
+.PHONY: clean fmt test tcl clean-project rom

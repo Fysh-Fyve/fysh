@@ -54,7 +54,7 @@ begin
   reg_file(0) <= (others => '0');
 
   -- Async! hell yeah I am not sure if this works
-  register_read : process(reg_sel_1_i, reg_sel_2_i, rd_clk_i)
+  register_read : process(reg_sel_1_i, reg_sel_2_i, rd_clk_i, reg_file)
   begin
     reg_val_1_o <= reg_file(to_integer(unsigned(reg_sel_1_i)));
     reg_val_2_o <= reg_file(to_integer(unsigned(reg_sel_2_i)));

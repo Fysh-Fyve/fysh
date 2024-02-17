@@ -106,7 +106,7 @@ begin
   pc_next_sel_o <= mux_sels(2);
   rd_sel_o      <= mux_sels(1 downto 0);
 
-  drive_clock : process(clk_i, opcode_i, pc_clk, ir_clk, mem_write_en)
+  drive_clock : process(clk_i, reset_i, opcode_i, pc_clk, ir_clk, mem_write_en)
     use std.textio.all;
     variable l : line;
   begin
