@@ -28,12 +28,17 @@ TEST_CASE("operators") {
                   "| "
                   "^ "
                   "~= "
+                  "~≈ "
                   "== "
+                  "≈≈ "
                   "= "
+                  "≈ "
                   "o~ "
                   "~o "
                   "o~= "
+                  "o~≈ "
                   "~o= "
+                  "~o≈ "
                   ">> "
                   "<< "};
 
@@ -47,13 +52,18 @@ TEST_CASE("operators") {
   T(Species::CARET);
 
   T(Species::NOT_EQUAL);
+  T(Species::NOT_EQUAL);
+  T(Species::EQUAL);
   T(Species::EQUAL);
 
+  T(Species::ASSIGN);
   T(Species::ASSIGN);
 
   T(Species::TADPOLE_GT);
   T(Species::TADPOLE_LT);
   T(Species::TADPOLE_GTE);
+  T(Species::TADPOLE_GTE);
+  T(Species::TADPOLE_LTE);
   T(Species::TADPOLE_LTE);
 
   T(Species::SHIFT_RIGHT);

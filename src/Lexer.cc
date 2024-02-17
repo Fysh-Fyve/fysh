@@ -20,6 +20,8 @@
 
 #include "Lexer.h"
 #include <cctype>
+#include <string_view>
+#include <variant>
 
 #ifdef FYSH_DEBUG
 #include <iostream>
@@ -64,63 +66,41 @@ fysh::Fysh fysh::FyshLexer::goFysh(Species s) noexcept {
   return s;
 }
 
-fysh::Fysh fysh::FyshLexer::tryUnicode(const char *bytes, Species s) noexcept {
-  bool touched{false};
-  for (size_t i = 0; (unsigned char)bytes[i] != 0x00; i++) {
-    if ((unsigned char)periscope() == (unsigned char)bytes[i]) {
-      reel();
-      touched = true;
-    } else {
-      if (touched) {
-        return cullDeformedFysh();
-      } else {
-        // Contiue looping through the characters
-        return Species::CONTINUE;
-      }
-    }
+fysh::FyshChar fysh::FyshLexer::eatFyshChar() noexcept {
+  FyshChar cur{peekFyshChar()};
+  if (std::holds_alternative<const char *>(cur)) {
+    auto curFysh{std::get<const char *>(cur)};
+    current = curFysh + 1;
+    return cur;
+  } else {
+    auto curFysh{std::get<std::string_view>(cur)};
+    current = curFysh.end();
+    return cur;
   }
-  return {s};
+}
+
+fysh::FyshChar fysh::FyshLexer::peekFyshChar() noexcept {
+  size_t offset = 0;
+  // Skip continuation bytes;
+  while ((current[offset] & 0xC0) == 0x80) {
+    offset++;
+  }
+  const char *start{current + offset};
+  size_t bytesToRead = 1;
+  if ((*start & 0xE0) == 0xC0) {
+    bytesToRead = 2;
+  } else if ((*start & 0xF0) == 0xE0) {
+    bytesToRead = 3;
+  } else if ((*start & 0xF8) == 0xF0) {
+    bytesToRead = 4;
+  } else {
+    // Single-byte char
+    return FyshChar{start};
+  }
+  return FyshChar{std::string_view{start, bytesToRead}};
 }
 
 // -------------- Token functions --------------
-
-struct Unicode {
-  const char *codePoint;
-  fysh::Species species;
-};
-
-/**
- * Try to match the token to Unicode characters.
- *
- * This assumes that none of these characters start with the same byte, or
- * else trying to check the next character will not work anymore because it
- * will already be marked as invalid.
- * Example:
- * ♡  - U+2661 - 0xE2 0x99 0xA1
- * ♥  - U+2665 - 0xE2 0x99 0xA5
- * These two start with the same bytes 0xE2 and 0x99.
- * if we add ♥ to the list of valid tokens, it will never be checked because
- * the lexer will match the first two bytes of ♡, see that 0xA5 != 0xA1,
- * and return an invalid token (instead of continuing to check).
- * Maybe we can implement this with a Trie, but it doesn't seem worth it
- * for only two tokens.
- */
-fysh::Fysh fysh::FyshLexer::unicode() noexcept {
-  static const struct Unicode chars[] = {
-      {"💔", Species::HEART_DIVIDE},
-      {"♡", Species::HEART_MULTIPLY},
-  };
-  for (const struct Unicode &c : chars) {
-    fysh::Fysh fysh{tryUnicode(c.codePoint, c.species)};
-    // We either get an invalid token or a non-continue token
-    if (fysh == Species::INVALID || !(fysh == Species::CONTINUE)) {
-      return fysh;
-    }
-  }
-
-  return cullDeformedFysh();
-}
-
 fysh::Fysh fysh::FyshLexer::cullDeformedFysh() noexcept {
   while (!isSpace(periscope()) && periscope() != '\0') {
     reel();
@@ -409,10 +389,16 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     reel();
     if (periscope() == '=') {
       return goFysh(Species::NOT_EQUAL);
+    } else if (peekFyshChar() == "≈") {
+      eatFyshChar();
+      return Species::NOT_EQUAL;
     } else if (periscope() == 'o') {
       reel();
       if (periscope() == '=') {
         return goFysh(Species::TADPOLE_LTE);
+      } else if (peekFyshChar() == "≈") {
+        eatFyshChar();
+        return Species::TADPOLE_LTE;
       } else {
         // We already reeled in o, do not go fysh.
         return Species::TADPOLE_LT;
@@ -439,6 +425,9 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
       reel();
       if (periscope() == '=') {
         return goFysh(Species::TADPOLE_GTE);
+      } else if (peekFyshChar() == "≈") {
+        eatFyshChar();
+        return Species::TADPOLE_GTE;
       } else {
         // We already reeled in ~, do not go fysh.
         return Species::TADPOLE_GT;
@@ -447,6 +436,22 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
       return cullDeformedFysh();
     }
   default:
-    return unicode();
+    if (peekFyshChar() == "♡") {
+      eatFyshChar();
+      return Species::HEART_MULTIPLY;
+    } else if (peekFyshChar() == "💔") {
+      eatFyshChar();
+      return Species::HEART_DIVIDE;
+    } else if (peekFyshChar() == "≈") {
+      eatFyshChar();
+      if (peekFyshChar() == "≈") {
+        eatFyshChar();
+        return Species::EQUAL;
+      } else {
+        return Species::ASSIGN;
+      }
+    } else {
+      return cullDeformedFysh();
+    }
   }
 }
