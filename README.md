@@ -74,13 +74,13 @@ Steve doesn’t give a flying fysh about their scale direction. ≈ for variable
 <!@#$><
 ```
 
-##### Not all fysh are created equal. But sometimes they are. We can check this using ≈≈ or ==
+##### Not all fysh are created equal. But sometimes they are. We can check this using `≈≈` or `==`
 ```
 ><steven> ≈≈ ><theFysh> ~
 ><steven> == ><theFysh> ~
 ```
 
-##### But sometimes we want to ensure that two fysh are different. This can be done using ~≈ or ~=
+##### But sometimes we want to ensure that two fysh are different. This can be done using `~≈` or `~=`
 ```
 ><steven> ~≈ ><theFysh> ~
 ><steven> ~= ><theFysh> ~
@@ -107,7 +107,7 @@ Steve doesn’t give a flying fysh about their scale direction. ≈ for variable
 
 
 
-##### Steven is looking for a change and is interested in having their bits rearranged. Given it's 2024, a time when open-mindedness prevails, Steven has a variety of bitwise manipulation techniques at his disposal: AND ( & ), OR (|), XOR (^), NOT (!). For those moments when he's feeling particularly adventurous, he might even consider the logical shift left (<<) or logical shift right (>>) operators.
+##### Steven is looking for a change and is interested in having their bits rearranged. Given it's 2024, a time when open-mindedness prevails, Steven has a variety of bitwise manipulation techniques at his disposal: `AND ( & )`, `OR (|)`, `XOR (^)`, `NOT (!)`. For those moments when he's feeling particularly adventurous, he might even consider the `logical shift left (<<)` or `logical shift right (>>)` operators.
 ```
 ><steven> &  ><{((°> ~
 ><steven> |  ><{((°> ~
@@ -117,7 +117,7 @@ Steve doesn’t give a flying fysh about their scale direction. ≈ for variable
 ><steven> >> ><{((°> ~
 ```
 
-##### In the whirlpool of fysh logic, the while loop, symbolized by ><(((@>, ensnares conditions within [ and ] , with ><> and <>< encapsulating the iterative heart.
+##### In the whirlpool of fysh logic, the while loop, symbolized by `><(((@>`, ensnares conditions within `[ ]` , with `><>` and `<><` encapsulating the iterative heart.
 ```
 ><(((@> [ ><steven> o~ ><{((°> ]
 ><>
@@ -125,7 +125,7 @@ Steve doesn’t give a flying fysh about their scale direction. ≈ for variable
 <><
 ```
 
-##### Navigating through decision streams, if and else statements flow naturally. \><(((^\> marks the if, \><(((\*\> \><(((^\> for else if, and \><(((\*\> for the uncharted else.
+##### Navigating through decision streams, if and else statements flow naturally. `><(((^>` marks the if, >`<(((*> ><(((^>` for else if, and `><(((*>` for the uncharted else.
 ```
 ><(((^> [ ><steven> o~ ><{((°> ]
 ><>
@@ -143,7 +143,7 @@ Steve doesn’t give a flying fysh about their scale direction. ≈ for variable
 <><
 ```
 
-##### For those seeking the fortune of randomness, ><###> unveils a 32-bit treasure, while \><//\> whispers single-line comment and \></\*\>, <\*/\>< span multiline scriptures.
+##### For those seeking the fortune of randomness, `><###>` unveils a 32-bit treasure, while `><//>` whispers single-line comment and `></*>`, `<*\><` span multiline scriptures.
 ```
 ><###> ~
 
@@ -155,7 +155,7 @@ Comments 2
 <*/><
 ```
 
-##### A fysh tank [ ] is an array of fysh separated by fysh food ‘ - ‘
+##### A fysh tank `[ ]` is an array of fysh separated by fysh food ` - `
 ```
 ><steven> ≈ [><({(°> - ><({(°>] ~
 ```
