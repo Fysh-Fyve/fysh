@@ -62,7 +62,7 @@ architecture rtl of control_fsm is
   end write;
 begin
   with opcode_i(6 downto 2) select write_dest <=
-    reg  when OPCODE_LUI | OPCODE_AUIPC | OPCODE_REG_IM | OPCODE_REG_REG | OPCODE_LOAD,
+    reg  when OPCODE_LUI | OPCODE_AUIPC | OPCODE_REG_IM | OPCODE_REG_REG | OPCODE_LOAD | OPCODE_JAL,
     mem  when OPCODE_STORE,
     none when others;
 
@@ -87,15 +87,16 @@ begin
     "01" & "111" & "10" & "01" when OPCODE_REG_IM,
     "00" & "111" & "10" & "01" when OPCODE_REG_REG,
 
+    "01" & "011" & "10" & "11" when OPCODE_LOAD,
+    "01" & "110" & "10" & "01" when OPCODE_STORE,
+
+    "11" & "111" & "11" & "00" when OPCODE_JAL,
+    "00" & "111" & "10" & "01" when OPCODE_JALR,
+    "00" & "111" & "10" & "01" when OPCODE_BRANCH,
+
     -- Because I'm sleeping on these
     "ZZ" & "ZZZ" & "ZZ" & "ZZ" when OPCODE_FENCE,
     "ZZ" & "ZZZ" & "ZZ" & "ZZ" when OPCODE_ATOMIC,
-
-    "01" & "011" & "10" & "11" when OPCODE_LOAD,
-    "01" & "110" & "10" & "01" when OPCODE_STORE,
-    "00" & "111" & "10" & "01" when OPCODE_JAL,
-    "00" & "111" & "10" & "01" when OPCODE_JALR,
-    "00" & "111" & "10" & "01" when OPCODE_BRANCH,
     (others => 'X')            when others;
 
   alu_a_sel_o   <= mux_sels(8);
