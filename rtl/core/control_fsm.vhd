@@ -46,6 +46,8 @@ architecture rtl of control_fsm is
   signal rd_clk       : std_ulogic := '0';
   signal mem_write_en : std_ulogic := '0';
 
+  signal branch : std_ulogic := '0';
+
   signal write_dest : write_dest_t := none;
   signal state      : state_t      := init;
 
@@ -65,6 +67,15 @@ begin
     reg  when OPCODE_LUI | OPCODE_AUIPC | OPCODE_REG_IM | OPCODE_REG_REG | OPCODE_LOAD | OPCODE_JAL | OPCODE_JALR,
     mem  when OPCODE_STORE,
     none when others;
+
+  with op_bits_i select branch <=
+    eq_i      when "000",               -- BEQ
+    not eq_i  when "001",               -- BNE
+    lt_i      when "100",               -- BLT
+    not lt_i  when "101",               -- BGE
+    ltu_i     when "110",               -- BLTU
+    not ltu_i when "111",               -- BGEU
+    '0'       when others;
 
   with opcode_i(6 downto 2) select sub_sra_o <=
     '0'       when OPCODE_AUIPC,        -- 0 for sure
@@ -92,7 +103,8 @@ begin
 
     "11" & "111" & "11" & "00" when OPCODE_JAL,
     "01" & "111" & "11" & "00" when OPCODE_JALR,
-    "00" & "111" & "10" & "01" when OPCODE_BRANCH,
+
+    "00" & "111" & not branch & "0" & "01" when OPCODE_BRANCH,
 
     -- Because I'm sleeping on these
     "ZZ" & "ZZZ" & "ZZ" & "ZZ" when OPCODE_FENCE,
