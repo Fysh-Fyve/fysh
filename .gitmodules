@@ -1,6 +1,6 @@
 [submodule "cpu"]
 	path = cpu
-	url = git@github.com:Fysh-Fyve/riscv.git
+	url = https://github.com/Fysh-Fyve/riscv.git
 [submodule "fysh"]
 	path = fysh
-	url = git@github.com:Fysh-Fyve/fysh.git
+	url = https://github.com/Fysh-Fyve/fysh.git
