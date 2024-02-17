@@ -245,13 +245,29 @@ fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
     scaleCount++;
   }
   // Special loopy fysh
-  if (scaleCount == 3 && value == 0 && dir == FyshDirection::RIGHT &&
-      periscope() == '@') {
-    reel();
-    if (periscope() == '>') {
-      return goFysh(Species::FYSH_LOOP);
-    } else {
-      return cullDeformedFysh();
+  if (scaleCount == 3 && value == 0 && dir == FyshDirection::RIGHT) {
+    switch (periscope()) {
+    case '@':
+      reel();
+      if (periscope() == '>') {
+        return goFysh(Species::FYSH_LOOP);
+      } else {
+        return cullDeformedFysh();
+      }
+    case '^':
+      reel();
+      if (periscope() == '>') {
+        return goFysh(Species::IF);
+      } else {
+        return cullDeformedFysh();
+      }
+    case '*':
+      reel();
+      if (periscope() == '>') {
+        return goFysh(Species::ELSE);
+      } else {
+        return cullDeformedFysh();
+      }
     }
   }
 
