@@ -430,6 +430,8 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     return goFysh(Species::FYSH_TANK_OPEN);
   case ']':
     return goFysh(Species::FYSH_TANK_CLOSE);
+  case '-':
+    return goFysh(Species::FYSH_FOOD);
   case '=':
     reel();
     if (periscope() == '=') {

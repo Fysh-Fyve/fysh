@@ -75,6 +75,7 @@ enum class Species {
   SHIFT_RIGHT,     // >>
   IF,              // ><(((^>
   ELSE,            // ><(((*>
+  FYSH_FOOD,       // -
 };
 
 class Fysh {
