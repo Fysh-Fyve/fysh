@@ -40,6 +40,8 @@ struct FyshChar : public std::variant<const char *, std::string_view> {
   }
 };
 
+std::ostream &operator<<(std::ostream &os, const fysh::FyshChar &f);
+
 enum class FyshDirection { RIGHT, LEFT };
 
 // code is based off of this:
