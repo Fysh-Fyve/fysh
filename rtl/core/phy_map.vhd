@@ -33,8 +33,8 @@ architecture rtl of phy_map is
   --! Maybe we should split them up more?
   constant MEM_SPLIT : integer := 17;
 
-  signal dmem_sel       : std_ulogic;
-  signal imem_sel       : std_ulogic;
+  signal dmem_sel      : std_ulogic;
+  signal imem_sel      : std_ulogic;
   signal ram_write_en  : std_ulogic;
   signal gpio_write_en : std_ulogic;
   signal rom_write_en  : std_ulogic;
@@ -46,6 +46,8 @@ architecture rtl of phy_map is
   signal drom_out : std_ulogic_vector (31 downto 0);
   signal iram_out : std_ulogic_vector (31 downto 0);
   signal irom_out : std_ulogic_vector (31 downto 0);
+
+  signal rom_data_in : std_ulogic_vector (31 downto 0);
 
   signal gpio_addr_start : std_ulogic;
 
@@ -67,8 +69,6 @@ begin
                 & d_i(15 downto 8)
                 & d_i(23 downto 16)
                 & d_i(31 downto 24);
-
-  rom_write_en <= '0';                  -- Disable writing to ROM
 
   ram_write_en    <= write_en_i and not gpio_addr_start;
   gpio_addr_start <= '1' when (waddr_i = x"DEADBEEC") else '0';
@@ -110,11 +110,11 @@ begin
     (others => 'X') when others;
 
   with iraddr_i(MEM_SPLIT) select imem_out <=
-    iram_out        when '1',
+    dram_out        when '1',
     irom_out        when '0',
     (others => 'X') when others;
 
-  rom_inst : entity work.mem(rtl)
+  rom_inst : entity work.brom(rtl)
     generic map (
       DATA   => rom_arr,
       ADDR_W => ROM_ADDR_W)
@@ -122,19 +122,15 @@ begin
       clk_i        => clk_i,
       iread_addr_i => iraddr_i(ROM_ADDR_W+1 downto 2),
       dread_addr_i => draddr_i(ROM_ADDR_W+1 downto 2),
-      write_en_i   => rom_write_en,
-      d_i          => le_data_in,
       d_o          => drom_out,
       i_o          => irom_out);
 
-  ram_inst : entity work.mem(rtl)
+  ram_inst : entity work.bram(rtl)
     port map (
       clk_i        => clk_i,
-      iread_addr_i => iraddr_i(MEM_SPLIT-1 downto 2),
-      dread_addr_i => draddr_i(MEM_SPLIT-1 downto 2),
+      read_addr_i => draddr_i(MEM_SPLIT-1 downto 2),
       write_addr_i => waddr_i(MEM_SPLIT-1 downto 2),
       write_en_i   => ram_write_en,
       d_i          => le_data_in,
-      d_o          => dram_out,
-      i_o          => iram_out);
+      d_o          => dram_out);
 end rtl;

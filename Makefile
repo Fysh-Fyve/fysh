@@ -65,6 +65,8 @@ alu_tb: $(TEST_DIR)/alu_tb.vhd $(ALU)
 
 
 _MEM := mem \
+	brom \
+	bram \
 	rom_pkg \
 	fysh_fyve_pkg \
 
