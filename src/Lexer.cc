@@ -70,7 +70,9 @@ fysh::FyshChar fysh::FyshLexer::eatFyshChar() noexcept {
   FyshChar cur{peekFyshChar()};
   if (std::holds_alternative<const char *>(cur)) {
     auto curFysh{std::get<const char *>(cur)};
-    current = curFysh + 1;
+    if (*curFysh != '\0') {
+      current = curFysh + 1;
+    }
     return cur;
   } else {
     auto curFysh{std::get<std::string_view>(cur)};
