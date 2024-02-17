@@ -455,3 +455,12 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     }
   }
 }
+
+std::ostream &fysh::operator<<(std::ostream &os, const fysh::FyshChar &f) {
+  if (std::holds_alternative<const char *>(f)) {
+    os << *std::get<const char *>(f);
+  } else {
+    os << std::get<std::string_view>(f);
+  }
+  return os;
+}
