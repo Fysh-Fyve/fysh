@@ -28,13 +28,16 @@ clean:
 
 rom: rtl/core/rom_pkg.vhd
 
-rtl/core/rom_pkg.vhd: scripts/asm/main.go \
-	scripts/rom/main.go \
+rtl/core/rom_pkg.vhd: build/fyve-asm \
+	build/fyve-asm \
 	scripts/rom/rom_pkg.part1.vhd \
 	scripts/rom/rom_pkg.part2.vhd
 	{ cat scripts/rom/rom_pkg.part1.vhd; \
-		go run scripts/asm/main.go | go run scripts/rom/main.go; \
+		build/fyve-asm | build/fyve-rom; \
 		cat scripts/rom/rom_pkg.part2.vhd; } > $@
+
+build/fyve-%: scripts/%.cc
+	cd build && cmake ../scripts
 
 
 %_tb: $(TEST_DIR)/%_tb.vhd $(SRC_DIR)/%.vhd
