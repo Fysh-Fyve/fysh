@@ -17,11 +17,11 @@
 /**
  * \file Lexer.h
  */
-#include "Fysh.h"
-#include <variant>
-
 #ifndef FYSH_LEXER_H_
 #define FYSH_LEXER_H_
+
+#include "Fysh.h"
+#include <variant>
 
 // Uncomment to print the current line where periscope is called
 // #define FYSH_DEBUG

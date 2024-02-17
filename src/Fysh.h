@@ -28,14 +28,13 @@ Fysh: an object with a species and body
 Stream: the input string
 Current: the current position in the input string
 */
+#ifndef FYSH_FYSH_H_
+#define FYSH_FYSH_H_
 
 #include <cstdint>
 #include <optional>
 #include <ostream>
 #include <string_view>
-
-#ifndef FYSH_FYSH_H_
-#define FYSH_FYSH_H_
 
 namespace fysh {
 
