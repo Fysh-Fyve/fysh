@@ -1,11 +1,17 @@
 ##### This is fysh
-` ><> `
+```
+><> 
+```
 
 ##### Fysh have to be terminated `~`
-`><> ~`
+```
+><> ~
+```
 
 ##### This is Steven
-`><steven> ~`
+```
+><steven> ~
+```
 
 ##### Steven has binary scales. ` } ` represents 1 and ` ) ` represents 0. Steve is valued at `b101` (5 in decimal)
 ```
