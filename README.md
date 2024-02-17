@@ -158,7 +158,7 @@ adventurous, he might even consider the `logical shift left (<<)` or
 ><steven> &  ><{((°> ~
 ><steven> |  ><{((°> ~
 ><steven> ^  ><{((°> ~
-><steven> !  ><{((°> ~
+! ><steven> ~
 ><steven> << ><{((°> ~
 ><steven> >> ><{((°> ~
 ```
