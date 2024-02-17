@@ -244,6 +244,20 @@ TEST_CASE("Fysh If Else") {
   T(Species::FYSH_CLOSE);
 }
 
+TEST_CASE("Arrays") {
+  FyshLexer lexer{"><fysh> = [ ><{}o> - ><{}o> ] ~"};
+
+  IDENT("fysh");
+  T(Species::ASSIGN);
+  T(Species::FYSH_TANK_OPEN);
+  T(3);
+  T(Species::FYSH_FOOD);
+  T(3);
+  T(Species::FYSH_TANK_CLOSE);
+  T(Species::TERMINATE);
+  T(Species::END);
+}
+
 TEST_CASE("Fysh Factorial") {
   FyshLexer lexer{R"(
 ><fysh>   = ><{({o> ~
