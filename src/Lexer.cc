@@ -253,26 +253,27 @@ fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
     }
   }
 
-  c = reel(); // stores the value after the last scale
-
-  // check if the current character is an eye or >
-  if (!(isFyshEye(c) && periscope() == '>') && c != '>') {
-    return cullDeformedFysh();
-  }
-
-  // check if its the end of the token or not (2nd character after the scales)
-  if (!isSpace(periscope())) {
-    c = periscope();
-    if ((dir == FyshDirection::RIGHT &&
-         c != '>') || // checks for '°>' (fysh head)
-        (dir == FyshDirection::LEFT &&
-         c != '<')) { // checks for '><' (fysh tail)
+  if (dir == FyshDirection::RIGHT) {
+    if (peekFyshChar() == "°") {
+      eatFyshChar();
+    } else if (periscope() == 'o') {
+      reel();
+    }
+    if (periscope() != '>') {
+      return cullDeformedFysh();
+    }
+    reel();
+  } else {
+    if (periscope() != '>') {
+      return cullDeformedFysh();
+    }
+    reel();
+    if (periscope() != '<') {
       return cullDeformedFysh();
     }
     reel();
   }
 
-  // make sure the token ends
   if (!isSpace(periscope()) && periscope() != '\0') {
     return cullDeformedFysh();
   }
@@ -326,14 +327,30 @@ fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
   case ('('):
   case ('}'):
   case (')'):
-  case ('o'):
-    return scales(FyshDirection::LEFT); // negative fysh literal <°)})}><
+    return scales(FyshDirection::LEFT); // eyeless negative fysh literal <)})}><
   case ('>'):
     return fyshClose(); // close curly bracket
   case ('!'):
     return closeWTF(); // error handling close tag
+  case ('o'):
+    reel();
+    switch (periscope()) {
+    case ('{'):
+    case ('('):
+    case ('}'):
+    case (')'):
+      // eyeless negative fysh literal <)})}><
+      return scales(FyshDirection::LEFT);
+    default:
+      current--;
+      return identifier(FyshDirection::LEFT);
+    }
+    return scales(FyshDirection::LEFT);
   default:
-    if (std::isalpha(periscope())) {
+    if (peekFyshChar() == "°") {
+      eatFyshChar();
+      return scales(FyshDirection::LEFT);
+    } else if (std::isalpha(periscope())) {
       return identifier(FyshDirection::LEFT);
     } else {
       return cullDeformedFysh();
@@ -359,7 +376,7 @@ fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
   case ('#'):
     return random(); // random number
   default:
-    if (std::isalpha(periscope()) && periscope() != 'o') {
+    if (std::isalpha(periscope())) {
       return identifier(FyshDirection::RIGHT);
     } else {
       return cullDeformedFysh();

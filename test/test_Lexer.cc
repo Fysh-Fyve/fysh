@@ -103,6 +103,16 @@ TEST_CASE("random fysh") {
   T(Species::END);
 }
 
+TEST_CASE("fysh eye") {
+  FyshLexer lexer{"><{{({(°> <3 <°})}>< <°})}><"};
+
+  T(0b011010);
+  T(Species::HEART_MULTIPLY);
+  T(-0b0101);
+  T(-0b0101);
+  T(Species::END);
+}
+
 TEST_CASE("negative fysh") {
   FyshLexer lexer{"><{{({(o> <3 <o})}>< <o})}><"};
 
@@ -151,7 +161,7 @@ TEST_CASE("Swim Left") {
 }
 
 TEST_CASE("identifiers") {
-  FyshLexer lexer{"><pos> <neg><"};
+  FyshLexer lexer{"><pos> <neg>< ><ostart> <ostart><"};
 
   auto fysh{lexer.nextFysh()};
   CHECK(fysh == "pos");
@@ -160,6 +170,16 @@ TEST_CASE("identifiers") {
 
   fysh = lexer.nextFysh();
   CHECK(fysh == "neg");
+  CHECK(fysh == Species::FYSH_IDENTIFIER);
+  CHECK(fysh.negate == true);
+
+  fysh = lexer.nextFysh();
+  CHECK(fysh == "ostart");
+  CHECK(fysh == Species::FYSH_IDENTIFIER);
+  CHECK(fysh.negate == false);
+
+  fysh = lexer.nextFysh();
+  CHECK(fysh == "ostart");
   CHECK(fysh == Species::FYSH_IDENTIFIER);
   CHECK(fysh.negate == true);
 
