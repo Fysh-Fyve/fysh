@@ -23,10 +23,12 @@ entity mem is
 
   port(
     d_i               : in  std_ulogic_vector (31 downto 0);
-    read_addr_i       : in  std_ulogic_vector (ADDR_W-1 downto 0) := (others => '0');
+    dread_addr_i      : in  std_ulogic_vector (ADDR_W-1 downto 0) := (others => '0');
+    iread_addr_i      : in  std_ulogic_vector (ADDR_W-1 downto 0) := (others => '0');
     write_addr_i      : in  std_ulogic_vector (ADDR_W-1 downto 0) := (others => '0');
     clk_i, write_en_i : in  std_ulogic;
-    d_o               : out std_ulogic_vector (31 downto 0));
+    d_o               : out std_ulogic_vector (31 downto 0);
+    i_o               : out std_ulogic_vector (31 downto 0));
 
 end mem;
 
@@ -46,7 +48,8 @@ begin
         writeline(output, l);
         RAM(to_integer(unsigned(write_addr_i))) <= d_i;
       end if;
-      d_o <= RAM(to_integer(unsigned(read_addr_i)));
+      d_o <= RAM(to_integer(unsigned(dread_addr_i)));
+      i_o <= RAM(to_integer(unsigned(iread_addr_i)));
     end if;
   end process;
 end architecture rtl;

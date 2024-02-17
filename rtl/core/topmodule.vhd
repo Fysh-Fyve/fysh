@@ -45,15 +45,17 @@ architecture rtl of topmodule is
   signal alu_a_sel : std_ulogic := '0';
   signal alu_b_sel : std_ulogic := '0';
 
-  signal raddr_sel : std_ulogic                      := '0';
-  signal waddr_sel : std_ulogic                      := '0';
-  signal rd_clk    : std_ulogic                      := '0';
-  signal rd_sel    : std_ulogic_vector (1 downto 0)  := (others => '0');
-  signal alu       : std_ulogic_vector (31 downto 0) := (others => '0');
-  signal pc        : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal draddr_sel : std_ulogic                      := '0';
+  signal iraddr_sel : std_ulogic                      := '0';
+  signal waddr_sel  : std_ulogic                      := '0';
+  signal rd_clk     : std_ulogic                      := '0';
+  signal rd_sel     : std_ulogic_vector (1 downto 0)  := (others => '0');
+  signal alu        : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal pc         : std_ulogic_vector (31 downto 0) := (others => '0');
 
-  signal rd_val                        : std_ulogic_vector (31 downto 0);
-  signal raddr, waddr, mem_out, mem_sx : std_ulogic_vector (31 downto 0);
+  signal rd_val                            : std_ulogic_vector (31 downto 0);
+  signal iraddr, draddr                    : std_ulogic_vector (31 downto 0);
+  signal waddr, dmem_out, imem_out, mem_sx : std_ulogic_vector (31 downto 0);
 begin
   print : process(clk)
     use std.textio.all;
@@ -127,7 +129,8 @@ begin
     sub_sra_o      => sub_sra,
     op_bits_o      => op_bits,
     waddr_sel_o    => waddr_sel,
-    raddr_sel_o    => raddr_sel,
+    iraddr_sel_o   => iraddr_sel,
+    draddr_sel_o   => draddr_sel,
     alu_a_sel_o    => alu_a_sel,
     alu_b_sel_o    => alu_b_sel,
     rd_sel_o       => rd_sel,
@@ -151,16 +154,18 @@ begin
 
   mem_inst : entity work.phy_map(rtl) port map (
     clk_i      => clk,
-    raddr_i    => raddr,
+    draddr_i   => draddr,
+    iraddr_i   => iraddr,
     waddr_i    => waddr,
     write_en_i => mem_write_en,
     d_i        => rs2_val,
-    d_o        => mem_out,
+    d_o        => dmem_out,
+    i_o        => imem_out,
     gpio       => gpio
     );
 
   mbr_sx_inst : entity work.mbr_sx(rtl) port map (
-    mbr_i => mem_out,
+    mbr_i => dmem_out,
     sx_o  => mem_sx);
 
   register_file_inst : entity work.register_file(rtl) port map (
@@ -173,8 +178,12 @@ begin
     reg_val_1_o    => rs1_val,
     reg_val_2_o    => rs2_val);
 
+  with draddr_sel select draddr <=
+    pc              when '1',
+    alu             when '0',
+    (others => 'X') when others;
 
-  with raddr_sel select raddr <=
+  with iraddr_sel select iraddr <=
     pc              when '1',
     alu             when '0',
     (others => 'X') when others;
@@ -198,10 +207,10 @@ begin
     if reset = '0' then
       insn <= (others => '0');
     elsif rising_edge(ir_clk) and mem_write_en = '0' then
-      write(l, string'("mem_out: "));
-      write(l, to_hstring(mem_out));
+      write(l, string'("imem_out: "));
+      write(l, to_hstring(imem_out));
       writeline(output, l);
-      insn <= mem_out;
+      insn <= imem_out;
     end if;
   end process insn_register;
 end rtl;

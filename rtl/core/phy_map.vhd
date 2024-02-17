@@ -17,12 +17,14 @@ entity phy_map is
     clk_i      : in std_ulogic;         --! Clock signal
     write_en_i : in std_ulogic;         --! Write enable
 
-    raddr_i : in    std_ulogic_vector (31 downto 0);   --! Read Address
-    waddr_i : in    std_ulogic_vector (31 downto 0);   --! Write Address
-    d_i     : in    std_ulogic_vector (31 downto 0);   --! Data Output
-    d_o     : out   std_ulogic_vector (31 downto 0);   --! Data Output
+    iraddr_i : in    std_ulogic_vector (31 downto 0);  --! Instruction Read Address
+    draddr_i : in    std_ulogic_vector (31 downto 0);  --! Data Read Address
+    waddr_i  : in    std_ulogic_vector (31 downto 0);  --! Write Address
+    d_i      : in    std_ulogic_vector (31 downto 0);  --! Data Input
+    d_o      : out   std_ulogic_vector (31 downto 0);  --! Data Output
+    i_o      : out   std_ulogic_vector (31 downto 0);  --! Instruction Output
     -- TODO: GPIO PIN Mode???
-    gpio    : inout std_ulogic_vector (31 downto 0));  --! GPIO Pins
+    gpio     : inout std_ulogic_vector (31 downto 0));  --! GPIO Pins
 
 end phy_map;
 
@@ -31,25 +33,35 @@ architecture rtl of phy_map is
   --! Maybe we should split them up more?
   constant MEM_SPLIT : integer := 17;
 
-  signal mem_sel       : std_ulogic;
+  signal dmem_sel       : std_ulogic;
+  signal imem_sel       : std_ulogic;
   signal ram_write_en  : std_ulogic;
   signal gpio_write_en : std_ulogic;
   signal rom_write_en  : std_ulogic;
 
   signal gpio_out : std_ulogic_vector (31 downto 0);
-  signal mem_out  : std_ulogic_vector (31 downto 0);
-  signal ram_out  : std_ulogic_vector (31 downto 0);
-  signal rom_out  : std_ulogic_vector (31 downto 0);
+  signal dmem_out : std_ulogic_vector (31 downto 0);
+  signal imem_out : std_ulogic_vector (31 downto 0);
+  signal dram_out : std_ulogic_vector (31 downto 0);
+  signal drom_out : std_ulogic_vector (31 downto 0);
+  signal iram_out : std_ulogic_vector (31 downto 0);
+  signal irom_out : std_ulogic_vector (31 downto 0);
 
   signal gpio_addr_start : std_ulogic;
 
-  signal le_data_in  : std_ulogic_vector (31 downto 0);
-  signal le_data_out : std_ulogic_vector (31 downto 0);
+  signal le_data_in   : std_ulogic_vector (31 downto 0);
+  signal le_idata_out : std_ulogic_vector (31 downto 0);
+  signal le_ddata_out : std_ulogic_vector (31 downto 0);
 begin
-  d_o <= le_data_out(7 downto 0)
-         & le_data_out(15 downto 8)
-         & le_data_out(23 downto 16)
-         & le_data_out(31 downto 24);
+  d_o <= le_ddata_out(7 downto 0)
+         & le_ddata_out(15 downto 8)
+         & le_ddata_out(23 downto 16)
+         & le_ddata_out(31 downto 24);
+
+  i_o <= le_idata_out(7 downto 0)
+         & le_idata_out(15 downto 8)
+         & le_idata_out(23 downto 16)
+         & le_idata_out(31 downto 24);
 
   le_data_in <= d_i(7 downto 0)
                 & d_i(15 downto 8)
@@ -58,8 +70,7 @@ begin
 
   rom_write_en <= '0';                  -- Disable writing to ROM
 
-  ram_write_en <= (not mem_sel) and write_en_i;
-
+  ram_write_en    <= write_en_i and not gpio_addr_start;
   gpio_addr_start <= '1' when (waddr_i = x"DEADBEEC") else '0';
   gpio_write_en   <= write_en_i and gpio_addr_start;
 
@@ -73,19 +84,34 @@ begin
     gpio_out <= gpio;
   end process gpio_clk;
 
-  with mem_sel select le_data_out <=
+  with imem_sel select le_idata_out <=
     gpio_out        when '1',
-    mem_out         when '0',
+    imem_out        when '0',
     (others => 'X') when others;
 
-  with raddr_i(31 downto 20) select mem_sel <=
+  with dmem_sel select le_ddata_out <=
+    gpio_out        when '1',
+    dmem_out        when '0',
+    (others => 'X') when others;
+
+  with draddr_i(31 downto 20) select dmem_sel <=
     '1' when x"DEA",
     '0' when x"000",
     'X' when others;
 
-  with raddr_i(MEM_SPLIT) select mem_out <=
-    ram_out         when '1',
-    rom_out         when '0',
+  with iraddr_i(31 downto 20) select imem_sel <=
+    '1' when x"DEA",
+    '0' when x"000",
+    'X' when others;
+
+  with draddr_i(MEM_SPLIT) select dmem_out <=
+    dram_out        when '1',
+    drom_out        when '0',
+    (others => 'X') when others;
+
+  with iraddr_i(MEM_SPLIT) select imem_out <=
+    iram_out        when '1',
+    irom_out        when '0',
     (others => 'X') when others;
 
   rom_inst : entity work.mem(rtl)
@@ -93,18 +119,22 @@ begin
       DATA   => rom_arr,
       ADDR_W => ROM_ADDR_W)
     port map (
-      clk_i       => clk_i,
-      read_addr_i => raddr_i(ROM_ADDR_W+1 downto 2),
-      write_en_i  => rom_write_en,
-      d_i         => le_data_in,
-      d_o         => rom_out);
+      clk_i        => clk_i,
+      iread_addr_i => iraddr_i(ROM_ADDR_W+1 downto 2),
+      dread_addr_i => draddr_i(ROM_ADDR_W+1 downto 2),
+      write_en_i   => rom_write_en,
+      d_i          => le_data_in,
+      d_o          => drom_out,
+      i_o          => irom_out);
 
   ram_inst : entity work.mem(rtl)
     port map (
       clk_i        => clk_i,
-      read_addr_i  => raddr_i(MEM_SPLIT-1 downto 2),
+      iread_addr_i => iraddr_i(MEM_SPLIT-1 downto 2),
+      dread_addr_i => draddr_i(MEM_SPLIT-1 downto 2),
       write_addr_i => waddr_i(MEM_SPLIT-1 downto 2),
       write_en_i   => ram_write_en,
       d_i          => le_data_in,
-      d_o          => ram_out);
+      d_o          => dram_out,
+      i_o          => iram_out);
 end rtl;

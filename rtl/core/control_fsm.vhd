@@ -23,7 +23,8 @@ entity control_fsm is
     rd_sel_o  : out std_ulogic_vector (1 downto 0) := (others => '0');
 
     sub_sra_o      : out std_ulogic := '0';
-    raddr_sel_o    : out std_ulogic := '0';
+    draddr_sel_o   : out std_ulogic := '0';
+    iraddr_sel_o   : out std_ulogic := '0';
     waddr_sel_o    : out std_ulogic := '0';
     alu_a_sel_o    : out std_ulogic := '0';
     alu_b_sel_o    : out std_ulogic := '0';
@@ -48,7 +49,7 @@ architecture rtl of control_fsm is
   signal write_dest : write_dest_t := none;
   signal state      : state_t      := init;
 
-  signal mux_sels : std_ulogic_vector(7 downto 0);
+  signal mux_sels : std_ulogic_vector(8 downto 0);
 
   procedure write (l : inout std.textio.line; wd : in write_dest_t) is
     use std.textio.all;
@@ -77,30 +78,31 @@ begin
     "000"      when others;
 
   -- alu_a, alu_b
-  -- raddr_sel, waddr_sel
+  -- draddr_sel, iraddr_sel, waddr_sel
   -- pc_alu, pc_next
   -- rd_sel
   with opcode_i(6 downto 2) select mux_sels <=
-    "01" & "11" & "10" & "01" when OPCODE_LUI,
-    "11" & "11" & "10" & "01" when OPCODE_AUIPC,
-    "01" & "11" & "10" & "01" when OPCODE_REG_IM,
-    "00" & "11" & "10" & "01" when OPCODE_REG_REG,
+    "01" & "111" & "10" & "01" when OPCODE_LUI,
+    "11" & "111" & "10" & "01" when OPCODE_AUIPC,
+    "01" & "111" & "10" & "01" when OPCODE_REG_IM,
+    "00" & "111" & "10" & "01" when OPCODE_REG_REG,
 
     -- Because I'm sleeping on these
-    "ZZ" & "ZZ" & "ZZ" & "ZZ" when OPCODE_FENCE,
-    "ZZ" & "ZZ" & "ZZ" & "ZZ" when OPCODE_ATOMIC,
+    "ZZ" & "ZZZ" & "ZZ" & "ZZ" when OPCODE_FENCE,
+    "ZZ" & "ZZZ" & "ZZ" & "ZZ" when OPCODE_ATOMIC,
 
     -- TODO: Implement
-    "01" & "10" & "10" & "11" when OPCODE_LOAD,
-    "01" & "10" & "10" & "01" when OPCODE_STORE,
-    "00" & "11" & "10" & "01" when OPCODE_JAL,
-    "00" & "11" & "10" & "01" when OPCODE_JALR,
-    "00" & "11" & "10" & "01" when OPCODE_BRANCH,
-    (others => 'X')           when others;
+    "01" & "110" & "10" & "11" when OPCODE_LOAD,
+    "01" & "110" & "10" & "01" when OPCODE_STORE,
+    "00" & "111" & "10" & "01" when OPCODE_JAL,
+    "00" & "111" & "10" & "01" when OPCODE_JALR,
+    "00" & "111" & "10" & "01" when OPCODE_BRANCH,
+    (others => 'X')            when others;
 
-  alu_a_sel_o   <= mux_sels(7);
-  alu_b_sel_o   <= mux_sels(6);
-  raddr_sel_o   <= mux_sels(5);
+  alu_a_sel_o   <= mux_sels(8);
+  alu_b_sel_o   <= mux_sels(7);
+  draddr_sel_o  <= mux_sels(6);
+  iraddr_sel_o  <= mux_sels(5);
   waddr_sel_o   <= mux_sels(4);
   pc_alu_sel_o  <= mux_sels(3);
   pc_next_sel_o <= mux_sels(2);
