@@ -242,6 +242,8 @@ TEST_CASE("Fysh If Else") {
   T(Species::ELSE);
   T(Species::FYSH_OPEN);
   T(Species::FYSH_CLOSE);
+
+  T(Species::END);
 }
 
 TEST_CASE("Arrays") {
