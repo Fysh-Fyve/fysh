@@ -1,10 +1,6 @@
-To create a syntax guide for your custom language, "Fysh," in Markdown, you'll want to organize the rules and examples you've provided into a structured format that's easy to read and understand. Below is an example of how you might structure this guide, incorporating the syntax and rules of Fysh:
-
----
-
 # Fysh Language Syntax Guide
 
-Fysh is a whimsical, fish-themed programming language that offers a unique approach to coding through aquatic metaphors and binary scales. This guide provides an overview of the syntax and features of Fysh.
+Fysh is a fish-themed programming language that offers a unique approach to coding through aquatic metaphors and binary scales. This guide provides an overview of the syntax and features of Fysh.
 
 ## Basic Syntax
 
