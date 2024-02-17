@@ -18,7 +18,7 @@ entity bram is
 
   port(
     d_i               : in  std_ulogic_vector (31 downto 0);
-    read_addr_i      : in  std_ulogic_vector (ADDR_W-1 downto 0) := (others => '0');
+    read_addr_i       : in  std_ulogic_vector (ADDR_W-1 downto 0) := (others => '0');
     write_addr_i      : in  std_ulogic_vector (ADDR_W-1 downto 0) := (others => '0');
     clk_i, write_en_i : in  std_ulogic;
     d_o               : out std_ulogic_vector (31 downto 0));
