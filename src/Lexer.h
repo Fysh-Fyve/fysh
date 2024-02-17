@@ -18,6 +18,7 @@
  * \file Lexer.h
  */
 #include "Fysh.h"
+#include <variant>
 
 #ifndef FYSH_LEXER_H_
 #define FYSH_LEXER_H_
@@ -26,6 +27,18 @@
 // #define FYSH_DEBUG
 
 namespace fysh {
+
+struct FyshChar : public std::variant<const char *, std::string_view> {
+  template <typename T> bool operator!=(const T &x) const { return *this != x; }
+  bool operator==(const char &x) const {
+    return std::holds_alternative<const char *>(*this) &&
+           *std::get<const char *>(*this) == x;
+  }
+  bool operator==(const char *x) const {
+    return std::holds_alternative<std::string_view>(*this) &&
+           std::get<std::string_view>(*this) == x;
+  }
+};
 
 enum class FyshDirection { RIGHT, LEFT };
 
@@ -70,6 +83,8 @@ private:
   Fysh slashOrComment() noexcept;
   Fysh identifier(FyshDirection dir, bool increment = false) noexcept;
   Fysh cullDeformedFysh() noexcept;
+  FyshChar eatFyshChar() noexcept;
+  FyshChar peekFyshChar() noexcept;
 };
 
 }; // namespace fysh
