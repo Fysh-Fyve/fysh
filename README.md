@@ -8,10 +8,13 @@
 `><steven> ~`
 
 ##### Steven has binary scales. ` } ` represents 1 and ` ) ` represents 0. Steve is valued at `b101` (5 in decimal)
-`><steven> = ><})}> ~`
-
+```
+><steven> = ><})}> ~
+```
 Steve doesn’t give a flying fysh about their scale direction. ≈ for variable assignment is cool with them too
-`><steven> ≈ ><}({> ~`
+```
+><steven> ≈ ><}({> ~
+```
 
 ##### Steven is blind. You have the power to bless them with sight, but it's completely optional
 ```
@@ -20,18 +23,26 @@ Steve doesn’t give a flying fysh about their scale direction. ≈ for variable
 ```
 
 ##### When there is a school of fysh, their collective value is equal to the sum of each individual member. This gives steven a value of `b101 = b100+ b001`
-`><steven> ≈ ><{((°> ><(({°> ~ `
+```
+><steven> ≈ ><{((°> ><(({°> ~ 
+```
 
 ##### Sometimes fysh want to be different and swim the other direction. This takes away from the school’s value. This gives Steven a value of `b101 = b111 - b010`
-`><steven> ≈ ><{{{°> <°)})>< ~ `
+```
+><steven> ≈ ><{{{°> <°)})>< ~
+```
 
 
 ##### Fysh often get lonely. This loneliness causes fysh to meet new fysh and proliferate. This gives Steven a value of `b101010 = b110 * b111`
-`><steven> ≈ ><{{(°> ♡ ><{{{°> ~ `
+```
+><steven> ≈ ><{{(°> ♡ ><{{{°> ~
+```
 
 
 ##### Since the fysh are lonely, they aren't too picky. They’ll make do with a lesser form of love `<3`
-`><steven> = ><{{(o> <3 ><{{{o> ~ `
+```
+><steven> = ><{{(o> <3 ><{{{o> ~
+```
 
 ##### Not every fysh story is a happy one. At times, separation is unavoidable, and their division is symbolized by a heartbreak
 ```
@@ -40,10 +51,14 @@ Steve doesn’t give a flying fysh about their scale direction. ≈ for variable
 ```
 
 ##### As life goes on, we learn from our mistakes and improve. Steven’s self help journey allowed them to grow an extra tail, incrementing their value by 1
-`>><steven> ~`
+```
+>><steven> ~
+```
 
 ##### Sometimes we feel like a fyshup, a failure. And that's ok, it’s a part of being fysh. However for some fysh, this feeling is too much to handle and is internalized. They haven’t received the emotional support they need and have gone on a downward spiral, causing them to feel worthless. They begin to retreat and try to swim away in the opposite direction causing their value to decrement by 1. 
-`<steven><< ~`
+```
+<steven><< ~
+```
 
 
 ##### Sometimes Steven F*shs up and throws an error. This can be done using two WTF (What The Fysh) encompassing a string
@@ -135,10 +150,14 @@ Comments 2
 ```
 
 ##### A fysh tank [ ] is an array of fysh separated by fysh food ‘ - ‘
-`><steven> ≈ [><({(°> - ><({(°>] ~ `
+````
+><steven> ≈ [><({(°> - ><({(°>] ~
+```
 
 ##### These fysh tanks can be traversed using a fysh
-`><steven>[><(({°>] ~`
+```
+><steven>[><(({°>] ~
+```
 
 
 #### Factorial Example
