@@ -215,7 +215,7 @@ begin
     use std.textio.all;
     variable l : line;
   begin
-    if ir_clk'event then
+    if rising_edge(ir_clk) then
       write(l, string'("dmem_out: "));
       write(l, to_hstring(dmem_out));
       write(l, string'(" imem_out: "));
