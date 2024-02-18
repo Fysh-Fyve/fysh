@@ -8,6 +8,9 @@ VHDL_SRC := $(call rwildcard,$(SRC_DIR),*.vhd)
 VHDL_TEST_SRC := $(call rwildcard,$(TEST_DIR),*.vhd)
 VHDL_TEST_BENCHES := $(patsubst $(TEST_DIR)/%.vhd, %, $(VHDL_TEST_SRC))
 
+ASM_SRC := $(call rwildcard,asm,*.S)
+ASM_HEX := $(patsubst %.S,%.hex,$(ASM_SRC))
+
 FMT_SRC := $(patsubst %, fmt-%,$(VHDL_SRC) $(VHDL_TEST_SRC))
 
 export GHDL_FLAGS := compile --std=08
@@ -26,6 +29,8 @@ wave:
 clean:
 	rm -fv **/*~
 
+hex: $(ASM_HEX)
+
 rom: rtl/core/rom_pkg.vhd
 
 rtl/core/rom_pkg.vhd: asm/example.hex \
@@ -35,6 +40,9 @@ rtl/core/rom_pkg.vhd: asm/example.hex \
 	./scripts/make_rom.sh $^
 
 PREFIX=riscv-none-elf
+
+%.dump: asm/%.hex
+	$(PREFIX)-objdump -D -b binary -m riscv $<
 
 %.hex: %.elf
 	$(PREFIX)-objcopy -O binary $< $@
@@ -118,4 +126,4 @@ $(VIVADO_PROJECT_FILE):
 clean-project:
 	rm -rf $(VIVADO_PROJECT_DIR)
 
-.PHONY: clean fmt test tcl clean-project rom
+.PHONY: clean fmt test tcl clean-project rom hex
