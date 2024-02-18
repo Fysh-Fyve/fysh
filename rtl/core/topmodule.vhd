@@ -58,21 +58,27 @@ architecture rtl of topmodule is
   signal iraddr, draddr                    : std_ulogic_vector (31 downto 0);
   signal waddr, dmem_out, imem_out, mem_sx : std_ulogic_vector (31 downto 0);
 begin
-  print : process(clk)
+  print : process(pc_clk)
     use std.textio.all;
     variable l : line;
   begin
-    if rising_edge(clk) then
-      write(l, string'("pc_clk: "));
-      write(l, pc_clk);
-      write(l, string'(" rd_clk: "));
+    if rising_edge(pc_clk) then
+      -- write(l, string'("pc_clk: "));
+      -- write(l, pc_clk);
+      -- write(l, string'(" "));
+      write(l, string'("rd_clk: "));
       write(l, rd_clk);
       write(l, string'(" pc: "));
       write(l, to_hstring(pc));
       write(l, string'(" ins: "));
       write(l, to_hstring(insn));
       write(l, string'(" func3: "));
-      write_func3(l, op_bits);
+      case insn(6 downto 2) is
+        when OPCODE_BRANCH =>
+          write_func3(l, op_bits);
+        when others =>
+          write_func3(l, op_bits);
+      end case;
       write(l, string'(" opcode: "));
       write_opcode(l, insn(6 downto 2));
       write(l, string'(" alu_a_op: "));

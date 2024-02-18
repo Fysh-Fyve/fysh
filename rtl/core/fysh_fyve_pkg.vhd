@@ -47,8 +47,16 @@ package fysh_fyve is
   constant OPCODE_JALR    : opcode_t := "11001";
   constant OPCODE_BRANCH  : opcode_t := "11000";
 
+  constant BEQ  : alu_op_t := "000";
+  constant BNE  : alu_op_t := "001";
+  constant BLT  : alu_op_t := "100";
+  constant BGE  : alu_op_t := "101";
+  constant BLTU : alu_op_t := "110";
+  constant BGEU : alu_op_t := "111";
+
   procedure write_opcode (l : inout std.textio.line; oc : in opcode_t);
   procedure write_func3 (l  : inout std.textio.line; f3 : in alu_op_t);
+  procedure write_branch (l : inout std.textio.line; f3 : in alu_op_t);
 end package fysh_fyve;
 
 package body fysh_fyve is
@@ -67,6 +75,20 @@ package body fysh_fyve is
       when others                => write(l, string'("ERR"));
     end case;
   end write_func3;
+
+  procedure write_branch (l : inout std.textio.line; f3 : in alu_op_t) is
+    use std.textio.all;
+  begin
+    case f3 is
+      when BEQ    => write(l, string'("BEQ"));
+      when BNE    => write(l, string'("BNE"));
+      when BLT    => write(l, string'("BLT"));
+      when BGE    => write(l, string'("BGE"));
+      when BLTU   => write(l, string'("LTU"));
+      when BGEU   => write(l, string'("GEU"));
+      when others => write(l, string'("ERR"));
+    end case;
+  end write_branch;
 
   procedure write_opcode (l : inout std.textio.line; oc : in opcode_t) is
     use std.textio.all;
