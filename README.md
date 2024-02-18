@@ -16,15 +16,15 @@
 ><steven> ~
 ```
 
-**Steven has binary scales. `}` represents 1 and `)` represents 0. Steve is
+**Steven has binary scales. `}` represents 1 and `)` represents 0. Steven is
 valued at `b101` (5 in decimal)**
 
 ```
 ><steven> = ><})}> ~
 ```
 
-Steve doesn’t give a flying fysh about their scale direction. ≈ for variable
-assignment is cool with them too
+**Steven doesn’t give a flying fysh about their scale direction. ≈ for variable
+assignment is cool with them too**
 
 ```
 ><steven> ≈ ><}({> ~
@@ -39,7 +39,7 @@ completely optional**
 ```
 
 **When there is a school of fysh, their collective value is equal to the sum of
-each individual member. This gives steven a value of `b101 = b100+ b001`**
+each individual member. This gives Steven a value of `b101 = b100+ b001`**
 
 ```
 ><steven> ≈ ><{((°> ><(({°> ~
