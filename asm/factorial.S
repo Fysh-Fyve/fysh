@@ -32,7 +32,6 @@ halt:
 	beq	zero, zero, halt
 
 fysh_open:
-	beq	zero, zero, halt
 	mv	a0, a5
 	mv	a1, a4
 	jal	ra, multiply

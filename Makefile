@@ -51,10 +51,10 @@ PREFIX=riscv-none-elf
 	$(PREFIX)-objcopy -O binary $< $@
 
 %.elf: %.o asm/fysh-fyve.ld
-	$(PREFIX)-gcc -nostdlib	-T asm/fysh-fyve.ld -o $@ $<
+	$(PREFIX)-gcc -march=rv32i -nostdlib -T asm/fysh-fyve.ld -o $@ $<
 
 %.o: %.S
-	$(PREFIX)-as $< -o $@
+	$(PREFIX)-as $< -march=rv32i -o $@
 
 build/fyve-%: scripts/%.cc
 	cd build && cmake ../scripts && make
