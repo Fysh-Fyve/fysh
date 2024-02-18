@@ -24,7 +24,6 @@
 #include "Lexer.h"
 
 namespace fysh {
-ast::Error expectFysh(Species species);
 class FyshParser {
 
 public:
@@ -34,6 +33,8 @@ public:
 private:
   void nextFysh();
   ast::FyshStmt parseStatement();
+  ast::FyshExpr parseExpression();
+  ast::Error expectFysh(Species species);
 
   template <typename T> ast::FyshStmt terminateStatement(T node) {
     if (curFysh != Species::TERMINATE) {
