@@ -11,6 +11,7 @@ entity topmodule is
   port (
     clk   : in    std_ulogic;
     reset : in    std_ulogic;
+    done  : out   std_ulogic;
     gpio  : inout std_ulogic_vector (31 downto 0));
 end topmodule;
 
@@ -199,6 +200,11 @@ begin
     alu             when "01",
     pc_alu          when "00",
     (others => 'X') when others;
+
+  -- Branch to the same instruction (infinite loop) to signal being "done"
+  with insn(6 downto 2) select done <=
+    nor(imm_ex) and (pc_alu_sel nor pc_next_sel) when OPCODE_BRANCH,
+    '0'                                          when others;
 
   insn_register : process(reset, ir_clk, mem_write_en)
     use std.textio.all;
