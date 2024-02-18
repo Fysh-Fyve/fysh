@@ -44,6 +44,9 @@ PREFIX=riscv-none-elf
 %.dump: asm/%.hex
 	$(PREFIX)-objdump -D -b binary -m riscv $<
 
+%.rom: asm/%.hex
+	./scripts/make_rom.sh $<
+
 %.hex: %.elf
 	$(PREFIX)-objcopy -O binary $< $@
 
