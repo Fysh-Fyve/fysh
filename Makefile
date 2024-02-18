@@ -28,13 +28,22 @@ clean:
 
 rom: rtl/core/rom_pkg.vhd
 
-rtl/core/rom_pkg.vhd: build/fyve-asm \
+rtl/core/rom_pkg.vhd: asm/example.hex \
 	build/fyve-rom \
 	scripts/rom/rom_pkg.part1.vhd \
 	scripts/rom/rom_pkg.part2.vhd
-	{ cat scripts/rom/rom_pkg.part1.vhd; \
-		build/fyve-asm | build/fyve-rom; \
-		cat scripts/rom/rom_pkg.part2.vhd; } > $@
+	./scripts/make_rom.sh $^
+
+PREFIX=riscv-none-elf
+
+%.hex: %.elf
+	$(PREFIX)-objcopy -O binary $< $@
+
+%.elf: %.o asm/fysh-fyve.ld
+	$(PREFIX)-gcc -nostdlib	-T asm/fysh-fyve.ld -o $@ $<
+
+%.o: %.S
+	$(PREFIX)-as $< -o $@
 
 build/fyve-%: scripts/%.cc
 	cd build && cmake ../scripts && make
