@@ -38,7 +38,7 @@ loop_body:
 	jal	ra, multiply
 done_mul:
 	mv	a5, a2
-	sub	a4, a4, t0
+	addi	a4, a4, -1
 
 	j	loop
 

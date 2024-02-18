@@ -79,6 +79,8 @@ begin
         when others =>
           write_func3(l, op_bits);
       end case;
+      write(l, string'(" sub_sra: "));
+      write(l, sub_sra);
       write(l, string'(" opcode: "));
       write_opcode(l, insn(6 downto 2));
       write(l, string'(" alu_a_op: "));

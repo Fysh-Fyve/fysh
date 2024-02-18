@@ -48,6 +48,8 @@ architecture rtl of control_fsm is
 
   signal branch : std_ulogic := '0';
 
+  signal is_add : std_ulogic := '0';
+
   signal write_dest : write_dest_t := none;
   signal state      : state_t      := init;
 
@@ -68,19 +70,24 @@ begin
     mem  when OPCODE_STORE,
     none when others;
 
+  with op_bits_i select is_add <=
+    '1' when OP_ADD_SUB,
+    '0' when others;
+
   with op_bits_i select branch <=
-    eq_i      when "000",               -- BEQ
-    not eq_i  when "001",               -- BNE
-    lt_i      when "100",               -- BLT
-    not lt_i  when "101",               -- BGE
-    ltu_i     when "110",               -- BLTU
-    not ltu_i when "111",               -- BGEU
+    eq_i      when BEQ,
+    not eq_i  when BNE,
+    lt_i      when BLT,
+    not lt_i  when BGE,
+    ltu_i     when BLTU,
+    not ltu_i when BGEU,
     '0'       when others;
 
   with opcode_i(6 downto 2) select sub_sra_o <=
-    '0'       when OPCODE_AUIPC,        -- 0 for sure
-    sub_sra_i when OPCODE_REG_IM | OPCODE_REG_REG,
-    '0'       when others;
+    '0'                      when OPCODE_AUIPC,   -- 0 for sure
+    sub_sra_i and not is_add when OPCODE_REG_IM,  -- There is no subi
+    sub_sra_i                when OPCODE_REG_REG,
+    '0'                      when others;
 
   with opcode_i(6 downto 2) select op_bits_o <=
     op_bits_i  when OPCODE_REG_IM | OPCODE_REG_REG,
