@@ -1,5 +1,7 @@
 \newpage
+
 \setcounter{secnumdepth}{0}
+
 \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
 
 # Appendix: The Fysh Programming Language
@@ -164,7 +166,7 @@ adventurous, he might even consider the `logical shift left (<<)` or
 ><steven> &  ><{((°> ~
 ><steven> |  ><{((°> ~
 ><steven> ^  ><{((°> ~
-><steven> !  ><{((°> ~
+! ><steven> ~
 ><steven> << ><{((°> ~
 ><steven> >> ><{((°> ~
 ```
