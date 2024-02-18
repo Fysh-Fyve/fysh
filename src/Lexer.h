@@ -64,20 +64,16 @@ private:
   unsigned int line = 1;
 
   char reel() noexcept;
+  bool match(char x) noexcept;
+  bool match(const char *x) noexcept;
 #ifdef FYSH_DEBUG
   char periscope(int line = -1) const noexcept;
 #else
   char periscope() const noexcept { return *current; };
 #endif // FYSH_DEBUG
   Fysh goFysh(Species species) noexcept;
-  bool isFyshEye(char c) noexcept;
-  Fysh tryUnicode(const char *bytes, Species s) noexcept;
-  Fysh unicode() noexcept;
-  Fysh heart() noexcept;
-  Fysh heartBreak() noexcept;
   Fysh openWTF() noexcept;
   Fysh closeWTF() noexcept;
-  Fysh fyshOpen() noexcept;
   Fysh fyshClose() noexcept;
   Fysh fyshOutline() noexcept;
   Fysh scales(FyshDirection dir) noexcept;

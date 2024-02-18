@@ -308,3 +308,22 @@ TEST_CASE("Fysh Factorial") {
 
   T(Species::END);
 }
+
+TEST_CASE("Comments") {
+  FyshLexer lexer{R"(
+><//> This is a comment
+></*>
+This is also a comment
+<*/><
+)"};
+
+  auto fysh{lexer.nextFysh()};
+  CHECK(fysh == "This is a comment");
+  CHECK(fysh == Species::COMMENT);
+
+  fysh = lexer.nextFysh();
+  CHECK(fysh.getBody() == "This is also a comment");
+  CHECK(fysh == Species::MULTILINE_COMMENT);
+
+  T(Species::END);
+}

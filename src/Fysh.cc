@@ -80,14 +80,10 @@ constexpr const char *debugType(const fysh::Species &species) {
     return "RANDOM";
   case Species::COMMENT:
     return "//";
-  case Species::OPENING_COMMENT:
-    return "/*";
-  case Species::CLOSING_COMMENT:
-    return "*/";
+  case Species::MULTILINE_COMMENT:
+    return "/**/";
   case Species::INVALID:
     return "INVALID";
-  case Species::CONTINUE:
-    return "CONTINUE";
   case Species::END:
     return "END";
   case Species::BITWISE_AND:
@@ -133,6 +129,8 @@ std::ostream &fysh::operator<<(std::ostream &os, const fysh::Fysh &f) {
   case Species::INCREMENT:
   case Species::DECREMENT:
   case Species::FYSH_IDENTIFIER:
+  case Species::COMMENT:
+  case Species::MULTILINE_COMMENT:
   case Species::INVALID: {
     os << debugType(f.getSpecies()) << "`" << f.getBody() << "`";
     break;
@@ -141,4 +139,35 @@ std::ostream &fysh::operator<<(std::ostream &os, const fysh::Fysh &f) {
     os << "'" << debugType(f.getSpecies()) << "'";
   }
   return os;
+}
+
+bool fysh::Fysh::operator==(const Species &in_species) const noexcept {
+  return species == in_species;
+}
+
+bool fysh::Fysh::operator==(const char *other) const noexcept {
+  switch (species) {
+  case Species::FYSH_IDENTIFIER:
+  case Species::INCREMENT:
+  case Species::DECREMENT:
+  case Species::COMMENT:
+  case Species::MULTILINE_COMMENT:
+  case Species::INVALID:
+    return body == other;
+  default:
+    return false;
+  }
+}
+
+bool fysh::Fysh::operator==(const Fysh &other) const noexcept {
+  return other.species == species && other.body == body && other.value == value;
+}
+
+bool fysh::Fysh::operator==(const std::uint32_t &other) const noexcept {
+  if (!value.has_value()) {
+    return false;
+  }
+  std::uint32_t intValue = value.value();
+  return species == Species::FYSH_LITERAL &&
+         (negate ? -intValue : intValue) == other;
 }

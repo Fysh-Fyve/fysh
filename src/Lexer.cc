@@ -19,6 +19,7 @@
  */
 
 #include "Lexer.h"
+#include "Species.h"
 #include <cctype>
 #include <string_view>
 #include <variant>
@@ -38,23 +39,8 @@ char fysh::FyshLexer::periscope(int line) const noexcept {
 #endif
 
 // -------------- Utility functions --------------
-static bool isSpace(char c) noexcept {
-  return c == ' ' || c == '\t' || c == '\r' || c == '\n';
-}
-
 static bool isScale(char c) noexcept {
   return c == '(' || c == ')' || c == '{' || c == '}';
-}
-
-// o or ° (eye of the fysh)
-bool fysh::FyshLexer::isFyshEye(char c) noexcept {
-  switch (c) {
-  case 'o':
-    // case '°': UNICODE
-    return true;
-  default:
-    return false;
-  }
 }
 
 char fysh::FyshLexer::reel() noexcept {
@@ -109,33 +95,18 @@ fysh::FyshChar fysh::FyshLexer::peekFyshChar() noexcept {
 
 // -------------- Token functions --------------
 fysh::Fysh fysh::FyshLexer::cullDeformedFysh() noexcept {
-  while (!isSpace(periscope()) && periscope() != '\0') {
+  while (!std::isspace(periscope()) && periscope() != '\0') {
     reel();
   }
-
   const char *fyshEnd{current};
   return {Species::INVALID, fyshStart, fyshEnd};
-}
-
-// <3 or ♡
-fysh::Fysh fysh::FyshLexer::heart() noexcept {
-  return goFysh(Species::HEART_MULTIPLY);
-}
-
-// </3 or 💔
-fysh::Fysh fysh::FyshLexer::heartBreak() noexcept {
-  reel();
-  if (periscope() == '3') {
-    return goFysh(Species::HEART_DIVIDE);
-  }
-  return cullDeformedFysh();
 }
 
 // opening for error handling ><!@#$>
 fysh::Fysh fysh::FyshLexer::openWTF() noexcept {
   reel();
-  if (reel() == '@' && reel() == '#' && reel() == '$' && periscope() == '>') {
-    return goFysh(Species::WTF_OPEN);
+  if (match("@#$>")) {
+    return Species::WTF_OPEN;
   }
   return cullDeformedFysh();
 }
@@ -143,30 +114,105 @@ fysh::Fysh fysh::FyshLexer::openWTF() noexcept {
 // closing for error handling <!@#$><
 fysh::Fysh fysh::FyshLexer::closeWTF() noexcept {
   reel();
-  if (reel() == '@' && reel() == '#' && reel() == '$' && reel() == '>' &&
-      periscope() == '<') {
-    return goFysh(Species::WTF_CLOSE);
+  if (match("@#$><")) {
+    return Species::WTF_CLOSE;
   }
   return cullDeformedFysh();
-}
-
-// ><>
-fysh::Fysh fysh::FyshLexer::fyshOpen() noexcept {
-  return goFysh(Species::FYSH_OPEN);
 }
 
 // <><
 fysh::Fysh fysh::FyshLexer::fyshClose() noexcept {
   reel();
-  if (periscope() == '<') {
-    return goFysh(Species::FYSH_CLOSE);
+  if (match('<')) {
+    return Species::FYSH_CLOSE;
   }
   return cullDeformedFysh();
 }
 
+bool fysh::FyshLexer::match(const char *c) noexcept {
+  for (; *c != '\0'; c++) {
+    if (!match(*c)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool fysh::FyshLexer::match(char c) noexcept {
+  if (periscope() == c) {
+    reel();
+    return true;
+  } else {
+    return false;
+  }
+}
+
+static std::string_view trim(std::string_view in) {
+  auto left = in.begin();
+  for (;; ++left) {
+    if (left == in.end())
+      return std::string_view();
+    if (!std::isspace(*left))
+      break;
+  }
+  auto right = in.end() - 1;
+  for (; right > left && isspace(*right); --right)
+    ;
+  return std::string_view(left, std::distance(left, right) + 1);
+}
+
 fysh::Fysh fysh::FyshLexer::slashOrComment() noexcept {
-  // TODO: Implement
-  return goFysh(Species::INVALID);
+  reel();
+  switch (periscope()) {
+    // single-line
+  case '/': {
+    reel();
+    if (!match('>')) {
+      return cullDeformedFysh();
+    }
+    while (periscope() == ' ' || periscope() == '\t') {
+      reel();
+    }
+    const char *commentStart{current};
+    while (periscope() != '\n' && periscope() != '\r') {
+      reel();
+    }
+    const char *commentEnd{current};
+    // Remove any extra newlines
+    while (periscope() == '\n' || periscope() == '\r') {
+      reel();
+    }
+
+    return {Species::COMMENT, commentStart, commentEnd};
+  }
+    // multi-line
+  case '*': {
+    reel();
+    if (!match('>')) {
+      return cullDeformedFysh();
+    }
+    const char *commentStart{current};
+    while (true) {
+      while (periscope() != '<' && periscope() != '\0') {
+        reel();
+      }
+      // We reached the end... yikes
+      if (periscope() == '\0') {
+        return Species::INVALID;
+      }
+      const char *commentEnd{current};
+      reel();
+      if (match("*/><")) {
+        auto comment{std::string_view(commentStart,
+                                      std::distance(commentStart, commentEnd))};
+        auto trimmed{trim(comment)};
+        return {Species::MULTILINE_COMMENT, trimmed.data(), trimmed.length()};
+      }
+    }
+  }
+  default:
+    return cullDeformedFysh();
+  }
 }
 
 fysh::Fysh fysh::FyshLexer::identifier(FyshDirection dir,
@@ -185,35 +231,31 @@ fysh::Fysh fysh::FyshLexer::identifier(FyshDirection dir,
   const char *identEnd{current};
   reel();
   if (dir == FyshDirection::LEFT) {
-    if (periscope() != '<') {
+    if (!match('<')) {
       return cullDeformedFysh();
-    } else {
-      reel();
-      if (periscope() == '<') {
-        reel();
-        return {Species::DECREMENT, identStart, identEnd};
-      }
+    }
+    if (match('<')) {
+      return {Species::DECREMENT, identStart, identEnd};
     }
   }
+
   if (increment) {
     return {Species::INCREMENT, identStart, identEnd};
   }
 
-  Fysh fysh{Species::FYSH_IDENTIFIER, identStart, identEnd};
-  fysh.negate = dir == FyshDirection::LEFT;
-  return fysh;
+  return {Species::FYSH_IDENTIFIER, identStart, identEnd,
+          dir == FyshDirection::LEFT};
 }
 
 fysh::Fysh fysh::FyshLexer::random() noexcept {
   reel();
   for (size_t i = 1; i < 3; i++) {
-    if (periscope() != '#') {
+    if (!match('#')) {
       return cullDeformedFysh();
     }
-    reel();
   }
-  if (periscope() == '>') {
-    return goFysh(Species::RANDOM);
+  if (match('>')) {
+    return Species::RANDOM;
   }
   return cullDeformedFysh();
 }
@@ -236,58 +278,46 @@ fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
       // loopy
     case '@':
       reel();
-      if (periscope() == '>') {
-        return goFysh(Species::FYSH_LOOP);
-      } else {
-        return cullDeformedFysh();
+      if (match('>')) {
+        return Species::FYSH_LOOP;
       }
+      return cullDeformedFysh();
       // happy
     case '^':
       reel();
-      if (periscope() == '>') {
-        return goFysh(Species::IF);
-      } else {
-        return cullDeformedFysh();
+      if (match('>')) {
+        return Species::IF;
       }
+      return cullDeformedFysh();
       // dead
     case '*':
       reel();
-      if (periscope() == '>') {
-        return goFysh(Species::ELSE);
-      } else {
-        return cullDeformedFysh();
+      if (match('>')) {
+        return Species::ELSE;
       }
+      return cullDeformedFysh();
     }
   }
 
   if (dir == FyshDirection::RIGHT) {
+    // Eat any fysh eyes
     if (peekFyshChar() == "°") {
       eatFyshChar();
-    } else if (periscope() == 'o') {
-      reel();
     }
-    if (periscope() != '>') {
-      return cullDeformedFysh();
-    }
-    reel();
-  } else {
-    if (periscope() != '>') {
-      return cullDeformedFysh();
-    }
-    reel();
-    if (periscope() != '<') {
-      return cullDeformedFysh();
-    }
-    reel();
-  }
+    match('o');
 
-  if (!isSpace(periscope()) && periscope() != '\0') {
+    if (!match('>')) {
+      return cullDeformedFysh();
+    }
+  } else if (!match("><")) { // left fysh
     return cullDeformedFysh();
   }
 
-  fysh::Fysh ret{value};
-  ret.negate = dir == FyshDirection::LEFT;
-  return ret;
+  if (!std::isspace(periscope()) && periscope() != '\0') {
+    return cullDeformedFysh();
+  }
+
+  return {value, dir == FyshDirection::LEFT};
 }
 
 // --------------------------Check for the token--------------------------------
@@ -299,9 +329,13 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
     reel();
     switch (periscope()) {
     case ('3'):
-      return heart(); // <3 multiplication heart
+      return goFysh(Species::HEART_MULTIPLY); // <3 multiplication heart
     case ('/'):
-      return heartBreak(); // </3 division heart
+      reel();
+      if (match('3')) {
+        return Species::HEART_DIVIDE;
+      }
+      return cullDeformedFysh();
     case ('<'):
       return goFysh(Species::SHIFT_LEFT);
     default:
@@ -316,9 +350,9 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
       reel();
       if (periscope() == '<') {
         return identifier(FyshDirection::RIGHT, true);
-      } else {
-        return Species::SHIFT_RIGHT;
       }
+
+      return Species::SHIFT_RIGHT;
     default:
       return cullDeformedFysh();
     }
@@ -358,11 +392,11 @@ fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
     if (peekFyshChar() == "°") {
       eatFyshChar();
       return scales(FyshDirection::LEFT);
-    } else if (std::isalpha(periscope())) {
-      return identifier(FyshDirection::LEFT);
-    } else {
-      return cullDeformedFysh();
     }
+    if (std::isalpha(periscope())) {
+      return identifier(FyshDirection::LEFT);
+    }
+    return cullDeformedFysh();
   }
 }
 
@@ -376,7 +410,7 @@ fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
   case (')'):
     return scales(FyshDirection::RIGHT); // fysh literal ><{{({(°>
   case ('>'):
-    return fyshOpen(); // open curly bracket
+    return goFysh(Species::FYSH_OPEN);
   case ('!'):
     return openWTF(); // error handling
   case ('/'):
@@ -386,15 +420,14 @@ fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
   default:
     if (std::isalpha(periscope())) {
       return identifier(FyshDirection::RIGHT);
-    } else {
-      return cullDeformedFysh();
     }
+    return cullDeformedFysh();
   }
 }
 
 // Where the magic happens
 fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
-  while (isSpace(periscope())) {
+  while (std::isspace(periscope())) {
     reel();
   }
 
@@ -412,73 +445,77 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     // I think this has to change if not is also going to be ^
   case '^':
     return goFysh(Species::CARET);
-  case '~':
+  case '~': {
     reel();
-    if (periscope() == '=') {
-      return goFysh(Species::NOT_EQUAL);
-    } else if (peekFyshChar() == "≈") {
+    if (match('=')) {
+      return Species::NOT_EQUAL;
+    }
+    if (peekFyshChar() == "≈") {
       eatFyshChar();
       return Species::NOT_EQUAL;
-    } else if (periscope() == 'o') {
-      reel();
-      if (periscope() == '=') {
-        return goFysh(Species::TADPOLE_LTE);
-      } else if (peekFyshChar() == "≈") {
+    }
+    if (match('o')) {
+      if (match('=')) {
+        return Species::TADPOLE_LTE;
+      }
+      if (peekFyshChar() == "≈") {
         eatFyshChar();
         return Species::TADPOLE_LTE;
-      } else {
-        // We already reeled in o, do not go fysh.
-        return Species::TADPOLE_LT;
       }
-    } else {
-      // We already reeled in ~, do not go fysh.
-      return Species::TERMINATE;
+      // We already reeled in o, do not go fysh.
+      return Species::TADPOLE_LT;
     }
+    // We already reeled in ~, do not go fysh.
+    return Species::TERMINATE;
+  }
   case '[':
     return goFysh(Species::FYSH_TANK_OPEN);
   case ']':
     return goFysh(Species::FYSH_TANK_CLOSE);
   case '-':
     return goFysh(Species::FYSH_FOOD);
-  case '=':
+  case '=': {
     reel();
-    if (periscope() == '=') {
-      return goFysh(Species::EQUAL);
-    } else {
-      // We already reeled in =, do not go fysh.
-      return Species::ASSIGN;
+    if (match('=')) {
+      return Species::EQUAL;
     }
-  case 'o':
+    // We already reeled in =, do not go fysh.
+    return Species::ASSIGN;
+  }
+  case 'o': {
     reel();
-    if (periscope() == '~') {
-      reel();
-      if (periscope() == '=') {
-        return goFysh(Species::TADPOLE_GTE);
-      } else if (peekFyshChar() == "≈") {
-        eatFyshChar();
-        return Species::TADPOLE_GTE;
-      } else {
-        // We already reeled in ~, do not go fysh.
-        return Species::TADPOLE_GT;
-      }
-    } else {
+    if (!match('~')) {
       return cullDeformedFysh();
     }
+    if (match('=')) {
+      return Species::TADPOLE_GTE;
+    }
+    if (peekFyshChar() == "≈") {
+      eatFyshChar();
+      return Species::TADPOLE_GTE;
+    }
+    // We already reeled in ~, do not go fysh.
+    return Species::TADPOLE_GT;
+  }
   default:
     if (peekFyshChar() == "♡") {
       eatFyshChar();
       return Species::HEART_MULTIPLY;
-    } else if (peekFyshChar() == "💔") {
+    }
+    if (peekFyshChar() == "💔") {
       eatFyshChar();
       return Species::HEART_DIVIDE;
-    } else if (peekFyshChar() == "≈") {
+    }
+
+    if (peekFyshChar() == "≈") {
       eatFyshChar();
+
       if (peekFyshChar() == "≈") {
         eatFyshChar();
         return Species::EQUAL;
-      } else {
-        return Species::ASSIGN;
       }
+
+      return Species::ASSIGN;
     } else {
       return cullDeformedFysh();
     }

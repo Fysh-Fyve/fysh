@@ -31,6 +31,7 @@ Current: the current position in the input string
 #ifndef FYSH_FYSH_H_
 #define FYSH_FYSH_H_
 
+#include "Species.h"
 #include <cstdint>
 #include <optional>
 #include <ostream>
@@ -38,59 +39,24 @@ Current: the current position in the input string
 
 namespace fysh {
 
-enum class Species {
-  FYSH_LITERAL,    // binary value
-  FYSH_IDENTIFIER, // variable
-  HEART_MULTIPLY,  // <3 or ♡
-  HEART_DIVIDE,    // </3 or 💔
-  TADPOLE_LT,      // ~o (less than    '<' )
-  TADPOLE_GT,      // o~ (greater than '>' )
-  TADPOLE_LTE,     // ~o≈ (less than equal to    '<=' )
-  TADPOLE_GTE,     // o~≈ (greater than equal to '>=' )
-  ASSIGN,          // ≈
-  EQUAL,           // ≈≈  (Equal to '==')
-  NOT_EQUAL,       // ~≈  (Not equal to '!=')
-  INCREMENT,       // >><fysh> (add 1 'fysh++')
-  DECREMENT,       // <fysh><< (sub 1 'fysh--')
-  FYSH_TANK_OPEN,  // [ (same as open bracket  '('  )
-  FYSH_TANK_CLOSE, // ] (same as closing bracket ')' )
-  FYSH_OPEN,       // ><> (same as open curly bracket '{' )
-  FYSH_CLOSE,      // <>< (same as closing curly bracket '}' )
-  WTF_OPEN,        // WHAT THE FYSH (Throw error opening) ><!@#$>
-  WTF_CLOSE,       // WHAT THE FYSH (Throw error closing) <!@#$><
-  RANDOM,          // Random fysh ><###>
-  FYSH_LOOP,       // ><(((@>
-  COMMENT,         // ><//> Comment
-  OPENING_COMMENT, // ></*> Comment
-  CLOSING_COMMENT, // Comment <*/><
-  INVALID,         // Invalid token!
-  CONTINUE,        // Continue trying to parse unicode
-  END,             // End of the input
-  BITWISE_AND,     // &
-  BITWISE_OR,      // |
-  CARET,           // ^
-  TERMINATE,       // ~
-  SHIFT_LEFT,      // <<
-  SHIFT_RIGHT,     // >>
-  IF,              // ><(((^>
-  ELSE,            // ><(((*>
-  FYSH_FOOD,       // -
-};
-
 class Fysh {
 public:
   //-----------------Constructors---------------------
   Fysh() noexcept : species{Species::INVALID} {}
   Fysh(Species inType) noexcept : species{inType} {}
 
-  Fysh(std::uint32_t integer) noexcept
-      : species{Species::FYSH_LITERAL}, value{integer} {}
+  Fysh(std::uint32_t integer, bool negate) noexcept
+      : negate{negate}, species{Species::FYSH_LITERAL}, value{integer} {}
 
   Fysh(Species inType, const char *start, std::size_t len) noexcept
       : species{inType}, body(start, len) {}
 
   Fysh(Species inType, const char *start, const char *end) noexcept
       : species{inType}, body(start, std::distance(start, end)) {}
+
+  Fysh(Species inType, const char *start, const char *end, bool negate) noexcept
+      : negate{negate}, species{inType},
+        body(start, std::distance(start, end)) {}
 
   // -----------------------METHODS-----------------------
 
@@ -112,32 +78,12 @@ public:
     return !(*this == other);
   }
 
-  bool operator==(const Species &in_species) const noexcept {
-    return species == in_species;
-  }
+  bool operator==(const Species &in_species) const noexcept;
+  bool operator==(const char *other) const noexcept;
+  bool operator==(const Fysh &other) const noexcept;
+  bool operator==(const std::uint32_t &other) const noexcept;
 
-  bool operator==(const char *other) const noexcept {
-    return (species == Species::FYSH_IDENTIFIER ||
-            species == Species::INVALID || species == Species::INCREMENT ||
-            species == Species::DECREMENT) &&
-           body == other;
-  }
-
-  bool operator==(const Fysh &other) const noexcept {
-    return other.species == species && other.body == body &&
-           other.value == value;
-  }
-
-  bool operator==(const std::uint32_t &other) const noexcept {
-    if (!value.has_value()) {
-      return false;
-    }
-    std::uint32_t intValue = value.value();
-    return species == Species::FYSH_LITERAL &&
-           (negate ? -intValue : intValue) == other;
-  }
-
-  bool negate;
+  bool negate{};
 
 private:
   Species species{};
