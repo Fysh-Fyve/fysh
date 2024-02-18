@@ -8,7 +8,8 @@ wget -O "/tmp/$archive" "https://github.com/xpack-dev-tools/riscv-none-elf-gcc-x
 mkdir -p "$HOME/.local"
 cd "$HOME/.local"
 tar xzf "/tmp/$archive"
+mv "$archive" riscv-none-elf-gcc
 
 echo 'Add this to your ~/.bashrc:'
 echo
-echo "export PATH=\"\$HOME/.local/$riscv/bin:\$PATH\""
+echo "export PATH=\"\$HOME/.local/riscv-none-elf-gcc/bin:\$PATH\""
