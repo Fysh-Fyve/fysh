@@ -57,10 +57,15 @@ bool fysh::FyshLexer::isFyshEye(char c) noexcept {
   }
 }
 
-// dude this is just the species, there is no start/end so it will pass the
-// testcase but wont contain the token
-//
-// Talk to me! - Charles
+char fysh::FyshLexer::reel() noexcept {
+  char c = *current;
+  if (c == '\n') {
+    line++;
+  }
+  current++;
+  return c;
+};
+
 fysh::Fysh fysh::FyshLexer::goFysh(Species s) noexcept {
   reel();
   return s;
@@ -216,19 +221,19 @@ fysh::Fysh fysh::FyshLexer::random() noexcept {
 fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
   // gets all the scales and converts them to a binary number
   char c = reel();
-  std::uint32_t value{c == '{' ||
-                      c == '}'}; // stores the first scale as a binary number
+  // stores the first scale as a binary number
+  std::uint32_t value{c == '{' || c == '}'};
   int scaleCount = 1;
   while (isScale(periscope())) {
     c = reel();
-    value = (value << 1) |
-            (c == '{' || c == '}'); // shifts the bits to the left and stores
-                                    // the next scale using bitwise OR
+    // shifts the bits to the left and stores the next scale using bitwise OR
+    value = (value << 1) | (c == '{' || c == '}');
     scaleCount++;
   }
-  // Special loopy fysh
+  // Special control sequence fysh
   if (scaleCount == 3 && value == 0 && dir == FyshDirection::RIGHT) {
     switch (periscope()) {
+      // loopy
     case '@':
       reel();
       if (periscope() == '>') {
@@ -236,6 +241,7 @@ fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
       } else {
         return cullDeformedFysh();
       }
+      // happy
     case '^':
       reel();
       if (periscope() == '>') {
@@ -243,6 +249,7 @@ fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
       } else {
         return cullDeformedFysh();
       }
+      // dead
     case '*':
       reel();
       if (periscope() == '>') {
@@ -339,9 +346,10 @@ fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
     case ('('):
     case ('}'):
     case (')'):
-      // eyeless negative fysh literal <)})}><
+      // negative fysh literal with eye <o)})}><
       return scales(FyshDirection::LEFT);
     default:
+      // negative fysh identifier starting with 'o' <open><
       current--;
       return identifier(FyshDirection::LEFT);
     }

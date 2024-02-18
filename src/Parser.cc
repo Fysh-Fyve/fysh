@@ -35,10 +35,25 @@ void fysh::FyshParser::nextFysh() {
   peekFysh = lexer.nextFysh();
 }
 
-fysh::ast::Error fysh::expectFysh(fysh::Species species) {
+fysh::ast::Error fysh::FyshParser::expectFysh(fysh::Species species) {
   std::stringstream ss;
-  ss << "Expected " << species;
+  ss << "Expected " << species << " at line " << lexer.fyshingLine();
   return ss.str();
+}
+
+fysh::ast::FyshExpr fysh::FyshParser::parseExpression() {
+  // TODO: This is wrong, doesn't take into account any statements with more
+  // than one expression involved
+  if (curFysh == Species::FYSH_LITERAL) {
+    ast::FyshLiteral value{curFysh.getValue().value()};
+    nextFysh();
+    return value;
+  } else if (curFysh == Species::FYSH_IDENTIFIER) {
+    ast::FyshIdentifier ident{curFysh.getBody()};
+    nextFysh();
+    return ident;
+  }
+  return ast::Error{"unimplemented"};
 }
 
 fysh::ast::FyshStmt fysh::FyshParser::parseStatement() {
@@ -55,16 +70,14 @@ fysh::ast::FyshStmt fysh::FyshParser::parseStatement() {
     ast::FyshIdentifier ident{curFysh.getBody()};
     nextFysh();
     nextFysh();
-    // TODO: Parse expression, not just a literal.
-    if (curFysh != Species::FYSH_LITERAL) {
-      return expectFysh(Species::FYSH_LITERAL);
+    auto expr{parseExpression()};
+    if (std::holds_alternative<ast::Error>(expr)) {
+      return std::get<ast::Error>(expr);
     }
-    ast::FyshLiteral value{curFysh.getValue().value()};
-    nextFysh();
-    return terminateStatement(ast::FyshAssignmentStmt{ident, value});
+    return terminateStatement(ast::FyshAssignmentStmt{ident, expr});
+  } else {
+    return terminateStatement(parseExpression());
   }
-
-  return ast::Error{"unimplemented"};
 }
 
 std::vector<fysh::ast::FyshStmt> fysh::FyshParser::parseProgram() {

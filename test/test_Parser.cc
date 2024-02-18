@@ -49,8 +49,7 @@ TEST_CASE("Assignment Statement") {
   check_num(stmt.right, 1);
 }
 
-// SKIP FOR NOW
-TEST_CASE("Expression Statements" * doctest::skip(true)) {
+TEST_CASE("Expression Statements") {
   fysh::FyshParser p{fysh::FyshLexer{R"(
 ><(({o> ~
 ><fysh> ~

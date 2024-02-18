@@ -51,6 +51,7 @@ class FyshLexer {
 public:
   FyshLexer(const char *streamStart) noexcept : current{streamStart} {}
   Fysh nextFysh() noexcept;
+  unsigned int fyshingLine() { return line; }
   const char *rest() const noexcept { return current; }
 #ifdef FYSH_DEBUG
   void printRest();
@@ -60,8 +61,9 @@ private:
   const char *current = nullptr;
   // Marks the start of the current fysh
   const char *fyshStart = nullptr;
+  unsigned int line = 1;
 
-  char reel() noexcept { return *current++; };
+  char reel() noexcept;
 #ifdef FYSH_DEBUG
   char periscope(int line = -1) const noexcept;
 #else
