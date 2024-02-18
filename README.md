@@ -195,20 +195,28 @@ uncharted else.**
 <><
 ```
 
-**For those seeking the fortune of randomness, `><###>` unveils a 32-bit
-treasure, while `><//>` whispers single-line comment and `></*>`, `<*\><` span
-multiline scriptures.**
+**This is a grilled fysh. It generates a random 32-bit number that determines the doneness of the fysh.**
 
 ```
 ><###> ~
+```
 
-><//> Comment
+**Navigator fysh are used to guide the reader through the code. They are represented by `><//>`.**
+```
+><//> Dayum, fysh got grillz
+```
 
+**Sometimes, the journey through the code is long and arduous. In these cases, multiline comments are used to provide a more detailed explanation of the code. They are represented by `></*>` and `<*\><`.**
+```
 ></*>
-Comments
-Comments 2
+How to grill a fysh:
+1. Get a fysh
+2. Grill the fysh
+3. Eat the fysh
 <*/><
 ```
+
+
 
 **A fysh tank `[ ]` is an array of fysh separated by fysh food `-`**
 
