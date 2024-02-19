@@ -9,10 +9,10 @@
 
 % Hyperlink setup: Customize as per your requirements
 \hypersetup{
-    colorlinks = true, % Enable coloring of links
-    linkcolor = urlblue, % Internal links
-    citecolor = urlblue, % Citations
-    urlcolor = urlblue, % External hyperlinks and URLs
+	colorlinks = true, % Enable coloring of links
+	linkcolor = urlblue, % Internal links
+	citecolor = urlblue, % Citations
+	urlcolor = urlblue, % External hyperlinks and URLs
 }
 
 \usepackage{titlesec}
@@ -34,13 +34,16 @@
 
 % Define tightlist to avoid undefined control sequence error with pandoc lists
 \providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+	\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
 % Remove heading from Table of Contents
 % https://tex.stackexchange.com/questions/55080/how-to-hide-the-table-of-contents-heading
 \makeatletter
 \renewcommand\tableofcontents{%
+	\begingroup
+	\hypersetup{linkcolor = black}
 	\@starttoc{toc}%
+	\endgroup
 }
 \makeatother
 
