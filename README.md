@@ -60,8 +60,8 @@ proliferate. This gives Steven a value of `b101010 = b110 * b111`.
 ><steven> ≈ ><{{(°> ♡ ><{{{°> ~
 ```
 
-Since the fysh are lonely, they aren't too picky. They’ll make do with a
-lesser form of love `<3`.
+Since the fysh are lonely, they aren't too picky. They’ll make do with a lesser
+form of love `<3`.
 
 ```
 ><steven> = ><{{(o> <3 ><{{{o> ~
@@ -82,8 +82,8 @@ journey allowed them to grow an extra tail, incrementing their value by 1.
 >><steven> ~
 ```
 
-Sometimes we feel like a fyshup, a failure. And that's ok, it’s a part of
-being fysh. However for some fysh, this feeling is too much to handle and is
+Sometimes we feel like a fyshup, a failure. And that's ok, it’s a part of being
+fysh. However for some fysh, this feeling is too much to handle and is
 internalized. They haven’t received the emotional support they need and have
 gone on a downward spiral, causing them to feel worthless. They begin to retreat
 and try to swim away in the opposite direction causing their value to decrement
@@ -102,8 +102,8 @@ Sometimes Steven fyshs up and throws an error. This can be done using two WTF
 <!@#$><
 ```
 
-Not all fysh are created equal. But sometimes they are. We can check this
-using `≈≈` or `==`.
+Not all fysh are created equal. But sometimes they are. We can check this using
+`≈≈` or `==`.
 
 ```
 ><steven> ≈≈ ><theFysh> ~
@@ -195,19 +195,23 @@ uncharted else.
 <><
 ```
 
-This is a grilled fysh. It generates a random 32-bit number that determines the doneness of the fysh.
+This is a grilled fysh. It generates a random 32-bit number that determines the
+doneness of the fysh.
 
 ```
 ><###> ~
 ```
 
-Navigator fysh are used to guide the reader through the code. They are represented by `><//>`.
+Navigator fysh are used to guide the reader through the code. They are
+represented by `><//>`.
 
 ```
 ><//> Dayum, fysh got grillz
 ```
 
-Sometimes, the journey through the code is long and arduous. In these cases, multiline comments are used to provide a more detailed explanation of the code. They are represented by `></*>` and `<*\><`.
+Sometimes, the journey through the code is long and arduous. In these cases,
+multiline comments are used to provide a more detailed explanation of the code.
+They are represented by `></*>` and `<*\><`.
 
 ```
 ></*>

@@ -1,4 +1,5 @@
 NINJA := $(shell command -v ninja 2> /dev/null)
+DPRINT := $(shell command -v dprint 2> /dev/null)
 
 ifdef NINJA
 BUILD ?= ninja
@@ -27,6 +28,9 @@ all: doctest/doctest.h build/compile_commands.json
 
 fmt: $(SRC)
 	clang-format -i $^
+ifdef DPRINT
+	dprint fmt
+endif
 
 build/compile_commands.json: build
 	cd build && cmake $(CMAKE_FLAGS) ..

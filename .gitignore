@@ -2,4 +2,3 @@
 build
 doctest/doctest.h
 test/doctest.h
-*.json
