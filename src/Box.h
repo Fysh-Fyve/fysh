@@ -1,7 +1,6 @@
 #ifndef BOX_H_
 #define BOX_H_
 
-#include <algorithm>
 #include <memory>
 #include <type_traits>
 
