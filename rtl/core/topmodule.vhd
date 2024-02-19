@@ -56,6 +56,7 @@ architecture rtl of topmodule is
   signal pc         : std_ulogic_vector (31 downto 0) := (others => '0');
 
   signal rd_val                            : std_ulogic_vector (31 downto 0);
+  signal gf                                : std_ulogic_vector (31 downto 0);
   signal iraddr, draddr                    : std_ulogic_vector (31 downto 0);
   signal waddr, dmem_out, imem_out, mem_sx : std_ulogic_vector (31 downto 0);
 begin
@@ -222,7 +223,7 @@ begin
 
   with rd_sel select rd_val <=
     mem_sx          when "11",
-    (others => 'X') when "10",          -- could be where our RNG is gonna be
+    gf              when "10",
     alu             when "01",
     pc_alu          when "00",
     (others => 'X') when others;
@@ -231,6 +232,11 @@ begin
   with insn(6 downto 2) select done <=
     nor(imm_ex & pc_alu_sel & pc_next_sel) when OPCODE_BRANCH,
     '0'                                    when others;
+
+  grilled_fysh_inst : entity work.grilled_fysh(rtl) port map (
+    clk  => clk,
+    pins => insn(7 downto 0),
+    gf_o => gf);
 
   insn_register : process(reset, ir_clk, mem_write_en)
   begin

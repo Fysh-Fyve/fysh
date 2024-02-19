@@ -102,6 +102,7 @@ _MEMORY := $(_MEM) \
 	   phy_map \
 	   mbr_sx \
 	   register_file \
+	   grilled_fysh \
 
 MEMORY := $(patsubst %, $(SRC_DIR)/%.vhd, $(_MEMORY))
 
