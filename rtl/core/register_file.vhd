@@ -13,6 +13,7 @@ use ieee.numeric_std.all;
 --! registers while `dest_reg_i` determines the register to be written to by
 --! `dest_reg_val_i`.
 entity register_file is
+  generic (VERBOSE : boolean := false);
   port (
     rd_clk_i       : in  std_ulogic;    --! Register File Clock Signal
     reset_i        : in  std_ulogic;    --! Reset Signal
@@ -38,11 +39,13 @@ begin
         reg_file(i) <= (others => '0');
       elsif rising_edge(rd_clk_i) then
         if (i = to_integer(unsigned(dest_reg_i))) then
-          write(l, string'("wrote value "));
-          write(l, to_hstring(dest_reg_val_i));
-          write(l, string'(" to register "));
-          write(l, i);
-          writeline(output, l);
+          if VERBOSE then
+            write(l, string'("wrote value "));
+            write(l, to_hstring(dest_reg_val_i));
+            write(l, string'(" to register "));
+            write(l, i);
+            writeline(output, l);
+          end if;
           reg_file(i) <= dest_reg_val_i;
         end if;
       end if;

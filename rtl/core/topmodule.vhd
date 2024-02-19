@@ -8,6 +8,7 @@ use work.fysh_fyve.all;
 
 --! The top module that brings all the components together.\n
 entity topmodule is
+  generic (VERBOSE : boolean := false);
   port (
     clk   : in    std_ulogic;
     reset : in    std_ulogic;
@@ -58,43 +59,56 @@ architecture rtl of topmodule is
   signal iraddr, draddr                    : std_ulogic_vector (31 downto 0);
   signal waddr, dmem_out, imem_out, mem_sx : std_ulogic_vector (31 downto 0);
 begin
-  print : process(pc_clk)
-    use std.textio.all;
-    variable l : line;
-  begin
-    if rising_edge(pc_clk) then
-      -- write(l, string'("pc_clk: "));
-      -- write(l, pc_clk);
-      -- write(l, string'(" "));
-      write(l, string'("rd_clk: "));
-      write(l, rd_clk);
-      write(l, string'(" pc: "));
-      write(l, to_hstring(pc));
-      write(l, string'(" ins: "));
-      write(l, to_hstring(insn));
-      write(l, string'(" func3: "));
-      case insn(6 downto 2) is
-        when OPCODE_BRANCH =>
-          write_func3(l, op_bits);
-        when others =>
-          write_func3(l, op_bits);
-      end case;
-      write(l, string'(" sub_sra: "));
-      write(l, sub_sra);
-      write(l, string'(" opcode: "));
-      write_opcode(l, insn(6 downto 2));
-      write(l, string'(" alu_a_op: "));
-      write(l, to_hstring(alu_a_op));
-      write(l, string'(" alu_b_op: "));
-      write(l, to_hstring(alu_b_op));
-      write(l, string'(" alu_o: "));
-      write(l, to_hstring(alu));
-      write(l, string'(" rd_sel: "));
-      write(l, rd_sel);
-      writeline(output, l);
-      writeline(output, l);
-    end if;
-  end process print;
+  verbose_print :
+  if VERBOSE generate
+    print : process(pc_clk)
+      use std.textio.all;
+      variable l : line;
+    begin
+      if rising_edge(pc_clk) then
+        write(l, string'("rd_clk: "));
+        write(l, rd_clk);
+        write(l, string'(" pc: "));
+        write(l, to_hstring(pc));
+        write(l, string'(" ins: "));
+        write(l, to_hstring(insn));
+        write(l, string'(" func3: "));
+        case insn(6 downto 2) is
+          when OPCODE_BRANCH =>
+            write_func3(l, op_bits);
+          when others =>
+            write_func3(l, op_bits);
+        end case;
+        write(l, string'(" sub_sra: "));
+        write(l, sub_sra);
+        write(l, string'(" opcode: "));
+        write_opcode(l, insn(6 downto 2));
+        write(l, string'(" alu_a_op: "));
+        write(l, to_hstring(alu_a_op));
+        write(l, string'(" alu_b_op: "));
+        write(l, to_hstring(alu_b_op));
+        write(l, string'(" alu_o: "));
+        write(l, to_hstring(alu));
+        write(l, string'(" rd_sel: "));
+        write(l, rd_sel);
+        writeline(output, l);
+        writeline(output, l);
+      end if;
+    end process print;
+
+    print_reg : process(ir_clk)
+      use std.textio.all;
+      variable l : line;
+    begin
+      if rising_edge(ir_clk) then
+        write(l, string'("dmem_out: "));
+        write(l, to_hstring(dmem_out));
+        write(l, string'(" imem_out: "));
+        write(l, to_hstring(imem_out));
+        writeline(output, l);
+      end if;
+    end process print_reg;
+  end generate;
 
   imm_sx_inst : entity work.imm_sx(rtl) port map (
     instruction_i => insn,
@@ -105,15 +119,17 @@ begin
     (others => '0') when "01101",
     rs1_val         when others;
 
-  program_counter_inst : entity work.program_counter(rtl) port map (
-    pc_clk_i        => pc_clk,
-    reset_i         => reset,
-    pc_next_sel_i   => pc_next_sel,
-    pc_alu_sel_i    => pc_alu_sel,
-    imm_x_i         => imm_ex,
-    alu_i           => alu,
-    pc_o            => pc,
-    pc_alu_result_o => pc_alu);
+  program_counter_inst : entity work.program_counter(rtl)
+    generic map (VERBOSE => VERBOSE)
+    port map (
+      pc_clk_i        => pc_clk,
+      reset_i         => reset,
+      pc_next_sel_i   => pc_next_sel,
+      pc_alu_sel_i    => pc_alu_sel,
+      imm_x_i         => imm_ex,
+      alu_i           => alu,
+      pc_o            => pc,
+      pc_alu_result_o => pc_alu);
 
   alu_inst : entity work.alu(rtl) port map (
     operand_a_i               => alu_a_op,
@@ -177,15 +193,17 @@ begin
     mbr_i => dmem_out,
     sx_o  => mem_sx);
 
-  register_file_inst : entity work.register_file(rtl) port map (
-    rd_clk_i       => rd_clk,
-    reset_i        => reset,
-    dest_reg_i     => insn(11 downto 7),
-    reg_sel_1_i    => insn(19 downto 15),
-    reg_sel_2_i    => insn(24 downto 20),
-    dest_reg_val_i => rd_val,
-    reg_val_1_o    => rs1_val,
-    reg_val_2_o    => rs2_val);
+  register_file_inst : entity work.register_file(rtl)
+    generic map (VERBOSE => VERBOSE)
+    port map (
+      rd_clk_i       => rd_clk,
+      reset_i        => reset,
+      dest_reg_i     => insn(11 downto 7),
+      reg_sel_1_i    => insn(19 downto 15),
+      reg_sel_2_i    => insn(24 downto 20),
+      dest_reg_val_i => rd_val,
+      reg_val_1_o    => rs1_val,
+      reg_val_2_o    => rs2_val);
 
   with draddr_sel select draddr <=
     pc              when '1',
@@ -215,8 +233,6 @@ begin
     '0'                                    when others;
 
   insn_register : process(reset, ir_clk, mem_write_en)
-    use std.textio.all;
-    variable l : line;
   begin
     if reset = '0' then
       insn <= (others => '0');
@@ -224,17 +240,4 @@ begin
       insn <= imem_out;
     end if;
   end process insn_register;
-
-  print_reg : process(ir_clk)
-    use std.textio.all;
-    variable l : line;
-  begin
-    if rising_edge(ir_clk) then
-      write(l, string'("dmem_out: "));
-      write(l, to_hstring(dmem_out));
-      write(l, string'(" imem_out: "));
-      write(l, to_hstring(imem_out));
-      writeline(output, l);
-    end if;
-  end process print_reg;
 end rtl;

@@ -11,6 +11,7 @@ use ieee.numeric_std.all;
 --! It either increments itself by 4 or is set as the result of the ALU such as
 --! when branching.
 entity program_counter is
+  generic (VERBOSE : boolean := false);
   port (
     pc_clk_i      : in std_ulogic := '0';  --! Program Counter Clock Signal.
     reset_i       : in std_ulogic := '0';  --! Reset Signal.
@@ -54,9 +55,11 @@ begin
     if reset_i = '0' then
       pc <= (others => '0');
     elsif rising_edge(pc_clk_i) then
-      write(l, string'("next_ins: "));
-      write(l, to_hstring(next_ins));
-      writeline(output, l);
+      if VERBOSE then
+        write(l, string'("next_ins: "));
+        write(l, to_hstring(next_ins));
+        writeline(output, l);
+      end if;
       pc <= next_ins;
     end if;
   end process;
