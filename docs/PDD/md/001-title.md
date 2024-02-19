@@ -29,8 +29,14 @@
 
 ## References
 
+\begingroup
+
+\hypersetup{urlcolor = black}
+
 <!-- This is where the references would be placed in the document -->
 <div id="refs"></div>
+
+\endgroup
 
 \newpage
 
