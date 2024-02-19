@@ -20,6 +20,7 @@
 
 #include "Parser.h"
 #include "AST.h"
+#include "Species.h"
 
 #include <sstream>
 #include <variant>
@@ -41,9 +42,7 @@ fysh::ast::Error fysh::FyshParser::expectFysh(fysh::Species species) {
   return ss.str();
 }
 
-fysh::ast::FyshExpr fysh::FyshParser::parseExpression() {
-  // TODO: This is wrong, doesn't take into account any statements with more
-  // than one expression involved
+fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
   if (curFysh == Species::FYSH_LITERAL) {
     ast::FyshLiteral value{curFysh.getValue().value()};
     nextFysh();
@@ -54,6 +53,20 @@ fysh::ast::FyshExpr fysh::FyshParser::parseExpression() {
     return ident;
   }
   return ast::Error{"unimplemented"};
+}
+
+fysh::ast::FyshExpr fysh::FyshParser::parseMultiplicative() {
+  auto left{parsePrimary()};
+  if (curFysh != Species::HEART_MULTIPLY) {
+    return left;
+  }
+  nextFysh();
+  auto right{parsePrimary()};
+  return ast::FyshBinaryExpr{left, right, ast::FyshBinary::Mul};
+}
+
+fysh::ast::FyshExpr fysh::FyshParser::parseExpression() {
+  return parseMultiplicative();
 }
 
 fysh::ast::FyshStmt fysh::FyshParser::parseStatement() {
