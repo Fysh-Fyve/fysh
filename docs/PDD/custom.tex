@@ -11,6 +11,11 @@
 	BoldItalicFont=Carlito-BoldItalic.ttf,
 	BoldFont      =Carlito-Bold.ttf,
 	ItalicFont    =Carlito-Italic.ttf]{Carlito-Regular.ttf}
+
+% Define tightlist to avoid undefined control sequence error with pandoc lists
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
 % Remove heading from Table of Contents
 % https://tex.stackexchange.com/questions/55080/how-to-hide-the-table-of-contents-heading
 \makeatletter
