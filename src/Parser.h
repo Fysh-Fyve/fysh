@@ -32,8 +32,30 @@ public:
 
 private:
   void nextFysh();
-  ast::FyshStmt parseStatement();
+
+  // We're doing recursive descent, where the operator precedence is determined
+  // by how deep it is in the call stack. Called earlier == Lower precedence.
+  // Order of operations (same line means equal precedence):
+  // - L_OR
+  // - L_AND
+  // - EQ, NEQ, LT, GT
+  // - ADD, B_OR, XOR
+  // - MUL, DIV, B_AND, SHIFTS
+  // - UNARY (remember that this is applied in reverse)
+  // - INDEX
+  // - LITERAL, GROUP
+  ast::FyshExpr parsePrimary();
+  ast::FyshExpr parseIndex();
+  ast::FyshExpr parseUnary();
+  ast::FyshExpr parseMultiplicative();
+  ast::FyshExpr parseAdditive();
+  ast::FyshExpr parseComparative();
+  ast::FyshExpr parseAnd();
+  ast::FyshExpr parseOr();
+
   ast::FyshExpr parseExpression();
+  ast::FyshStmt parseStatement();
+
   ast::Error expectFysh(Species species);
 
   template <typename T> ast::FyshStmt terminateStatement(T node) {
