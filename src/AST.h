@@ -31,7 +31,7 @@ namespace fysh::ast {
 // TODO: Maybe make this more sophisticated?
 using Error = Box<std::string>;
 
-// TODO: Fill these up with more operations
+// all operators that take two arguments and return one (add, sub, greater than, less than, bit shift, etc.)
 enum class FyshBinary {
   Add,
   Sub,
@@ -45,7 +45,7 @@ enum class FyshBinary {
   LTE,
 };
 
-// TODO: Fill these up with more operations
+// !True
 enum class FyshUnary {
   Neg,
 };
@@ -53,32 +53,39 @@ enum class FyshUnary {
 struct FyshBinaryExpr;
 struct FyshUnaryExpr;
 
+// ><steven>
 struct FyshIdentifier {
   std::string_view name;
 };
 
+// ><))}>
 struct FyshLiteral {
   std::uint64_t num;
 };
 
+// every single type of expression
 using FyshExpr =
-    std::variant<Error, Box<FyshBinaryExpr>, FyshIdentifier, FyshLiteral>;
+    std::variant<Error, Box<FyshBinaryExpr>, Box<FyshUnaryExpr> ,FyshIdentifier, FyshLiteral>;
 
+// !Steven
 struct FyshUnaryExpr {
   FyshUnary op;
   FyshExpr expr;
 };
 
+// 1 + 2, steven > 1
 struct FyshBinaryExpr {
   FyshExpr left;
   FyshExpr right;
   FyshBinary op;
 };
 
+//  >><steven>
 struct FyshIncrementStmt {
   FyshExpr expr;
 };
 
+//  <steven><<
 struct FyshDecrementStmt {
   FyshExpr expr;
 };
