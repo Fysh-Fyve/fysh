@@ -35,12 +35,19 @@ This document outlines the design of the Fysh programming language compiler and 
 <><
 ```
 **Explanation:**
-- `><number> = ><})}>` initializes number with the binary value `101` (5 in decimal). (`} = 1`, `) = 0`)
-- `><factorial> = ><))}>` initializes factorial with the binary value `001` (1 in decimal). (`} = 1`, `) = 0`)
-- `><(((@> [><number> o~ ><))}>]` is a while loop that continues while the number is greater than 1. ( `><(((@>` is the while loop operator, `o~` is the greater than operator)
-- Inside the while loop, `><factorial> = ><factorial> <3 ><number> ~` calculates the factorial by multiplying the current factorial with the number and storing the result back in the factorial. (`<3` is the multiplication operator)
-- `<number><< ~` decrements the number by 1.
-- The program ends when the number is no longer greater than 1.
-- The final result is stored in the `factorial` variable.
+  
+  - `><number> = ><})}>` initializes number with the binary value `101` (5 in decimal). (`} = 1`, `) = 0`)
+  
+  - `><factorial> = ><))}>` initializes factorial with the binary value `001` (1 in decimal). (`} = 1`, `) = 0`)
+  
+  - `><(((@> [><number> o~ ><))}>]` is a while loop that continues while the number is greater than 1. ( `><(((@>` is the while loop operator, `o~` is the greater than operator)
+  
+  - Inside the while loop, `><factorial> = ><factorial> <3 ><number> ~` calculates the factorial by multiplying the current factorial with the number and storing the result back in the factorial. (`<3` is the multiplication operator)
+  
+  - `<number><< ~` decrements the number by 1.
+  
+  - The program ends when the number is no longer greater than 1.
+  
+  - The final result is stored in the `factorial` variable.
 
 This example demonstrates the unique syntax and features of Fysh, which is designed to be fun and challenging to use.
