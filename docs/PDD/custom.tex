@@ -3,7 +3,27 @@
 % ... Need to change bottom margin because of the modified headsep
 \usepackage[letterpaper, margin=1in, bottom=1.75in]{geometry}
 % Remove ugly borders from hyperlinks
-\usepackage[hidelinks]{hyperref}
+% Remove ugly borders from hyperlinks
+% \usepackage[hidelinks]{hyperref} % Remove or comment out this line
+\usepackage{hyperref} % Add this line instead
+
+% Hyperlink setup: Customize as per your requirements
+\hypersetup{
+    colorlinks = true, % Enable coloring of links
+    linkcolor = urlblue, % Internal links
+    citecolor = urlblue, % Citations
+    urlcolor = urlblue, % External hyperlinks and URLs
+}
+
+\usepackage{titlesec}
+\usepackage{fontspec}
+
+% Define colours
+\usepackage{xcolor,colortbl}
+\definecolor{enggblue}{RGB}{25,64,119}
+\definecolor{urlblue}{HTML}{3a8ebf}
+
+
 \usepackage{titlesec}
 % Change font Calibri-compatible font
 \usepackage{fontspec}

@@ -1,7 +1,7 @@
 # High-Level Software/Firmware Design
 
 This document outlines the design of the Fysh programming language compiler and
-its execution on custom hardware. The Fysh compiler translates Fysh code into
+its execution on custom hardware. As shown in Section \ref{Tab:software}, the Fysh compiler translates Fysh code into
 executable machine code using C++ for backend processing. This process is
 divided into three primary stages: Front End, Middle End (optional), and Back
 End.
@@ -31,16 +31,15 @@ End.
 - **Code Generation**: The final stage converts the optimized IR into machine
   code specific to the target hardware, making the program executable.
 
-\newpage
-
 ## Introduction to the Fysh Programming Language
 
 _Fysh is designed to be a fun programming language that is initially
 intimidating but ultimately rewarding. It is a statically-typed, compiled
 language with a focus on having fun while programming. The full language
 specification can be found on
-[Github](https://github.com/Fysh-Fyve/fysh/blob/main/README.md)._
+**[Github](https://github.com/Fysh-Fyve/fysh/blob/main/README.md)**._
 
+\
 **Practical Example: Factorial Calculation in Fysh**
 
 ```fysh
