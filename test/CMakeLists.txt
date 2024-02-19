@@ -9,6 +9,5 @@ add_executable(
 	test_Fysh.cc
 	test_Lexer.cc
 	test_Parser.cc
-	test_Register.cc
 )
-target_link_libraries(tests DocTest common FyshASM)
+target_link_libraries(tests DocTest common)

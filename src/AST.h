@@ -31,7 +31,8 @@ namespace fysh::ast {
 // TODO: Maybe make this more sophisticated?
 using Error = Box<std::string>;
 
-// all operators that take two arguments and return one (add, sub, greater than, less than, bit shift, etc.)
+// all operators that take two arguments and return one (add, sub, greater than,
+// less than, bit shift, etc.)
 enum class FyshBinary {
   Add,
   Sub,
@@ -64,8 +65,8 @@ struct FyshLiteral {
 };
 
 // every single type of expression
-using FyshExpr =
-    std::variant<Error, Box<FyshBinaryExpr>, Box<FyshUnaryExpr> ,FyshIdentifier, FyshLiteral>;
+using FyshExpr = std::variant<Error, Box<FyshBinaryExpr>, Box<FyshUnaryExpr>,
+                              FyshIdentifier, FyshLiteral>;
 
 // !Steven
 struct FyshUnaryExpr {
