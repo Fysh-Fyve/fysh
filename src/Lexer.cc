@@ -62,18 +62,19 @@ fysh::Fysh fysh::FyshLexer::goFysh(Species s) noexcept {
 }
 
 fysh::FyshChar fysh::FyshLexer::eatFyshChar() noexcept {
-  FyshChar cur{peekFyshChar()};
-  if (std::holds_alternative<const char *>(cur)) {
-    auto curFysh{std::get<const char *>(cur)};
-    if (*curFysh != '\0') {
-      current = curFysh + 1;
-    }
-    return cur;
-  } else {
-    auto curFysh{std::get<std::string_view>(cur)};
-    current = curFysh.end();
-    return cur;
-  }
+  return std::visit(
+      [&](auto &&arg) -> FyshChar {
+        using T = std::decay_t<decltype(arg)>;
+        if constexpr (std::is_same_v<T, const char *>) {
+          if (*arg != '\0') {
+            current = arg + 1;
+          }
+        } else if constexpr (std::is_same_v<T, std::string_view>) {
+          current = arg.end();
+        }
+        return {arg};
+      },
+      peekFyshChar());
 }
 
 fysh::FyshChar fysh::FyshLexer::peekFyshChar() noexcept {
@@ -312,7 +313,14 @@ fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
     }
   }
 
-  if (dir == FyshDirection::RIGHT) {
+  if (dir == FyshDirection::LEFT) {
+    // Left fysh
+    if (!match("><")) {
+      return cullDeformedFysh();
+    }
+  } else {
+    // Right Fysh
+
     // Eat any fysh eyes
     if (peekFyshChar() == "°") {
       eatFyshChar();
@@ -322,8 +330,6 @@ fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
     if (!match('>')) {
       return cullDeformedFysh();
     }
-  } else if (!match("><")) { // left fysh
-    return cullDeformedFysh();
   }
 
   if (!std::isspace(periscope()) && periscope() != '\0') {
