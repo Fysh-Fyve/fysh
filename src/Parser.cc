@@ -55,14 +55,39 @@ fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
   return ast::Error{"unimplemented"};
 }
 
+static std::optional<fysh::ast::FyshBinary> binaryOp(fysh::Fysh fysh) {
+  using fysh::Species;
+  using fysh::ast::FyshBinary;
+  switch (fysh.getSpecies()) {
+    // clang-format off
+  case Species::HEART_MULTIPLY: return FyshBinary::Mul;
+  case Species::HEART_DIVIDE:   return FyshBinary::Div;
+  case Species::TADPOLE_LT:     return FyshBinary::LT;
+  case Species::TADPOLE_GT:     return FyshBinary::GT;
+  case Species::TADPOLE_LTE:    return FyshBinary::LTE;
+  case Species::TADPOLE_GTE:    return FyshBinary::GTE;
+  case Species::EQUAL:          return FyshBinary::Equal;
+  case Species::NOT_EQUAL:      return FyshBinary::NotEqual;
+  case Species::BITWISE_AND:    return FyshBinary::BitwiseAnd;
+  case Species::BITWISE_OR:     return FyshBinary::BitwiseOr;
+  case Species::CARET:          return FyshBinary::BitwiseXor;
+  case Species::SHIFT_LEFT:     return FyshBinary::ShiftLeft;
+  case Species::SHIFT_RIGHT:    return FyshBinary::ShiftRight;
+    // clang-format on
+  default:
+    return {};
+  }
+}
+
 fysh::ast::FyshExpr fysh::FyshParser::parseMultiplicative() {
   auto left{parsePrimary()};
-  if (curFysh != Species::HEART_MULTIPLY) {
+  auto op{binaryOp(curFysh)};
+  if (op != ast::FyshBinary::Mul) {
     return left;
   }
   nextFysh();
   auto right{parsePrimary()};
-  return ast::FyshBinaryExpr{left, right, ast::FyshBinary::Mul};
+  return ast::FyshBinaryExpr{left, right, op.value()};
 }
 
 fysh::ast::FyshExpr fysh::FyshParser::parseExpression() {

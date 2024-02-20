@@ -44,6 +44,11 @@ enum class FyshBinary {
   LT,
   GTE,
   LTE,
+  BitwiseAnd,
+  BitwiseOr,
+  BitwiseXor,
+  ShiftLeft,
+  ShiftRight,
 };
 
 // !True
