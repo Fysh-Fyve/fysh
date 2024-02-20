@@ -83,23 +83,25 @@ static std::optional<fysh::ast::FyshBinary> binaryOp(fysh::Fysh fysh) {
 fysh::ast::FyshExpr fysh::FyshParser::parseMultiplicative() {
   auto left{parsePrimary()};
   auto op{binaryOp(curFysh)};
-  if (op != ast::FyshBinary::Mul) {
-    return left;
+  while (op == ast::FyshBinary::Mul || op == ast::FyshBinary::Div ||
+         op == ast::FyshBinary::ShiftLeft ||
+         op == ast::FyshBinary::ShiftRight ||
+         op == ast::FyshBinary::BitwiseAnd) {
+    nextFysh();
+    auto right{parseAdditive()};
+    left = ast::FyshBinaryExpr{left, right, op.value()};
+    op = binaryOp(curFysh);
   }
-  nextFysh();
-  auto right{parsePrimary()};
-  return ast::FyshBinaryExpr{left, right, op.value()};
+  return left;
 }
 
 fysh::ast::FyshExpr fysh::FyshParser::parseAdditive() {
   auto left{parseMultiplicative()};
-  if (curFysh == Species::TERMINATE) {
-    return left;
-  }
-  std::optional<ast::FyshBinary> op{binaryOp(curFysh)};
-  while (op == ast::FyshBinary::BitwiseOr ||
-         op == ast::FyshBinary::BitwiseXor ||
-         (!op.has_value() && curFysh != Species::TERMINATE)) {
+  auto op{binaryOp(curFysh)};
+  while (
+      op == ast::FyshBinary::BitwiseOr || op == ast::FyshBinary::BitwiseXor ||
+      // TODO: This might break when it comes to parsing unaries, not sure yet
+      (!op.has_value() && curFysh != Species::TERMINATE)) {
     if (op.has_value()) {
       nextFysh();
     }
