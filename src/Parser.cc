@@ -22,6 +22,7 @@
 #include "AST.h"
 #include "Species.h"
 
+#include <iostream>
 #include <sstream>
 #include <variant>
 #include <vector>
@@ -92,12 +93,21 @@ fysh::ast::FyshExpr fysh::FyshParser::parseMultiplicative() {
 
 fysh::ast::FyshExpr fysh::FyshParser::parseAdditive() {
   auto left{parseMultiplicative()};
-  auto op{binaryOp(curFysh)};
-  if (op.has_value() || curFysh == Species::TERMINATE) {
+  if (curFysh == Species::TERMINATE) {
     return left;
   }
-  auto right{parseMultiplicative()};
-  return ast::FyshBinaryExpr{left, right, ast::FyshBinary::Add};
+  std::optional<ast::FyshBinary> op{binaryOp(curFysh)};
+  while (op == ast::FyshBinary::BitwiseOr ||
+         op == ast::FyshBinary::BitwiseXor ||
+         (!op.has_value() && curFysh != Species::TERMINATE)) {
+    if (op.has_value()) {
+      nextFysh();
+    }
+    auto right{parseAdditive()};
+    left = ast::FyshBinaryExpr{left, right, op.value_or(ast::FyshBinary::Add)};
+    op = binaryOp(curFysh);
+  }
+  return left;
 }
 
 fysh::ast::FyshExpr fysh::FyshParser::parseExpression() {

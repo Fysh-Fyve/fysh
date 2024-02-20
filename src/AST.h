@@ -73,6 +73,9 @@ struct FyshLiteral {
 using FyshExpr = std::variant<Error, Box<FyshBinaryExpr>, Box<FyshUnaryExpr>,
                               FyshIdentifier, FyshLiteral>;
 
+bool operator==(const FyshExpr &expr, const char *str);
+bool operator!=(const FyshExpr &expr, const char *str);
+
 // !Steven
 struct FyshUnaryExpr {
   FyshUnary op;

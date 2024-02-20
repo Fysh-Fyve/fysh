@@ -1,8 +1,9 @@
 #include "../src/Lexer.h"
 #include "../src/Parser.h"
 
+#define DOCTEST_CONFIG_TREAT_CHAR_STAR_AS_STRING
+
 #include "doctest.h"
-#include <cstdint>
 #include <variant>
 
 using namespace fysh::ast;
@@ -36,8 +37,11 @@ template <typename T> void check_ident(T expr, const char *name) {
   CHECK(get_expr<FyshIdentifier>(expr).name == name);
 }
 
-template <typename T> void check_num(T expr, std::uint64_t value) {
-  CHECK(get_expr<FyshLiteral>(expr).num == value);
+FyshExpr expr(const char *input) {
+  fysh::FyshParser p{fysh::FyshLexer{input}};
+  auto program{p.parseProgram()};
+  check_program(program, 1);
+  return get_stmt<FyshExpr>(program[0]);
 }
 
 TEST_CASE("Assignment Statement") {
@@ -46,43 +50,25 @@ TEST_CASE("Assignment Statement") {
   check_program(program, 1);
   auto stmt{get_stmt<FyshAssignmentStmt>(program[0])};
   check_ident(stmt.left, "fysh");
-  check_num(stmt.right, 1);
+  CHECK(get_expr<FyshLiteral>(stmt.right).num == 1);
 }
 
-TEST_CASE("Literal") {
-  fysh::FyshParser p{fysh::FyshLexer{"><(({o> ~"}};
-  auto program{p.parseProgram()};
-  check_program(program, 1);
-  check_num(program[0], 1);
-}
-
-TEST_CASE("Identifier") {
-  fysh::FyshParser p{fysh::FyshLexer{"><fysh> ~"}};
-  auto program{p.parseProgram()};
-  check_program(program, 1);
-  check_ident(program[0], "fysh");
-}
-
-TEST_CASE("Multiplication") {
-  fysh::FyshParser p{fysh::FyshLexer{"><fysh> <3 ><{({o> ~"}};
-  auto program{p.parseProgram()};
-  check_program(program, 1);
-
-  auto binaryExpr{get_expr<Box<FyshBinaryExpr>>(program[0])};
-  check_ident(binaryExpr.t->left, "fysh");
-  check_num(binaryExpr.t->right, 5);
-  CHECK(binaryExpr.t->op == FyshBinary::Mul);
-}
-
-TEST_CASE("Multiplication with Addition") {
-  fysh::FyshParser p{fysh::FyshLexer{"><fysh> ><{({o> <3 ><(({o> ~"}};
-  auto program{p.parseProgram()};
-  check_program(program, 1);
-  auto fullExpr{get_expr<Box<FyshBinaryExpr>>(program[0])};
-  check_ident<FyshExpr>(fullExpr.t->left, "fysh");
-  auto innerExpr{get_expr<Box<FyshBinaryExpr>>(fullExpr.t->right)};
-  check_num(innerExpr.t->left, 5);
-  check_num(innerExpr.t->right, 1);
+TEST_CASE("Expression Statements") {
+  struct TestCase {
+    const char *input;
+    const char *expected;
+  };
+  static const TestCase cases[] = {
+      {"><(({o> ~", "1"},
+      {"><fysh> ~", "fysh"},
+      {"><fysh> <3 ><{({o> ~", "(fysh * 5)"},
+      {"><fysh> ><{({o> <3 ><(({o> ~", "(fysh + (5 * 1))"},
+      {"><fyshy> | ><{({o> ^ ><(({o> ~", "(fyshy | (5 ^ 1))"},
+      {"><fysh1> ><fysh2> ><fysh3> ~", "(fysh1 + (fysh2 + fysh3))"},
+  };
+  for (const auto &[input, expected] : cases) {
+    CHECK_EQ(expr(input), expected);
+  }
 }
 
 TEST_CASE("Increment Statement") {
