@@ -7,7 +7,6 @@ constexpr const char *str(const fysh::ast::FyshBinary &op) {
   switch (op) {
     // clang-format off
   case FyshBinary::Add:        return "+";
-  case FyshBinary::Sub:        return "-";
   case FyshBinary::Mul:        return "*";
   case FyshBinary::Div:        return "/";
   case FyshBinary::Equal:      return "==";
