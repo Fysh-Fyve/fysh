@@ -20,7 +20,6 @@
 
 #include "Lexer.h"
 #include "Species.h"
-#include <cctype>
 #include <string_view>
 #include <variant>
 
@@ -41,6 +40,11 @@ char fysh::FyshLexer::periscope(int line) const noexcept {
 // -------------- Utility functions --------------
 static bool isScale(char c) noexcept {
   return c == '(' || c == ')' || c == '{' || c == '}';
+}
+
+bool fysh::FyshLexer::isUnicode() noexcept {
+  return peekFyshChar() == "鱼" || peekFyshChar() == "魚" ||
+         peekFyshChar() == "と";
 }
 
 char fysh::FyshLexer::reel() noexcept {
@@ -221,9 +225,18 @@ fysh::Fysh fysh::FyshLexer::identifier(FyshDirection dir,
     reel();
   }
   const char *identStart{current};
-  reel();
-  while (std::isalnum(periscope())) {
+  // TODO: Support all Unicode
+  if (isUnicode()) {
+    eatFyshChar();
+  } else {
     reel();
+  }
+  while (std::isalnum(periscope()) || isUnicode()) {
+    if (isUnicode()) {
+      eatFyshChar();
+    } else {
+      reel();
+    }
   }
   if (periscope() != '>') {
     return cullDeformedFysh();
@@ -393,7 +406,7 @@ fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
       eatFyshChar();
       return scales(FyshDirection::LEFT);
     }
-    if (std::isalpha(periscope())) {
+    if (std::isalpha(periscope()) || isUnicode()) {
       return identifier(FyshDirection::LEFT);
     }
     return cullDeformedFysh();
@@ -418,7 +431,7 @@ fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
   case ('#'):
     return random(); // random number
   default:
-    if (std::isalpha(periscope())) {
+    if (std::isalpha(periscope()) || isUnicode()) {
       return identifier(FyshDirection::RIGHT);
     }
     return cullDeformedFysh();

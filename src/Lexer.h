@@ -64,6 +64,7 @@ private:
   unsigned int line = 1;
 
   char reel() noexcept;
+  bool isUnicode() noexcept;
   bool match(char x) noexcept;
   bool match(const char *x) noexcept;
 #ifdef FYSH_DEBUG
