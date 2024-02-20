@@ -1,6 +1,7 @@
 #include "AST.h"
 #include <cassert>
 #include <ostream>
+#include <sstream>
 
 constexpr const char *str(const fysh::ast::FyshBinary &op) {
   using fysh::ast::FyshBinary;
@@ -52,19 +53,29 @@ std::ostream &fysh::ast::operator<<(std::ostream &os,
       [&](auto &&arg) {
         using T = std::decay_t<decltype(arg)>;
         if constexpr (std::is_same_v<T, Error>)
-          os << "ERROR(\"" << *arg.t << "\"";
+          os << "ERROR(\"" << *arg.t << "\")";
         else if constexpr (std::is_same_v<T, Box<FyshBinaryExpr>>)
           os << "(" << arg.t->left << " " << str(arg.t->op) << " "
              << arg.t->right << ")";
         else if constexpr (std::is_same_v<T, Box<FyshUnaryExpr>>)
           os << "(" << str(arg.t->op) << " " << arg.t->expr << ")";
         else if constexpr (std::is_same_v<T, FyshIdentifier>)
-          os << "(" << arg.name << ")";
+          os << arg.name;
         else if constexpr (std::is_same_v<T, FyshLiteral>)
-          os << "(" << arg.num << ")";
+          os << arg.num;
         else
           static_assert(always_false_v<T>, "non-exhaustive visitor!");
       },
       f);
   return os;
+}
+
+bool fysh::ast::operator==(const fysh::ast::FyshExpr &expr, const char *str) {
+  std::stringstream ss;
+  ss << expr;
+  return ss.str() == str;
+}
+
+bool fysh::ast::operator!=(const fysh::ast::FyshExpr &expr, const char *str) {
+  return !(expr == str);
 }
