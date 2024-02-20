@@ -90,8 +90,18 @@ fysh::ast::FyshExpr fysh::FyshParser::parseMultiplicative() {
   return ast::FyshBinaryExpr{left, right, op.value()};
 }
 
+fysh::ast::FyshExpr fysh::FyshParser::parseAdditive() {
+  auto left{parseMultiplicative()};
+  auto op{binaryOp(curFysh)};
+  if (op.has_value() || curFysh == Species::TERMINATE) {
+    return left;
+  }
+  auto right{parseMultiplicative()};
+  return ast::FyshBinaryExpr{left, right, ast::FyshBinary::Add};
+}
+
 fysh::ast::FyshExpr fysh::FyshParser::parseExpression() {
-  return parseMultiplicative();
+  return parseAdditive();
 }
 
 fysh::ast::FyshStmt fysh::FyshParser::parseStatement() {

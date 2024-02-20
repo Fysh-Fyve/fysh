@@ -23,6 +23,7 @@
 #include "Box.h"
 #include <cstdint>
 #include <optional>
+#include <ostream>
 #include <string_view>
 #include <variant>
 #include <vector>
@@ -123,6 +124,11 @@ struct FyshIfStmt {
   FyshBlock consequence;
   std::optional<FyshBlock> alternative;
 };
+
+constexpr const char *toStr(const FyshBinary &op);
+constexpr const char *toStr(const FyshUnary &op);
+
+std::ostream &operator<<(std::ostream &os, const FyshExpr &f);
 
 }; // namespace fysh::ast
 

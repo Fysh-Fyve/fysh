@@ -49,21 +49,40 @@ TEST_CASE("Assignment Statement") {
   check_num(stmt.right, 1);
 }
 
-TEST_CASE("Expression Statements") {
-  fysh::FyshParser p{fysh::FyshLexer{R"(
-><(({o> ~
-><fysh> ~
-><fysh> <3 ><{({o> ~
-)"}};
+TEST_CASE("Literal") {
+  fysh::FyshParser p{fysh::FyshLexer{"><(({o> ~"}};
   auto program{p.parseProgram()};
-  check_program(program, 3);
+  check_program(program, 1);
   check_num(program[0], 1);
-  check_ident(program[1], "fysh");
+}
 
-  auto binaryExpr{get_expr<Box<FyshBinaryExpr>>(program[2])};
+TEST_CASE("Identifier") {
+  fysh::FyshParser p{fysh::FyshLexer{"><fysh> ~"}};
+  auto program{p.parseProgram()};
+  check_program(program, 1);
+  check_ident(program[0], "fysh");
+}
+
+TEST_CASE("Multiplication") {
+  fysh::FyshParser p{fysh::FyshLexer{"><fysh> <3 ><{({o> ~"}};
+  auto program{p.parseProgram()};
+  check_program(program, 1);
+
+  auto binaryExpr{get_expr<Box<FyshBinaryExpr>>(program[0])};
   check_ident(binaryExpr.t->left, "fysh");
   check_num(binaryExpr.t->right, 5);
   CHECK(binaryExpr.t->op == FyshBinary::Mul);
+}
+
+TEST_CASE("Multiplication with Addition") {
+  fysh::FyshParser p{fysh::FyshLexer{"><fysh> ><{({o> <3 ><(({o> ~"}};
+  auto program{p.parseProgram()};
+  check_program(program, 1);
+  auto fullExpr{get_expr<Box<FyshBinaryExpr>>(program[0])};
+  check_ident<FyshExpr>(fullExpr.t->left, "fysh");
+  auto innerExpr{get_expr<Box<FyshBinaryExpr>>(fullExpr.t->right)};
+  check_num(innerExpr.t->left, 5);
+  check_num(innerExpr.t->right, 1);
 }
 
 TEST_CASE("Increment Statement") {

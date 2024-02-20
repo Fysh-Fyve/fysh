@@ -1,5 +1,6 @@
 add_library (
 	common
+	AST.cc
 	AST.h
 	Box.h
 	Fysh.cc
