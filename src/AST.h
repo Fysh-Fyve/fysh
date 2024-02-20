@@ -36,7 +36,6 @@ using Error = Box<std::string>;
 // less than, bit shift, etc.)
 enum class FyshBinary {
   Add,
-  Sub,
   Mul,
   Div,
   Equal,
