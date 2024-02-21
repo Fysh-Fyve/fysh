@@ -24,7 +24,6 @@ _start:
 	li	t0, 1    # load constant into temporary register for comparison
 	lui	x31, 0x10
 loop:
-	sw	a4, 4(x31)
 	# while number > 1
 	bgt	a4, t0, loop_body
 
