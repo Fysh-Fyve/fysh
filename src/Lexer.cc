@@ -42,6 +42,8 @@ static bool isScale(char c) noexcept {
   return c == '(' || c == ')' || c == '{' || c == '}';
 }
 
+// TODO: Support all Unicode. There might also be a more efficient way to check
+// for non-keyword and non-operator characters
 bool fysh::FyshLexer::isUnicode() noexcept {
   return peekFyshChar() == "鱼" || peekFyshChar() == "魚" ||
          peekFyshChar() == "と";
@@ -226,7 +228,6 @@ fysh::Fysh fysh::FyshLexer::identifier(FyshDirection dir,
     reel();
   }
   const char *identStart{current};
-  // TODO: Support all Unicode
   if (isUnicode()) {
     eatFyshChar();
   } else {
