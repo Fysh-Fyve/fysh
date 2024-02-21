@@ -1,4 +1,5 @@
-rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
+rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) \
+	  $(filter $(subst *,%,$2),$d))
 
 RTL_DIR := rtl
 SRC_DIR := $(RTL_DIR)/core
@@ -8,14 +9,18 @@ VHDL_SRC := $(call rwildcard,$(SRC_DIR),*.vhd)
 VHDL_TEST_SRC := $(call rwildcard,$(TEST_DIR),*.vhd)
 VHDL_TEST_BENCHES := $(patsubst $(TEST_DIR)/%.vhd, %, $(VHDL_TEST_SRC))
 
-ASM_SRC := $(call rwildcard,asm,*.S)
-ASM_HEX := $(patsubst %.S,%.hex,$(ASM_SRC))
+ASM_SRC1 := $(call rwildcard,asm,*.S)
+ASM_SRC2 := $(call rwildcard,asm,*.s)
+ASM_SRC3 := $(call rwildcard,asm,*.asm)
+ASM_HEX := $(patsubst %.S,%.hex,$(ASM_SRC1)) $(patsubst %.s,%.hex,$(ASM_SRC2)) \
+	   $(patsubst %.asm,%.hex,$(ASM_SRC3))
 
 FMT_SRC := $(patsubst %, fmt-%,$(VHDL_SRC) $(VHDL_TEST_SRC))
 
 export GHDL_FLAGS := compile --std=08
 # GHDL_FLAGS += -frelaxed
-export RUN_FLAGS := --ieee-asserts=disable # If you wanna silence annoying errors
+# If you wanna silence annoying errors
+export RUN_FLAGS := --ieee-asserts=disable
 ifdef WAVE
 RUN_FLAGS += --wave=wave.ghw
 endif
@@ -54,6 +59,12 @@ PREFIX=riscv-none-elf
 	$(PREFIX)-gcc -march=rv32i -nostdlib -T asm/fysh-fyve.ld -o $@ $<
 
 %.o: %.S
+	$(PREFIX)-as $< -march=rv32i -o $@
+
+%.o: %.asm
+	$(PREFIX)-as $< -march=rv32i -o $@
+
+%.o: %.s
 	$(PREFIX)-as $< -march=rv32i -o $@
 
 build/fyve-%: scripts/%.cc
