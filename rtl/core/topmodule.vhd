@@ -234,8 +234,9 @@ begin
     '0'                                    when others;
 
   grilled_fysh_inst : entity work.grilled_fysh(rtl) port map (
-    clk  => clk,
-    pins => insn(7 downto 0),
+    clk_i  => clk,
+    -- Should be connected to the ADC
+    pins_i => insn(7 downto 0),
     gf_o => gf);
 
   insn_register : process(reset, ir_clk, mem_write_en)

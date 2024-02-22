@@ -10,9 +10,9 @@ use ieee.std_logic_1164.all;
 -- Every clock cycle, shift then XOR?
 entity grilled_fysh is
   port (
-    clk  : in  std_ulogic;
-    pins : in  std_ulogic_vector (7 downto 0);
-    gf_o : out std_ulogic_vector (31 downto 0));
+    clk_i  : in  std_ulogic;
+    pins_i : in  std_ulogic_vector (7 downto 0);
+    gf_o   : out std_ulogic_vector (31 downto 0));
 end grilled_fysh;
 
 architecture rtl of grilled_fysh is
@@ -21,7 +21,7 @@ begin
   begin
     if rising_edge(clk) then
       -- TODO: Shift every clock cycle
-      gf_o <= pins &pins & pins & pins;
+      gf_o <= pins & pins & pins & pins;
     end if;
   end process shift;
 end rtl;
