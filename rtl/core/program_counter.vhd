@@ -44,7 +44,7 @@ begin
     imm_x_i         when '0',
     (others => 'X') when others;
 
-  
+
   pc_alu_result   <= std_ulogic_vector(unsigned(pc) + unsigned(pc_alu));
   pc_alu_result_o <= pc_alu_result;
   pc_o            <= pc;
