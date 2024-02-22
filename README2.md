@@ -1,185 +1,31 @@
-# Fysh Language Syntax Guide
+# 🌊 Dive into Fysh: A Programming Language for the World to Sea 🐠
 
-Fysh is a fish-themed programming language that offers a unique approach to
-coding through aquatic metaphors and binary scales. This guide provides an
-overview of the syntax and features of Fysh.
+## Welcome to the Oceanic Future of Coding!
 
-## Basic Syntax
+### 🐬 Meet Fysh: Not Just Another Drop in the Programming Waters 🌟
 
-### Variables
+**Introducing Fysh** - the latest, greatest splash in the programming ocean!
+Fysh isn't your garden-variety coding language; oh no, it's the world's most
+_inclusive_ dialect, decipherable by brains both on land and under sea\*.
+Imagine, if you will, a language so fluid, so versatile, that dolphins could
+debug your code and octopuses could optimize your algorithms. It's not just a
+programming language; it's an aquatic revolution!
 
-Declare a variable (e.g., Steven) using `><variableName>`.
+### 🐟 A Revolutionary Ripple in the Digital Ocean
 
-```fysh
-><steven>
-```
+### 🌐 Fysh: Coding Without Borders
 
-### Termination
+### 🚫 **Discalmers:**
 
-Every Fysh code block must be terminated with a `~`.
+- **Aquatic Comprehension**\*: The ability of sea creatures to actually
+  understand Fysh remains unconfirmed. Any effort to test this understanding
+  might result in puzzled expressions from both marine and terrestrial
+  observers.
 
-```fysh
-><steven> ~
-```
+- **Communication Limitations**: Given the current linguistic barrier with our
+  underwater counterparts, Fysh temporarily excludes string variables. Our
+  marine linguistics team is diving deep into oceanic communication and promises
+  updates as new discoveries surface.
 
-### Binary Scales
-
-Binary values are represented with `}` for 1 and `)` for 0. Assign binary values
-using `=` or `≈`.
-
-```fysh
-><steven> = ><})}> ~
-><steven> ≈ ><}({> ~
-```
-
-### Optional Feature
-
-You can optionally add features to variables, like giving Steven sight with `°`
-or `o`.
-
-```fysh
-><steven> ≈ ><{({°> ~
-><steven> = ><{({o> ~
-```
-
-## Operators
-
-### Arithmetic Operations
-
-Fysh supports addition, subtraction, multiplication, and division through
-creative symbols.
-
-- **Addition:** Sum of individual values in a school of fysh. (e.g.,
-  `><{((°> + ><(({°> ~`)
-- **Subtraction:** Represented by fysh swimming in opposite directions. (e.g.,
-  `><{{{°> <°)})>< ~`)
-- **Multiplication:** Represented by a heart symbol `♡` or a lesser form of love
-  `<3`.
-- **Division:** Symbolized by a heartbreak `💔` or `</3`.
-
-### Increment and Decrement
-
-Grow an extra tail to increment and swim in the opposite direction to decrement.
-
-```fysh
->><steven> ~
-<steven><< ~
-```
-
-### Error Handling
-
-Use `><!@#$>` and `<!@#$><` to throw an error.
-
-```fysh
-><!@#$>
-    What The Fysh?!
-<!@#$><
-```
-
-### Equality and Inequality
-
-Check for equality with `≈≈` or `==`, and inequality with `~≈` or `~=`.
-
-```fysh
-><steven> ≈≈ ><theFysh> ~
-><steven> ~= ><theFysh> ~
-```
-
-### Comparison Operators
-
-Use variations of `o~` and `~o` for greater than, less than. And `o~≈` and `~o≈`
-for greater than or equal to, less than or equal to.
-
-```fysh
-><steven> o~ ><sixFins> ~
-><steven> o~≈ ><sixFins> ~
-><steven> ~o ><sixFins> ~
-><steven> ~o= ><sixFins> ~
-```
-
-### Logical Operators
-
-Combine conditions with `&&` for AND, `||` for OR, and negate with `!!`.
-
-```fysh
-><steven> && ><theTruth> ~
-><steven> || ><theTruth> ~
-!! ><steven> ~
-```
-
-### Bitwise Operations
-
-Fysh supports `AND`, `OR`, `XOR`, `NOT`, and shift operations.
-
-```fysh
-><steven> &  ><{((°> ~
-><steven> |  ><{((°> ~
-><steven> ^  ><{((°> ~
-! ><steven>
-><steven> << ><{((°> ~
-><steven> >> ><{((°> ~
-```
-
-## Control Structures
-
-### Loops
-
-Use `><(((@>` for while loops.
-
-```fysh
-><(((@> [ ><steven> o~ ><{((°> ]
-><>
-    <steven><< ~
-<><
-```
-
-### Conditional Statements
-
-`><(((^>` for if, `><(((*> ><(((^>` for else if, and `><(((*>` for else.
-
-```fysh
-><(((^> [ ><steven> o~ ><{((°> ]
-><>
-    <steven><< ~
-<><
-```
-
-## Comments
-
-Single-line comments with `><//>` and multi-line with `></*>` and `<*/><`.
-
-```fysh
-><//> This is a comment.
-></*>
-Multi-line comment
-<*/><
-```
-
-## Arrays
-
-Define arrays with `[ ]` and separate elements with `-`. Access elements using
-`><varName>[index]`.
-
-```fysh
-><steven> ≈ [><({(°> - ><({(°>] ~
-><steven>[><(({°>]
-```
-
-## Factorial Example
-
-A complete example demonstrating the factorial calculation.
-
-```fysh
-><//> Factorial calculation example
-><number>    ≈ ><{({°>   ><//> b101 = 5
-><factorial> ≈ ><(({°>   ><//> b001 = 1
-
-><(((@> [><number> o~ ><(({°>]
-><>
-    ><//> factorial = factorial * number
-    ><factorial> ≈ ><factorial> ♡ ><number> ~
-
-    ><//> number -= 1
-    <number><< ~
-<><
-```
+Dive into Fysh, and let's make waves in the world of programming, together!
+🌊👩‍💻🐟
