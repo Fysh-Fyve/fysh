@@ -15,13 +15,20 @@ entity grilled_fysh is
     gf_o   : out std_ulogic_vector (31 downto 0));
 end grilled_fysh;
 
+-- 00_00_00_00
+-- 00_00_00_11
+-- 00_00_11_22
+-- 00_11_22_33
+-- 11_22_33_44
+-- 22_33_44_55
+
 architecture rtl of grilled_fysh is
 begin
-  shift : process (clk)
+  shift : process (clk_i)
   begin
-    if rising_edge(clk) then
+    if rising_edge(clk_i) then
       -- TODO: Shift every clock cycle
-      gf_o <= pins & pins & pins & pins;
+      gf_o <= pins_i & pins_i & pins_i & pins_i;
     end if;
   end process shift;
 end rtl;
