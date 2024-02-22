@@ -141,6 +141,10 @@ fysh::ast::FyshStmt fysh::FyshParser::parseStatement() {
 }
 
 std::vector<fysh::ast::FyshStmt> fysh::FyshParser::parseProgram() {
+  return parseBlock();
+}
+
+std::vector<fysh::ast::FyshStmt> fysh::FyshParser::parseBlock() {
   std::vector<fysh::ast::FyshStmt> program;
 
   while (curFysh != Species::END) {
