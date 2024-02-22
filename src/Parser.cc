@@ -88,7 +88,7 @@ fysh::ast::FyshExpr fysh::FyshParser::parseMultiplicative() {
          op == ast::FyshBinary::ShiftRight ||
          op == ast::FyshBinary::BitwiseAnd) {
     nextFysh();
-    auto right{parseAdditive()};
+    auto right{parseMultiplicative()};
     left = ast::FyshBinaryExpr{left, right, op.value()};
     op = binaryOp(curFysh);
   }
