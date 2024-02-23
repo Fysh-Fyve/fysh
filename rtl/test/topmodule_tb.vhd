@@ -8,6 +8,8 @@ use std.env.stop;
 
 --! Test bench for the top module.
 entity topmodule_tb is
+  generic (VERBOSE : boolean := false);
+  -- generic (VERBOSE : boolean := true);
 end topmodule_tb;
 
 architecture test_bench of topmodule_tb is
@@ -29,11 +31,13 @@ begin
     end if;
   end process stop_exec;
 
-  topmodule_inst : entity work.topmodule(rtl) port map (
-    clk   => clk,
-    gpio  => gpio,
-    done  => done,
-    reset => reset);
+  topmodule_inst : entity work.topmodule(rtl)
+    generic map (VERBOSE => VERBOSE)
+    port map (
+      clk   => clk,
+      gpio  => gpio,
+      done  => done,
+      reset => reset);
   process
   begin
     wait for 10.6383 ns;
