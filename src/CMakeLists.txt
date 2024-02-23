@@ -3,6 +3,8 @@ add_library (
 	AST.cc
 	AST.h
 	Box.h
+	Compyler.cc
+	Compyler.h
 	Fysh.cc
 	Lexer.cc
 	Lexer.h
