@@ -11,6 +11,7 @@ use work.rom.rom_arr;
 --! Creates physical maps to memory\n
 --! 0x00000000 - 0x0000FFFF (ROM)\n
 --! 0x00010000 - 0x0003FFFF (RAM)\n
+--! 0xDEADBEE8 - 0xDEADBEEB (GPIO Pin mode)\n
 --! 0xDEADBEEC - 0xDEADBEEF (GPIO)\n
 entity phy_map is
   port (
@@ -23,7 +24,6 @@ entity phy_map is
     d_i      : in    std_ulogic_vector (31 downto 0);  --! Data Input
     d_o      : out   std_ulogic_vector (31 downto 0);  --! Data Output
     i_o      : out   std_ulogic_vector (31 downto 0);  --! Instruction Output
-    -- TODO: GPIO PIN Mode???
     gpio     : inout std_ulogic_vector (31 downto 0));  --! GPIO Pins
 
 end phy_map;
@@ -33,10 +33,12 @@ architecture rtl of phy_map is
   --! Maybe we should split them up more?
   constant MEM_SPLIT : integer := 17;
 
-  signal ram_write_en  : std_ulogic;
-  signal gpio_write_en : std_ulogic;
+  signal ram_write_en       : std_ulogic;
+  signal gpio_write_en      : std_ulogic;
+  signal gpio_mode_write_en : std_ulogic;
 
   signal gpio_out : std_ulogic_vector (31 downto 0);
+  signal mode_out : std_ulogic_vector (31 downto 0);
   signal dram_out : std_ulogic_vector (31 downto 0);
   signal drom_out : std_ulogic_vector (31 downto 0);
   signal irom_out : std_ulogic_vector (31 downto 0);
@@ -49,8 +51,9 @@ architecture rtl of phy_map is
   signal le_idata_out : std_ulogic_vector (31 downto 0);
   signal le_ddata_out : std_ulogic_vector (31 downto 0);
 
-  type mem_sel_t is (gpio_sel, rom_sel, ram_sel);
-  signal imem_sel, dmem_sel, wmem_sel : mem_sel_t;
+  type mem_sel_t is (gpio_sel, gpio_mode_sel, rom_sel, ram_sel);
+  signal imem_sel, dmem_sel, wmem_sel    : mem_sel_t;
+  signal wgpio_sel, dgpio_sel, igpio_sel : mem_sel_t;
 begin
   d_o <= le_ddata_out(7 downto 0)
          & le_ddata_out(15 downto 8)
@@ -67,43 +70,56 @@ begin
                 & d_i(23 downto 16)
                 & d_i(31 downto 24);
 
-  ram_write_en  <= write_en_i and '1' when (wmem_sel = ram_sel)  else '0';
-  gpio_write_en <= write_en_i and '1' when (wmem_sel = gpio_sel) else '0';
-
-  gpio_clk : process(clk_i, gpio)
-  begin
-    if rising_edge(clk_i) then
-      if gpio_write_en = '1' then
-        gpio <= le_data_in;
-      end if;
-    end if;
-    gpio_out <= gpio;
-  end process gpio_clk;
+  ram_write_en       <= write_en_i and '1' when (wmem_sel = ram_sel)       else '0';
+  gpio_write_en      <= write_en_i and '1' when (wmem_sel = gpio_sel)      else '0';
+  gpio_mode_write_en <= write_en_i and '1' when (wmem_sel = gpio_mode_sel) else '0';
 
   with imem_sel select le_idata_out <=
     gpio_out when gpio_sel,
     dram_out when ram_sel,
-    irom_out when rom_sel;
+    irom_out when rom_sel,
+    mode_out when gpio_mode_sel;
 
   with dmem_sel select le_ddata_out <=
     gpio_out when gpio_sel,
     dram_out when ram_sel,
-    drom_out when rom_sel;
+    drom_out when rom_sel,
+    mode_out when gpio_mode_sel;
 
   with waddr_i(31 downto 16) select wmem_sel <=
-    gpio_sel when x"DEAD",
-    rom_sel  when x"0000",
-    ram_sel  when others;
+    wgpio_sel when x"DEAD",
+    rom_sel   when x"0000",
+    ram_sel   when others;
 
   with draddr_i(31 downto 16) select dmem_sel <=
-    gpio_sel when x"DEAD",
-    rom_sel  when x"0000",
-    ram_sel  when others;
+    dgpio_sel when x"DEAD",
+    rom_sel   when x"0000",
+    ram_sel   when others;
 
   with iraddr_i(31 downto 16) select imem_sel <=
-    gpio_sel when x"DEAD",
-    rom_sel  when x"0000",
-    ram_sel  when others;
+    igpio_sel when x"DEAD",
+    rom_sel   when x"0000",
+    ram_sel   when others;
+
+  -- This only works for aligned access
+  -- TODO: Support unaligned access
+  with waddr_i(15 downto 0) select wgpio_sel <=
+    gpio_mode_sel when x"BEE8", gpio_sel when others;
+  with draddr_i(15 downto 0) select dgpio_sel <=
+    gpio_mode_sel when x"BEE8", gpio_sel when others;
+  with iraddr_i(15 downto 0) select igpio_sel <=
+    gpio_mode_sel when x"BEE8", gpio_sel when others;
+
+  gpio_inst : entity work.gpio_pins(rtl)
+    port map (
+      clk_i           => clk_i,
+      gp_io           => gpio,
+      write_en_i      => gpio_write_en,
+      mode_write_en_i => gpio_mode_write_en,
+      pin_mode_i      => le_data_in,
+      pin_write_i     => le_data_in,
+      pin_read_o      => gpio_out,
+      mode_o          => mode_out);
 
   rom_inst : entity work.brom(rtl)
     generic map (

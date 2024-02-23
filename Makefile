@@ -111,6 +111,7 @@ mem_tb: $(TEST_DIR)/mem_tb.vhd $(MEM)
 
 _MEMORY := $(_MEM) \
 	   phy_map \
+	   gpio_pins \
 	   mbr_sx \
 	   register_file \
 	   grilled_fysh \
