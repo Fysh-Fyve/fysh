@@ -46,11 +46,19 @@ fysh::ast::Error fysh::FyshParser::expectFysh(fysh::Species species) {
 fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
   if (curFysh == Species::FYSH_LITERAL) {
     ast::FyshLiteral value{curFysh.getValue().value()};
+    bool negate{curFysh.negate};
     nextFysh();
+    if (negate) {
+      return ast::FyshUnaryExpr{ast::FyshUnary::Neg, value};
+    }
     return value;
   } else if (curFysh == Species::FYSH_IDENTIFIER) {
     ast::FyshIdentifier ident{curFysh.getBody()};
+    bool negate{curFysh.negate};
     nextFysh();
+    if (negate) {
+      return ast::FyshUnaryExpr{ast::FyshUnary::Neg, ident};
+    }
     return ident;
   }
   return ast::Error{"unimplemented"};
