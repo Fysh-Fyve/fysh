@@ -28,6 +28,8 @@
 #include <variant>
 #include <vector>
 
+template <class> inline constexpr bool always_false_v = false;
+
 namespace fysh::ast {
 // TODO: Maybe make this more sophisticated?
 using Error = Box<std::string>;

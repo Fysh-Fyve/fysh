@@ -64,8 +64,6 @@ constexpr const char *fysh::ast::toStr(const fysh::ast::FyshUnary &op) {
   return str(op);
 }
 
-template <class> inline constexpr bool always_false_v = false;
-
 std::ostream &fysh::ast::operator<<(std::ostream &os,
                                     const fysh::ast::FyshExpr &f) {
   std::visit(

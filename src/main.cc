@@ -17,15 +17,21 @@
 /**
  * \file main.cc
  */
+#include "Compyler.h"
 #include "Lexer.h"
+#include "Parser.h"
+#include <llvm-18/llvm/Support/raw_ostream.h>
 
 int main() {
-  std::string_view input{"><{{({(o> <3 ><{{({(o>"};
-  // Assuming `input` is a std::string or std::string_view
-  fysh::FyshLexer lexer{input.data()};
-  lexer.nextFysh();
-  lexer.nextFysh();
-  lexer.nextFysh();
+  fysh::FyshLexer lexer{"><{{({(o> ><{{({(o> ~"};
+  fysh::FyshParser parser{lexer};
+  auto program{parser.parseProgram()};
+  fysh::Compyler cumpyler;
+
+  auto fn{cumpyler.compyle(program)};
+
+  fn->print(llvm::outs());
+  fn->eraseFromParent();
 
   return 0;
 }

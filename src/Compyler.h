@@ -21,14 +21,19 @@
 #define FYSH_COMPYLER_H_
 
 #include "AST.h"
+#include <llvm/IR/Function.h>
 #include <llvm/IR/IRBuilder.h>
+#include <llvm/IR/LLVMContext.h>
+#include <llvm/IR/Module.h>
 #include <memory>
 
 namespace fysh {
 class Compyler {
 public:
   Compyler();
-  llvm::Value *compyle(std::vector<ast::FyshStmt> program);
+
+  llvm::Function *compyle(std::vector<ast::FyshStmt> program);
+  llvm::Value *compyle(ast::FyshExpr *expr);
 
 private:
   std::unique_ptr<llvm::LLVMContext> context;
