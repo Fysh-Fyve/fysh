@@ -51,10 +51,10 @@ llvm::Value *fysh::Compyler::compyle(fysh::ast::FyshExpr *expr) {
         if constexpr (std::is_same_v<T, ast::Error>) {
           return nullptr;
         } else if constexpr (std::is_same_v<T, Box<ast::FyshBinaryExpr>>) {
-          auto binExpr = arg.getraw();
-          if (binExpr.op == ast::FyshBinary::Add) {
-            auto left = compyle(&binExpr.left);
-            auto right = compyle(&binExpr.left);
+          auto binOp = arg.getraw();
+          if (binOp.op == ast::FyshBinary::Add) {
+            auto left = compyle(&binOp.left);
+            auto right = compyle(&binOp.right);
             if (!left || !right) {
               return nullptr;
             }

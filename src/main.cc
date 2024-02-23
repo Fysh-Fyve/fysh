@@ -20,18 +20,46 @@
 #include "Compyler.h"
 #include "Lexer.h"
 #include "Parser.h"
+#include <fstream>
+#include <iostream>
 #include <llvm-18/llvm/Support/raw_ostream.h>
+#include <sstream>
 
-int main() {
-  fysh::FyshLexer lexer{"><{{({(o> ><{{({(o> ~"};
+void compyle(std::istream &stream) {
+  std::stringstream ss;
+  ss << stream.rdbuf();
+  std::string source{ss.str()};
+  fysh::FyshLexer lexer{source.data()};
   fysh::FyshParser parser{lexer};
   auto program{parser.parseProgram()};
+
+  if (program.size() == 1) {
+    if (auto err = std::get_if<fysh::ast::Error>(&program[0])) {
+      std::cerr << "Error: " << err->getraw() << std::endl;
+      return;
+    }
+  }
+
   fysh::Compyler cumpyler;
-
   auto fn{cumpyler.compyle(program)};
+  if (fn == nullptr) {
+    std::cerr << "error compyling?" << std::endl;
+  } else {
+    fn->print(llvm::outs());
+    fn->eraseFromParent();
+  }
+}
 
-  fn->print(llvm::outs());
-  fn->eraseFromParent();
-
+int main(int argc, char *argv[]) {
+  if (argc < 2) {
+    compyle(std::cin);
+  } else {
+    std::ifstream inputFile(argv[1]);
+    if (!inputFile.is_open()) {
+      std::cerr << "Error opening file " << argv[1] << " for reading\n";
+      return 1;
+    }
+    compyle(inputFile);
+  }
   return 0;
 }
