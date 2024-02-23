@@ -1,4 +1,5 @@
 #include "Compyler.h"
+#include "AST.h"
 
 #include <llvm/ADT/APInt.h>
 #include <llvm/IR/DerivedTypes.h>
@@ -52,17 +53,29 @@ llvm::Value *fysh::Compyler::compyle(fysh::ast::FyshExpr *expr) {
           return nullptr;
         } else if constexpr (std::is_same_v<T, Box<ast::FyshBinaryExpr>>) {
           auto binOp = arg.getraw();
+          auto left = compyle(&binOp.left);
+          auto right = compyle(&binOp.right);
+          if (!left || !right) {
+            return nullptr;
+          }
           if (binOp.op == ast::FyshBinary::Add) {
-            auto left = compyle(&binOp.left);
-            auto right = compyle(&binOp.right);
-            if (!left || !right) {
-              return nullptr;
-            }
             return builder->CreateAdd(left, right, "addtmp");
+          } else if (binOp.op == ast::FyshBinary::Mul) {
+            return builder->CreateMul(left, right, "multmp");
+          } else if (binOp.op == ast::FyshBinary::Div) {
+            return builder->CreateMul(left, right, "divtmp");
           }
           // TODO: Do other operations
           return nullptr;
         } else if constexpr (std::is_same_v<T, Box<ast::FyshUnaryExpr>>) {
+          auto unaryOp = arg.getraw();
+          auto expr = compyle(&unaryOp.expr);
+          if (!expr) {
+            return nullptr;
+          }
+          if (unaryOp.op == ast::FyshUnary::Neg) {
+            return builder->CreateNeg(expr);
+          }
           return nullptr;
         } else if constexpr (std::is_same_v<T, ast::FyshIdentifier>) {
           return nullptr;
