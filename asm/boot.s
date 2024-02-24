@@ -2,6 +2,8 @@
 
 .text
 _start:
-	jalr	ra, 0x10
+	# TODO: Do more initialization here.
+	# (e.g.) Stack, thread, and global pointer initialization,  etc.
+	jal	ra, main
 done:
 	beqz	zero, done

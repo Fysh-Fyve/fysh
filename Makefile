@@ -9,11 +9,9 @@ VHDL_SRC := $(call rwildcard,$(SRC_DIR),*.vhd)
 VHDL_TEST_SRC := $(call rwildcard,$(TEST_DIR),*.vhd)
 VHDL_TEST_BENCHES := $(patsubst $(TEST_DIR)/%.vhd, %, $(VHDL_TEST_SRC))
 
-ASM_SRC1 := $(call rwildcard,asm,*.S)
-ASM_SRC2 := $(call rwildcard,asm,*.s)
-ASM_SRC3 := $(call rwildcard,asm,*.asm)
-ASM_HEX := $(patsubst %.S,%.hex,$(ASM_SRC1)) $(patsubst %.s,%.hex,$(ASM_SRC2)) \
-	   $(patsubst %.asm,%.hex,$(ASM_SRC3))
+ASM_SRC := $(call rwildcard,asm,*.s)
+# We don't make a standalone hexfile with asm/boot.s
+ASM_HEX := $(filter-out asm/boot.hex, $(patsubst %.s,%.hex,$(ASM_SRC)))
 
 FMT_SRC := $(patsubst %, fmt-%,$(VHDL_SRC) $(VHDL_TEST_SRC))
 
@@ -32,7 +30,7 @@ wave:
 	WAVE=1 $(MAKE) topmodule_tb
 
 clean:
-	rm -fv **/*~
+	rm -fv **/*~ $(ASM_HEX)
 
 hex: $(ASM_HEX)
 
@@ -55,14 +53,8 @@ PREFIX=riscv-none-elf
 %.hex: %.elf
 	$(PREFIX)-objcopy -O binary $< $@
 
-%.elf: %.o asm/fysh-fyve.ld
-	$(PREFIX)-gcc -march=rv32i -nostdlib -T asm/fysh-fyve.ld -o $@ $<
-
-%.o: %.S
-	$(PREFIX)-as $< -march=rv32i -o $@
-
-%.o: %.asm
-	$(PREFIX)-as $< -march=rv32i -o $@
+%.elf: asm/fysh-fyve.ld asm/boot.o %.o
+	$(PREFIX)-gcc -march=rv32i -nostdlib -T $^ -o $@
 
 %.o: %.s
 	$(PREFIX)-as $< -march=rv32i -o $@

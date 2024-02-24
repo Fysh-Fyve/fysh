@@ -1,7 +1,7 @@
-.globl _start
+.globl main
 
 .text
-_start:
+main:
 	li	t0, 10
 	addi	t0, t0, -1
 	lui	x31, 0x10

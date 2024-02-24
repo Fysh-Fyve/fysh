@@ -1,4 +1,4 @@
-.globl _start
+.globl main
 
 # Take the factorial of:
 .data
@@ -17,7 +17,7 @@ arg: .word 5
 # 	<number><< ~
 # <><
 .text
-_start:
+main:
 	lw	a4, arg  # Number
 	li	a5, 1    # Factorial
 

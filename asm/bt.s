@@ -1,7 +1,7 @@
-.globl _start
+.globl main
 
 .text
-_start:
+main:
 
 branch_beq:
 	li	t0, 10

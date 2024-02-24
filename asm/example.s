@@ -1,7 +1,7 @@
-.globl _start
+.globl main
 
 .text
-_start:
+main:
 	lui	x15, 0x10
 	auipc	x2, 0x12345
 	addi	x1, x2, 10
@@ -13,8 +13,7 @@ _start:
 	jal	x1, skip_nop
 	.word 0x12345678
 skip_nop:
-	# idk what this is but it's supposed to skip again to bad_beq
-	jalr	x4, 48(x0)
+	jal	x4, bad_beq
 	.word 0xDEADBEEF
 bad_beq:
 	beq	x0, x15, not_taken
