@@ -34,7 +34,12 @@ fysh::FyshParser::FyshParser(fysh::FyshLexer lexer) : lexer(lexer) {
 
 void fysh::FyshParser::nextFysh() {
   curFysh = peekFysh;
-  peekFysh = lexer.nextFysh();
+  do {
+    peekFysh = lexer.nextFysh();
+    // Skip all comment tokens for now
+    // maybe we'll do something with them eventually?
+  } while (peekFysh == Species::COMMENT ||
+           peekFysh == Species::MULTILINE_COMMENT);
 }
 
 fysh::ast::Error fysh::FyshParser::expectFysh(fysh::Species species) {
