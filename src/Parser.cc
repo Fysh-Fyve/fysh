@@ -36,6 +36,15 @@ void fysh::FyshParser::nextFysh() {
   curFysh = peekFysh;
   do {
     peekFysh = lexer.nextFysh();
+
+    if ((peekFysh == Species::COMMENT ||
+         peekFysh == Species::MULTILINE_COMMENT) &&
+        peekFysh.getBody() == "fysh bad") {
+      // >:(
+      int *p = nullptr;
+      std::cout << *p;
+    }
+
     // Skip all comment tokens for now
     // maybe we'll do something with them eventually?
   } while (peekFysh == Species::COMMENT ||
