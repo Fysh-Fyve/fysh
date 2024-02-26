@@ -75,9 +75,19 @@ their division is symbolized by a heartbreak.
 ><steven> = ><{{(({o> </3 ><{({o> ~
 ```
 
+Fysh are often mistreated are forced into fyshbowls for human entertainment. This isolates the fysh and makes them sad. This is represented by `( ><{{(({°> <°}))}>< )`. 
+```
+><steven> ≈ ><steven> 💔 ( ><{{(({°> <°}))>< ) ~
+```
+
+BEDMAS/PEDMAS has been taught to humans for years. But what about fysh? Fysh have a different way of doing things. Introducing FISHS: Fyshbowl, Increment, Sexual reproduction, Heartbreak, School of fish.
+```fysh
+><steven> ≈ ><{{(({°>  ><{{(°> ♡ ><{{(({°> <°}})>< 💔 ( ><{{(°> ><{{(°> )  ~
+
+```
+
 As life goes on, we learn from our mistakes and improve. Steven’s self help
 journey allowed them to grow an extra tail, incrementing their value by 1.
-
 ```
 >><steven> ~
 ```
@@ -118,21 +128,21 @@ using `~≈` or `~=`.
 ><steven> ~= ><theFysh> ~
 ```
 
-Tadpoles, curious by nature, gravitate towards larger fysh, perhaps seeking
-guidance or a new destiny. This tadpole ponders if Steven has more than six
-fins. (Steven > sixFins, Steven >= sixFins)
+Tadpoles also exist in the fysh language. Tadpoles swim towards bigger fysh
+(they like the danger) and are represented by `~o or o~`. ( `~o is <`, `o~ is >`).
+Here we are checking if Steven is bigger than 5. Then if they're less than 7.
 
-```
-><steven> o~ ><sixFins> ~
-><steven> o~≈ ><sixFins> ~
+```fysh
+><steven> o~ ><{({°>
+><steven> ~o ><{{{°>
 ```
 
-Or, with a twist of fate, they explore if Steven is the lesser, a journey of
-humility and discovery. (Steven < sixFins, Steven <= sixFins)
+Tadpoles aren`t too picky and will also swim towards fysh that are greater than or equal to the other fysh. 
+Here we are checking if Steven is greater than or equal to 5. Then if they're less than or equal to 7.
 
-```
-><steven> ~o ><sixFins> ~
-><steven> ~o≈ ><sixFins> ~
+```fysh
+><steven> o~≈ ><{({°>
+><steven> ~o≈ ><{{{°>
 ```
 
 Steven is a curious fysh and often wonders if the world is as it seems. They
@@ -149,9 +159,9 @@ is not real and this is all a simulation, they find it. (!!Steven)
 
 Steven is looking for a change and is interested in having their bits
 rearranged. Given it's 2024, a time when open-mindedness prevails, Steven has a
-variety of bitwise manipulation techniques at his disposal: `AND (&)`, `OR (|)`,
-`XOR (^)`, `NOT (!)`. For those moments when he's feeling particularly
-adventurous, he might even consider the `logical shift left (<<)` or
+variety of bitwise manipulation techniques at their disposal: `AND (&)`, `OR (|)`,
+`XOR (^)`, `NOT (!)`. For those moments when they're feeling particularly
+adventurous, they might even consider the `logical shift left (<<)` or
 `logical shift right (>>)` operators.
 
 ```
