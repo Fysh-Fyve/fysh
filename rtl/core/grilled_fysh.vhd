@@ -27,7 +27,6 @@ begin
   shift : process (clk_i)
   begin
     if rising_edge(clk_i) then
-      -- TODO: Shift every clock cycle
       gf_o <= gf_o(23 downto 0) & (gf_o(31 downto 24) xor pins_i);
     end if;
   end process shift;
