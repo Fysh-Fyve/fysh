@@ -12,7 +12,7 @@ entity grilled_fysh is
   port (
     clk_i  : in  std_ulogic;
     pins_i : in  std_ulogic_vector (7 downto 0);
-    gf_o   : out std_ulogic_vector (31 downto 0));
+    gf_o   : out std_ulogic_vector (31 downto 0) := (others => '0'));
 end grilled_fysh;
 
 -- 00_00_00_00
