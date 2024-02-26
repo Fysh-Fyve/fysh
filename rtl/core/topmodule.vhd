@@ -13,7 +13,8 @@ entity topmodule is
     clk   : in    std_ulogic;
     reset : in    std_ulogic;
     done  : out   std_ulogic;
-    gpio  : inout std_ulogic_vector (31 downto 0));
+    gpio  : inout std_ulogic_vector (31 downto 0);
+    adc   : in    std_ulogic_vector(7 downto 0));
 end topmodule;
 
 architecture rtl of topmodule is
@@ -235,9 +236,8 @@ begin
 
   grilled_fysh_inst : entity work.grilled_fysh(rtl) port map (
     clk_i  => clk,
-    -- Should be connected to the ADC
-    pins_i => insn(7 downto 0),
-    gf_o => gf);
+    pins_i => adc,
+    gf_o   => gf);
 
   insn_register : process(reset, ir_clk, mem_write_en)
   begin

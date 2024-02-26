@@ -47,6 +47,9 @@ package fysh_fyve is
   constant OPCODE_JALR    : opcode_t := "11001";
   constant OPCODE_BRANCH  : opcode_t := "11000";
 
+  -- Grilled fysh custom opcode
+  constant OPCODE_FYSH : opcode_t := "11010";
+
   constant BEQ  : alu_op_t := "000";
   constant BNE  : alu_op_t := "001";
   constant BLT  : alu_op_t := "100";
@@ -105,6 +108,7 @@ package body fysh_fyve is
       when OPCODE_JAL     => write(l, string'("JAL   "));
       when OPCODE_JALR    => write(l, string'("JALR  "));
       when OPCODE_BRANCH  => write(l, string'("BRANCH"));
+      when OPCODE_FYSH    => write(l, string'("FYSH  "));
       when others         => write(l, string'("ERROR "));
     end case;
   end write_opcode;

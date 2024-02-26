@@ -66,7 +66,14 @@ architecture rtl of control_fsm is
   end write;
 begin
   with opcode_i(6 downto 2) select write_dest <=
-    reg  when OPCODE_LUI | OPCODE_AUIPC | OPCODE_REG_IM | OPCODE_REG_REG | OPCODE_LOAD | OPCODE_JAL | OPCODE_JALR,
+    reg  when OPCODE_LUI
+    | OPCODE_AUIPC
+    | OPCODE_REG_IM
+    | OPCODE_REG_REG
+    | OPCODE_LOAD
+    | OPCODE_JAL
+    | OPCODE_JALR
+    | OPCODE_FYSH,
     mem  when OPCODE_STORE,
     none when others;
 
@@ -110,6 +117,8 @@ begin
 
     "11" & "111" & "11" & "00" when OPCODE_JAL,
     "01" & "111" & "11" & "00" when OPCODE_JALR,
+
+    "00" & "111" & "10" & "10" when OPCODE_FYSH,
 
     "00" & "111" & not branch & "0" & "01" when OPCODE_BRANCH,
 
