@@ -445,6 +445,30 @@ fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
   }
 }
 
+fysh::Fysh fysh::FyshLexer::tilde() noexcept {
+  reel();
+  if (match('=')) {
+    return Species::NOT_EQUAL;
+  }
+  if (peekFyshChar() == "≈") {
+    eatFyshChar();
+    return Species::NOT_EQUAL;
+  }
+  if (match('o')) {
+    if (match('=')) {
+      return Species::TADPOLE_LTE;
+    }
+    if (peekFyshChar() == "≈") {
+      eatFyshChar();
+      return Species::TADPOLE_LTE;
+    }
+    // We already reeled in o, do not go fysh.
+    return Species::TADPOLE_LT;
+  }
+  // We already reeled in ~, do not go fysh.
+  return Species::FYSH_WATER;
+}
+
 // Where the magic happens
 fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
   while (std::isspace(periscope())) {
@@ -466,32 +490,16 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
   case '^':
     return goFysh(Species::CARET);
   case '~': {
-    reel();
-    if (match('=')) {
-      return Species::NOT_EQUAL;
-    }
-    if (peekFyshChar() == "≈") {
-      eatFyshChar();
-      return Species::NOT_EQUAL;
-    }
-    if (match('o')) {
-      if (match('=')) {
-        return Species::TADPOLE_LTE;
-      }
-      if (peekFyshChar() == "≈") {
-        eatFyshChar();
-        return Species::TADPOLE_LTE;
-      }
-      // We already reeled in o, do not go fysh.
-      return Species::TADPOLE_LT;
-    }
-    // We already reeled in ~, do not go fysh.
-    return Species::FYSH_WATER;
+    return tilde();
   }
   case '[':
     return goFysh(Species::FYSH_TANK_OPEN);
   case ']':
     return goFysh(Species::FYSH_TANK_CLOSE);
+  case '(':
+    return goFysh(Species::FYSH_BOWL_OPEN);
+  case ')':
+    return goFysh(Species::FYSH_BOWL_CLOSE);
   case '-':
     return goFysh(Species::FYSH_FOOD);
   case '=': {
@@ -503,6 +511,7 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     return Species::ASSIGN;
   }
   case 'o': {
+    // Tadpole
     reel();
     if (!match('~')) {
       return cullDeformedFysh();
@@ -518,6 +527,7 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     return Species::TADPOLE_GT;
   }
   default:
+    // Ascii characters
     if (peekFyshChar() == "♡") {
       eatFyshChar();
       return Species::HEART_MULTIPLY;

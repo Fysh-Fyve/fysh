@@ -68,6 +68,10 @@ constexpr const char *debugType(const fysh::Species &species) {
     return "[";
   case Species::FYSH_TANK_CLOSE:
     return "]";
+  case Species::FYSH_BOWL_OPEN:
+    return "(";
+  case Species::FYSH_BOWL_CLOSE:
+    return ")";
   case Species::FYSH_OPEN:
     return "{";
   case Species::FYSH_CLOSE:

@@ -84,6 +84,7 @@ private:
   Fysh slashOrComment() noexcept;
   Fysh identifier(FyshDirection dir, bool increment = false) noexcept;
   Fysh cullDeformedFysh() noexcept;
+  Fysh tilde() noexcept;
   FyshChar eatFyshChar() noexcept;
   FyshChar peekFyshChar() noexcept;
 };
