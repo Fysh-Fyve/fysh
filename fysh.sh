@@ -4,10 +4,10 @@
 #	./fysh.sh [NUMBER]
 # With no NUMBER, read standard input.
 
-[ $# = 0 ] && {
-	line=$(cat)
-} || {
-	line=$1
-}
-scales=$(echo "obase=2;$line" | bc | tr '1' '{' | tr "0" "(")
-echo "><$scales°>"
+[ $# = 0 ] && { line=$(cat); } || { line=$1; }
+trunc=${line#-}
+scales=$(echo "obase=2;${trunc}" | bc)
+case $line in
+	-*) echo "<°$(echo "$scales" | tr '1' '}' | tr '0' ')')><" ;;
+	*) echo "><$(echo "$scales" | tr '1' '{' | tr '0' '(')°>" ;;
+esac
