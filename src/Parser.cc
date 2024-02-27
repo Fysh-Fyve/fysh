@@ -74,6 +74,14 @@ fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
       return ast::FyshUnaryExpr{ast::FyshUnary::Neg, ident};
     }
     return ident;
+  } else if (curFysh == Species::FYSH_BOWL_OPEN) {
+    nextFysh();
+    ast::FyshExpr expr{parseExpression()};
+    if (curFysh != Species::FYSH_BOWL_CLOSE) {
+      return expectFysh(Species::FYSH_BOWL_CLOSE);
+    }
+    nextFysh();
+    return expr;
   }
   return ast::Error{"unimplemented"};
 }
@@ -123,7 +131,8 @@ fysh::ast::FyshExpr fysh::FyshParser::parseAdditive() {
   while (
       op == ast::FyshBinary::BitwiseOr || op == ast::FyshBinary::BitwiseXor ||
       // TODO: This might break when it comes to parsing unaries, not sure yet
-      (!op.has_value() && curFysh != Species::FYSH_WATER)) {
+      (!op.has_value() && curFysh != Species::FYSH_WATER &&
+       curFysh != Species::FYSH_BOWL_CLOSE)) {
     if (op.has_value()) {
       nextFysh();
     }
