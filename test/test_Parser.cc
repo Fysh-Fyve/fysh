@@ -66,6 +66,7 @@ TEST_CASE("Expression Statements") {
       {"><fyshy> | ><{({o> ^ ><(({o> ~", "(fyshy | (5 ^ 1))"},
       {"><fysh1> ><fysh2> ><fysh3> ~", "(fysh1 + (fysh2 + fysh3))"},
       {"><{{> <3 ><{(({({> <3 ><{({{{{({{> ~", "(3 * (37 * 379))"},
+      {"( ><{{> <3 ><{(({({> ) <3 ><{({{{{({{> ~", "((3 * 37) * 379)"},
   };
   for (const auto &[input, expected] : cases) {
     CHECK_EQ(expr(input), expected);
