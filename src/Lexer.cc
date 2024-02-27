@@ -42,11 +42,22 @@ static bool isScale(char c) noexcept {
   return c == '(' || c == ')' || c == '{' || c == '}';
 }
 
-// TODO: Support all Unicode. There might also be a more efficient way to check
-// for non-keyword and non-operator characters
+// Checks if the current character is a Unicode character
 bool fysh::FyshLexer::isUnicode() noexcept {
-  return peekFyshChar() == "鱼" || peekFyshChar() == "魚" ||
-         peekFyshChar() == "と";
+        unsigned char c = static_cast<unsigned char>(*current);
+
+        // If the first byte is 0xxxxxxx, it's ASCII, not Unicode.
+        if ((c & 0x80) == 0x00) {
+            return false; 
+        }
+        // If the first byte starts with 110xxxxx, 1110xxxx, or 11110xxx, it's a Unicode character.
+        else if ((c & 0xE0) == 0xC0 || // 110xxxxx, two-byte sequence
+                 (c & 0xF0) == 0xE0 || // 1110xxxx, three-byte sequence
+                 (c & 0xF8) == 0xF0) { // 11110xxx, four-byte sequence
+            return true; 
+        }
+        return false; // Not a start of Unicode sequence (likely a continuation byte or invalid UTF-8)
+    
 }
 
 char fysh::FyshLexer::reel() noexcept {
@@ -58,11 +69,13 @@ char fysh::FyshLexer::reel() noexcept {
   return c;
 };
 
+// Consume a character and return its species
 fysh::Fysh fysh::FyshLexer::goFysh(Species s) noexcept {
   reel();
   return s;
 }
 
+// Decodes and consumes a character, handling both single-byte and multi-byte characters
 fysh::FyshChar fysh::FyshLexer::eatFyshChar() noexcept {
   return std::visit(
       [&](auto &&arg) -> FyshChar {
@@ -79,6 +92,7 @@ fysh::FyshChar fysh::FyshLexer::eatFyshChar() noexcept {
       peekFyshChar());
 }
 
+// Peeks at the next character without consuming it, supporting multi-byte characters
 fysh::FyshChar fysh::FyshLexer::peekFyshChar() noexcept {
   size_t offset = 0;
   // Skip continuation bytes;
@@ -87,6 +101,7 @@ fysh::FyshChar fysh::FyshLexer::peekFyshChar() noexcept {
   }
   const char *start{current + offset};
   size_t bytesToRead = 1;
+  // Determine the number of bytes to read based on the first byte
   if ((*start & 0xE0) == 0xC0) {
     bytesToRead = 2;
   } else if ((*start & 0xF0) == 0xE0) {

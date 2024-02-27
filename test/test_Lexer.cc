@@ -163,7 +163,7 @@ TEST_CASE("Swim Left") {
 }
 
 TEST_CASE("identifiers") {
-  FyshLexer lexer{"><pos> <neg>< ><ostart> <ostart>< ><鱼> ><とと> <魚><"};
+  FyshLexer lexer{"><pos> <neg>< ><ostart> <ostart>< ><鱼> ><とと> <魚>< <سمكة>< ><ᜁᜐ᜔ᜇ> ><ᠨᡳᠮᠠᡥᠠ>"};
 
   auto fysh{lexer.nextFysh()};
   CHECK(fysh == "pos");
@@ -199,6 +199,21 @@ TEST_CASE("identifiers") {
   CHECK(fysh == "魚");
   CHECK(fysh == Species::FYSH_IDENTIFIER);
   CHECK(fysh.negate == true);
+
+  fysh = lexer.nextFysh();
+  CHECK(fysh == "سمكة");
+  CHECK(fysh == Species::FYSH_IDENTIFIER);
+  CHECK(fysh.negate == true);
+
+  fysh = lexer.nextFysh();
+  CHECK(fysh == "ᜁᜐ᜔ᜇ");
+  CHECK(fysh == Species::FYSH_IDENTIFIER);
+  CHECK(fysh.negate == false);
+
+  fysh = lexer.nextFysh();
+  CHECK(fysh == "ᠨᡳᠮᠠᡥᠠ");
+  CHECK(fysh == Species::FYSH_IDENTIFIER);
+  CHECK(fysh.negate == false);
 
   T(Species::END);
 }
