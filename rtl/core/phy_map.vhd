@@ -14,6 +14,7 @@ use work.rom.rom_arr;
 --! 0xDEADBEE8 - 0xDEADBEEB (GPIO Pin mode)\n
 --! 0xDEADBEEC - 0xDEADBEEF (GPIO)\n
 entity phy_map is
+  generic (VERBOSE : boolean := false);
   port (
     clk_i      : in std_ulogic;         --! Clock signal
     write_en_i : in std_ulogic;         --! Write enable
@@ -54,6 +55,18 @@ architecture rtl of phy_map is
   type mem_sel_t is (gpio_sel, gpio_mode_sel, rom_sel, ram_sel);
   signal imem_sel, dmem_sel, wmem_sel    : mem_sel_t;
   signal wgpio_sel, dgpio_sel, igpio_sel : mem_sel_t;
+
+  procedure write_mem_sel (l : inout std.textio.line; sel : in mem_sel_t) is
+    use std.textio.all;
+  begin
+    case sel is
+      when gpio_sel      => write(l, string'("gpio"));
+      when gpio_mode_sel => write(l, string'("mode"));
+      when rom_sel       => write(l, string'("rom "));
+      when ram_sel       => write(l, string'("ram "));
+    end case;
+  end write_mem_sel;
+
 begin
   d_o <= le_ddata_out(7 downto 0)
          & le_ddata_out(15 downto 8)
@@ -69,6 +82,19 @@ begin
                 & d_i(15 downto 8)
                 & d_i(23 downto 16)
                 & d_i(31 downto 24);
+
+  print_write : process(clk_i)
+    use std.textio.all;
+    variable l : line;
+  begin
+    if rising_edge(clk_i) and write_en_i = '1' then
+      write(l, string'("w_adrr: "));
+      write(l, to_hstring(waddr_i));
+      write(l, string'(", mem sel: "));
+      write_mem_sel(l, wmem_sel);
+      writeline(output, l);
+    end if;
+  end process print_write;
 
   ram_write_en       <= write_en_i and '1' when (wmem_sel = ram_sel)       else '0';
   gpio_write_en      <= write_en_i and '1' when (wmem_sel = gpio_sel)      else '0';
@@ -111,6 +137,7 @@ begin
     gpio_mode_sel when x"BEE8", gpio_sel when others;
 
   gpio_inst : entity work.gpio_pins(rtl)
+    generic map(VERBOSE => VERBOSE)
     port map (
       clk_i           => clk_i,
       gp_io           => gpio,

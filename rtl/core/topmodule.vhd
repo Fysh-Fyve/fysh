@@ -179,17 +179,19 @@ begin
     imm_ex          when '1',
     (others => 'X') when others;
 
-  mem_inst : entity work.phy_map(rtl) port map (
-    clk_i      => clk,
-    draddr_i   => draddr,
-    iraddr_i   => iraddr,
-    waddr_i    => waddr,
-    write_en_i => mem_write_en,
-    d_i        => rs2_val,
-    d_o        => dmem_out,
-    i_o        => imem_out,
-    gpio       => gpio
-    );
+  mem_inst : entity work.phy_map(rtl)
+    generic map(VERBOSE => VERBOSE)
+    port map (
+      clk_i      => clk,
+      draddr_i   => draddr,
+      iraddr_i   => iraddr,
+      waddr_i    => waddr,
+      write_en_i => mem_write_en,
+      d_i        => rs2_val,
+      d_o        => dmem_out,
+      i_o        => imem_out,
+      gpio       => gpio
+      );
 
   mbr_sx_inst : entity work.mbr_sx(rtl) port map (
     mbr_i => dmem_out,

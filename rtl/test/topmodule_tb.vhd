@@ -13,10 +13,10 @@ entity topmodule_tb is
 end topmodule_tb;
 
 architecture test_bench of topmodule_tb is
-  signal clk   : std_ulogic := '0';
-  signal gpio  : std_ulogic_vector (31 downto 0);
-  signal reset : std_ulogic := '1';
-  signal done  : std_ulogic := '0';
+  signal clk   : std_ulogic                      := '0';
+  signal gpio  : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal reset : std_ulogic                      := '1';
+  signal done  : std_ulogic                      := '0';
   signal adc   : std_ulogic_vector(7 downto 0);
 
   type data_t is array (natural range <>) of std_ulogic_vector(7 downto 0);
