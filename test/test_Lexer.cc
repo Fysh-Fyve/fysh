@@ -361,7 +361,8 @@ TEST_CASE("Fysh Bowl") {
 }
 
 TEST_CASE("TOUCHING") {
-  FyshLexer lexer{"><>♡(><fysh>♡<{{{(())}}}><<{{{(())}}}><><)))>♡><)))>><)))>♡)<><"};
+  FyshLexer lexer{"><>♡(><fysh>♡<{{{(())}}}><<{{{(())}}}><><)))>♡><)))><FYSH><><)))>♡)<><"};
+  // ><> ♡ ( ><fysh> ♡ <{{{(())}}}>< <{{{(())}}}>< ><)))> ♡ ><)))> <FYSH>< ><)))> ♡ ) <><
   T(Species::FYSH_OPEN);
   T(Species::HEART_MULTIPLY);
   T(Species::FYSH_BOWL_OPEN);
@@ -372,6 +373,7 @@ TEST_CASE("TOUCHING") {
   T(0b000);
   T(Species::HEART_MULTIPLY);
   T(0b000);
+  IDENT("FYSH");
   T(0b000);
   T(Species::HEART_MULTIPLY);
   T(Species::FYSH_BOWL_CLOSE);
