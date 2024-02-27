@@ -218,9 +218,9 @@ TEST_CASE("increment & decrement") {
 TEST_CASE("Terminate") {
   FyshLexer lexer{"~ ~~"};
 
-  T(Species::TERMINATE);
-  T(Species::TERMINATE);
-  T(Species::TERMINATE);
+  T(Species::FYSH_WATER);
+  T(Species::FYSH_WATER);
+  T(Species::FYSH_WATER);
   T(Species::END);
 }
 
@@ -271,7 +271,7 @@ TEST_CASE("Arrays") {
   T(Species::FYSH_FOOD);
   T(3);
   T(Species::FYSH_TANK_CLOSE);
-  T(Species::TERMINATE);
+  T(Species::FYSH_WATER);
   T(Species::END);
 }
 
@@ -290,12 +290,12 @@ TEST_CASE("Fysh Factorial") {
   IDENT("fysh");
   T(Species::ASSIGN);
   T(5);
-  T(Species::TERMINATE);
+  T(Species::FYSH_WATER);
 
   IDENT("result");
   T(Species::ASSIGN);
   T(1);
-  T(Species::TERMINATE);
+  T(Species::FYSH_WATER);
 
   T(Species::FYSH_LOOP);
 
@@ -312,12 +312,12 @@ TEST_CASE("Fysh Factorial") {
   IDENT("result");
   T(Species::HEART_MULTIPLY);
   IDENT("fysh");
-  T(Species::TERMINATE);
+  T(Species::FYSH_WATER);
 
   auto fysh{lexer.nextFysh()};
   CHECK(fysh == "fysh");
   CHECK(fysh == Species::DECREMENT);
-  T(Species::TERMINATE);
+  T(Species::FYSH_WATER);
 
   T(Species::FYSH_CLOSE);
 

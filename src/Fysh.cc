@@ -92,7 +92,7 @@ constexpr const char *debugType(const fysh::Species &species) {
     return "|";
   case Species::CARET:
     return "^";
-  case Species::TERMINATE:
+  case Species::FYSH_WATER:
     return "~";
   case Species::SHIFT_LEFT:
     return "<<";

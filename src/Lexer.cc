@@ -486,7 +486,7 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
       return Species::TADPOLE_LT;
     }
     // We already reeled in ~, do not go fysh.
-    return Species::TERMINATE;
+    return Species::FYSH_WATER;
   }
   case '[':
     return goFysh(Species::FYSH_TANK_OPEN);
