@@ -163,7 +163,8 @@ TEST_CASE("Swim Left") {
 }
 
 TEST_CASE("identifiers") {
-  FyshLexer lexer{"><pos> <neg>< ><ostart> <ostart>< ><鱼> ><とと> <魚>< <سمكة>< ><ᜁᜐ᜔ᜇ> ><ᠨᡳᠮᠠᡥᠠ>"};
+  FyshLexer lexer{"><pos> <neg>< ><ostart> <ostart>< ><鱼> ><とと> <魚>< "
+                  "<سمكة>< ><ᜁᜐ᜔ᜇ> ><ᠨᡳᠮᠠᡥᠠ>"};
 
   auto fysh{lexer.nextFysh()};
   CHECK(fysh == "pos");
@@ -376,8 +377,10 @@ TEST_CASE("Fysh Bowl") {
 }
 
 TEST_CASE("TOUCHING") {
-  FyshLexer lexer{"><>♡(><fysh>♡<{{{(())}}}><<{{{(())}}}><><)))>♡><)))><FYSH><><)))>♡)<><"};
-  // ><> ♡ ( ><fysh> ♡ <{{{(())}}}>< <{{{(())}}}>< ><)))> ♡ ><)))> <FYSH>< ><)))> ♡ ) <><
+  FyshLexer lexer{
+      "><>♡(><fysh>♡<{{{(())}}}><<{{{(())}}}><><)))>♡><)))><FYSH><><)))>♡)<><"};
+  // ><> ♡ ( ><fysh> ♡ <{{{(())}}}>< <{{{(())}}}>< ><)))> ♡ ><)))> <FYSH><
+  // ><)))> ♡ ) <><
   T(Species::FYSH_OPEN);
   T(Species::HEART_MULTIPLY);
   T(Species::FYSH_BOWL_OPEN);
@@ -395,4 +398,3 @@ TEST_CASE("TOUCHING") {
   T(Species::FYSH_CLOSE);
   T(Species::END);
 }
-
