@@ -333,9 +333,7 @@ fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
     }
   }
 
-  if (!std::isspace(periscope()) && periscope() != '\0') {
-    return cullDeformedFysh();
-  }
+
 
   return {value, dir == FyshDirection::LEFT};
 }

@@ -137,10 +137,12 @@ TEST_CASE("weird fysh") {
 TEST_CASE("Bad fysh") {
   FyshLexer lexer{"><{{({(o><DQHUD ><{{({(o>< ><{{((>< ><{{{< ><o{{}}>< "
                   "><{{({(o <o{{}}o ><>"};
-
-  INVALID("><{{({(o><DQHUD");
-  INVALID("><{{({(o><");
-  INVALID("><{{((><");
+  T(0b11010);
+  INVALID("<DQHUD");
+  T(0b11010);
+  INVALID("<");
+  T(0b1100);
+  INVALID("<");
   INVALID("><{{{<");
   INVALID("><o{{}}><");
   INVALID("><{{({(o");
@@ -359,7 +361,7 @@ TEST_CASE("Fysh Bowl") {
 }
 
 TEST_CASE("TOUCHING") {
-  FyshLexer lexer{"><>♡(><fysh>♡<{{{(())}}}><♡><)))>♡)<><"};
+  FyshLexer lexer{"><>♡(><fysh>♡<{{{(())}}}><<{{{(())}}}><><)))>♡><)))>><)))>♡)<><"};
   // "Error happens here. it doesnt like the heart touching the tail <{{{(())}}}><♡"
   T(Species::FYSH_OPEN);
   T(Species::HEART_MULTIPLY);
@@ -367,7 +369,10 @@ TEST_CASE("TOUCHING") {
   IDENT("fysh");
   T(Species::HEART_MULTIPLY);
   T(-0b1110000111);
+  T(-0b1110000111);
+  T(0b000);
   T(Species::HEART_MULTIPLY);
+  T(0b000);
   T(0b000);
   T(Species::HEART_MULTIPLY);
   T(Species::FYSH_BOWL_CLOSE);
