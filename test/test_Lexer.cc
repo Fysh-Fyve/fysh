@@ -362,7 +362,6 @@ TEST_CASE("Fysh Bowl") {
 
 TEST_CASE("TOUCHING") {
   FyshLexer lexer{"><>♡(><fysh>♡<{{{(())}}}><<{{{(())}}}><><)))>♡><)))>><)))>♡)<><"};
-  // "Error happens here. it doesnt like the heart touching the tail <{{{(())}}}><♡"
   T(Species::FYSH_OPEN);
   T(Species::HEART_MULTIPLY);
   T(Species::FYSH_BOWL_OPEN);
