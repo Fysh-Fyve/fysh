@@ -62,7 +62,7 @@ enum class Species {
   BITWISE_AND,       // &
   BITWISE_OR,        // |
   CARET,             // ^
-  TERMINATE,         // ~
+  FYSH_WATER,        // ~
   SHIFT_LEFT,        // <<
   SHIFT_RIGHT,       // >>
   IF,                // ><(((^>

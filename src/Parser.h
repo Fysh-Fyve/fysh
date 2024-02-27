@@ -60,8 +60,8 @@ private:
   ast::Error expectFysh(Species species);
 
   template <typename T> ast::FyshStmt terminateStatement(T node) {
-    if (curFysh != Species::TERMINATE) {
-      return expectFysh(Species::TERMINATE);
+    if (curFysh != Species::FYSH_WATER) {
+      return expectFysh(Species::FYSH_WATER);
     }
     nextFysh();
     return node;

@@ -123,7 +123,7 @@ fysh::ast::FyshExpr fysh::FyshParser::parseAdditive() {
   while (
       op == ast::FyshBinary::BitwiseOr || op == ast::FyshBinary::BitwiseXor ||
       // TODO: This might break when it comes to parsing unaries, not sure yet
-      (!op.has_value() && curFysh != Species::TERMINATE)) {
+      (!op.has_value() && curFysh != Species::FYSH_WATER)) {
     if (op.has_value()) {
       nextFysh();
     }
