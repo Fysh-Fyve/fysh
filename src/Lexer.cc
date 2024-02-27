@@ -22,19 +22,24 @@
 #include "Species.h"
 #include <string_view>
 #include <variant>
+#include <cctype>
 
 #ifdef FYSH_DEBUG
 #include <iostream>
+#endif
 
-void fysh::FyshLexer::printRest() { std::cerr << rest() << std::endl; }
 
-char fysh::FyshLexer::periscope(int line) const noexcept {
-  if (line > 0) {
-    std::cerr << "Current (line:" << line << "): " << *current << std::endl;
-  }
-  return *current;
+#ifdef FYSH_DEBUG
+void printRest(const std::string_view& rest) {
+    std::cerr << rest << std::endl;
 }
-#define periscope() periscope(__LINE__)
+
+char periscope(const char* current, int line) noexcept {
+    if (line > 0) {
+        std::cerr << "Current (line:" << line << "): " << *current << std::endl;
+    }
+    return *current;
+}
 #endif
 
 // -------------- Utility functions --------------
@@ -42,31 +47,29 @@ static bool isScale(char c) noexcept {
   return c == '(' || c == ')' || c == '{' || c == '}';
 }
 
-// Checks if the current character is a Unicode character
-bool fysh::FyshLexer::isUnicode() noexcept {
-  unsigned char c = static_cast<unsigned char>(*current);
+static std::string_view trim(const std::string_view& in) {
+        auto left = in.begin();
+        while (left != in.end() && std::isspace(*left)) ++left;
+        if (left == in.end()) return {};
+        
+        auto right = in.end() - 1;
+        while (right > left && std::isspace(*right)) --right;
 
-  // If the first byte is 0xxxxxxx, it's ASCII, not Unicode.
-  if ((c & 0x80) == 0x00) {
-    return false;
-  }
-  // If the first byte starts with 110xxxxx, 1110xxxx, or 11110xxx, it's a
-  // Unicode character.
-  else if ((c & 0xE0) == 0xC0 || // 110xxxxx, two-byte sequence
-           (c & 0xF0) == 0xE0 || // 1110xxxx, three-byte sequence
-           (c & 0xF8) == 0xF0) { // 11110xxx, four-byte sequence
-    return true;
-  }
-  return false; // Not a start of Unicode sequence (likely a continuation byte
-                // or invalid UTF-8)
+        return {left, static_cast<size_t>(right - left + 1)};
+}
+
+// Checks if the current character is a Unicode character
+bool fysh::FyshLexer::isUnicode() const noexcept {
+    unsigned char c = static_cast<unsigned char>(*current);
+    if ((c & 0x80) == 0x00) return false; // ASCII (first byte is 0xxxxxxx)
+    
+    // Unicode start byte (2, 3, or 4 byte sequence (start with 110xxxxx, 1110xxxx, or 11110xxx respectively))
+    return (c & 0xE0) == 0xC0 || (c & 0xF0) == 0xE0 || (c & 0xF8) == 0xF0; 
 }
 
 char fysh::FyshLexer::reel() noexcept {
-  char c = *current;
-  if (c == '\n') {
-    line++;
-  }
-  current++;
+  char c = *current++;
+  if (c == '\n') line++;
   return c;
 };
 
@@ -172,19 +175,7 @@ bool fysh::FyshLexer::match(char c) noexcept {
   }
 }
 
-static std::string_view trim(std::string_view in) {
-  auto left = in.begin();
-  for (;; ++left) {
-    if (left == in.end())
-      return std::string_view();
-    if (!std::isspace(*left))
-      break;
-  }
-  auto right = in.end() - 1;
-  for (; right > left && isspace(*right); --right)
-    ;
-  return std::string_view(left, std::distance(left, right) + 1);
-}
+
 
 fysh::Fysh fysh::FyshLexer::slashOrComment() noexcept {
   reel();
