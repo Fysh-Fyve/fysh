@@ -44,20 +44,21 @@ static bool isScale(char c) noexcept {
 
 // Checks if the current character is a Unicode character
 bool fysh::FyshLexer::isUnicode() noexcept {
-        unsigned char c = static_cast<unsigned char>(*current);
+  unsigned char c = static_cast<unsigned char>(*current);
 
-        // If the first byte is 0xxxxxxx, it's ASCII, not Unicode.
-        if ((c & 0x80) == 0x00) {
-            return false; 
-        }
-        // If the first byte starts with 110xxxxx, 1110xxxx, or 11110xxx, it's a Unicode character.
-        else if ((c & 0xE0) == 0xC0 || // 110xxxxx, two-byte sequence
-                 (c & 0xF0) == 0xE0 || // 1110xxxx, three-byte sequence
-                 (c & 0xF8) == 0xF0) { // 11110xxx, four-byte sequence
-            return true; 
-        }
-        return false; // Not a start of Unicode sequence (likely a continuation byte or invalid UTF-8)
-    
+  // If the first byte is 0xxxxxxx, it's ASCII, not Unicode.
+  if ((c & 0x80) == 0x00) {
+    return false;
+  }
+  // If the first byte starts with 110xxxxx, 1110xxxx, or 11110xxx, it's a
+  // Unicode character.
+  else if ((c & 0xE0) == 0xC0 || // 110xxxxx, two-byte sequence
+           (c & 0xF0) == 0xE0 || // 1110xxxx, three-byte sequence
+           (c & 0xF8) == 0xF0) { // 11110xxx, four-byte sequence
+    return true;
+  }
+  return false; // Not a start of Unicode sequence (likely a continuation byte
+                // or invalid UTF-8)
 }
 
 char fysh::FyshLexer::reel() noexcept {
@@ -75,7 +76,8 @@ fysh::Fysh fysh::FyshLexer::goFysh(Species s) noexcept {
   return s;
 }
 
-// Decodes and consumes a character, handling both single-byte and multi-byte characters
+// Decodes and consumes a character, handling both single-byte and multi-byte
+// characters
 fysh::FyshChar fysh::FyshLexer::eatFyshChar() noexcept {
   return std::visit(
       [&](auto &&arg) -> FyshChar {
@@ -92,7 +94,8 @@ fysh::FyshChar fysh::FyshLexer::eatFyshChar() noexcept {
       peekFyshChar());
 }
 
-// Peeks at the next character without consuming it, supporting multi-byte characters
+// Peeks at the next character without consuming it, supporting multi-byte
+// characters
 fysh::FyshChar fysh::FyshLexer::peekFyshChar() noexcept {
   size_t offset = 0;
   // Skip continuation bytes;
@@ -347,8 +350,6 @@ fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
       return cullDeformedFysh();
     }
   }
-
-
 
   return {value, dir == FyshDirection::LEFT};
 }

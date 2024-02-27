@@ -48,7 +48,7 @@ enum class Species {
   INCREMENT,         // >><fysh> (add 1 'fysh++')
   DECREMENT,         // <fysh><< (sub 1 'fysh--')
   FYSH_TANK_OPEN,    // [ (used for Arrays, loops, and conditionals)
-  FYSH_TANK_CLOSE,   // ] 
+  FYSH_TANK_CLOSE,   // ]
   FYSH_BOWL_OPEN,    // ( (Used for FISHS (BEDMAS))
   FYSH_BOWL_CLOSE,   // )
   FYSH_OPEN,         // ><> (same as open curly bracket '{' )
