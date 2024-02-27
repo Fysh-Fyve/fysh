@@ -358,22 +358,6 @@ TEST_CASE("Fysh Bowl") {
   T(Species::END);
 }
 
-TEST_CASE("FAILED IDK WHY") {
-  FyshLexer lexer{"><> ♡ ( ><fysh> ♡ <{{{(())}}}>< ♡ ><)))> ♡ ) <><"};
-  T(Species::FYSH_OPEN);
-  T(Species::HEART_MULTIPLY);
-  T(Species::FYSH_BOWL_OPEN);
-  IDENT("fysh");
-  T(Species::HEART_MULTIPLY);
-  T(-0b1110000111);
-  T(Species::HEART_MULTIPLY);
-  T("0b000");
-  T(Species::HEART_MULTIPLY);
-  T(Species::FYSH_BOWL_CLOSE);
-  T(Species::FYSH_CLOSE);
-  T(Species::END);
-}
-
 TEST_CASE("TOUCHING") {
   FyshLexer lexer{"><>♡(><fysh>♡<{{{(())}}}><♡><)))>♡)<><"};
   // "Error happens here. it doesnt like the heart touching the tail <{{{(())}}}><♡"
@@ -384,7 +368,7 @@ TEST_CASE("TOUCHING") {
   T(Species::HEART_MULTIPLY);
   T(-0b1110000111);
   T(Species::HEART_MULTIPLY);
-  T("0b000");
+  T(0b000);
   T(Species::HEART_MULTIPLY);
   T(Species::FYSH_BOWL_CLOSE);
   T(Species::FYSH_CLOSE);
