@@ -47,8 +47,10 @@ enum class Species {
   NOT_EQUAL,         // ~≈  (Not equal to '!=')
   INCREMENT,         // >><fysh> (add 1 'fysh++')
   DECREMENT,         // <fysh><< (sub 1 'fysh--')
-  FYSH_TANK_OPEN,    // [ (same as open bracket  '('  )
-  FYSH_TANK_CLOSE,   // ] (same as closing bracket ')' )
+  FYSH_TANK_OPEN,    // [ (used for Arrays, loops, and conditionals)
+  FYSH_TANK_CLOSE,   // ] 
+  FYSH_BOWL_OPEN,    // ( (Used for FISHS (BEDMAS))
+  FYSH_BOWL_CLOSE,   // )
   FYSH_OPEN,         // ><> (same as open curly bracket '{' )
   FYSH_CLOSE,        // <>< (same as closing curly bracket '}' )
   WTF_OPEN,          // WHAT THE FYSH (Throw error opening) ><!@#$>
