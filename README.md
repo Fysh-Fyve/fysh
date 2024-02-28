@@ -249,8 +249,8 @@ These fysh tanks can be traversed using a fysh.
 ```
 ><//> Comment
 
-><number>    ≈ ><{({°>   ><//> b101 = 5
-><factorial> ≈ ><(({°>   ><//> b001 = 1
+><number>    ≈ ><{({°> ~  ><//> b101 = 5
+><factorial> ≈ ><(({°> ~  ><//> b001 = 1
 
 ><//> while number > 1
 ><(((@> [><number> o~ ><(({°>]
