@@ -144,8 +144,21 @@ fysh::ast::FyshExpr fysh::FyshParser::parseAdditive() {
   return left;
 }
 
+fysh::ast::FyshExpr fysh::FyshParser::parseComparative() {
+  auto left{parseAdditive()};
+  auto op{binaryOp(curFysh)};
+  while (op == ast::FyshBinary::LT || op == ast::FyshBinary::GT ||
+         op == ast::FyshBinary::LTE || op == ast::FyshBinary::GTE) {
+    nextFysh();
+    auto right{parseComparative()};
+    left = ast::FyshBinaryExpr{left, right, op.value()};
+    op = binaryOp(curFysh);
+  }
+  return left;
+}
+
 fysh::ast::FyshExpr fysh::FyshParser::parseExpression() {
-  return parseAdditive();
+  return parseComparative();
 }
 
 fysh::ast::FyshStmt fysh::FyshParser::parseStatement() {
