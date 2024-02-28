@@ -20,14 +20,14 @@ set_property -dict { PACKAGE_PIN M14 IOSTANDARD LVCMOS33 } [get_ports { gpio[0] 
 #set_property -dict { PACKAGE_PIN D18 IOSTANDARD LVCMOS33 } [get_ports { gpio[7] }];
 
 ##Pmod Header JA (XADC)
-#set_property -dict { PACKAGE_PIN N15 IOSTANDARD LVCMOS33 } [get_ports { adc[0] }];
-#set_property -dict { PACKAGE_PIN L14 IOSTANDARD LVCMOS33 } [get_ports { adc[1] }];
-#set_property -dict { PACKAGE_PIN K16 IOSTANDARD LVCMOS33 } [get_ports { adc[2] }];
-#set_property -dict { PACKAGE_PIN K14 IOSTANDARD LVCMOS33 } [get_ports { adc[3] }];
-#set_property -dict { PACKAGE_PIN N16 IOSTANDARD LVCMOS33 } [get_ports { adc[4] }];
-#set_property -dict { PACKAGE_PIN L15 IOSTANDARD LVCMOS33 } [get_ports { adc[5] }];
-#set_property -dict { PACKAGE_PIN J16 IOSTANDARD LVCMOS33 } [get_ports { adc[6] }];
-#set_property -dict { PACKAGE_PIN J14 IOSTANDARD LVCMOS33 } [get_ports { adc[7] }];
+set_property -dict { PACKAGE_PIN N15 IOSTANDARD LVCMOS33 } [get_ports { adc[0] }];
+set_property -dict { PACKAGE_PIN L14 IOSTANDARD LVCMOS33 } [get_ports { adc[1] }];
+set_property -dict { PACKAGE_PIN K16 IOSTANDARD LVCMOS33 } [get_ports { adc[2] }];
+set_property -dict { PACKAGE_PIN K14 IOSTANDARD LVCMOS33 } [get_ports { adc[3] }];
+set_property -dict { PACKAGE_PIN N16 IOSTANDARD LVCMOS33 } [get_ports { adc[4] }];
+set_property -dict { PACKAGE_PIN L15 IOSTANDARD LVCMOS33 } [get_ports { adc[5] }];
+set_property -dict { PACKAGE_PIN J16 IOSTANDARD LVCMOS33 } [get_ports { adc[6] }];
+set_property -dict { PACKAGE_PIN J14 IOSTANDARD LVCMOS33 } [get_ports { adc[7] }];
 
 ##Pmod Header JC
 set_property -dict { PACKAGE_PIN V15 IOSTANDARD LVCMOS33 } [get_ports { gpio[8]  }];
