@@ -24,6 +24,86 @@ fysh::Compyler::createEntryBlockAlloca(llvm::Function *TheFunction,
   return builder.CreateAlloca(llvm::Type::getInt32Ty(*context), nullptr, name);
 }
 
+fysh::Emit fysh::Compyler::compyleLoop(fysh::ast::FyshLoopStmt loop,
+                                       llvm::Function *function) {
+  llvm::Function *parent{builder->GetInsertBlock()->getParent()};
+  llvm::BasicBlock *conditionBlock{builder->GetInsertBlock()};
+  Emit condEmit{compyleExpr(&loop.condition)};
+  if (std::holds_alternative<ast::Error>(condEmit)) {
+    return condEmit;
+  }
+  llvm::Value *loopCond{std::get<llvm::Value *>(condEmit)};
+  llvm::BasicBlock *loopBlock{
+      llvm::BasicBlock::Create(*context, "loop", parent)};
+  builder->SetInsertPoint(loopBlock);
+  return nullptr;
+}
+
+fysh::Emit
+fysh::Compyler::compyleBlock(std::vector<fysh::ast::FyshStmt> program,
+                             llvm::Function *function) {
+  llvm::Value *retVal;
+  for (auto &stmt : program) {
+    fysh::Emit emit = std::visit(
+        [this, function](auto &&arg) -> fysh::Emit {
+          using T = std::decay_t<decltype(arg)>;
+          if constexpr (std::is_same_v<T, ast::Error>) {
+            return arg;
+          } else if constexpr (std::is_same_v<T, ast::FyshExpr>) {
+            return compyleExpr(&arg);
+          } else if constexpr (std::is_same_v<T, ast::FyshIncrementStmt>) {
+            return nullptr;
+          } else if constexpr (std::is_same_v<T, ast::FyshDecrementStmt>) {
+            if (auto ident = std::get_if<ast::FyshIdentifier>(&arg.expr)) {
+              if (namedValues.find(ident->name) == namedValues.end()) {
+                return ast::Error{"unknown variable"};
+              }
+              auto alloca{namedValues[ident->name]};
+              auto load{builder->CreateLoad(alloca->getAllocatedType(), alloca,
+                                            ident->name)};
+              auto dec{builder->CreateSub(load, builder->getInt32(1))};
+              return builder->CreateStore(dec, alloca);
+            } else {
+              return ast::Error{"decrementing non-variable"};
+            }
+          } else if constexpr (std::is_same_v<T, ast::FyshAssignmentStmt>) {
+            // Only handle assignments to identifiers for now
+            if (auto ident = std::get_if<ast::FyshIdentifier>(&arg.left)) {
+              if (namedValues.find(ident->name) == namedValues.end()) {
+                namedValues[ident->name] =
+                    createEntryBlockAlloca(function, ident->name);
+              }
+              auto alloca{namedValues[ident->name]};
+              auto val{compyleExpr(&arg.right)};
+              if (auto expr = std::get_if<llvm::Value *>(&val)) {
+                return builder->CreateStore(*expr, alloca);
+              }
+              return nullptr;
+            } else {
+              return ast::Error{"assigning to non-variable"};
+            }
+          } else if constexpr (std::is_same_v<T, ast::FyshBlock>) {
+            return compyleBlock(arg, function);
+          } else if constexpr (std::is_same_v<T, ast::FyshLoopStmt>) {
+            return compyleLoop(arg, function);
+          } else if constexpr (std::is_same_v<T, ast::FyshIfStmt>) {
+            return nullptr;
+          } else {
+            static_assert(always_false_v<T>, "non-exhaustive visitor!");
+          }
+        },
+        stmt);
+
+    if (auto error = std::get_if<ast::Error>(&emit)) {
+      return *error;
+    } else if (auto expr = std::get_if<llvm::Value *>(&emit)) {
+      retVal = *expr;
+    }
+  }
+
+  return retVal;
+}
+
 llvm::Function *
 fysh::Compyler::compyle(std::vector<fysh::ast::FyshStmt> program) {
   // int() function type
@@ -35,73 +115,25 @@ fysh::Compyler::compyle(std::vector<fysh::ast::FyshStmt> program) {
   llvm::BasicBlock *bb = llvm::BasicBlock::Create(*context, "entry", prototype);
   builder->SetInsertPoint(bb);
 
-  llvm::Value *retVal;
+  Emit emit = compyleBlock(program, prototype);
 
-  for (auto &stmt : program) {
-    fysh::Emit emit = std::visit(
-        [this, prototype](auto &&arg) -> fysh::Emit {
-          using T = std::decay_t<decltype(arg)>;
-          if constexpr (std::is_same_v<T, ast::Error>) {
-            return arg;
-          } else if constexpr (std::is_same_v<T, ast::FyshExpr>) {
-            return compyle(&arg);
-          } else if constexpr (std::is_same_v<T, ast::FyshIncrementStmt>) {
-            return nullptr;
-          } else if constexpr (std::is_same_v<T, ast::FyshDecrementStmt>) {
-            return nullptr;
-          } else if constexpr (std::is_same_v<T, ast::FyshAssignmentStmt>) {
-            // Only handle assignments to identifiers for now
-            if (auto ident = std::get_if<ast::FyshIdentifier>(&arg.left)) {
-              if (namedValues.find(ident->name) == namedValues.end()) {
-                namedValues[ident->name] =
-                    createEntryBlockAlloca(prototype, ident->name);
-              }
-              auto alloca{namedValues[ident->name]};
-              auto val{compyle(&arg.right)};
-              if (auto expr = std::get_if<llvm::Value *>(&val)) {
-                builder->CreateStore(*expr, alloca);
-              }
-              return nullptr;
-            } else {
-              return ast::Error{"assigning to non-variable"};
-            }
-          } else if constexpr (std::is_same_v<T, ast::FyshBlock>) {
-            return nullptr;
-          } else if constexpr (std::is_same_v<T, ast::FyshLoopStmt>) {
-            return nullptr;
-          } else if constexpr (std::is_same_v<T, ast::FyshIfStmt>) {
-            return nullptr;
-          } else {
-            static_assert(always_false_v<T>, "non-exhaustive visitor!");
-          }
-        },
-        stmt);
+  if (auto expr = std::get_if<llvm::Value *>(&emit)) {
+    // Finish off the function.
+    builder->CreateRet(*expr);
+    // Validate the generated code, checking for consistency.
+    llvm::verifyFunction(*prototype);
 
-    if (auto error = std::get_if<ast::Error>(&emit)) {
-      std::cerr << error << std::endl;
-      // Error reading body, remove function.
-      prototype->eraseFromParent();
-      return nullptr;
-    } else if (auto expr = std::get_if<llvm::Value *>(&emit)) {
-      retVal = *expr;
-    }
-  }
-  if (!retVal) {
-    // Error reading body, remove function.
-    prototype->eraseFromParent();
-    return nullptr;
+    return prototype;
+  } else if (auto error = std::get_if<ast::Error>(&emit)) {
+    std::cerr << error << std::endl;
   }
 
-  // Finish off the function.
-  builder->CreateRet(retVal);
-
-  // Validate the generated code, checking for consistency.
-  llvm::verifyFunction(*prototype);
-
-  return prototype;
+  // Something went wrong!
+  prototype->eraseFromParent();
+  return nullptr;
 }
 
-fysh::Emit fysh::Compyler::compyle(fysh::ast::FyshExpr *expr) {
+fysh::Emit fysh::Compyler::compyleExpr(fysh::ast::FyshExpr *expr) {
   if (expr == nullptr) {
     return nullptr;
   }
@@ -112,8 +144,8 @@ fysh::Emit fysh::Compyler::compyle(fysh::ast::FyshExpr *expr) {
           return arg;
         } else if constexpr (std::is_same_v<T, Box<ast::FyshBinaryExpr>>) {
           auto binOp = arg.getraw();
-          auto left = compyle(&binOp.left);
-          auto right = compyle(&binOp.right);
+          auto left = compyleExpr(&binOp.left);
+          auto right = compyleExpr(&binOp.right);
           if (auto err = std::get_if<ast::Error>(&left)) {
             return *err;
           }
@@ -128,12 +160,14 @@ fysh::Emit fysh::Compyler::compyle(fysh::ast::FyshExpr *expr) {
             return builder->CreateMul(leftVal, rightVal, "multmp");
           } else if (binOp.op == ast::FyshBinary::Div) {
             return builder->CreateMul(leftVal, rightVal, "divtmp");
+          } else if (binOp.op == ast::FyshBinary::GT) {
+            return builder->CreateICmpUGT(leftVal, rightVal, "gttmp");
           }
           // TODO: Do other operations
           return nullptr;
         } else if constexpr (std::is_same_v<T, Box<ast::FyshUnaryExpr>>) {
           auto unaryOp = arg.getraw();
-          auto emit = compyle(&unaryOp.expr);
+          auto emit = compyleExpr(&unaryOp.expr);
           if (auto err = std::get_if<ast::Error>(&emit)) {
             return *err;
           }
