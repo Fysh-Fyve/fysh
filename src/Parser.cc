@@ -132,7 +132,8 @@ fysh::ast::FyshExpr fysh::FyshParser::parseAdditive() {
       op == ast::FyshBinary::BitwiseOr || op == ast::FyshBinary::BitwiseXor ||
       // TODO: This might break when it comes to parsing unaries, not sure yet
       (!op.has_value() && curFysh != Species::FYSH_WATER &&
-       curFysh != Species::FYSH_BOWL_CLOSE)) {
+       curFysh != Species::FYSH_BOWL_CLOSE &&
+       curFysh != Species::FYSH_TANK_CLOSE)) {
     if (op.has_value()) {
       nextFysh();
     }
@@ -166,6 +167,30 @@ fysh::ast::FyshStmt fysh::FyshParser::parseStatement() {
       return std::get<ast::Error>(expr);
     }
     return terminateStatement(ast::FyshAssignmentStmt{ident, expr});
+  } else if (curFysh == Species::FYSH_LOOP) {
+    nextFysh();
+    if (curFysh != Species::FYSH_TANK_OPEN) {
+      return expectFysh(Species::FYSH_TANK_OPEN);
+    }
+    nextFysh();
+    auto condition{parseExpression()};
+    if (curFysh != Species::FYSH_TANK_CLOSE) {
+      return expectFysh(Species::FYSH_TANK_CLOSE);
+    }
+    nextFysh();
+    if (curFysh != Species::FYSH_OPEN) {
+      return expectFysh(Species::FYSH_OPEN);
+    }
+    nextFysh();
+    auto block{parseBlock()};
+    if (block.size() == 1 && std::holds_alternative<ast::Error>(block[0])) {
+      return block[0];
+    }
+    if (curFysh != Species::FYSH_CLOSE) {
+      return expectFysh(Species::FYSH_CLOSE);
+    }
+    nextFysh();
+    return ast::FyshLoopStmt{condition, block};
   } else {
     return terminateStatement(parseExpression());
   }
@@ -178,7 +203,7 @@ std::vector<fysh::ast::FyshStmt> fysh::FyshParser::parseProgram() {
 std::vector<fysh::ast::FyshStmt> fysh::FyshParser::parseBlock() {
   std::vector<fysh::ast::FyshStmt> program;
 
-  while (curFysh != Species::END) {
+  while ((curFysh != Species::END) && (curFysh != Species::FYSH_CLOSE)) {
     auto stmt{parseStatement()};
     if (std::holds_alternative<ast::Error>(stmt)) {
       return {stmt};

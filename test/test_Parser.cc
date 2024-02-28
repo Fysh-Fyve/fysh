@@ -1,5 +1,6 @@
 #include "../src/Lexer.h"
 #include "../src/Parser.h"
+#include <iostream>
 
 #define DOCTEST_CONFIG_TREAT_CHAR_STAR_AS_STRING
 
@@ -22,6 +23,13 @@ template <typename T> T get_stmt(FyshStmt stmt) {
   return std::get<T>(stmt);
 }
 
+template <typename T> T unwrap(FyshStmt stmt) {
+  while (std::holds_alternative<FyshBlock>(stmt)) {
+    stmt = std::get<FyshBlock>(stmt)[0];
+  }
+  return get_stmt<T>(stmt);
+}
+
 template <typename T> T get_expr(FyshStmt stmt) {
   auto expr{get_stmt<FyshExpr>(stmt)};
   REQUIRE(std::holds_alternative<T>(expr));
@@ -41,14 +49,29 @@ FyshExpr expr(const char *input) {
   fysh::FyshParser p{fysh::FyshLexer{input}};
   auto program{p.parseProgram()};
   check_program(program, 1);
-  return get_stmt<FyshExpr>(program[0]);
+  return unwrap<FyshExpr>(program[0]);
+}
+
+TEST_CASE("Loop Statement") {
+  fysh::FyshParser p{fysh::FyshLexer{R"(
+><(((@> [ ><fysh> ]
+><>
+    ><((({o> ~
+<><
+  )"}};
+  auto program{p.parseProgram()};
+  check_program(program, 1);
+  auto stmt{unwrap<FyshLoopStmt>(program[0])};
+  check_ident(stmt.condition, "fysh");
+  check_program(stmt.body, 1);
+  CHECK(get_expr<FyshLiteral>(unwrap<FyshExpr>(stmt.body[0])).num == 1);
 }
 
 TEST_CASE("Assignment Statement") {
   fysh::FyshParser p{fysh::FyshLexer{"><fysh> = ><(({o> ~"}};
   auto program{p.parseProgram()};
   check_program(program, 1);
-  auto stmt{get_stmt<FyshAssignmentStmt>(program[0])};
+  auto stmt{unwrap<FyshAssignmentStmt>(program[0])};
   check_ident(stmt.left, "fysh");
   CHECK(get_expr<FyshLiteral>(stmt.right).num == 1);
 }
@@ -77,7 +100,7 @@ TEST_CASE("Increment Statement") {
   fysh::FyshParser p{fysh::FyshLexer{">><fysh> ~"}};
   auto program{p.parseProgram()};
   check_program(program, 1);
-  auto stmt{get_stmt<FyshIncrementStmt>(program[0])};
+  auto stmt{unwrap<FyshIncrementStmt>(program[0])};
   check_ident(stmt.expr, "fysh");
 }
 
@@ -85,6 +108,6 @@ TEST_CASE("Decrement Statement") {
   fysh::FyshParser p{fysh::FyshLexer{"<fysh><< ~"}};
   auto program{p.parseProgram()};
   check_program(program, 1);
-  auto stmt{get_stmt<FyshDecrementStmt>(program[0])};
+  auto stmt{unwrap<FyshDecrementStmt>(program[0])};
   check_ident(stmt.expr, "fysh");
 }
