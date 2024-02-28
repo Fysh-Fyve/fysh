@@ -87,6 +87,42 @@ std::ostream &fysh::ast::operator<<(std::ostream &os,
   return os;
 }
 
+std::ostream &fysh::ast::operator<<(std::ostream &os,
+                                    const fysh::ast::FyshStmt &f) {
+  std::visit(
+      [&](auto &&arg) {
+        using T = std::decay_t<decltype(arg)>;
+        if constexpr (std::is_same_v<T, Error>)
+          os << "ERROR(\"" << *arg.t << "\");";
+        else if constexpr (std::is_same_v<T, FyshExpr>)
+          os << arg << ";\n";
+        else if constexpr (std::is_same_v<T, FyshAssignmentStmt>)
+          os << arg.left << " = " << arg.right << ";\n";
+        else if constexpr (std::is_same_v<T, FyshBlock>) {
+          os << "{\n";
+          for (const auto &a : arg) {
+            os << a;
+          }
+          os << "}\n";
+        } else if constexpr (std::is_same_v<T, FyshIncrementStmt>)
+          os << arg.expr << "++;\n";
+        else if constexpr (std::is_same_v<T, FyshDecrementStmt>)
+          os << arg.expr << "--;\n";
+        else if constexpr (std::is_same_v<T, FyshLoopStmt>)
+          os << "while (" << arg.condition << ")\n" << arg.body;
+        else if constexpr (std::is_same_v<T, FyshIfStmt>) {
+          os << "if (" << arg.condition << ")\n" << arg.consequence;
+          if (arg.alternative.has_value()) {
+            os << "else\n" << arg.alternative.value();
+          }
+        } else {
+          static_assert(always_false_v<T>, "non-exhaustive visitor!");
+        }
+      },
+      f);
+  return os;
+}
+
 bool fysh::ast::operator==(const fysh::ast::FyshExpr &expr, const char *str) {
   std::stringstream ss;
   ss << expr;

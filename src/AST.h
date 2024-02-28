@@ -116,6 +116,7 @@ using FyshStmt =
 
 struct FyshBlock : public std::vector<FyshStmt> {
   using std::vector<FyshStmt>::vector;
+  FyshBlock(const std::vector<FyshStmt> &vec) : std::vector<FyshStmt>(vec) {}
 };
 
 struct FyshLoopStmt {
@@ -133,6 +134,7 @@ constexpr const char *toStr(const FyshBinary &op);
 constexpr const char *toStr(const FyshUnary &op);
 
 std::ostream &operator<<(std::ostream &os, const FyshExpr &f);
+std::ostream &operator<<(std::ostream &os, const FyshStmt &f);
 
 }; // namespace fysh::ast
 
