@@ -28,14 +28,18 @@
 #include <memory>
 
 namespace fysh {
+using Emit = std::variant<llvm::Value *, ast::Error>;
 class Compyler {
 public:
   Compyler();
 
   llvm::Function *compyle(std::vector<ast::FyshStmt> program);
-  llvm::Value *compyle(ast::FyshExpr *expr);
+  Emit compyle(ast::FyshExpr *expr);
 
 private:
+  llvm::AllocaInst *createEntryBlockAlloca(llvm::Function *TheFunction,
+                                           const std::string_view &name);
+  std::unordered_map<std::string_view, llvm::AllocaInst *> namedValues;
   std::unique_ptr<llvm::LLVMContext> context;
   std::unique_ptr<llvm::Module> module;
   std::unique_ptr<llvm::IRBuilder<>> builder;
