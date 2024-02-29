@@ -39,55 +39,62 @@ fysh::Emit fysh::Compyler::compyleLoop(const fysh::ast::FyshLoopStmt &loop,
   return nullptr;
 }
 
+fysh::Emit fysh::Compyler::handleAssignment(const fysh::ast::FyshStmt &stmt,
+                                            llvm::Function *function) {
+  // Assuming the statement is an assignment
+  // Placeholder logic, replace with actual assignment handling
+  return fysh::Emit{}; // Adjust based on your Emit type
+}
+
+fysh::Emit fysh::Compyler::handleIncDecStmt(const fysh::ast::FyshStmt &stmt,
+                                            llvm::Function *function) {
+  // Assuming the statement is either an increment or decrement statement
+  // Placeholder logic, replace with actual increment/decrement handling
+  return fysh::Emit{}; // Adjust based on your Emit type
+}
+
+fysh::Emit fysh::Compyler::handleStatement(const fysh::ast::FyshStmt &stmt,
+                                           llvm::Function *function) {
+  // Example handling based on the type of statement
+  // This needs to be replaced with actual handling logic
+  if (auto expr = std::get_if<fysh::ast::FyshExpr>(&stmt)) {
+    return compyleExpr(expr);
+  } else if (auto block = std::get_if<fysh::ast::FyshBlock>(&stmt)) {
+    return compyleBlock(*block, function);
+  }
+  // Add handling for other statement types (loops, if statements, etc.)
+
+  return fysh::Emit{}; // Placeholder return, adjust based on your Emit type
+}
+
 fysh::Emit
 fysh::Compyler::compyleBlock(const std::vector<fysh::ast::FyshStmt> &program,
                              llvm::Function *function) {
-  llvm::Value *retVal;
+  llvm::Value *retVal = nullptr; // Initialize retVal explicitly
+
   for (auto &stmt : program) {
     fysh::Emit emit = std::visit(
         [this, function](auto &&arg) -> fysh::Emit {
           using T = std::decay_t<decltype(arg)>;
+
           if constexpr (std::is_same_v<T, ast::Error>) {
             return arg;
-          } else if constexpr (std::is_same_v<T, ast::FyshExpr>) {
-            return compyleExpr(&arg);
-          } else if constexpr (std::is_same_v<T, ast::FyshIncrementStmt>) {
-            return nullptr;
-          } else if constexpr (std::is_same_v<T, ast::FyshDecrementStmt>) {
-            if (auto ident = std::get_if<ast::FyshIdentifier>(&arg.expr)) {
-              if (namedValues.find(ident->name) == namedValues.end()) {
-                return ast::Error{"unknown variable"};
-              }
-              auto alloca{namedValues[ident->name]};
-              auto load{builder->CreateLoad(alloca->getAllocatedType(), alloca,
-                                            ident->name)};
-              auto dec{builder->CreateSub(load, builder->getInt32(1))};
-              return builder->CreateStore(dec, alloca);
-            } else {
-              return ast::Error{"decrementing non-variable"};
-            }
+          } else if constexpr (std::is_same_v<T, ast::FyshExpr> ||
+                               std::is_same_v<T, ast::FyshBlock> ||
+                               std::is_same_v<T, ast::FyshLoopStmt> ||
+                               std::is_same_v<T, ast::FyshIfStmt>) {
+            // Handle expressions, blocks, loops, and if statements directly.
+            return handleStatement(
+                arg, function); // Implement handleStatement for these types.
+          } else if constexpr (std::is_same_v<T, ast::FyshIncrementStmt> ||
+                               std::is_same_v<T, ast::FyshDecrementStmt>) {
+            // Handle increments and decrements.
+            //// Implement handleIncDecStmt.
+            return handleIncDecStmt(arg, function);
           } else if constexpr (std::is_same_v<T, ast::FyshAssignmentStmt>) {
-            // Only handle assignments to identifiers for now
-            if (auto ident = std::get_if<ast::FyshIdentifier>(&arg.left)) {
-              if (namedValues.find(ident->name) == namedValues.end()) {
-                namedValues[ident->name] =
-                    createEntryBlockAlloca(function, ident->name);
-              }
-              auto alloca{namedValues[ident->name]};
-              auto val{compyleExpr(&arg.right)};
-              if (auto expr = std::get_if<llvm::Value *>(&val)) {
-                return builder->CreateStore(*expr, alloca);
-              }
-              return nullptr;
-            } else {
-              return ast::Error{"assigning to non-variable"};
-            }
-          } else if constexpr (std::is_same_v<T, ast::FyshBlock>) {
-            return compyleBlock(arg, function);
-          } else if constexpr (std::is_same_v<T, ast::FyshLoopStmt>) {
-            return compyleLoop(arg, function);
-          } else if constexpr (std::is_same_v<T, ast::FyshIfStmt>) {
-            return nullptr;
+            // Handle assignment statements.
+            //// Implement handleAssignment.
+            return handleAssignment(arg, function);
           } else {
             static_assert(always_false_v<T>, "non-exhaustive visitor!");
           }
@@ -96,11 +103,14 @@ fysh::Compyler::compyleBlock(const std::vector<fysh::ast::FyshStmt> &program,
 
     if (auto error = std::get_if<ast::Error>(&emit)) {
       return *error;
-    } else if (auto expr = std::get_if<llvm::Value *>(&emit)) {
+    }
+    if (auto expr = std::get_if<llvm::Value *>(&emit)) {
       retVal = *expr;
     }
   }
 
+  // Return the last expression's value or nullptr if no expressions were
+  // executed.
   return retVal;
 }
 

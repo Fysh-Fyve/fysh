@@ -42,6 +42,10 @@ public:
 private:
   llvm::AllocaInst *createEntryBlockAlloca(llvm::Function *TheFunction,
                                            const std::string_view &name);
+  Emit handleStatement(const ast::FyshStmt &stmt, llvm::Function *function);
+  Emit handleIncDecStmt(const ast::FyshStmt &stmt, llvm::Function *function);
+  Emit handleAssignment(const ast::FyshStmt &stmt, llvm::Function *function);
+
   std::unordered_map<std::string_view, llvm::AllocaInst *> namedValues;
   std::unique_ptr<llvm::LLVMContext> context;
   std::unique_ptr<llvm::Module> module;
