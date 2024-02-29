@@ -44,13 +44,13 @@ static bool isScale(char c) noexcept {
 }
 
 static std::string_view trim(const std::string_view &in) {
-  auto left = in.begin();
+  const char *left{in.begin()};
   while (left != in.end() && std::isspace(*left))
     ++left;
   if (left == in.end())
     return {};
 
-  auto right = in.end() - 1;
+  const char *right{in.end() - 1};
   while (right > left && std::isspace(*right))
     --right;
 
@@ -59,7 +59,7 @@ static std::string_view trim(const std::string_view &in) {
 
 // Checks if the current character is a Unicode character
 bool fysh::FyshLexer::isUnicode() const noexcept {
-  unsigned char c = static_cast<unsigned char>(*current);
+  unsigned char c{static_cast<unsigned char>(*current)};
   if ((c & 0x80) == 0x00)
     return false; // ASCII (first byte is 0xxxxxxx)
 
@@ -69,7 +69,7 @@ bool fysh::FyshLexer::isUnicode() const noexcept {
 }
 
 char fysh::FyshLexer::reel() noexcept {
-  char c = *current++;
+  char c{*current++};
   if (c == '\n')
     line++;
   return c;
@@ -85,7 +85,7 @@ fysh::Fysh fysh::FyshLexer::goFysh(Species s) noexcept {
 // characters
 fysh::FyshChar fysh::FyshLexer::eatFyshChar() noexcept {
   return std::visit(
-      [&](auto &&arg) -> FyshChar {
+      [this](auto &&arg) -> FyshChar {
         using T = std::decay_t<decltype(arg)>;
         if constexpr (std::is_same_v<T, const char *>) {
           if (*arg != '\0') {
@@ -102,13 +102,13 @@ fysh::FyshChar fysh::FyshLexer::eatFyshChar() noexcept {
 // Peeks at the next character without consuming it, supporting multi-byte
 // characters
 fysh::FyshChar fysh::FyshLexer::peekFyshChar() noexcept {
-  size_t offset = 0;
+  size_t offset{0};
   // Skip continuation bytes;
   while ((current[offset] & 0xC0) == 0x80) {
     offset++;
   }
   const char *start{current + offset};
-  size_t bytesToRead = 1;
+  size_t bytesToRead{1};
   // Determine the number of bytes to read based on the first byte
   if ((*start & 0xE0) == 0xC0) {
     bytesToRead = 2;
@@ -219,9 +219,9 @@ fysh::Fysh fysh::FyshLexer::slashOrComment() noexcept {
       const char *commentEnd{current};
       reel();
       if (match("*/><")) {
-        auto comment{std::string_view(commentStart,
-                                      std::distance(commentStart, commentEnd))};
-        auto trimmed{trim(comment)};
+        std::string_view comment{std::string_view(
+            commentStart, std::distance(commentStart, commentEnd))};
+        std::string_view trimmed{trim(comment)};
         return {Species::MULTILINE_COMMENT, trimmed.data(), trimmed.length()};
       }
     }
@@ -273,7 +273,7 @@ fysh::Fysh fysh::FyshLexer::identifier(FyshDirection dir,
 
 fysh::Fysh fysh::FyshLexer::random() noexcept {
   reel();
-  for (size_t i = 1; i < 3; i++) {
+  for (size_t i{1}; i < 3; i++) {
     if (!match('#')) {
       return cullDeformedFysh();
     }
@@ -286,10 +286,10 @@ fysh::Fysh fysh::FyshLexer::random() noexcept {
 
 fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
   // gets all the scales and converts them to a binary number
-  char c = reel();
+  char c{reel()};
   // stores the first scale as a binary number
   std::uint32_t value{c == '{' || c == '}'};
-  int scaleCount = 1;
+  int scaleCount{1};
   while (isScale(periscope())) {
     c = reel();
     // shifts the bits to the left and stores the next scale using bitwise OR

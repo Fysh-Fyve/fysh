@@ -35,7 +35,8 @@ void compyle(std::istream &stream) {
   fysh::ast::FyshBlock program{parser.parseProgram()};
 
   if (program.size() == 1) {
-    if (auto err = std::get_if<fysh::ast::Error>(&program[0])) {
+    if (const fysh::ast::Error *err =
+            std::get_if<fysh::ast::Error>(&program[0])) {
       std::cerr << "Error: " << err->getraw() << std::endl;
       return;
     }

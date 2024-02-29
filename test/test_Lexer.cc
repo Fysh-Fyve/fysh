@@ -7,14 +7,14 @@ using namespace fysh;
 #define T(x) CHECK(lexer.nextFysh() == (x));
 #define IDENT(x)                                                               \
   do {                                                                         \
-    auto fysh{lexer.nextFysh()};                                               \
+    Fysh fysh{lexer.nextFysh()};                                               \
     CHECK(fysh == (x));                                                        \
     CHECK(fysh == Species::FYSH_IDENTIFIER);                                   \
   } while (0)
 
 #define INVALID(x)                                                             \
   do {                                                                         \
-    auto fysh{lexer.nextFysh()};                                               \
+    Fysh fysh{lexer.nextFysh()};                                               \
     CHECK(fysh == (x));                                                        \
     CHECK(fysh == Species::INVALID);                                           \
   } while (0)
@@ -167,7 +167,7 @@ TEST_CASE("identifiers") {
       "><pos> <neg>< ><ostart> <ostart>< ><鱼> ><とと> <魚>< "
       "<سمكة>< ><ᜁᜐ᜔ᜇ> ><ᠨᡳᠮᠠᡥᠠ> <°isthisallowed>< ><whataboutthis°>"};
 
-  auto fysh{lexer.nextFysh()};
+  Fysh fysh{lexer.nextFysh()};
   CHECK(fysh == "pos");
   CHECK(fysh == Species::FYSH_IDENTIFIER);
   CHECK(fysh.negate == false);
@@ -233,7 +233,7 @@ TEST_CASE("identifiers") {
 TEST_CASE("increment & decrement") {
   FyshLexer lexer{">><inc> <dec><<"};
 
-  auto fysh{lexer.nextFysh()};
+  Fysh fysh{lexer.nextFysh()};
   CHECK(fysh == "inc");
   CHECK(fysh == Species::INCREMENT);
 
@@ -343,7 +343,7 @@ TEST_CASE("Fysh Factorial") {
   IDENT("fysh");
   T(Species::FYSH_WATER);
 
-  auto fysh{lexer.nextFysh()};
+  Fysh fysh{lexer.nextFysh()};
   CHECK(fysh == "fysh");
   CHECK(fysh == Species::DECREMENT);
   T(Species::FYSH_WATER);
@@ -361,7 +361,7 @@ This is also a comment
 <*/><
 )"};
 
-  auto fysh{lexer.nextFysh()};
+  Fysh fysh{lexer.nextFysh()};
   CHECK(fysh == "This is a comment");
   CHECK(fysh == Species::COMMENT);
 

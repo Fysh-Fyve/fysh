@@ -19,6 +19,7 @@
  */
 #include "Fysh.h"
 #include <cassert>
+#include <cstdint>
 
 fysh::Species fysh::Fysh::getSpecies() const noexcept { return species; }
 std::optional<std::uint32_t> fysh::Fysh::getValue() const noexcept {
@@ -117,7 +118,7 @@ std::ostream &fysh::operator<<(std::ostream &os, const fysh::Fysh &f) {
   using fysh::Species;
   switch (f.getSpecies()) {
   case Species::FYSH_LITERAL: {
-    auto val{f.getValue()};
+    std::optional<uint32_t> val{f.getValue()};
     os << "(";
     if (f.negate) {
       os << "-";

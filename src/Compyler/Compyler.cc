@@ -57,7 +57,8 @@ fysh::Emit fysh::Compyler::loop(const fysh::ast::FyshLoopStmt &stmt,
 
 fysh::Emit fysh::Compyler::increment(const fysh::ast::FyshIncrementStmt &stmt,
                                      llvm::Function *fn) {
-  if (auto ident = std::get_if<ast::FyshIdentifier>(&stmt.expr)) {
+  if (const ast::FyshIdentifier *ident =
+          std::get_if<ast::FyshIdentifier>(&stmt.expr)) {
     if (namedValues.find(ident->name) == namedValues.end()) {
       return ast::Error{"unknown variable"};
     }
@@ -73,7 +74,8 @@ fysh::Emit fysh::Compyler::increment(const fysh::ast::FyshIncrementStmt &stmt,
 
 fysh::Emit fysh::Compyler::decrement(const fysh::ast::FyshDecrementStmt &stmt,
                                      llvm::Function *fn) {
-  if (auto ident = std::get_if<ast::FyshIdentifier>(&stmt.expr)) {
+  if (const ast::FyshIdentifier *ident =
+          std::get_if<ast::FyshIdentifier>(&stmt.expr)) {
     if (namedValues.find(ident->name) == namedValues.end()) {
       return ast::Error{"unknown variable"};
     }
@@ -90,14 +92,15 @@ fysh::Emit fysh::Compyler::decrement(const fysh::ast::FyshDecrementStmt &stmt,
 fysh::Emit fysh::Compyler::assignment(const fysh::ast::FyshAssignmentStmt &stmt,
                                       llvm::Function *fn) {
   // Only handle assignments to identifiers for now
-  if (auto ident = std::get_if<ast::FyshIdentifier>(&stmt.left)) {
+  if (const ast::FyshIdentifier *ident =
+          std::get_if<ast::FyshIdentifier>(&stmt.left)) {
     if (namedValues.find(ident->name) == namedValues.end()) {
       namedValues[ident->name] = builder->CreateAlloca(
           llvm::Type::getInt32Ty(*context), nullptr, ident->name);
     }
-    auto alloca{namedValues[ident->name]};
-    auto val{expression(&stmt.right)};
-    if (auto expr = std::get_if<llvm::Value *>(&val)) {
+    llvm::AllocaInst *alloca{namedValues[ident->name]};
+    Emit val{expression(&stmt.right)};
+    if (llvm::Value * *expr{std::get_if<llvm::Value *>(&val)}) {
       return builder->CreateStore(*expr, alloca);
     }
     return nullptr;
@@ -136,14 +139,14 @@ fysh::Emit fysh::Compyler::statement(const ast::FyshStmt &stmt,
 
 fysh::Emit fysh::Compyler::block(const std::vector<fysh::ast::FyshStmt> &block,
                                  llvm::Function *fn) {
-  llvm::Value *retVal = nullptr; // Initialize retVal explicitly
+  llvm::Value *retVal{nullptr}; // Initialize retVal explicitly
 
-  for (auto &stmt : block) {
-    fysh::Emit emit = statement(stmt, fn);
-    if (auto error = std::get_if<ast::Error>(&emit)) {
+  for (const ast::FyshStmt &stmt : block) {
+    fysh::Emit emit{statement(stmt, fn)};
+    if (const ast::Error * error{std::get_if<ast::Error>(&emit)}) {
       return *error;
     }
-    if (auto expr = std::get_if<llvm::Value *>(&emit)) {
+    if (llvm::Value * *expr{std::get_if<llvm::Value *>(&emit)}) {
       retVal = *expr;
     }
   }
@@ -156,24 +159,24 @@ fysh::Emit fysh::Compyler::block(const std::vector<fysh::ast::FyshStmt> &block,
 llvm::Function *
 fysh::Compyler::compyle(const std::vector<fysh::ast::FyshStmt> &program) {
   // int() function type
-  llvm::FunctionType *ft = llvm::FunctionType::get(
-      llvm::Type::getInt32Ty(*context), std::vector<llvm::Type *>(), false);
-  llvm::Function *prototype = llvm::Function::Create(
-      ft, llvm::Function::ExternalLinkage, "main", module.get());
+  llvm::FunctionType *ft{llvm::FunctionType::get(
+      llvm::Type::getInt32Ty(*context), std::vector<llvm::Type *>(), false)};
+  llvm::Function *prototype{llvm::Function::Create(
+      ft, llvm::Function::ExternalLinkage, "main", module.get())};
 
-  llvm::BasicBlock *bb = llvm::BasicBlock::Create(*context, "entry", prototype);
+  llvm::BasicBlock *bb{llvm::BasicBlock::Create(*context, "entry", prototype)};
   builder->SetInsertPoint(bb);
 
-  Emit emit = block(program, prototype);
+  Emit emit{block(program, prototype)};
 
-  if (auto expr = std::get_if<llvm::Value *>(&emit)) {
+  if (llvm::Value * *expr{std::get_if<llvm::Value *>(&emit)}) {
     // Finish off the function.
     builder->CreateRet(*expr);
     // Validate the generated code, checking for consistency.
     llvm::verifyFunction(*prototype);
 
     return prototype;
-  } else if (auto error = std::get_if<ast::Error>(&emit)) {
+  } else if (const ast::Error * error{std::get_if<ast::Error>(&emit)}) {
     std::cerr << error << std::endl;
   }
 
@@ -183,8 +186,8 @@ fysh::Compyler::compyle(const std::vector<fysh::ast::FyshStmt> &program) {
 }
 
 fysh::Emit fysh::Compyler::unary(const fysh::ast::FyshUnaryExpr &expr) {
-  auto emit = expression(&expr.expr);
-  if (auto err = std::get_if<ast::Error>(&emit)) {
+  Emit emit{expression(&expr.expr)};
+  if (const ast::Error * err{std::get_if<ast::Error>(&emit)}) {
     return *err;
   }
   if (expr.op == ast::FyshUnary::Neg) {
@@ -196,14 +199,14 @@ fysh::Emit fysh::Compyler::unary(const fysh::ast::FyshUnaryExpr &expr) {
 fysh::Emit fysh::Compyler::binary(const fysh::ast::FyshBinaryExpr &expr) {
   fysh::Emit left{expression(&expr.left)};
   fysh::Emit right{expression(&expr.right)};
-  if (auto err = std::get_if<ast::Error>(&left)) {
+  if (const ast::Error * err{std::get_if<ast::Error>(&left)}) {
     return *err;
   }
-  if (auto err = std::get_if<ast::Error>(&right)) {
+  if (const ast::Error * err{std::get_if<ast::Error>(&right)}) {
     return *err;
   }
-  auto leftVal{std::get<llvm::Value *>(left)};
-  auto rightVal{std::get<llvm::Value *>(right)};
+  llvm::Value *leftVal{std::get<llvm::Value *>(left)};
+  llvm::Value *rightVal{std::get<llvm::Value *>(right)};
   if (expr.op == ast::FyshBinary::Add) {
     return builder->CreateAdd(leftVal, rightVal, "addtmp");
   } else if (expr.op == ast::FyshBinary::Mul) {
