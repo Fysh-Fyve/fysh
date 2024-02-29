@@ -34,17 +34,22 @@ public:
   Compyler();
 
   llvm::Function *compyle(const std::vector<ast::FyshStmt> &program);
-  Emit compyleBlock(const std::vector<ast::FyshStmt> &block,
-                    llvm::Function *function);
-  Emit compyleExpr(const ast::FyshExpr *expr);
-  Emit compyleLoop(const ast::FyshLoopStmt &loop, llvm::Function *function);
 
 private:
-  llvm::AllocaInst *createEntryBlockAlloca(llvm::Function *TheFunction,
-                                           const std::string_view &name);
-  Emit handleStatement(const ast::FyshStmt &stmt, llvm::Function *function);
-  Emit handleIncDecStmt(const ast::FyshStmt &stmt, llvm::Function *function);
-  Emit handleAssignment(const ast::FyshStmt &stmt, llvm::Function *function);
+  /* Compiling statements */
+  Emit statement(const ast::FyshStmt &stmt, llvm::Function *fn);
+  Emit block(const std::vector<ast::FyshStmt> &block, llvm::Function *fn);
+  Emit ifStmt(const ast::FyshIfStmt &stmt, llvm::Function *fn);
+  Emit loop(const ast::FyshLoopStmt &stmt, llvm::Function *fn);
+  Emit increment(const ast::FyshIncrementStmt &stmt, llvm::Function *fn);
+  Emit decrement(const ast::FyshDecrementStmt &stmt, llvm::Function *fn);
+  Emit assignment(const ast::FyshAssignmentStmt &stmt, llvm::Function *fn);
+
+  /* Compiling expressions */
+  Emit expression(const ast::FyshExpr *expr);
+  Emit identifier(const ast::FyshIdentifier &expr);
+  Emit binary(const fysh::ast::FyshBinaryExpr &expr);
+  Emit unary(const fysh::ast::FyshUnaryExpr &expr);
 
   std::unordered_map<std::string_view, llvm::AllocaInst *> namedValues;
   std::unique_ptr<llvm::LLVMContext> context;
