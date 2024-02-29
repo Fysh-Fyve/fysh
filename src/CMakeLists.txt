@@ -12,4 +12,6 @@ add_library (
 	Lexer/Lexer.h
 	Parser/Parser.cc
 	Parser/Parser.h
+	VybeChecker/VybeChecker.cc
+	VybeChecker/VybeChecker.h
 )

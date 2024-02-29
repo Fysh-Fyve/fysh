@@ -45,7 +45,7 @@ public:
   }
 };
 
-class SemanticAnalyzer {
+class VybeChecker {
 private:
   SymbolTable symbolTable;
 
@@ -66,15 +66,15 @@ public:
   // Example usage: analyzeNode("VariableUsage", "x");
 };
 
-int main() {
-  SemanticAnalyzer analyzer;
-
-  // Simulate parsing variable declaration
-  analyzer.analyzeNode("VariableDeclaration", "x", "int");
-
-  // Simulate using a variable
-  analyzer.analyzeNode("VariableUsage", "x"); // No error
-  analyzer.analyzeNode("VariableUsage", "y"); // This should show an error
-
-  return 0;
-}
+// int main() {
+//   SemanticAnalyzer analyzer;
+//
+//   // Simulate parsing variable declaration
+//   analyzer.analyzeNode("VariableDeclaration", "x", "int");
+//
+//   // Simulate using a variable
+//   analyzer.analyzeNode("VariableUsage", "x"); // No error
+//   analyzer.analyzeNode("VariableUsage", "y"); // This should show an error
+//
+//   return 0;
+// }
