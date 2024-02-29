@@ -8,8 +8,8 @@ use std.env.stop;
 
 --! Test bench for the top module.
 entity topmodule_tb is
-  generic (VERBOSE : boolean := false);
--- generic (VERBOSE : boolean := true);
+  -- generic (VERBOSE : boolean := false);
+  generic (VERBOSE : boolean := false; GPIO_VERBOSE : boolean := true);
 end topmodule_tb;
 
 architecture test_bench of topmodule_tb is
@@ -53,7 +53,7 @@ begin
   end process stop_exec;
 
   topmodule_inst : entity work.topmodule(rtl)
-    generic map (VERBOSE => VERBOSE)
+    generic map (VERBOSE => VERBOSE, GPIO_VERBOSE => GPIO_VERBOSE)
     port map (
       clk   => clk,
       gpio  => gpio,
