@@ -33,10 +33,11 @@ class Compyler {
 public:
   Compyler();
 
-  llvm::Function *compyle(std::vector<ast::FyshStmt> program);
-  Emit compyleBlock(std::vector<ast::FyshStmt> block, llvm::Function *function);
-  Emit compyleExpr(ast::FyshExpr *expr);
-  Emit compyleLoop(ast::FyshLoopStmt loop, llvm::Function *function);
+  llvm::Function *compyle(const std::vector<ast::FyshStmt> &program);
+  Emit compyleBlock(const std::vector<ast::FyshStmt> &block,
+                    llvm::Function *function);
+  Emit compyleExpr(const ast::FyshExpr *expr);
+  Emit compyleLoop(const ast::FyshLoopStmt &loop, llvm::Function *function);
 
 private:
   llvm::AllocaInst *createEntryBlockAlloca(llvm::Function *TheFunction,
