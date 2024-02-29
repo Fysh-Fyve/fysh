@@ -24,7 +24,7 @@ fysh::Compyler::createEntryBlockAlloca(llvm::Function *TheFunction,
   return builder.CreateAlloca(llvm::Type::getInt32Ty(*context), nullptr, name);
 }
 
-fysh::Emit fysh::Compyler::compyleLoop(fysh::ast::FyshLoopStmt loop,
+fysh::Emit fysh::Compyler::compyleLoop(const fysh::ast::FyshLoopStmt &loop,
                                        llvm::Function *function) {
   llvm::Function *parent{builder->GetInsertBlock()->getParent()};
   llvm::BasicBlock *conditionBlock{builder->GetInsertBlock()};
@@ -40,7 +40,7 @@ fysh::Emit fysh::Compyler::compyleLoop(fysh::ast::FyshLoopStmt loop,
 }
 
 fysh::Emit
-fysh::Compyler::compyleBlock(std::vector<fysh::ast::FyshStmt> program,
+fysh::Compyler::compyleBlock(const std::vector<fysh::ast::FyshStmt> &program,
                              llvm::Function *function) {
   llvm::Value *retVal;
   for (auto &stmt : program) {
@@ -105,7 +105,7 @@ fysh::Compyler::compyleBlock(std::vector<fysh::ast::FyshStmt> program,
 }
 
 llvm::Function *
-fysh::Compyler::compyle(std::vector<fysh::ast::FyshStmt> program) {
+fysh::Compyler::compyle(const std::vector<fysh::ast::FyshStmt> &program) {
   // int() function type
   llvm::FunctionType *ft = llvm::FunctionType::get(
       llvm::Type::getInt32Ty(*context), std::vector<llvm::Type *>(), false);
@@ -133,7 +133,7 @@ fysh::Compyler::compyle(std::vector<fysh::ast::FyshStmt> program) {
   return nullptr;
 }
 
-fysh::Emit fysh::Compyler::compyleExpr(fysh::ast::FyshExpr *expr) {
+fysh::Emit fysh::Compyler::compyleExpr(const fysh::ast::FyshExpr *expr) {
   if (expr == nullptr) {
     return nullptr;
   }
