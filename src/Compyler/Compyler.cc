@@ -1,5 +1,5 @@
 #include "Compyler.h"
-#include "AST.h"
+#include "../AST/AST.h"
 
 #include <iostream>
 #include <llvm/ADT/APInt.h>

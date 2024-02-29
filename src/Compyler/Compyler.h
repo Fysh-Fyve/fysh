@@ -20,12 +20,11 @@
 #ifndef FYSH_COMPYLER_H_
 #define FYSH_COMPYLER_H_
 
-#include "AST.h"
+#include "../AST/AST.h"
 #include <llvm/IR/Function.h>
 #include <llvm/IR/IRBuilder.h>
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/IR/Module.h>
-#include <memory>
 
 namespace fysh {
 using Emit = std::variant<llvm::Value *, ast::Error>;

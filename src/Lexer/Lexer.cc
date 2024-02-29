@@ -19,26 +19,22 @@
  */
 
 #include "Lexer.h"
-#include "Species.h"
-#include <string_view>
-#include <variant>
+#include "../Fysh/Species.h"
 #include <cctype>
+#include <variant>
 
 #ifdef FYSH_DEBUG
 #include <iostream>
 #endif
 
-
 #ifdef FYSH_DEBUG
-void printRest(const std::string_view& rest) {
-    std::cerr << rest << std::endl;
-}
+void printRest(const std::string_view &rest) { std::cerr << rest << std::endl; }
 
-char periscope(const char* current, int line) noexcept {
-    if (line > 0) {
-        std::cerr << "Current (line:" << line << "): " << *current << std::endl;
-    }
-    return *current;
+char periscope(const char *current, int line) noexcept {
+  if (line > 0) {
+    std::cerr << "Current (line:" << line << "): " << *current << std::endl;
+  }
+  return *current;
 }
 #endif
 
@@ -47,29 +43,35 @@ static bool isScale(char c) noexcept {
   return c == '(' || c == ')' || c == '{' || c == '}';
 }
 
-static std::string_view trim(const std::string_view& in) {
-        auto left = in.begin();
-        while (left != in.end() && std::isspace(*left)) ++left;
-        if (left == in.end()) return {};
-        
-        auto right = in.end() - 1;
-        while (right > left && std::isspace(*right)) --right;
+static std::string_view trim(const std::string_view &in) {
+  auto left = in.begin();
+  while (left != in.end() && std::isspace(*left))
+    ++left;
+  if (left == in.end())
+    return {};
 
-        return {left, static_cast<size_t>(right - left + 1)};
+  auto right = in.end() - 1;
+  while (right > left && std::isspace(*right))
+    --right;
+
+  return {left, static_cast<size_t>(right - left + 1)};
 }
 
 // Checks if the current character is a Unicode character
 bool fysh::FyshLexer::isUnicode() const noexcept {
-    unsigned char c = static_cast<unsigned char>(*current);
-    if ((c & 0x80) == 0x00) return false; // ASCII (first byte is 0xxxxxxx)
-    
-    // Unicode start byte (2, 3, or 4 byte sequence (start with 110xxxxx, 1110xxxx, or 11110xxx respectively))
-    return (c & 0xE0) == 0xC0 || (c & 0xF0) == 0xE0 || (c & 0xF8) == 0xF0; 
+  unsigned char c = static_cast<unsigned char>(*current);
+  if ((c & 0x80) == 0x00)
+    return false; // ASCII (first byte is 0xxxxxxx)
+
+  // Unicode start byte (2, 3, or 4 byte sequence (start with 110xxxxx,
+  // 1110xxxx, or 11110xxx respectively))
+  return (c & 0xE0) == 0xC0 || (c & 0xF0) == 0xE0 || (c & 0xF8) == 0xF0;
 }
 
 char fysh::FyshLexer::reel() noexcept {
   char c = *current++;
-  if (c == '\n') line++;
+  if (c == '\n')
+    line++;
   return c;
 };
 
@@ -174,8 +176,6 @@ bool fysh::FyshLexer::match(char c) noexcept {
     return false;
   }
 }
-
-
 
 fysh::Fysh fysh::FyshLexer::slashOrComment() noexcept {
   reel();

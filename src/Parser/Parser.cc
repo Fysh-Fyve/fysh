@@ -19,8 +19,8 @@
  */
 
 #include "Parser.h"
-#include "AST.h"
-#include "Species.h"
+#include "../AST/AST.h"
+#include "../Fysh/Species.h"
 
 #include <iostream>
 #include <sstream>

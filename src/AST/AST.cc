@@ -100,7 +100,7 @@ std::ostream &fysh::ast::operator<<(std::ostream &os,
           os << arg.left << " = " << arg.right << ";\n";
         else if constexpr (std::is_same_v<T, FyshBlock>) {
           os << "{\n";
-          for (const auto &a : arg) {
+          for (const ast::FyshStmt &a : arg) {
             os << a;
           }
           os << "}\n";

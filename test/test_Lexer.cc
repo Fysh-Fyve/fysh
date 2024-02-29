@@ -1,4 +1,4 @@
-#include "../src/Lexer.h"
+#include "../src/Lexer/Lexer.h"
 
 #include "doctest.h"
 

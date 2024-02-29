@@ -1,6 +1,5 @@
-#include "../src/Lexer.h"
-#include "../src/Parser.h"
-#include <iostream>
+#include "../src/Lexer/Lexer.h"
+#include "../src/Parser/Parser.h"
 
 #define DOCTEST_CONFIG_TREAT_CHAR_STAR_AS_STRING
 

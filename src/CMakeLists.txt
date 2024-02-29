@@ -1,14 +1,15 @@
 add_library (
 	common
-	AST.cc
-	AST.h
-	Box.h
-	Compyler.cc
-	Compyler.h
-	Fysh.cc
-	Lexer.cc
-	Lexer.h
-	Parser.cc
-	Parser.h
-	Species.h
+	AST/AST.cc
+	AST/AST.h
+	AST/Box.h
+	Compyler/Compyler.cc
+	Compyler/Compyler.h
+	Fysh/Fysh.cc
+	Fysh/Fysh.h
+	Fysh/Species.h
+	Lexer/Lexer.cc
+	Lexer/Lexer.h
+	Parser/Parser.cc
+	Parser/Parser.h
 )

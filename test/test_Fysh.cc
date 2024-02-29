@@ -1,4 +1,4 @@
-#include "../src/Fysh.h"
+#include "../src/Fysh/Fysh.h"
 
 #include "doctest.h"
 

@@ -17,12 +17,13 @@
 /**
  * \file main.cc
  */
-#include "Compyler.h"
-#include "Lexer.h"
-#include "Parser.h"
+#include "AST/AST.h"
+#include "Compyler/Compyler.h"
+#include "Lexer/Lexer.h"
+#include "Parser/Parser.h"
 #include <fstream>
 #include <iostream>
-#include <llvm-18/llvm/Support/raw_ostream.h>
+#include <llvm/Support/raw_ostream.h>
 #include <sstream>
 
 void compyle(std::istream &stream) {
@@ -31,7 +32,7 @@ void compyle(std::istream &stream) {
   std::string source{ss.str()};
   fysh::FyshLexer lexer{source.data()};
   fysh::FyshParser parser{lexer};
-  auto program{parser.parseProgram()};
+  fysh::ast::FyshBlock program{parser.parseProgram()};
 
   if (program.size() == 1) {
     if (auto err = std::get_if<fysh::ast::Error>(&program[0])) {
@@ -41,7 +42,7 @@ void compyle(std::istream &stream) {
   }
 
   fysh::Compyler cumpyler;
-  auto fn{cumpyler.compyle(program)};
+  llvm::Function *fn{cumpyler.compyle(program)};
   if (fn == nullptr) {
     std::cerr << "error compyling?" << std::endl;
   } else {
