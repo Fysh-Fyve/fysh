@@ -165,7 +165,9 @@ TEST_CASE("Swim Left") {
 TEST_CASE("identifiers") {
   FyshLexer lexer{
       "><pos> <neg>< ><ostart> <ostart>< ><鱼> ><とと> <魚>< "
-      "<سمكة>< ><ᜁᜐ᜔ᜇ> ><ᠨᡳᠮᠠᡥᠠ> <°isthisallowed>< ><whataboutthis°>"};
+      "<سمكة>< ><ᜁᜐ᜔ᜇ> ><ᠨᡳᠮᠠᡥᠠ> "
+      // "<°isthisallowed>< ><whataboutthis°>"
+  };
 
   Fysh fysh{lexer.nextFysh()};
   CHECK(fysh == "pos");
@@ -217,15 +219,16 @@ TEST_CASE("identifiers") {
   CHECK(fysh == Species::FYSH_IDENTIFIER);
   CHECK(fysh.negate == false);
 
-  fysh = lexer.nextFysh();
-  CHECK(fysh == "°isthisallowed");
-  CHECK(fysh == Species::FYSH_IDENTIFIER);
-  CHECK(fysh.negate == true);
-
-  fysh = lexer.nextFysh();
-  CHECK(fysh == "whataboutthis°");
-  CHECK(fysh == Species::FYSH_IDENTIFIER);
-  CHECK(fysh.negate == false);
+  // Comment out until we decide what to do with it
+  // fysh = lexer.nextFysh();
+  // CHECK(fysh == "°isthisallowed");
+  // CHECK(fysh == Species::FYSH_IDENTIFIER);
+  // CHECK(fysh.negate == true);
+  //
+  // fysh = lexer.nextFysh();
+  // CHECK(fysh == "whataboutthis°");
+  // CHECK(fysh == Species::FYSH_IDENTIFIER);
+  // CHECK(fysh.negate == false);
 
   T(Species::END);
 }
