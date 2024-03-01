@@ -48,6 +48,7 @@ begin
   stop_exec : process(done)
   begin
     if done = '1' then
+      wait for 100 ns;
       stop;
     end if;
   end process stop_exec;
