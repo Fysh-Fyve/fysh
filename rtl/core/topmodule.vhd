@@ -243,7 +243,7 @@ begin
 
   insn_register : process(reset, ir_clk, mem_write_en)
   begin
-    if reset = '0' then
+    if reset = '1' then
       insn <= (others => '0');
     elsif rising_edge(ir_clk) and mem_write_en = '0' then
       insn <= imem_out;

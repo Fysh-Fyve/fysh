@@ -35,7 +35,7 @@ begin
       use std.textio.all;
       variable l : line;
     begin
-      if reset_i = '0' then
+      if reset_i = '1' then
         reg_file(i) <= (others => '0');
       elsif rising_edge(rd_clk_i) then
         if (i = to_integer(unsigned(dest_reg_i))) then

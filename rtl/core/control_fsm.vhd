@@ -140,7 +140,7 @@ begin
     use std.textio.all;
     variable l : line;
   begin
-    if reset_i = '0' then
+    if reset_i = '1' then
       state  <= init;
       done_o <= '0';
     elsif rising_edge(clk_i) then

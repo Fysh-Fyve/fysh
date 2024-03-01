@@ -63,13 +63,13 @@ begin
   process
   begin
     wait for 10.6383 ns;
-    reset <= '0';
-    wait for 10.6383 ns;
     reset <= '1';
     wait for 10.6383 ns;
     reset <= '0';
     wait for 10.6383 ns;
     reset <= '1';
+    wait for 10.6383 ns;
+    reset <= '0';
     wait;
   end process;
 end test_bench;

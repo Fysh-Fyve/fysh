@@ -53,7 +53,7 @@ begin
     use std.textio.all;
     variable l : line;
   begin
-    if reset_i = '0' then
+    if reset_i = '1' then
       pc <= (others => '0');
     elsif rising_edge(pc_clk_i) then
       if VERBOSE then
