@@ -45,14 +45,6 @@ begin
     end if;
   end process adc_data;
 
-  stop_exec : process(done)
-  begin
-    if done = '1' then
-      wait for 100 ns;
-      stop;
-    end if;
-  end process stop_exec;
-
   topmodule_inst : entity work.topmodule(rtl)
     generic map (VERBOSE => VERBOSE, GPIO_VERBOSE => GPIO_VERBOSE)
     port map (
@@ -71,6 +63,8 @@ begin
     reset <= '1';
     wait for 10.6383 ns;
     reset <= '0';
-    wait;
+    wait until rising_edge(done);
+    wait for 100 ns;
+    stop;
   end process;
 end test_bench;
