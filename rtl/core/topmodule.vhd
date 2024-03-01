@@ -10,11 +10,11 @@ use work.fysh_fyve.all;
 entity topmodule is
   generic (VERBOSE : boolean := false; GPIO_VERBOSE : boolean := false);
   port (
-    clk   : in    std_ulogic;
-    reset : in    std_ulogic;
-    done  : out   std_ulogic;
-    gpio  : inout std_ulogic_vector (31 downto 0);
-    adc   : in    std_ulogic_vector(7 downto 0));
+    clk   : in  std_ulogic;
+    reset : in  std_ulogic;
+    done  : out std_ulogic;
+    gpio  : out std_ulogic_vector (31 downto 0);
+    adc   : in  std_ulogic_vector(7 downto 0));
 end topmodule;
 
 architecture rtl of topmodule is
@@ -60,6 +60,8 @@ architecture rtl of topmodule is
   signal gf                                : std_ulogic_vector (31 downto 0);
   signal iraddr, draddr                    : std_ulogic_vector (31 downto 0);
   signal waddr, dmem_out, imem_out, mem_sx : std_ulogic_vector (31 downto 0);
+
+  signal clk_div : std_ulogic;
 begin
   verbose_print :
   if VERBOSE generate
@@ -112,6 +114,10 @@ begin
     end process print_reg;
   end generate;
 
+  clk_div_inst : entity work.clk_divider(rtl)
+    generic map(DIV => DIV_NORMAL)
+    port map(clk_i  => clk, clk_o => clk_div);
+
   imm_sx_inst : entity work.imm_sx(rtl) port map (
     instruction_i => insn,
     imm_val_o     => imm_ex);
@@ -144,7 +150,7 @@ begin
     less_than_unsigned_flag_o => ltu);
 
   control_fsm_inst : entity work.control_fsm(rtl) port map(
-    clk_i     => clk,
+    clk_i     => clk_div,
     reset_i   => reset,
     eq_i      => eq,
     lt_i      => lt,
@@ -182,7 +188,7 @@ begin
   mem_inst : entity work.phy_map(rtl)
     generic map(VERBOSE => VERBOSE or GPIO_VERBOSE)
     port map (
-      clk_i      => clk,
+      clk_i      => clk_div,
       draddr_i   => draddr,
       iraddr_i   => iraddr,
       waddr_i    => waddr,
@@ -237,7 +243,7 @@ begin
     '0'                                    when others;
 
   grilled_fysh_inst : entity work.grilled_fysh(rtl) port map (
-    clk_i  => clk,
+    clk_i  => clk_div,
     pins_i => adc,
     gf_o   => gf);
 

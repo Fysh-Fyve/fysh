@@ -25,14 +25,14 @@ use ieee.std_logic_1164.all;
 entity gpio_pins is
   generic (VERBOSE : boolean := false);
   port (
-    clk_i           : in    std_ulogic;  --! Clock signal.
-    gp_io           : inout std_ulogic_vector (31 downto 0) := (others => '0');  --! In-out port corresponding to the actual pins.
-    write_en_i      : in    std_ulogic;  --! Whether to write to pin_write_i
-    mode_write_en_i : in    std_ulogic;  --! Whether to write to pin_mode_i
-    pin_mode_i      : in    std_ulogic_vector (31 downto 0);  --! Bit mask for writing to GPIO
-    pin_write_i     : in    std_ulogic_vector (31 downto 0);  --! Input port for GPIO
-    pin_read_o      : out   std_ulogic_vector (31 downto 0);  --! Output port for GPIO
-    mode_o          : out   std_ulogic_vector (31 downto 0));  --! Outputs current pin mode
+    clk_i           : in  std_ulogic;   --! Clock signal.
+    gp_io           : out std_ulogic_vector (31 downto 0) := (others => '0');  --! In-out port corresponding to the actual pins.
+    write_en_i      : in  std_ulogic;   --! Whether to write to pin_write_i
+    mode_write_en_i : in  std_ulogic;   --! Whether to write to pin_mode_i
+    pin_mode_i      : in  std_ulogic_vector (31 downto 0);  --! Bit mask for writing to GPIO
+    pin_write_i     : in  std_ulogic_vector (31 downto 0);  --! Input port for GPIO
+    pin_read_o      : out std_ulogic_vector (31 downto 0);  --! Output port for GPIO
+    mode_o          : out std_ulogic_vector (31 downto 0));  --! Outputs current pin mode
 end gpio_pins;
 
 architecture rtl of gpio_pins is
@@ -46,11 +46,12 @@ begin
         variable l : line;
       begin
         if gp_io(i)'event then
-          write(l, string'("gpio "));
-          write(l, i);
-          write(l, string'(": "));
-          write(l, gp_io(i));
-          writeline(output, l);
+          report to_string(gp_io(i));
+        -- write(l, string'("gpio "));
+        -- write(l, i);
+        -- write(l, string'(": "));
+        -- write(l, gp_io(i));
+        -- writeline(output, l);
         end if;
       end process;
     end generate print_gpio_g;

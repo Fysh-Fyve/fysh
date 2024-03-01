@@ -57,6 +57,10 @@ package fysh_fyve is
   constant BLTU : alu_op_t := "110";
   constant BGEU : alu_op_t := "111";
 
+  constant DIV_NORMAL : integer := 1;
+  constant DIV_1_HZ   : integer := 62500000;
+  constant DIV_1_KHZ  : integer := 62500;
+
   procedure write_opcode (l : inout std.textio.line; oc : in opcode_t);
   procedure write_func3 (l  : inout std.textio.line; f3 : in alu_op_t);
   procedure write_branch (l : inout std.textio.line; f3 : in alu_op_t);

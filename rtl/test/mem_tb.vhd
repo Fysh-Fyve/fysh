@@ -45,7 +45,7 @@ begin
   clock : process
   begin
     clk <= not clk;
-    wait for 10.6383 ns;
+    wait for 10 ns;
   end process clock;
 
 

@@ -20,7 +20,7 @@ architecture test_bench of alu_tb is
     use std.textio.all;
     variable my_line : line;
   begin
-    wait for 10.6383 ns;
+    wait for 10 ns;
     write(my_line, to_hstring(a));
     write(my_line, ht);
     write(my_line, lbl);

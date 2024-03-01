@@ -82,6 +82,7 @@ ALU := $(patsubst %, $(SRC_DIR)/%.vhd, $(_ALU))
 _ALU_CONTROL := imm_sx \
 		program_counter \
 		control_fsm \
+		clk_divider \
 
 ALU_CONTROL := $(patsubst %, $(SRC_DIR)/%.vhd, $(_ALU_CONTROL)) \
 	$(ALU) \

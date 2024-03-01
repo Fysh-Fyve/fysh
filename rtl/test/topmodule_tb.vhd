@@ -34,7 +34,7 @@ begin
   drive_clock : process
   begin
     clk <= not clk;
-    wait for 10.6383 ns;
+    wait for 10 ns;
   end process drive_clock;
 
   adc_data : process(clk)
@@ -55,13 +55,13 @@ begin
       adc   => adc);
   process
   begin
-    wait for 10.6383 ns;
+    wait for 10 ns;
     reset <= '1';
-    wait for 10.6383 ns;
+    wait for 10 ns;
     reset <= '0';
-    wait for 10.6383 ns;
+    wait for 10 ns;
     reset <= '1';
-    wait for 10.6383 ns;
+    wait for 10 ns;
     reset <= '0';
     wait until rising_edge(done);
     wait for 100 ns;
