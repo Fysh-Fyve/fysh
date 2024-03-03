@@ -33,7 +33,31 @@
 fysh::Compyler::Compyler()
     : context{std::make_unique<llvm::LLVMContext>()},
       module{std::make_unique<llvm::Module>("fysh", *context)},
-      builder{std::make_unique<llvm::IRBuilder<>>(*context)} {}
+      builder{std::make_unique<llvm::IRBuilder<>>(*context)},
+      fpm{std::make_unique<llvm::FunctionPassManager>()},
+      lam{std::make_unique<llvm::LoopAnalysisManager>()},
+      fam{std::make_unique<llvm::FunctionAnalysisManager>()},
+      cgam{std::make_unique<llvm::CGSCCAnalysisManager>()},
+      mam{std::make_unique<llvm::ModuleAnalysisManager>()},
+      pic{std::make_unique<llvm::PassInstrumentationCallbacks>()},
+      si{std::make_unique<llvm::StandardInstrumentations>(
+          *context, /*DebugLogging*/ true)} {
+
+  // Add transform passes.
+  // Do simple "peephole" optimizations and bit-twiddling optzns.
+  fpm->addPass(llvm::InstCombinePass());
+  // Reassociate expressions.
+  fpm->addPass(llvm::ReassociatePass());
+  // Eliminate Common SubExpressions.
+  fpm->addPass(llvm::GVNPass());
+  // Simplify the control flow graph (deleting unreachable blocks, etc).
+  fpm->addPass(llvm::SimplifyCFGPass());
+
+  llvm::PassBuilder pb;
+  pb.registerModuleAnalyses(*mam);
+  pb.registerFunctionAnalyses(*fam);
+  pb.crossRegisterProxies(*lam, *fam, *cgam, *mam);
+}
 
 fysh::Emit fysh::Compyler::ifStmt(const fysh::ast::FyshIfStmt &stmt,
                                   llvm::Function *fn) {
@@ -174,6 +198,8 @@ fysh::Compyler::compyle(const std::vector<fysh::ast::FyshStmt> &program) {
     builder->CreateRet(*expr);
     // Validate the generated code, checking for consistency.
     llvm::verifyFunction(*prototype);
+
+    fpm->run(*prototype, *fam);
 
     return prototype;
   } else if (const ast::Error * error{std::get_if<ast::Error>(&emit)}) {
