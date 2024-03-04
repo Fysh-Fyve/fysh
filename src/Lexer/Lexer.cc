@@ -350,8 +350,8 @@ fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
     // Right Fysh
 
     // Eat any fysh eyes
-    expectFyshChar("°");
-    match('o');
+    while (expectFyshChar("°") || match('o'))
+      ;
 
     if (!match('>')) {
       return cullDeformedFysh();
@@ -415,23 +415,30 @@ fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
     return fyshClose(); // close curly bracket
   case ('!'):
     return closeWTF(); // error handling close tag
-  case ('o'):
+  case ('o'): {
+    const char *identStart{current};
     reel();
+    while (expectFyshChar("°") || match('o'))
+      ;
     switch (periscope()) {
     case ('{'):
     case ('('):
     case ('}'):
     case (')'):
-      // negative fysh literal with eye <o)})}><
+      // negative fysh literal with eye(s) <o)})}><
       return scales(FyshDirection::LEFT);
     default:
       // negative fysh identifier starting with 'o' <open><
-      current--;
+      current = identStart;
       return identifier(FyshDirection::LEFT);
     }
     return scales(FyshDirection::LEFT);
+  }
   default:
     if (expectFyshChar("°")) {
+      // Eat any fysh eyes
+      while (expectFyshChar("°") || match('o'))
+        ;
       return scales(FyshDirection::LEFT);
     } else if (std::isalpha(periscope()) || isUnicode()) {
       return identifier(FyshDirection::LEFT);

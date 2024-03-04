@@ -81,6 +81,14 @@ TEST_CASE("positive fysh multiply") {
   T(Species::END);
 }
 
+TEST_CASE("biblically accurate fysh") {
+  FyshLexer lexer{"><{{oooo> <ooooooooo}}><"};
+
+  T(0b011);
+  T(-0b011);
+  T(Species::END);
+}
+
 TEST_CASE("fysh open & wtf open") {
   FyshLexer lexer{"><> <3 ><{{({(o> ><!@#$> ><> ><!@#$>"};
 
