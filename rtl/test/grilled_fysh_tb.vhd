@@ -26,7 +26,12 @@ architecture test_bench of grilled_fysh_tb is
     x"BE",
     x"EF",
     x"F1",
-    x"54");
+    x"54",
+    x"C0",
+    x"DE",
+    x"C0",
+    x"FF",
+    x"EE");
 begin
   grilled_fysh_inst : entity work.grilled_fysh(rtl) port map (
     clk_i  => clk,
