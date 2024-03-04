@@ -29,15 +29,8 @@
 namespace fysh {
 
 struct FyshChar : public std::variant<const char *, std::string_view> {
-  template <typename T> bool operator!=(const T &x) const { return *this != x; }
-  bool operator==(const char &x) const {
-    return std::holds_alternative<const char *>(*this) &&
-           *std::get<const char *>(*this) == x;
-  }
-  bool operator==(const char *x) const {
-    return std::holds_alternative<std::string_view>(*this) &&
-           std::get<std::string_view>(*this) == x;
-  }
+  bool operator==(const char &x) const;
+  bool operator==(const char *x) const;
 };
 
 std::ostream &operator<<(std::ostream &os, const fysh::FyshChar &f);
@@ -87,6 +80,7 @@ private:
   Fysh tilde() noexcept;
   FyshChar eatFyshChar() noexcept;
   FyshChar peekFyshChar() noexcept;
+  bool expectFyshChar(const char *c) noexcept;
 };
 
 }; // namespace fysh

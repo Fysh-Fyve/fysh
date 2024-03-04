@@ -57,6 +57,16 @@ static std::string_view trim(const std::string_view &in) {
   return {left, static_cast<size_t>(right - left + 1)};
 }
 
+bool fysh::FyshChar::operator==(const char &x) const {
+  return std::holds_alternative<const char *>(*this) &&
+         *std::get<const char *>(*this) == x;
+}
+
+bool fysh::FyshChar::operator==(const char *x) const {
+  return std::holds_alternative<std::string_view>(*this) &&
+         std::get<std::string_view>(*this) == x;
+}
+
 // Checks if the current character is a Unicode character
 bool fysh::FyshLexer::isUnicode() const noexcept {
   unsigned char c{static_cast<unsigned char>(*current)};
@@ -97,6 +107,14 @@ fysh::FyshChar fysh::FyshLexer::eatFyshChar() noexcept {
         return {arg};
       },
       peekFyshChar());
+}
+
+bool fysh::FyshLexer::expectFyshChar(const char *c) noexcept {
+  if (peekFyshChar() == c) {
+    eatFyshChar();
+    return true;
+  }
+  return false;
 }
 
 // Peeks at the next character without consuming it, supporting multi-byte
@@ -332,9 +350,7 @@ fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
     // Right Fysh
 
     // Eat any fysh eyes
-    if (peekFyshChar() == "°") {
-      eatFyshChar();
-    }
+    expectFyshChar("°");
     match('o');
 
     if (!match('>')) {
@@ -355,14 +371,15 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
     switch (periscope()) {
     case ('3'):
       return goFysh(Species::HEART_MULTIPLY); // <3 multiplication heart
+    case ('<'):
+      return goFysh(Species::SHIFT_LEFT);
     case ('/'):
       reel();
       if (match('3')) {
         return Species::HEART_DIVIDE;
+      } else {
+        return cullDeformedFysh();
       }
-      return cullDeformedFysh();
-    case ('<'):
-      return goFysh(Species::SHIFT_LEFT);
     default:
       return swimLeft(); // a fysh swimming left
     }
@@ -414,14 +431,13 @@ fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
     }
     return scales(FyshDirection::LEFT);
   default:
-    if (peekFyshChar() == "°") {
-      eatFyshChar();
+    if (expectFyshChar("°")) {
       return scales(FyshDirection::LEFT);
-    }
-    if (std::isalpha(periscope()) || isUnicode()) {
+    } else if (std::isalpha(periscope()) || isUnicode()) {
       return identifier(FyshDirection::LEFT);
+    } else {
+      return cullDeformedFysh();
     }
-    return cullDeformedFysh();
   }
 }
 
@@ -429,19 +445,16 @@ fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
 fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
   reel(); // 2nd swim right character '<'
   switch (periscope()) {
+    // clang-format off
   case ('{'):
   case ('('):
   case ('}'):
-  case (')'):
-    return scales(FyshDirection::RIGHT); // fysh literal ><{{({(°>
-  case ('>'):
-    return goFysh(Species::FYSH_OPEN);
-  case ('!'):
-    return openWTF(); // error handling
-  case ('/'):
-    return slashOrComment(); // comment
-  case ('#'):
-    return random(); // random number
+  case (')'): return scales(FyshDirection::RIGHT); // fysh literal ><{{({(°>
+  case ('>'): return goFysh(Species::FYSH_OPEN);
+  case ('!'): return openWTF(); // error handling
+  case ('/'): return slashOrComment(); // comment
+  case ('#'): return random(); // random number
+    // clang-format on
   default:
     if (std::isalpha(periscope()) || isUnicode()) {
       return identifier(FyshDirection::RIGHT);
@@ -454,24 +467,21 @@ fysh::Fysh fysh::FyshLexer::tilde() noexcept {
   reel();
   if (match('=')) {
     return Species::NOT_EQUAL;
-  }
-  if (peekFyshChar() == "≈") {
-    eatFyshChar();
+  } else if (expectFyshChar("≈")) {
     return Species::NOT_EQUAL;
-  }
-  if (match('o')) {
+  } else if (match('o')) {
     if (match('=')) {
       return Species::TADPOLE_LTE;
-    }
-    if (peekFyshChar() == "≈") {
-      eatFyshChar();
+    } else if (expectFyshChar("≈")) {
       return Species::TADPOLE_LTE;
+    } else {
+      // We already reeled in o, do not go fysh.
+      return Species::TADPOLE_LT;
     }
-    // We already reeled in o, do not go fysh.
-    return Species::TADPOLE_LT;
+  } else {
+    // We already reeled in ~, do not go fysh.
+    return Species::FYSH_WATER;
   }
-  // We already reeled in ~, do not go fysh.
-  return Species::FYSH_WATER;
 }
 
 // Where the magic happens
@@ -482,74 +492,54 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
 
   fyshStart = current;
   switch (periscope()) {
-  case '\0':
-    return Species::END;
+    // clang-format off
+  case '\0': return Species::END;
   case '<':
-  case '>':
-    return fyshOutline();
-  case '&':
-    return goFysh(Species::BITWISE_AND);
-  case '|':
-    return goFysh(Species::BITWISE_OR);
+  case '>': return fyshOutline();
+  case '&': return goFysh(Species::BITWISE_AND);
+  case '|': return goFysh(Species::BITWISE_OR);
     // I think this has to change if not is also going to be ^
-  case '^':
-    return goFysh(Species::CARET);
-  case '~': {
-    return tilde();
-  }
-  case '[':
-    return goFysh(Species::FYSH_TANK_OPEN);
-  case ']':
-    return goFysh(Species::FYSH_TANK_CLOSE);
-  case '(':
-    return goFysh(Species::FYSH_BOWL_OPEN);
-  case ')':
-    return goFysh(Species::FYSH_BOWL_CLOSE);
-  case '-':
-    return goFysh(Species::FYSH_FOOD);
+  case '^': return goFysh(Species::CARET);
+  case '~': return tilde();
+  case '[': return goFysh(Species::FYSH_TANK_OPEN);
+  case ']': return goFysh(Species::FYSH_TANK_CLOSE);
+  case '(': return goFysh(Species::FYSH_BOWL_OPEN);
+  case ')': return goFysh(Species::FYSH_BOWL_CLOSE);
+  case '-': return goFysh(Species::FYSH_FOOD);
+    // clang-format on
   case '=': {
     reel();
     if (match('=')) {
       return Species::EQUAL;
+    } else {
+      // We already reeled in =, do not go fysh.
+      return Species::ASSIGN;
     }
-    // We already reeled in =, do not go fysh.
-    return Species::ASSIGN;
   }
   case 'o': {
     // Tadpole
     reel();
     if (!match('~')) {
       return cullDeformedFysh();
-    }
-    if (match('=')) {
+    } else if (match('=')) {
       return Species::TADPOLE_GTE;
-    }
-    if (peekFyshChar() == "≈") {
-      eatFyshChar();
+    } else if (expectFyshChar("≈")) {
       return Species::TADPOLE_GTE;
+    } else {
+      // We already reeled in ~, do not go fysh.
+      return Species::TADPOLE_GT;
     }
-    // We already reeled in ~, do not go fysh.
-    return Species::TADPOLE_GT;
   }
   default:
     // Ascii characters
-    if (peekFyshChar() == "♡") {
-      eatFyshChar();
+    if (expectFyshChar("♡")) {
       return Species::HEART_MULTIPLY;
-    }
-    if (peekFyshChar() == "💔") {
-      eatFyshChar();
+    } else if (expectFyshChar("💔")) {
       return Species::HEART_DIVIDE;
-    }
-
-    if (peekFyshChar() == "≈") {
-      eatFyshChar();
-
-      if (peekFyshChar() == "≈") {
-        eatFyshChar();
+    } else if (expectFyshChar("≈")) {
+      if (expectFyshChar("≈")) {
         return Species::EQUAL;
       }
-
       return Species::ASSIGN;
     } else {
       return cullDeformedFysh();
