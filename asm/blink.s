@@ -16,7 +16,7 @@ toggle:
 	xor	a5, a5, a4
 	sw	a5, 0(x31)
 	addi	a3, a3, -1
-	beqz	a3, done
+	beqz	a3, loop
 	j	loop
 done:
 	beqz	zero, done

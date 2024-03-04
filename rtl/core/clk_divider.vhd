@@ -25,7 +25,7 @@ begin
   end generate normal_clock;
 
   divided_clock : if (DIV /= DIV_NORMAL) generate
-    process (clk_i)
+    process (clk_i, clock_out)
     begin
       if rising_edge(clk_i) then
         count <= count + 1;

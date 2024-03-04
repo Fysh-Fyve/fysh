@@ -11,7 +11,7 @@ entity topmodule is
   generic (
     VERBOSE      : boolean := false;
     GPIO_VERBOSE : boolean := false;
-    DIV_CLK      : integer := DIV_1_HZ);
+    DIV_CLK      : integer := DIV_10_HZ);
   port (
     clk   : in  std_ulogic;
     reset : in  std_ulogic;
@@ -209,7 +209,7 @@ begin
   register_file_inst : entity work.register_file(rtl)
     generic map (VERBOSE => VERBOSE)
     port map (
-      clk_i          => clk,
+      clk_i          => clk_div,
       rd_write_en_i  => rd_clk,
       reset_i        => reset,
       dest_reg_i     => insn(11 downto 7),

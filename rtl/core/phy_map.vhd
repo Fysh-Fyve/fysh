@@ -83,7 +83,7 @@ begin
                 & d_i(23 downto 16)
                 & d_i(31 downto 24);
 
-  print_write : process(clk_i)
+  print_write : process(clk_i, write_en_i)
     use std.textio.all;
     variable l : line;
   begin

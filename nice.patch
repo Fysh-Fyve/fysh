@@ -1,0 +1,65 @@
+diff --git a/rtl/constr/ZyboZ7_master.xdc b/rtl/constr/ZyboZ7_master.xdc
+index 1c417fe..3c135fb 100644
+--- a/rtl/constr/ZyboZ7_master.xdc
++++ b/rtl/constr/ZyboZ7_master.xdc
+@@ -14,9 +14,9 @@ set_property -dict { PACKAGE_PIN W13 IOSTANDARD LVCMOS33 } [get_ports { gpio[6]
+ set_property -dict { PACKAGE_PIN T16 IOSTANDARD LVCMOS33 } [get_ports { gpio[7] }];
+ 
+ ##LEDs
+-set_property -dict { PACKAGE_PIN M14 IOSTANDARD LVCMOS33 } [get_ports { gpio[0] }];
++#set_property -dict { PACKAGE_PIN M14 IOSTANDARD LVCMOS33 } [get_ports { gpio[0] }];
+ set_property -dict { PACKAGE_PIN M15 IOSTANDARD LVCMOS33 } [get_ports { done }];
+-#set_property -dict { PACKAGE_PIN G14 IOSTANDARD LVCMOS33 } [get_ports { gpio[6] }];
++set_property -dict { PACKAGE_PIN G14 IOSTANDARD LVCMOS33 } [get_ports { gpio[0] }];
+ #set_property -dict { PACKAGE_PIN D18 IOSTANDARD LVCMOS33 } [get_ports { gpio[7] }];
+ 
+ ##Pmod Header JA (XADC)
+diff --git a/rtl/core/fysh_fyve_pkg.vhd b/rtl/core/fysh_fyve_pkg.vhd
+index 76eb7fb..149fc7e 100644
+--- a/rtl/core/fysh_fyve_pkg.vhd
++++ b/rtl/core/fysh_fyve_pkg.vhd
+@@ -59,7 +59,9 @@ package fysh_fyve is
+ 
+   constant DIV_NORMAL : integer := 1;
+   constant DIV_1_HZ   : integer := 62500000;
++  constant DIV_10_HZ   : integer := 6250000;
+   constant DIV_1_KHZ  : integer := 62500;
++  constant DIV_62_5_MHZ : integer := 2;
+ 
+   procedure write_opcode (l : inout std.textio.line; oc : in opcode_t);
+   procedure write_func3 (l  : inout std.textio.line; f3 : in alu_op_t);
+diff --git a/rtl/core/topmodule.vhd b/rtl/core/topmodule.vhd
+index 6a4207c..c351e0c 100644
+--- a/rtl/core/topmodule.vhd
++++ b/rtl/core/topmodule.vhd
+@@ -11,7 +11,7 @@ entity topmodule is
+   generic (
+     VERBOSE      : boolean := false;
+     GPIO_VERBOSE : boolean := false;
+-    DIV_CLK      : integer := DIV_1_HZ);
++    DIV_CLK      : integer := DIV_10_HZ);
+   port (
+     clk   : in  std_ulogic;
+     reset : in  std_ulogic;
+@@ -209,7 +209,7 @@ begin
+   register_file_inst : entity work.register_file(rtl)
+     generic map (VERBOSE => VERBOSE)
+     port map (
+-      clk_i          => clk,
++      clk_i          => clk_div,
+       rd_write_en_i  => rd_clk,
+       reset_i        => reset,
+       dest_reg_i     => insn(11 downto 7),
+diff --git a/rtl/test/topmodule_tb.vhd b/rtl/test/topmodule_tb.vhd
+index eba6c82..27d05dc 100644
+--- a/rtl/test/topmodule_tb.vhd
++++ b/rtl/test/topmodule_tb.vhd
+@@ -50,7 +50,7 @@ begin
+     generic map (
+       VERBOSE      => VERBOSE,
+       GPIO_VERBOSE => GPIO_VERBOSE,
+-      DIV_CLK      => DIV_NORMAL)
++      DIV_CLK      => DIV_62_5_MHZ)
+     port map (
+       clk   => clk,
+       gpio  => gpio,

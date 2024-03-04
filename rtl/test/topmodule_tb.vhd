@@ -50,7 +50,7 @@ begin
     generic map (
       VERBOSE      => VERBOSE,
       GPIO_VERBOSE => GPIO_VERBOSE,
-      DIV_CLK      => DIV_NORMAL)
+      DIV_CLK      => DIV_62_5_MHZ)
     port map (
       clk   => clk,
       gpio  => gpio,
