@@ -4,6 +4,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use std.env.stop;
+use work.fysh_fyve.all;
 --! @endcond
 
 --! Test bench for the top module.
@@ -46,7 +47,10 @@ begin
   end process adc_data;
 
   topmodule_inst : entity work.topmodule(rtl)
-    generic map (VERBOSE => VERBOSE, GPIO_VERBOSE => GPIO_VERBOSE)
+    generic map (
+      VERBOSE      => VERBOSE,
+      GPIO_VERBOSE => GPIO_VERBOSE,
+      DIV_CLK      => DIV_NORMAL)
     port map (
       clk   => clk,
       gpio  => gpio,

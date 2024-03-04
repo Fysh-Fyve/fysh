@@ -8,7 +8,10 @@ use work.fysh_fyve.all;
 
 --! The top module that brings all the components together.\n
 entity topmodule is
-  generic (VERBOSE : boolean := false; GPIO_VERBOSE : boolean := false);
+  generic (
+    VERBOSE      : boolean := false;
+    GPIO_VERBOSE : boolean := false;
+    DIV_CLK      : integer := DIV_1_HZ);
   port (
     clk   : in  std_ulogic;
     reset : in  std_ulogic;
@@ -115,7 +118,7 @@ begin
   end generate;
 
   clk_div_inst : entity work.clk_divider(rtl)
-    generic map(DIV => DIV_NORMAL)
+    generic map(DIV => DIV_CLK)
     port map(clk_i  => clk, clk_o => clk_div);
 
   imm_sx_inst : entity work.imm_sx(rtl) port map (
