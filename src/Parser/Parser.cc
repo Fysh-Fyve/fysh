@@ -83,7 +83,9 @@ fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
     nextFysh();
     return expr;
   }
-  return ast::Error{"unimplemented"};
+  std::stringstream ss;
+  ss << "Parser error at line " << lexer.fyshingLine();
+  return ast::Error{ss.str()};
 }
 
 static std::optional<fysh::ast::FyshBinary> binaryOp(fysh::Fysh fysh) {

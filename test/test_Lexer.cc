@@ -5,12 +5,15 @@
 using namespace fysh;
 
 #define T(x) CHECK(lexer.nextFysh() == (x));
-#define IDENT(x)                                                               \
+#define IDENT_DIR(x, n)                                                        \
   do {                                                                         \
     Fysh fysh{lexer.nextFysh()};                                               \
     CHECK(fysh == (x));                                                        \
     CHECK(fysh == Species::FYSH_IDENTIFIER);                                   \
+    CHECK(fysh.negate == n);                                                   \
   } while (0)
+
+#define IDENT(x) IDENT_DIR(x, false)
 
 #define INVALID(x)                                                             \
   do {                                                                         \
@@ -82,11 +85,13 @@ TEST_CASE("positive fysh multiply") {
 }
 
 TEST_CASE("biblically accurate fysh") {
-  FyshLexer lexer{"><{{oooo> <ooooooooo}}>< ><oolong>"};
+  FyshLexer lexer{"><{{oooo> <ooooooooo}}>< ><oolong> <oomph><"};
 
   T(0b011);
   T(-0b011);
-  IDENT("oolong");
+  IDENT_DIR("oolong", false);
+  IDENT_DIR("oomph", true);
+
   T(Species::END);
 }
 
@@ -178,66 +183,20 @@ TEST_CASE("identifiers") {
       // "<°isthisallowed>< ><whataboutthis°>"
   };
 
-  Fysh fysh{lexer.nextFysh()};
-  CHECK(fysh == "pos");
-  CHECK(fysh == Species::FYSH_IDENTIFIER);
-  CHECK(fysh.negate == false);
-
-  fysh = lexer.nextFysh();
-  CHECK(fysh == "neg");
-  CHECK(fysh == Species::FYSH_IDENTIFIER);
-  CHECK(fysh.negate == true);
-
-  fysh = lexer.nextFysh();
-  CHECK(fysh == "ostart");
-  CHECK(fysh == Species::FYSH_IDENTIFIER);
-  CHECK(fysh.negate == false);
-
-  fysh = lexer.nextFysh();
-  CHECK(fysh == "ostart");
-  CHECK(fysh == Species::FYSH_IDENTIFIER);
-  CHECK(fysh.negate == true);
-
-  fysh = lexer.nextFysh();
-  CHECK(fysh == "鱼");
-  CHECK(fysh == Species::FYSH_IDENTIFIER);
-  CHECK(fysh.negate == false);
-
-  fysh = lexer.nextFysh();
-  CHECK(fysh == "とと");
-  CHECK(fysh == Species::FYSH_IDENTIFIER);
-  CHECK(fysh.negate == false);
-
-  fysh = lexer.nextFysh();
-  CHECK(fysh == "魚");
-  CHECK(fysh == Species::FYSH_IDENTIFIER);
-  CHECK(fysh.negate == true);
-
-  fysh = lexer.nextFysh();
-  CHECK(fysh == "سمكة");
-  CHECK(fysh == Species::FYSH_IDENTIFIER);
-  CHECK(fysh.negate == true);
-
-  fysh = lexer.nextFysh();
-  CHECK(fysh == "ᜁᜐ᜔ᜇ");
-  CHECK(fysh == Species::FYSH_IDENTIFIER);
-  CHECK(fysh.negate == false);
-
-  fysh = lexer.nextFysh();
-  CHECK(fysh == "ᠨᡳᠮᠠᡥᠠ");
-  CHECK(fysh == Species::FYSH_IDENTIFIER);
-  CHECK(fysh.negate == false);
+  IDENT_DIR("pos", false);
+  IDENT_DIR("neg", true);
+  IDENT_DIR("ostart", false);
+  IDENT_DIR("ostart", true);
+  IDENT_DIR("鱼", false);
+  IDENT_DIR("とと", false);
+  IDENT_DIR("魚", true);
+  IDENT_DIR("سمكة", true);
+  IDENT_DIR("ᜁᜐ᜔ᜇ", false);
+  IDENT_DIR("ᠨᡳᠮᠠᡥᠠ", false);
 
   // Comment out until we decide what to do with it
-  // fysh = lexer.nextFysh();
-  // CHECK(fysh == "°isthisallowed");
-  // CHECK(fysh == Species::FYSH_IDENTIFIER);
-  // CHECK(fysh.negate == true);
-  //
-  // fysh = lexer.nextFysh();
-  // CHECK(fysh == "whataboutthis°");
-  // CHECK(fysh == Species::FYSH_IDENTIFIER);
-  // CHECK(fysh.negate == false);
+  // IDENT_DIR("°isthisallowed", true);
+  // IDENT_DIR("whataboutthis°", false);
 
   T(Species::END);
 }
@@ -407,14 +366,14 @@ TEST_CASE("TOUCHING") {
   T(Species::FYSH_OPEN);
   T(Species::HEART_MULTIPLY);
   T(Species::FYSH_BOWL_OPEN);
-  IDENT("fysh");
+  IDENT_DIR("fysh", false);
   T(Species::HEART_MULTIPLY);
   T(-0b1110000111);
   T(-0b1110000111);
   T(0b000);
   T(Species::HEART_MULTIPLY);
   T(0b000);
-  IDENT("FYSH");
+  IDENT_DIR("FYSH", true);
   T(0b000);
   T(Species::HEART_MULTIPLY);
   T(Species::FYSH_BOWL_CLOSE);
