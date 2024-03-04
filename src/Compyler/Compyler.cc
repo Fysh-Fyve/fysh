@@ -66,6 +66,7 @@ fysh::Emit fysh::Compyler::ifStmt(const fysh::ast::FyshIfStmt &stmt,
 
 fysh::Emit fysh::Compyler::loop(const fysh::ast::FyshLoopStmt &stmt,
                                 llvm::Function *fn) {
+  // TODO: This is very wrong, please fix
   llvm::Function *parent{builder->GetInsertBlock()->getParent()};
   llvm::BasicBlock *conditionBlock{builder->GetInsertBlock()};
   Emit condEmit{expression(&stmt.condition)};
@@ -238,9 +239,9 @@ fysh::Emit fysh::Compyler::binary(const fysh::ast::FyshBinaryExpr &expr) {
   } else if (expr.op == ast::FyshBinary::Mul) {
     return builder->CreateMul(leftVal, rightVal, "multmp");
   } else if (expr.op == ast::FyshBinary::Div) {
-    return builder->CreateMul(leftVal, rightVal, "divtmp");
+    return builder->CreateSDiv(leftVal, rightVal, "divtmp");
   } else if (expr.op == ast::FyshBinary::GT) {
-    return builder->CreateICmpUGT(leftVal, rightVal, "gttmp");
+    return builder->CreateICmpSGT(leftVal, rightVal, "gttmp");
   }
   // TODO: Do other operations
   return nullptr;
