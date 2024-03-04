@@ -206,7 +206,8 @@ begin
   register_file_inst : entity work.register_file(rtl)
     generic map (VERBOSE => VERBOSE)
     port map (
-      rd_clk_i       => rd_clk,
+      clk_i          => clk,
+      rd_write_en_i  => rd_clk,
       reset_i        => reset,
       dest_reg_i     => insn(11 downto 7),
       reg_sel_1_i    => insn(19 downto 15),

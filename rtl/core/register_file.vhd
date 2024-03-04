@@ -15,7 +15,8 @@ use ieee.numeric_std.all;
 entity register_file is
   generic (VERBOSE : boolean := false);
   port (
-    rd_clk_i       : in  std_ulogic;    --! Register File Clock Signal
+    clk_i          : in  std_ulogic;    --! Main clock signal
+    rd_write_en_i  : in  std_ulogic;    --! Register File Clock Signal
     reset_i        : in  std_ulogic;    --! Reset Signal
     dest_reg_i     : in  std_ulogic_vector (4 downto 0);  --! Destination Register
     reg_sel_1_i    : in  std_ulogic_vector (4 downto 0) := (others => '0');  --! First Register Select
@@ -31,14 +32,14 @@ architecture rtl of register_file is
 begin
   registers_g :
   for i in 1 to 31 generate
-    register_write : process(reset_i, rd_clk_i)
+    register_write : process(reset_i, clk_i, rd_write_en_i)
       use std.textio.all;
       variable l : line;
     begin
       if reset_i = '1' then
         reg_file(i) <= (others => '0');
-      elsif rising_edge(rd_clk_i) then
-        if (i = to_integer(unsigned(dest_reg_i))) then
+      elsif falling_edge(clk_i) then
+        if rd_write_en_i = '1' and (i = to_integer(unsigned(dest_reg_i)))then
           if VERBOSE then
             write(l, string'("wrote value "));
             write(l, to_hstring(dest_reg_val_i));
@@ -57,9 +58,11 @@ begin
   reg_file(0) <= (others => '0');
 
   -- Async! hell yeah I am not sure if this works
-  register_read : process(reg_sel_1_i, reg_sel_2_i, rd_clk_i, reg_file)
+  register_read : process(clk_i, reg_sel_1_i, reg_sel_2_i, rd_write_en_i, reg_file)
   begin
-    reg_val_1_o <= reg_file(to_integer(unsigned(reg_sel_1_i)));
-    reg_val_2_o <= reg_file(to_integer(unsigned(reg_sel_2_i)));
+    if falling_edge(clk_i) then
+      reg_val_1_o <= reg_file(to_integer(unsigned(reg_sel_1_i)));
+      reg_val_2_o <= reg_file(to_integer(unsigned(reg_sel_2_i)));
+    end if;
   end process register_read;
 end rtl;
