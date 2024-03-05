@@ -32,14 +32,14 @@ architecture rtl of register_file is
 begin
   registers_g :
   for i in 1 to 31 generate
-    register_write : process(reset_i, clk_i, rd_write_en_i)
+    register_write : process(reset_i, rd_write_en_i)
       use std.textio.all;
       variable l : line;
     begin
       if reset_i = '1' then
         reg_file(i) <= (others => '0');
-      elsif falling_edge(clk_i) then
-        if rd_write_en_i = '1' and (i = to_integer(unsigned(dest_reg_i)))then
+      elsif rising_edge(rd_write_en_i) then
+        if (i = to_integer(unsigned(dest_reg_i))) then
           if VERBOSE then
             write(l, string'("wrote value "));
             write(l, to_hstring(dest_reg_val_i));
