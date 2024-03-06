@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * \file semnaticAnalyzer.cc
+ * \file VybeChecker.cc
  */
 #include <iostream>
 #include <map>
