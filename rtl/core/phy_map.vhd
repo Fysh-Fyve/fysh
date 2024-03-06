@@ -19,13 +19,13 @@ entity phy_map is
     clk_i      : in std_ulogic;         --! Clock signal
     write_en_i : in std_ulogic;         --! Write enable
 
-    iraddr_i : in  std_ulogic_vector (31 downto 0);  --! Instruction Read Address
-    draddr_i : in  std_ulogic_vector (31 downto 0);  --! Data Read Address
-    waddr_i  : in  std_ulogic_vector (31 downto 0);  --! Write Address
-    d_i      : in  std_ulogic_vector (31 downto 0);  --! Data Input
-    d_o      : out std_ulogic_vector (31 downto 0);  --! Data Output
-    i_o      : out std_ulogic_vector (31 downto 0);  --! Instruction Output
-    gpio     : out std_ulogic_vector (31 downto 0));  --! GPIO Pins
+    iraddr_i : in    std_ulogic_vector (31 downto 0);  --! Instruction Read Address
+    draddr_i : in    std_ulogic_vector (31 downto 0);  --! Data Read Address
+    waddr_i  : in    std_ulogic_vector (31 downto 0);  --! Write Address
+    d_i      : in    std_ulogic_vector (31 downto 0);  --! Data Input
+    d_o      : out   std_ulogic_vector (31 downto 0);  --! Data Output
+    i_o      : out   std_ulogic_vector (31 downto 0);  --! Instruction Output
+    gpio     : inout std_ulogic_vector (31 downto 0));  --! GPIO Pins
 
 end phy_map;
 

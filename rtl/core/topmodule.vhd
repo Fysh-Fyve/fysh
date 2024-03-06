@@ -13,11 +13,11 @@ entity topmodule is
     GPIO_VERBOSE : boolean := false;
     DIV_CLK      : integer := DIV_10_HZ);
   port (
-    clk   : in  std_ulogic;
-    reset : in  std_ulogic;
-    done  : out std_ulogic;
-    gpio  : out std_ulogic_vector (31 downto 0);
-    adc   : in  std_ulogic_vector(7 downto 0));
+    clk   : in    std_ulogic;
+    reset : in    std_ulogic;
+    done  : out   std_ulogic;
+    gpio  : inout std_ulogic_vector (31 downto 0);
+    adc   : in    std_ulogic_vector(7 downto 0));
 end topmodule;
 
 architecture rtl of topmodule is
