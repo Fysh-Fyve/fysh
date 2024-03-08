@@ -262,10 +262,10 @@ fysh::Emit fysh::Compyler::binary(const fysh::ast::FyshBinaryExpr &expr) {
   } else if (expr.op == ast::FyshBinary::BitwiseXor) {
     return builder->CreateXor(leftVal, rightVal, "xortmp");
   } else if (expr.op == ast::FyshBinary::ShiftLeft) {
-    return builder ->CreateShl(leftVal, rightVal, "shltmp");
+    return builder->CreateShl(leftVal, rightVal, "shltmp");
   } else if (expr.op == ast::FyshBinary::ShiftRight) {
-    return builder ->CreateAShr(leftVal, rightVal, "ashrtmp");
-  } 
+    return builder->CreateAShr(leftVal, rightVal, "ashrtmp");
+  }
   // TODO Any remaining binary expressions
   return nullptr;
 }
