@@ -2,9 +2,8 @@
 
 .text
 main:
-	li	x31, 0xDEADBEEF
-	li	t0, 0xFF
-	sw	t0, 0(x31)
+	li	a0, 0xFF000000
+	jal	ra, fysh_gpio_write_all
 done:
 	beqz	zero, done
 

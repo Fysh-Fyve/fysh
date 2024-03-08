@@ -10,8 +10,7 @@ VHDL_TEST_SRC := $(call rwildcard,$(TEST_DIR),*.vhd)
 VHDL_TEST_BENCHES := $(patsubst $(TEST_DIR)/%.vhd, %, $(VHDL_TEST_SRC))
 
 ASM_SRC := $(call rwildcard,asm,*.s)
-# We don't make a standalone hexfile with asm/boot.s
-ASM_HEX := $(filter-out asm/boot.hex, $(patsubst %.s,%.hex,$(ASM_SRC)))
+ASM_HEX := $(patsubst %.s,%.hex,$(ASM_SRC))
 
 FMT_SRC := $(patsubst %, fmt-%,$(VHDL_SRC) $(VHDL_TEST_SRC))
 
@@ -47,14 +46,23 @@ PREFIX=riscv-none-elf
 %.dump: asm/%.hex
 	$(PREFIX)-objdump -D -b binary -m riscv $<
 
+%.dump: sw/%.hex
+	$(PREFIX)-objdump -D -b binary -m riscv $<
+
 %.rom: asm/%.hex
 	./scripts/make_rom.sh $<
 
 %.hex: %.elf
 	$(PREFIX)-objcopy -O binary $< $@
 
-%.elf: asm/fysh-fyve.ld asm/boot.o %.o
+%.elf: sw/fysh-fyve.ld sw/boot.o sw/gpio.o %.o
 	$(PREFIX)-gcc -march=rv32i -nostdlib -T $^ -o $@
+
+%.o: %.c
+	$(PREFIX)-gcc -c $< -mabi=ilp32 -O3 -march=rv32i -o $@
+
+%.s: %.c
+	$(PREFIX)-gcc -S $< -mabi=ilp32 -O3 -march=rv32i -o $@
 
 %.o: %.s
 	$(PREFIX)-as $< -march=rv32i -o $@
