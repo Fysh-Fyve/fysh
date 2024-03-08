@@ -91,7 +91,8 @@ fysh::Emit fysh::Compyler::increment(const fysh::ast::FyshIncrementStmt &stmt,
     llvm::Value *load{
         builder->CreateLoad(alloca->getAllocatedType(), alloca, ident->name)};
     llvm::Value *inc{builder->CreateAdd(load, builder->getInt32(1))};
-    return builder->CreateStore(inc, alloca);
+    builder->CreateStore(inc, alloca);
+    return inc;
   } else {
     return ast::Error{"incrementing non-variable"};
   }
@@ -108,7 +109,8 @@ fysh::Emit fysh::Compyler::decrement(const fysh::ast::FyshDecrementStmt &stmt,
     llvm::Value *load{
         builder->CreateLoad(alloca->getAllocatedType(), alloca, ident->name)};
     llvm::Value *dec{builder->CreateSub(load, builder->getInt32(1))};
-    return builder->CreateStore(dec, alloca);
+    builder->CreateStore(dec, alloca);
+    return dec;
   } else {
     return ast::Error{"decrementing non-variable"};
   }
@@ -126,7 +128,8 @@ fysh::Emit fysh::Compyler::assignment(const fysh::ast::FyshAssignmentStmt &stmt,
     llvm::AllocaInst *alloca{namedValues[ident->name]};
     Emit val{expression(&stmt.right)};
     if (llvm::Value * *expr{std::get_if<llvm::Value *>(&val)}) {
-      return builder->CreateStore(*expr, alloca);
+      builder->CreateStore(*expr, alloca);
+      return *expr;
     }
     return nullptr;
   } else {
