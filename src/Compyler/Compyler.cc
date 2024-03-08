@@ -251,11 +251,19 @@ fysh::Emit fysh::Compyler::binary(const fysh::ast::FyshBinaryExpr &expr) {
   } else if (expr.op == ast::FyshBinary::LTE) {
     return builder->CreateICmpSLE(leftVal, rightVal, "ltetmp");
   } else if (expr.op == ast::FyshBinary::GTE) {
-    return builder ->CreateICmpSGE(leftVal, rightVal, "gtetmp");
-  } else if (expr.op == ast::FyshBinary::GTE) {
-    return builder ->CreateICmpSGE(leftVal, rightVal, "gtetmp");
-  }
-  // TODO: Do other operations
+    return builder->CreateICmpSGE(leftVal, rightVal, "gtetmp");
+  } else if (expr.op == ast::FyshBinary::BitwiseAnd) {
+    return builder->CreateAnd(leftVal, rightVal, "andtmp");
+  } else if (expr.op == ast::FyshBinary::BitwiseOr) {
+    return builder->CreateOr(leftVal, rightVal, "ortmp");
+  } else if (expr.op == ast:FyshBinary::BitwiseXor) {
+    return builder->CreateXor(leftVal, rightVal, "xortmp");
+  } else if (expr.op == ast::FyshBinary::ShiftLeft) {
+    return builder ->CreateShl(leftVal, rightVal, "shltmp");
+  } else if (expr.op == ast::FyshBinary::ShiftRight) {
+    return builder ->CreateAShr(leftVal, rightVal, "ashrtmp");
+  } 
+  // TODO Any remaining binary expressions
   return nullptr;
 }
 
