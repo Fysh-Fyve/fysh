@@ -242,6 +242,18 @@ fysh::Emit fysh::Compyler::binary(const fysh::ast::FyshBinaryExpr &expr) {
     return builder->CreateSDiv(leftVal, rightVal, "divtmp");
   } else if (expr.op == ast::FyshBinary::GT) {
     return builder->CreateICmpSGT(leftVal, rightVal, "gttmp");
+  } else if (expr.op == ast::FyshBinary::Equal) {
+    return builder->CreateICmpEQ(leftVal, rightVal, "eqtmp");
+  } else if (expr.op == ast::FyshBinary::NotEqual) {
+    return builder->CreateICmpNE(leftVal, rightVal, "netmp");
+  } else if (expr.op == ast::FyshBinary::LT) {
+    return builder->CreateICmpSLT(leftVal, rightVal, "lttmp");
+  } else if (expr.op == ast::FyshBinary::LTE) {
+    return builder->CreateICmpSLE(leftVal, rightVal, "ltetmp");
+  } else if (expr.op == ast::FyshBinary::GTE) {
+    return builder ->CreateICmpSGE(leftVal, rightVal, "gtetmp");
+  } else if (expr.op == ast::FyshBinary::GTE) {
+    return builder ->CreateICmpSGE(leftVal, rightVal, "gtetmp");
   }
   // TODO: Do other operations
   return nullptr;
