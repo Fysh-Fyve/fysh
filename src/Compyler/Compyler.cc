@@ -256,7 +256,7 @@ fysh::Emit fysh::Compyler::binary(const fysh::ast::FyshBinaryExpr &expr) {
     return builder->CreateAnd(leftVal, rightVal, "andtmp");
   } else if (expr.op == ast::FyshBinary::BitwiseOr) {
     return builder->CreateOr(leftVal, rightVal, "ortmp");
-  } else if (expr.op == ast:FyshBinary::BitwiseXor) {
+  } else if (expr.op == ast::FyshBinary::BitwiseXor) {
     return builder->CreateXor(leftVal, rightVal, "xortmp");
   } else if (expr.op == ast::FyshBinary::ShiftLeft) {
     return builder ->CreateShl(leftVal, rightVal, "shltmp");
