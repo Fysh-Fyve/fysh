@@ -185,7 +185,8 @@ fysh::Emit fysh::Compyler::block(const std::vector<fysh::ast::FyshStmt> &block,
 }
 
 llvm::Function *
-fysh::Compyler::compyle(const std::vector<fysh::ast::FyshStmt> &program) {
+fysh::Compyler::compyle(const std::vector<fysh::ast::FyshStmt> &program,
+                        bool noOpt) {
   // int() function type
   llvm::FunctionType *ft{llvm::FunctionType::get(
       llvm::Type::getInt32Ty(*context), std::vector<llvm::Type *>(), false)};
@@ -203,7 +204,9 @@ fysh::Compyler::compyle(const std::vector<fysh::ast::FyshStmt> &program) {
     // Validate the generated code, checking for consistency.
     llvm::verifyFunction(*prototype);
 
-    fpm->run(*prototype, *fam);
+    if (!noOpt) {
+      fpm->run(*prototype, *fam);
+    }
 
     return prototype;
   } else if (const ast::Error * error{std::get_if<ast::Error>(&emit)}) {

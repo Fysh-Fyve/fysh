@@ -43,7 +43,8 @@ class Compyler {
 public:
   Compyler();
 
-  llvm::Function *compyle(const std::vector<ast::FyshStmt> &program);
+  llvm::Function *compyle(const std::vector<ast::FyshStmt> &program,
+                          bool noOpt);
 
 private:
   /* Compiling statements */

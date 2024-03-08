@@ -24,16 +24,28 @@
 #include <fstream>
 #include <getopt.h>
 #include <iostream>
+#include <llvm-18/llvm/Support/JSON.h>
 #include <llvm/Support/raw_ostream.h>
 #include <sstream>
 
-void compyle(std::istream &stream) {
+struct Options {
+  enum class Output { AST, IR } output;
+  bool noOpt = false;
+  std::string outputFilename = "-";
+};
+
+void compyle(std::istream &stream, Options opts) {
   std::stringstream ss;
   ss << stream.rdbuf();
   std::string source{ss.str()};
   fysh::FyshLexer lexer{source.data()};
   fysh::FyshParser parser{lexer};
   fysh::ast::FyshBlock program{parser.parseProgram()};
+
+  if (opts.output == Options::Output::AST) {
+    std::cout << program;
+    return;
+  }
 
   if (program.size() == 1) {
     if (const fysh::ast::Error *err =
@@ -44,53 +56,68 @@ void compyle(std::istream &stream) {
   }
 
   fysh::Compyler cumpyler;
-  llvm::Function *fn{cumpyler.compyle(program)};
+  llvm::Function *fn{cumpyler.compyle(program, opts.noOpt)};
   if (fn == nullptr) {
     std::cerr << "error compyling?" << std::endl;
   } else {
-    fn->print(llvm::outs());
+    if (opts.outputFilename == "-") {
+      fn->print(llvm::outs());
+    } else {
+      std::error_code ec;
+      llvm::raw_fd_ostream outputFile(opts.outputFilename.c_str(), ec);
+      if (outputFile.error()) {
+        std::cerr << "Error opening file " << opts.outputFilename
+                  << " for writing: " << ec.message() << "\n";
+        std::exit(1);
+      } else {
+        fn->print(outputFile);
+      }
+    }
     fn->eraseFromParent();
   }
 }
 
-int main(int argc, char *argv[]) {
+Options parseOptions(int argc, char *argv[]) {
+  Options opts;
   char c;
-  enum class Output { AST, IR };
-  Output output;
-  bool noOpt = false;
-  std::string outputFilename;
-  while ((c = getopt(argc, argv, "onah")) != -1) {
+  while ((c = getopt(argc, argv, "o:nah")) != -1) {
     switch (c) {
     case 'a': {
-      output = Output::AST;
+      opts.output = Options::Output::AST;
       break;
     }
     case 'n': {
-      noOpt = true;
+      opts.noOpt = true;
       break;
     }
     case 'o': {
-      outputFilename = optarg;
+      opts.outputFilename = optarg;
       break;
     }
     case 'h': {
       std::cout << "USAGE: " << argv[0] << "[-o OUTPUT] [-an] [INPUT]"
                 << std::endl;
-      return 0;
+      std::exit(0);
     }
     default:
       break;
     }
   }
+
+  return opts;
+}
+
+int main(int argc, char *argv[]) {
+  Options opts = parseOptions(argc, argv);
   if (argv[optind] == NULL) {
-    compyle(std::cin);
+    compyle(std::cin, opts);
   } else {
     std::ifstream inputFile(argv[optind]);
     if (!inputFile.is_open()) {
       std::cerr << "Error opening file " << argv[optind] << " for reading\n";
       return 1;
     }
-    compyle(inputFile);
+    compyle(inputFile, opts);
   }
   return 0;
 }
