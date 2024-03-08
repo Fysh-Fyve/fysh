@@ -22,6 +22,7 @@
 #include "Lexer/Lexer.h"
 #include "Parser/Parser.h"
 #include <fstream>
+#include <getopt.h>
 #include <iostream>
 #include <llvm/Support/raw_ostream.h>
 #include <sstream>
@@ -53,12 +54,40 @@ void compyle(std::istream &stream) {
 }
 
 int main(int argc, char *argv[]) {
-  if (argc < 2) {
+  char c;
+  enum class Output { AST, IR };
+  Output output;
+  bool noOpt = false;
+  std::string outputFilename;
+  while ((c = getopt(argc, argv, "onah")) != -1) {
+    switch (c) {
+    case 'a': {
+      output = Output::AST;
+      break;
+    }
+    case 'n': {
+      noOpt = true;
+      break;
+    }
+    case 'o': {
+      outputFilename = optarg;
+      break;
+    }
+    case 'h': {
+      std::cout << "USAGE: " << argv[0] << "[-o OUTPUT] [-an] [INPUT]"
+                << std::endl;
+      return 0;
+    }
+    default:
+      break;
+    }
+  }
+  if (argv[optind] == NULL) {
     compyle(std::cin);
   } else {
-    std::ifstream inputFile(argv[1]);
+    std::ifstream inputFile(argv[optind]);
     if (!inputFile.is_open()) {
-      std::cerr << "Error opening file " << argv[1] << " for reading\n";
+      std::cerr << "Error opening file " << argv[optind] << " for reading\n";
       return 1;
     }
     compyle(inputFile);
