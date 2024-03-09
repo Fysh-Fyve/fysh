@@ -275,6 +275,34 @@ TEST_CASE("Arrays") {
   T(Species::END);
 }
 
+TEST_CASE("Anchors") {
+  FyshLexer lexer{R"(
+  (+o ><fysh> ~
+  o+) ><fysh> ~
+  ><{{> (+o ><fysh> ~
+  ><{{> o+) ><fysh> ~
+  )"};
+
+  T(Species::ANCHOR_LEFT);
+  IDENT("fysh");
+  T(Species::FYSH_WATER);
+
+  T(Species::ANCHOR_RIGHT);
+  IDENT("fysh");
+  T(Species::FYSH_WATER);
+
+  T(3);
+  T(Species::ANCHOR_LEFT);
+  IDENT("fysh");
+  T(Species::FYSH_WATER);
+
+  T(3);
+  T(Species::ANCHOR_RIGHT);
+  IDENT("fysh");
+  T(Species::FYSH_WATER);
+  T(Species::END);
+}
+
 TEST_CASE("Fysh Factorial") {
   FyshLexer lexer{R"(
 ><fysh>   = ><{({o> ~
