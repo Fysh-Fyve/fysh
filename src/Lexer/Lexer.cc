@@ -505,15 +505,26 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
   case '>': return fyshOutline();
   case '&': return goFysh(Species::BITWISE_AND);
   case '|': return goFysh(Species::BITWISE_OR);
-    // I think this has to change if not is also going to be ^
   case '^': return goFysh(Species::CARET);
   case '~': return tilde();
   case '[': return goFysh(Species::FYSH_TANK_OPEN);
   case ']': return goFysh(Species::FYSH_TANK_CLOSE);
-  case '(': return goFysh(Species::FYSH_BOWL_OPEN);
   case ')': return goFysh(Species::FYSH_BOWL_CLOSE);
   case '-': return goFysh(Species::FYSH_FOOD);
     // clang-format on
+  case '(': {
+    reel();
+    if (match('+')) {
+      if (match('o')) {
+        return Species::ANCHOR_LEFT;
+      } else {
+        return cullDeformedFysh();
+      } 
+    } else {
+      // We already reeled in (, do not go fysh.
+      return Species::FYSH_BOWL_OPEN;
+    }
+  }
   case '=': {
     reel();
     if (match('=')) {
@@ -524,17 +535,29 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     }
   }
   case 'o': {
-    // Tadpole
+    // Tadpoles and Right Anchors
+    // return cullDeformedFysh();
     reel();
-    if (!match('~')) {
-      return cullDeformedFysh();
-    } else if (match('=')) {
-      return Species::TADPOLE_GTE;
-    } else if (expectFyshChar("≈")) {
-      return Species::TADPOLE_GTE;
-    } else {
-      // We already reeled in ~, do not go fysh.
-      return Species::TADPOLE_GT;
+    if (match('~')) {
+      if (match('=')) {
+        return Species::TADPOLE_GTE;
+      } else if(expectFyshChar("≈")) {
+        return Species::TADPOLE_GTE;
+      } else {
+        // We already reeled in ~, do not go fysh.
+        return Species::TADPOLE_GT;
+      }
+    } else if (match('+')) {
+      if (match(')')) {
+        return Species::ANCHOR_RIGHT;
+      } else {
+        return cullDeformedFysh();
+      }
+    // } else if (expectFyshChar("≈")) {
+    //   return Species::TADPOLE_GTE;
+    // } else {
+    //   // We already reeled in ~, do not go fysh.
+    //   return cullDeformedFysh();
     }
   }
   default:

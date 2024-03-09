@@ -109,6 +109,10 @@ constexpr const char *debugType(const fysh::Species &species) {
     return "else";
   case Species::FYSH_FOOD:
     return "-";
+  case Species::ANCHOR_LEFT:
+    return "(+o";
+  case Species::ANCHOR_RIGHT:
+    return "o+)";
   }
 
   assert(false);

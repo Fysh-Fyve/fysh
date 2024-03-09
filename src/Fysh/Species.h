@@ -70,6 +70,8 @@ enum class Species {
   IF,                // ><(((^>
   ELSE,              // ><(((*>
   FYSH_FOOD,         // -
+  ANCHOR_LEFT,       // (+o
+  ANCHOR_RIGHT,      // o+)
 };
 
 }
