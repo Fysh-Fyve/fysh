@@ -1,11 +1,948 @@
 [
   {
-    "type": "source_file",
+    "type": "addition",
+    "named": true,
+    "fields": {
+      "left": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "fysh_bowl",
+            "named": true
+          },
+          {
+            "type": "grilled_fysh",
+            "named": true
+          },
+          {
+            "type": "negative_ident",
+            "named": true
+          },
+          {
+            "type": "negative_literal",
+            "named": true
+          },
+          {
+            "type": "positive_ident",
+            "named": true
+          },
+          {
+            "type": "positive_literal",
+            "named": true
+          }
+        ]
+      },
+      "right": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "fysh_bowl",
+            "named": true
+          },
+          {
+            "type": "grilled_fysh",
+            "named": true
+          },
+          {
+            "type": "negative_ident",
+            "named": true
+          },
+          {
+            "type": "negative_literal",
+            "named": true
+          },
+          {
+            "type": "positive_ident",
+            "named": true
+          },
+          {
+            "type": "positive_literal",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "anchor_statement",
+    "named": true,
+    "fields": {
+      "dir": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "(+o",
+            "named": false
+          },
+          {
+            "type": "o+)",
+            "named": false
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "fysh_bowl",
+            "named": true
+          },
+          {
+            "type": "grilled_fysh",
+            "named": true
+          },
+          {
+            "type": "negative_ident",
+            "named": true
+          },
+          {
+            "type": "negative_literal",
+            "named": true
+          },
+          {
+            "type": "positive_ident",
+            "named": true
+          },
+          {
+            "type": "positive_literal",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "assignment_statement",
+    "named": true,
+    "fields": {
+      "left": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "positive_ident",
+            "named": true
+          }
+        ]
+      },
+      "right": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "fysh_bowl",
+            "named": true
+          },
+          {
+            "type": "grilled_fysh",
+            "named": true
+          },
+          {
+            "type": "negative_ident",
+            "named": true
+          },
+          {
+            "type": "negative_literal",
+            "named": true
+          },
+          {
+            "type": "positive_ident",
+            "named": true
+          },
+          {
+            "type": "positive_literal",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "binary_expression",
+    "named": true,
+    "fields": {
+      "left": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "fysh_bowl",
+            "named": true
+          },
+          {
+            "type": "grilled_fysh",
+            "named": true
+          },
+          {
+            "type": "negative_ident",
+            "named": true
+          },
+          {
+            "type": "negative_literal",
+            "named": true
+          },
+          {
+            "type": "positive_ident",
+            "named": true
+          },
+          {
+            "type": "positive_literal",
+            "named": true
+          }
+        ]
+      },
+      "operator": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "&",
+            "named": false
+          },
+          {
+            "type": "(+o",
+            "named": false
+          },
+          {
+            "type": "</3",
+            "named": false
+          },
+          {
+            "type": "<3",
+            "named": false
+          },
+          {
+            "type": "<<",
+            "named": false
+          },
+          {
+            "type": "==",
+            "named": false
+          },
+          {
+            "type": ">>",
+            "named": false
+          },
+          {
+            "type": "^",
+            "named": false
+          },
+          {
+            "type": "o+)",
+            "named": false
+          },
+          {
+            "type": "o~",
+            "named": false
+          },
+          {
+            "type": "o~=",
+            "named": false
+          },
+          {
+            "type": "o~≈",
+            "named": false
+          },
+          {
+            "type": "|",
+            "named": false
+          },
+          {
+            "type": "~=",
+            "named": false
+          },
+          {
+            "type": "~o",
+            "named": false
+          },
+          {
+            "type": "~o=",
+            "named": false
+          },
+          {
+            "type": "~o≈",
+            "named": false
+          },
+          {
+            "type": "~≈",
+            "named": false
+          },
+          {
+            "type": "≈≈",
+            "named": false
+          },
+          {
+            "type": "♡",
+            "named": false
+          },
+          {
+            "type": "💔",
+            "named": false
+          }
+        ]
+      },
+      "right": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "fysh_bowl",
+            "named": true
+          },
+          {
+            "type": "grilled_fysh",
+            "named": true
+          },
+          {
+            "type": "negative_ident",
+            "named": true
+          },
+          {
+            "type": "negative_literal",
+            "named": true
+          },
+          {
+            "type": "positive_ident",
+            "named": true
+          },
+          {
+            "type": "positive_literal",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "addition",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "anchor_statement",
+          "named": true
+        },
+        {
+          "type": "assignment_statement",
+          "named": true
+        },
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "dec_statement",
+          "named": true
+        },
+        {
+          "type": "expression_statement",
+          "named": true
+        },
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "inc_statement",
+          "named": true
+        },
+        {
+          "type": "loop_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "dead_fysh",
     "named": true,
     "fields": {}
   },
   {
-    "type": "",
+    "type": "dec_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "expression_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "fysh_bowl",
+          "named": true
+        },
+        {
+          "type": "grilled_fysh",
+          "named": true
+        },
+        {
+          "type": "negative_ident",
+          "named": true
+        },
+        {
+          "type": "negative_literal",
+          "named": true
+        },
+        {
+          "type": "positive_ident",
+          "named": true
+        },
+        {
+          "type": "positive_literal",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "fysh_bowl",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "fysh_bowl",
+          "named": true
+        },
+        {
+          "type": "grilled_fysh",
+          "named": true
+        },
+        {
+          "type": "negative_ident",
+          "named": true
+        },
+        {
+          "type": "negative_literal",
+          "named": true
+        },
+        {
+          "type": "positive_ident",
+          "named": true
+        },
+        {
+          "type": "positive_literal",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "fysh_tank",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "fysh_bowl",
+          "named": true
+        },
+        {
+          "type": "grilled_fysh",
+          "named": true
+        },
+        {
+          "type": "negative_ident",
+          "named": true
+        },
+        {
+          "type": "negative_literal",
+          "named": true
+        },
+        {
+          "type": "positive_ident",
+          "named": true
+        },
+        {
+          "type": "positive_literal",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "grilled_fysh",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "happy_fysh",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "if_statement",
+    "named": true,
+    "fields": {
+      "cond": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "fysh_tank",
+            "named": true
+          }
+        ]
+      },
+      "else": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          },
+          {
+            "type": "if_statement",
+            "named": true
+          }
+        ]
+      },
+      "then": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "dead_fysh",
+          "named": true
+        },
+        {
+          "type": "happy_fysh",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "inc_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "loop_statement",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "cond": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "fysh_tank",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "loopy_fysh",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "loopy_fysh",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "negative_ident",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "negative_literal",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "scales",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "positive_ident",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "positive_literal",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "scales",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "scales",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "one",
+          "named": true
+        },
+        {
+          "type": "zero",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "source_file",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "anchor_statement",
+          "named": true
+        },
+        {
+          "type": "assignment_statement",
+          "named": true
+        },
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "dec_statement",
+          "named": true
+        },
+        {
+          "type": "expression_statement",
+          "named": true
+        },
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "inc_statement",
+          "named": true
+        },
+        {
+          "type": "loop_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "###",
+    "named": false
+  },
+  {
+    "type": "&",
+    "named": false
+  },
+  {
+    "type": "(",
+    "named": false
+  },
+  {
+    "type": "(((",
+    "named": false
+  },
+  {
+    "type": "(+o",
+    "named": false
+  },
+  {
+    "type": ")",
+    "named": false
+  },
+  {
+    "type": "*",
+    "named": false
+  },
+  {
+    "type": "<",
+    "named": false
+  },
+  {
+    "type": "</3",
+    "named": false
+  },
+  {
+    "type": "<3",
+    "named": false
+  },
+  {
+    "type": "<<",
+    "named": false
+  },
+  {
+    "type": "<><",
+    "named": false
+  },
+  {
+    "type": "=",
+    "named": false
+  },
+  {
+    "type": "==",
+    "named": false
+  },
+  {
+    "type": ">",
+    "named": false
+  },
+  {
+    "type": "><",
+    "named": false
+  },
+  {
+    "type": "><>",
+    "named": false
+  },
+  {
+    "type": ">>",
+    "named": false
+  },
+  {
+    "type": "@",
+    "named": false
+  },
+  {
+    "type": "[",
+    "named": false
+  },
+  {
+    "type": "]",
+    "named": false
+  },
+  {
+    "type": "^",
+    "named": false
+  },
+  {
+    "type": "comment",
+    "named": true
+  },
+  {
+    "type": "name",
+    "named": true
+  },
+  {
+    "type": "o",
+    "named": false
+  },
+  {
+    "type": "o+)",
+    "named": false
+  },
+  {
+    "type": "one",
+    "named": true
+  },
+  {
+    "type": "o~",
+    "named": false
+  },
+  {
+    "type": "o~=",
+    "named": false
+  },
+  {
+    "type": "o~≈",
+    "named": false
+  },
+  {
+    "type": "zero",
+    "named": true
+  },
+  {
+    "type": "|",
+    "named": false
+  },
+  {
+    "type": "~",
+    "named": false
+  },
+  {
+    "type": "~=",
+    "named": false
+  },
+  {
+    "type": "~o",
+    "named": false
+  },
+  {
+    "type": "~o=",
+    "named": false
+  },
+  {
+    "type": "~o≈",
+    "named": false
+  },
+  {
+    "type": "~≈",
+    "named": false
+  },
+  {
+    "type": "°",
+    "named": false
+  },
+  {
+    "type": "≈",
+    "named": false
+  },
+  {
+    "type": "≈≈",
+    "named": false
+  },
+  {
+    "type": "♡",
+    "named": false
+  },
+  {
+    "type": "💔",
     "named": false
   }
 ]

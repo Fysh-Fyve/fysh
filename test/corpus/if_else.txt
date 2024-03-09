@@ -1,0 +1,61 @@
+================================================================================
+If/Else
+================================================================================
+
+><(((^> [ ><steven> o~ ><{((°> ]
+><>
+	<steven><< ~
+<><
+
+><(((*> ><(((^> [ ><steven> ~o ><{((°> ]
+><>
+	>><steven> ~
+<><
+
+><(((*>
+><>
+	><steven> ≈ ><(((°> ~
+<><
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_statement
+    (happy_fysh)
+    (fysh_tank
+      (binary_expression
+        (positive_ident
+          (name))
+        (positive_literal
+          (scales
+            (one)
+            (zero)
+            (zero)))))
+    (block
+      (dec_statement
+        (name)))
+    (dead_fysh)
+    (if_statement
+      (happy_fysh)
+      (fysh_tank
+        (binary_expression
+          (positive_ident
+            (name))
+          (positive_literal
+            (scales
+              (one)
+              (zero)
+              (zero)))))
+      (block
+        (inc_statement
+          (name)))
+      (dead_fysh)
+      (block
+        (assignment_statement
+          (positive_ident
+            (name))
+          (positive_literal
+            (scales
+              (zero)
+              (zero)
+              (zero))))))))
