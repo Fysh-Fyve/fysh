@@ -536,7 +536,6 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
   }
   case 'o': {
     // Tadpoles and Right Anchors
-    // return cullDeformedFysh();
     reel();
     if (match('~')) {
       if (match('=')) {
@@ -553,11 +552,9 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
       } else {
         return cullDeformedFysh();
       }
-    // } else if (expectFyshChar("≈")) {
-    //   return Species::TADPOLE_GTE;
-    // } else {
-    //   // We already reeled in ~, do not go fysh.
-    //   return cullDeformedFysh();
+    } else {
+      // must be o~ or o+
+      return cullDeformedFysh();
     }
   }
   default:
