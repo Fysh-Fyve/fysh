@@ -163,6 +163,94 @@ fysh::ast::FyshExpr fysh::FyshParser::parseExpression() {
   return parseComparative();
 }
 
+fysh::ast::FyshStmt fysh::FyshParser::parseAssignment() {
+  ast::FyshIdentifier ident{curFysh.getBody()};
+  nextFysh();
+  nextFysh();
+  ast::FyshExpr expr{parseExpression()};
+  if (std::holds_alternative<ast::Error>(expr)) {
+    return std::get<ast::Error>(expr);
+  }
+  return terminateStatement(ast::FyshAssignmentStmt{ident, expr});
+}
+
+fysh::ast::FyshStmt fysh::FyshParser::parseIfElse() {
+  nextFysh();
+  if (curFysh != Species::FYSH_TANK_OPEN) {
+    return expectFysh(Species::FYSH_TANK_OPEN);
+  }
+  nextFysh();
+  ast::FyshExpr condition{parseExpression()};
+  if (curFysh != Species::FYSH_TANK_CLOSE) {
+    return expectFysh(Species::FYSH_TANK_CLOSE);
+  }
+  nextFysh();
+  if (curFysh != Species::FYSH_OPEN) {
+    return expectFysh(Species::FYSH_OPEN);
+  }
+  nextFysh();
+  ast::FyshBlock consequence{parseBlock()};
+  if (consequence.size() == 1 &&
+      std::holds_alternative<ast::Error>(consequence[0])) {
+    return consequence[0];
+  }
+  if (curFysh != Species::FYSH_CLOSE) {
+    return expectFysh(Species::FYSH_CLOSE);
+  }
+  nextFysh();
+  // No else statement
+  if (curFysh != Species::ELSE) {
+    return ast::FyshIfStmt{condition, consequence};
+  }
+  nextFysh();
+  // Else if
+  if (curFysh == Species::IF) {
+    return ast::FyshIfStmt{condition, consequence,
+                           ast::FyshBlock{parseIfElse()}};
+  }
+  // Else
+  if (curFysh != Species::FYSH_OPEN) {
+    return expectFysh(Species::FYSH_OPEN);
+  }
+  nextFysh();
+  ast::FyshBlock alternative{parseBlock()};
+  if (alternative.size() == 1 &&
+      std::holds_alternative<ast::Error>(alternative[0])) {
+    return alternative[0];
+  }
+  if (curFysh != Species::FYSH_CLOSE) {
+    return expectFysh(Species::FYSH_CLOSE);
+  }
+  nextFysh();
+  return ast::FyshIfStmt{condition, consequence, alternative};
+}
+
+fysh::ast::FyshStmt fysh::FyshParser::parseLoop() {
+  nextFysh();
+  if (curFysh != Species::FYSH_TANK_OPEN) {
+    return expectFysh(Species::FYSH_TANK_OPEN);
+  }
+  nextFysh();
+  ast::FyshExpr condition{parseExpression()};
+  if (curFysh != Species::FYSH_TANK_CLOSE) {
+    return expectFysh(Species::FYSH_TANK_CLOSE);
+  }
+  nextFysh();
+  if (curFysh != Species::FYSH_OPEN) {
+    return expectFysh(Species::FYSH_OPEN);
+  }
+  nextFysh();
+  ast::FyshBlock block{parseBlock()};
+  if (block.size() == 1 && std::holds_alternative<ast::Error>(block[0])) {
+    return block[0];
+  }
+  if (curFysh != Species::FYSH_CLOSE) {
+    return expectFysh(Species::FYSH_CLOSE);
+  }
+  nextFysh();
+  return ast::FyshLoopStmt{condition, block};
+}
+
 fysh::ast::FyshStmt fysh::FyshParser::parseStatement() {
   if (curFysh == Species::INCREMENT) {
     ast::FyshIdentifier ident{curFysh.getBody()};
@@ -174,38 +262,11 @@ fysh::ast::FyshStmt fysh::FyshParser::parseStatement() {
     return terminateStatement(ast::FyshDecrementStmt{ident});
   } else if (curFysh == Species::FYSH_IDENTIFIER &&
              peekFysh == Species::ASSIGN) {
-    ast::FyshIdentifier ident{curFysh.getBody()};
-    nextFysh();
-    nextFysh();
-    ast::FyshExpr expr{parseExpression()};
-    if (std::holds_alternative<ast::Error>(expr)) {
-      return std::get<ast::Error>(expr);
-    }
-    return terminateStatement(ast::FyshAssignmentStmt{ident, expr});
+    return parseAssignment();
   } else if (curFysh == Species::FYSH_LOOP) {
-    nextFysh();
-    if (curFysh != Species::FYSH_TANK_OPEN) {
-      return expectFysh(Species::FYSH_TANK_OPEN);
-    }
-    nextFysh();
-    ast::FyshExpr condition{parseExpression()};
-    if (curFysh != Species::FYSH_TANK_CLOSE) {
-      return expectFysh(Species::FYSH_TANK_CLOSE);
-    }
-    nextFysh();
-    if (curFysh != Species::FYSH_OPEN) {
-      return expectFysh(Species::FYSH_OPEN);
-    }
-    nextFysh();
-    ast::FyshBlock block{parseBlock()};
-    if (block.size() == 1 && std::holds_alternative<ast::Error>(block[0])) {
-      return block[0];
-    }
-    if (curFysh != Species::FYSH_CLOSE) {
-      return expectFysh(Species::FYSH_CLOSE);
-    }
-    nextFysh();
-    return ast::FyshLoopStmt{condition, block};
+    return parseLoop();
+  } else if (curFysh == Species::IF) {
+    return parseIfElse();
   } else {
     return terminateStatement(parseExpression());
   }

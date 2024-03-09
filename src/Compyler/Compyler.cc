@@ -61,23 +61,90 @@ fysh::Compyler::Compyler()
 
 fysh::Emit fysh::Compyler::ifStmt(const fysh::ast::FyshIfStmt &stmt,
                                   llvm::Function *fn) {
-  return nullptr;
+  llvm::Function *parent{builder->GetInsertBlock()->getParent()};
+  llvm::BasicBlock *conditionBlock{
+      llvm::BasicBlock::Create(*context, "if_cond", parent)};
+  llvm::BasicBlock *thenBlock{
+      llvm::BasicBlock::Create(*context, "then", parent)};
+  llvm::BasicBlock *elseBlock{
+      stmt.alternative.has_value()
+          ? llvm::BasicBlock::Create(*context, "else", parent)
+          : nullptr};
+  llvm::BasicBlock *exitBlock{
+      llvm::BasicBlock::Create(*context, "if_exit", parent)};
+
+  builder->CreateBr(conditionBlock);
+
+  builder->SetInsertPoint(conditionBlock);
+  Emit condEmit{expression(&stmt.condition)};
+  if (std::holds_alternative<ast::Error>(condEmit)) {
+    return condEmit;
+  }
+  llvm::Value *ifCond{std::get<llvm::Value *>(condEmit)};
+
+  builder->CreateCondBr(ifCond, thenBlock, elseBlock ? elseBlock : exitBlock);
+
+  builder->SetInsertPoint(thenBlock);
+  Emit thenEmit{block(stmt.consequence, fn)};
+  if (std::holds_alternative<ast::Error>(thenEmit)) {
+    return thenEmit;
+  }
+  builder->CreateBr(exitBlock);
+  if (elseBlock) {
+    builder->SetInsertPoint(elseBlock);
+    Emit elseEmit{block(stmt.consequence, fn)};
+    if (std::holds_alternative<ast::Error>(elseEmit)) {
+      return elseEmit;
+    }
+    builder->CreateBr(exitBlock);
+    elseBlock = builder->GetInsertBlock();
+    builder->SetInsertPoint(exitBlock);
+    llvm::PHINode *phiNode =
+        builder->CreatePHI(llvm::Type::getInt32Ty(*context), 2, "iftmp");
+    phiNode->addIncoming(std::get<llvm::Value *>(thenEmit), thenBlock);
+    phiNode->addIncoming(std::get<llvm::Value *>(elseEmit), elseBlock);
+    return phiNode;
+  } else {
+    builder->SetInsertPoint(exitBlock);
+    llvm::PHINode *phiNode =
+        builder->CreatePHI(llvm::Type::getInt32Ty(*context), 2, "iftmp");
+    phiNode->addIncoming(std::get<llvm::Value *>(thenEmit), thenBlock);
+    phiNode->addIncoming(llvm::ConstantInt::get(*context, llvm::APInt(32, 0)),
+                         conditionBlock);
+    return phiNode;
+  }
 }
 
 fysh::Emit fysh::Compyler::loop(const fysh::ast::FyshLoopStmt &stmt,
                                 llvm::Function *fn) {
-  // TODO: This is very wrong, please fix
   llvm::Function *parent{builder->GetInsertBlock()->getParent()};
-  llvm::BasicBlock *conditionBlock{builder->GetInsertBlock()};
+
+  llvm::BasicBlock *conditionBlock{
+      llvm::BasicBlock::Create(*context, "loop_cond", parent)};
+  llvm::BasicBlock *loopBodyBlock{
+      llvm::BasicBlock::Create(*context, "loop_body", parent)};
+  llvm::BasicBlock *loopExit{
+      llvm::BasicBlock::Create(*context, "loop_exit", parent)};
+
+  builder->CreateBr(conditionBlock);
+
+  builder->SetInsertPoint(conditionBlock);
   Emit condEmit{expression(&stmt.condition)};
   if (std::holds_alternative<ast::Error>(condEmit)) {
     return condEmit;
   }
   llvm::Value *loopCond{std::get<llvm::Value *>(condEmit)};
-  llvm::BasicBlock *loopBlock{
-      llvm::BasicBlock::Create(*context, "loop", parent)};
-  builder->SetInsertPoint(loopBlock);
-  return nullptr;
+
+  builder->CreateCondBr(loopCond, loopBodyBlock, loopExit);
+  builder->SetInsertPoint(loopBodyBlock);
+  Emit blockEmit{block(stmt.body, fn)};
+  if (std::holds_alternative<ast::Error>(blockEmit)) {
+    return blockEmit;
+  }
+  builder->CreateBr(conditionBlock);
+  builder->SetInsertPoint(loopExit);
+
+  return std::get<llvm::Value *>(blockEmit);
 }
 
 fysh::Emit fysh::Compyler::increment(const fysh::ast::FyshIncrementStmt &stmt,
@@ -240,35 +307,63 @@ fysh::Emit fysh::Compyler::binary(const fysh::ast::FyshBinaryExpr &expr) {
   }
   llvm::Value *leftVal{std::get<llvm::Value *>(left)};
   llvm::Value *rightVal{std::get<llvm::Value *>(right)};
+
   if (expr.op == ast::FyshBinary::Add) {
     return builder->CreateAdd(leftVal, rightVal, "addtmp");
-  } else if (expr.op == ast::FyshBinary::Mul) {
+  }
+
+  if (expr.op == ast::FyshBinary::Mul) {
     return builder->CreateMul(leftVal, rightVal, "multmp");
-  } else if (expr.op == ast::FyshBinary::Div) {
+  }
+
+  if (expr.op == ast::FyshBinary::Div) {
     return builder->CreateSDiv(leftVal, rightVal, "divtmp");
-  } else if (expr.op == ast::FyshBinary::GT) {
+  }
+
+  if (expr.op == ast::FyshBinary::GT) {
     return builder->CreateICmpSGT(leftVal, rightVal, "gttmp");
-  } else if (expr.op == ast::FyshBinary::Equal) {
+  }
+
+  if (expr.op == ast::FyshBinary::Equal) {
     return builder->CreateICmpEQ(leftVal, rightVal, "eqtmp");
-  } else if (expr.op == ast::FyshBinary::NotEqual) {
+  }
+
+  if (expr.op == ast::FyshBinary::NotEqual) {
     return builder->CreateICmpNE(leftVal, rightVal, "netmp");
-  } else if (expr.op == ast::FyshBinary::LT) {
+  }
+
+  if (expr.op == ast::FyshBinary::LT) {
     return builder->CreateICmpSLT(leftVal, rightVal, "lttmp");
-  } else if (expr.op == ast::FyshBinary::LTE) {
+  }
+
+  if (expr.op == ast::FyshBinary::LTE) {
     return builder->CreateICmpSLE(leftVal, rightVal, "ltetmp");
-  } else if (expr.op == ast::FyshBinary::GTE) {
+  }
+
+  if (expr.op == ast::FyshBinary::GTE) {
     return builder->CreateICmpSGE(leftVal, rightVal, "gtetmp");
-  } else if (expr.op == ast::FyshBinary::BitwiseAnd) {
+  }
+
+  if (expr.op == ast::FyshBinary::BitwiseAnd) {
     return builder->CreateAnd(leftVal, rightVal, "andtmp");
-  } else if (expr.op == ast::FyshBinary::BitwiseOr) {
+  }
+
+  if (expr.op == ast::FyshBinary::BitwiseOr) {
     return builder->CreateOr(leftVal, rightVal, "ortmp");
-  } else if (expr.op == ast::FyshBinary::BitwiseXor) {
+  }
+
+  if (expr.op == ast::FyshBinary::BitwiseXor) {
     return builder->CreateXor(leftVal, rightVal, "xortmp");
-  } else if (expr.op == ast::FyshBinary::ShiftLeft) {
+  }
+
+  if (expr.op == ast::FyshBinary::ShiftLeft) {
     return builder->CreateShl(leftVal, rightVal, "shltmp");
-  } else if (expr.op == ast::FyshBinary::ShiftRight) {
+  }
+
+  if (expr.op == ast::FyshBinary::ShiftRight) {
     return builder->CreateAShr(leftVal, rightVal, "ashrtmp");
   }
+
   // TODO Any remaining binary expressions
   return nullptr;
 }
