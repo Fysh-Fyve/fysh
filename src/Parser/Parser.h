@@ -55,6 +55,9 @@ private:
 
   ast::FyshExpr parseExpression();
   ast::FyshStmt parseStatement();
+  ast::FyshStmt parseLoop();
+  ast::FyshStmt parseAssignment();
+  ast::FyshStmt parseIfElse();
   std::vector<ast::FyshStmt> parseBlock();
 
   ast::Error expectFysh(Species species);
