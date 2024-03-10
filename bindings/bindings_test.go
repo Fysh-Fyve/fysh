@@ -15,7 +15,10 @@ func TestGrammar(t *testing.T) {
 	n, err := sitter.ParseCtx(context.Background(), []byte("><fysh> = ><{{> ~"), fysh.GetLanguage())
 	assert.NoError(err)
 	assert.Equal(
-		"(source_file (assignment_statement left: (positive_ident (name)) right: (positive_literal (scales (one) (one)))))",
+		"(source_file "+
+			"(assignment_statement "+
+			"left: (positive_ident (name)) "+
+			"right: (positive_literal (scales (one) (one)))))",
 		n.String(),
 	)
 }
