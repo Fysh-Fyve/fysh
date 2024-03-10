@@ -519,7 +519,7 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
         return Species::ANCHOR_LEFT;
       } else {
         return cullDeformedFysh();
-      } 
+      }
     } else {
       // We already reeled in (, do not go fysh.
       return Species::FYSH_BOWL_OPEN;
@@ -540,7 +540,7 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     if (match('~')) {
       if (match('=')) {
         return Species::TADPOLE_GTE;
-      } else if(expectFyshChar("≈")) {
+      } else if (expectFyshChar("≈")) {
         return Species::TADPOLE_GTE;
       } else {
         // We already reeled in ~, do not go fysh.
