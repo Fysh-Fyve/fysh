@@ -39,37 +39,37 @@ rtl/core/rom_pkg.vhd: asm/example.hex \
 	build/fyve-rom \
 	scripts/rom/rom_pkg.part1.vhd \
 	scripts/rom/rom_pkg.part2.vhd
-	./scripts/make_rom.sh $^
+	./scripts/make_rom.sh $<
 
-PREFIX=riscv-none-elf
+%.dump: asm/%.elf
+	llvm-objdump -D --section=.text --section=.sdata --arch-name=riscv32 $<
 
-%.dump: asm/%.hex
-	$(PREFIX)-objdump -D -b binary -m riscv $<
-
-%.dump: sw/%.hex
-	$(PREFIX)-objdump -D -b binary -m riscv $<
+%.dump: sw/%.elf
+	llvm-objdump -D --section=.text --section=.sdata --arch-name=riscv32 $<
 
 %.rom: asm/%.hex
 	./scripts/make_rom.sh $<
 
 %.hex: %.elf
-	$(PREFIX)-objcopy -O binary $< $@
+	llvm-objcopy -O binary $< $@
 
 %.elf: sw/fysh-fyve.ld sw/boot.o sw/gpio.o %.o
-	$(PREFIX)-gcc -march=rv32i -nostdlib -T $^ -o $@
+	clang --target=riscv32 -march=rv32i -nostdlib -T $^ -o $@
 
 %.o: %.c
-	$(PREFIX)-gcc -c $< -mabi=ilp32 -O3 -march=rv32i -o $@
+	clang -c $< -O3 --target=riscv32 -march=rv32i -nostdlib -o $@
 
 %.s: %.c
-	$(PREFIX)-gcc -S $< -mabi=ilp32 -O3 -march=rv32i -o $@
+	clang -S $< -O3 --target=riscv32 -march=rv32i -nostdlib -o $@
 
 %.o: %.s
-	$(PREFIX)-as $< -march=rv32i -o $@
+	clang -c $< -O3 --target=riscv32 -march=rv32i -nostdlib -o $@
 
-build/fyve-%: scripts/%.cc
+build/fyve-%: scripts/%.cc | build
 	cd build && cmake ../scripts && make
 
+build:
+	mkdir -p $@
 
 %_tb: $(TEST_DIR)/%_tb.vhd $(SRC_DIR)/%.vhd
 	@TB="$@" ./scripts/run_test.sh $^
