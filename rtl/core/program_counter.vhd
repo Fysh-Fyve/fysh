@@ -57,9 +57,7 @@ begin
       pc <= (others => '0');
     elsif rising_edge(pc_clk_i) then
       if VERBOSE then
-        write(l, string'("next_ins: "));
-        write(l, to_hstring(next_ins));
-        writeline(output, l);
+        report string'("next_ins: ") & to_hstring(next_ins);
       end if;
       pc <= next_ins;
     end if;

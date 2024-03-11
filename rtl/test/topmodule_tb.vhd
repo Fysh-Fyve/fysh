@@ -9,8 +9,7 @@ use work.fysh_fyve.all;
 
 --! Test bench for the top module.
 entity topmodule_tb is
-  -- generic (VERBOSE : boolean := false);
-  generic (VERBOSE : boolean := false; GPIO_VERBOSE : boolean := true);
+  generic (VERBOSE : boolean := true; GPIO_VERBOSE : boolean := true);
 end topmodule_tb;
 
 architecture test_bench of topmodule_tb is

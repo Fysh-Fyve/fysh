@@ -117,7 +117,11 @@ _MEMORY := $(_MEM) \
 	   register_file \
 	   grilled_fysh \
 
+
 MEMORY := $(patsubst %, $(SRC_DIR)/%.vhd, $(_MEMORY))
+
+phy_map_tb: $(TEST_DIR)/phy_map_tb.vhd $(MEMORY)
+	@TB="$@" ./scripts/run_test.sh $^
 
 topmodule_tb: $(TEST_DIR)/topmodule_tb.vhd \
 	$(SRC_DIR)/topmodule.vhd \

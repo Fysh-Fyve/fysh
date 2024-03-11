@@ -26,7 +26,7 @@ entity bram is
 end bram;
 
 architecture rtl of bram is
-  signal RAM : mem_t (0 to NUM_WORDS-1);
+  signal RAM : mem_t (0 to NUM_WORDS-1) := (others => (others => '0'));
 begin
   process(clk_i)
     use std.textio.all;
@@ -38,6 +38,8 @@ begin
         write(l, to_hstring(d_i));
         write(l, string'(" to address 0x"));
         write(l, to_hstring(write_addr_i & "00"));
+        write(l, ht);
+        write(l, to_integer(unsigned(write_addr_i)));
         writeline(output, l);
         RAM(to_integer(unsigned(write_addr_i))) <= d_i;
       end if;
