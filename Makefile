@@ -29,7 +29,7 @@ wave:
 	WAVE=1 $(MAKE) topmodule_tb
 
 clean:
-	rm -fv **/*~ $(ASM_HEX)
+	rm -fv **/*~ asm/*.hex asm/*.elf asm/*.o sw/*.o
 
 hex: $(ASM_HEX)
 
