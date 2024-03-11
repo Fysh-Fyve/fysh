@@ -59,6 +59,10 @@ fysh::Compyler::Compyler()
   pb.crossRegisterProxies(*lam, *fam, *cgam, *mam);
 }
 
+static constexpr bool isError(const fysh::Emit &emit) {
+  return std::holds_alternative<fysh::ast::Error>(emit);
+}
+
 fysh::Emit fysh::Compyler::ifStmt(const fysh::ast::FyshIfStmt &stmt,
                                   llvm::Function *fn) {
   llvm::Function *parent{builder->GetInsertBlock()->getParent()};
@@ -77,7 +81,7 @@ fysh::Emit fysh::Compyler::ifStmt(const fysh::ast::FyshIfStmt &stmt,
 
   builder->SetInsertPoint(conditionBlock);
   Emit condEmit{expression(&stmt.condition)};
-  if (std::holds_alternative<ast::Error>(condEmit)) {
+  if (isError(condEmit)) {
     return condEmit;
   }
   llvm::Value *ifCond{std::get<llvm::Value *>(condEmit)};
@@ -86,14 +90,14 @@ fysh::Emit fysh::Compyler::ifStmt(const fysh::ast::FyshIfStmt &stmt,
 
   builder->SetInsertPoint(thenBlock);
   Emit thenEmit{block(stmt.consequence, fn)};
-  if (std::holds_alternative<ast::Error>(thenEmit)) {
+  if (isError(thenEmit)) {
     return thenEmit;
   }
   builder->CreateBr(exitBlock);
   if (elseBlock) {
     builder->SetInsertPoint(elseBlock);
     Emit elseEmit{block(stmt.consequence, fn)};
-    if (std::holds_alternative<ast::Error>(elseEmit)) {
+    if (isError(elseEmit)) {
       return elseEmit;
     }
     builder->CreateBr(exitBlock);
@@ -115,6 +119,137 @@ fysh::Emit fysh::Compyler::ifStmt(const fysh::ast::FyshIfStmt &stmt,
   }
 }
 
+static llvm::Function *defineReadAll(llvm::Module *module,
+                                     llvm::LLVMContext *context) {
+  // int fysh_gpio_read_all()
+  llvm::FunctionType *ft{llvm::FunctionType::get(
+      llvm::Type::getInt32Ty(*context), std::vector<llvm::Type *>(), false)};
+  return llvm::Function::Create(ft, llvm::Function::ExternalLinkage,
+                                "fysh_gpio_read_all", module);
+}
+
+static llvm::Function *defineRead(llvm::Module *module,
+                                  llvm::LLVMContext *context) {
+  // int fysh_gpio_read(int pin)
+  llvm::FunctionType *ft{llvm::FunctionType::get(
+      llvm::Type::getInt32Ty(*context),
+      std::vector<llvm::Type *>{llvm::Type::getInt32Ty(*context)}, false)};
+  return llvm::Function::Create(ft, llvm::Function::ExternalLinkage,
+                                "fysh_gpio_read", module);
+}
+
+static llvm::Function *defineWriteAll(llvm::Module *module,
+                                      llvm::LLVMContext *context) {
+  // void fysh_gpio_write_all(int value)
+  llvm::FunctionType *ft{llvm::FunctionType::get(
+      llvm::Type::getVoidTy(*context),
+      std::vector<llvm::Type *>{llvm::Type::getInt32Ty(*context)}, false)};
+  return llvm::Function::Create(ft, llvm::Function::ExternalLinkage,
+                                "fysh_gpio_write_all", module);
+}
+
+static llvm::Function *defineWrite(llvm::Module *module,
+                                   llvm::LLVMContext *context) {
+  // void fysh_gpio_write(int pin, int value)
+  llvm::FunctionType *ft{llvm::FunctionType::get(
+      llvm::Type::getVoidTy(*context),
+      std::vector<llvm::Type *>{llvm::Type::getInt32Ty(*context),
+                                llvm::Type::getInt32Ty(*context)},
+      false)};
+  return llvm::Function::Create(ft, llvm::Function::ExternalLinkage,
+                                "fysh_gpio_write", module);
+}
+
+fysh::Emit fysh::Compyler::anchorIn(const fysh::ast::FyshBinaryExpr &expr) {
+  fysh::Emit pin{expression(&expr.left)};
+  if (isError(pin)) {
+    return pin;
+  }
+  if (const ast::FyshIdentifier *ident =
+          std::get_if<ast::FyshIdentifier>(&expr.right)) {
+    if (namedValues.find(ident->name) == namedValues.end()) {
+      return ast::Error{"unknown variable"};
+    }
+    llvm::AllocaInst *alloca{namedValues[ident->name]};
+    llvm::Function *fn = module->getFunction("fysh_gpio_read");
+    if (!fn)
+      fn = defineRead(module.get(), context.get());
+    llvm::FunctionType *ft{llvm::FunctionType::get(
+        llvm::Type::getInt32Ty(*context),
+        std::vector<llvm::Type *>{llvm::Type::getInt32Ty(*context)}, false)};
+    llvm::Value *retVal{builder->CreateCall(
+        ft, fn, std::vector<llvm::Value *>{std::get<llvm::Value *>(pin)})};
+    builder->CreateStore(retVal, alloca);
+    return retVal;
+  } else {
+    return ast::Error{"assigning to non-variable"};
+  }
+}
+
+fysh::Emit fysh::Compyler::anchorOut(const fysh::ast::FyshBinaryExpr &expr) {
+  fysh::Emit pin{expression(&expr.left)};
+  if (isError(pin)) {
+    return pin;
+  }
+  fysh::Emit value{expression(&expr.right)};
+  if (isError(value)) {
+    return value;
+  }
+  llvm::Function *fn = module->getFunction("fysh_gpio_write");
+  if (!fn)
+    fn = defineWrite(module.get(), context.get());
+  llvm::FunctionType *ft{llvm::FunctionType::get(
+      llvm::Type::getInt32Ty(*context),
+      std::vector<llvm::Type *>{llvm::Type::getInt32Ty(*context)}, false)};
+  return builder->CreateCall(
+      ft, fn,
+      std::vector<llvm::Value *>{std::get<llvm::Value *>(pin),
+                                 std::get<llvm::Value *>(value)});
+}
+
+fysh::Emit fysh::Compyler::anchorStmt(const fysh::ast::FyshAnchorStmt &stmt,
+                                      llvm::Function *fn) {
+  if (stmt.op == fysh::ast::FyshBinary::AnchorIn) {
+    // Only handle assignments to identifiers for now
+    if (const ast::FyshIdentifier *ident =
+            std::get_if<ast::FyshIdentifier>(&stmt.right)) {
+      if (namedValues.find(ident->name) == namedValues.end()) {
+        return ast::Error{"unknown variable"};
+      }
+      llvm::AllocaInst *alloca{namedValues[ident->name]};
+      llvm::Function *fn = module->getFunction("fysh_gpio_read_all");
+      if (!fn)
+        fn = defineReadAll(module.get(), context.get());
+      llvm::FunctionType *ft{
+          llvm::FunctionType::get(llvm::Type::getInt32Ty(*context),
+                                  std::vector<llvm::Type *>(), false)};
+      llvm::Value *retVal{
+          builder->CreateCall(ft, fn, std::vector<llvm::Value *>())};
+      builder->CreateStore(retVal, alloca);
+      return retVal;
+    } else {
+      return ast::Error{"assigning to non-variable"};
+    }
+  } else if (stmt.op == fysh::ast::FyshBinary::AnchorOut) {
+    Emit val{expression(&stmt.right)};
+    if (llvm::Value * *expr{std::get_if<llvm::Value *>(&val)}) {
+      llvm::Function *fn = module->getFunction("fysh_gpio_write_all");
+      if (!fn)
+        fn = defineWriteAll(module.get(), context.get());
+      llvm::FunctionType *ft{llvm::FunctionType::get(
+          llvm::Type::getVoidTy(*context),
+          std::vector<llvm::Type *>{llvm::Type::getInt32Ty(*context)}, false)};
+      llvm::Value *retVal{
+          builder->CreateCall(ft, fn, std::vector<llvm::Value *>{*expr})};
+      return *expr;
+    } else {
+      return val;
+    }
+  } else {
+    return ast::Error{"invalid anchor operand"};
+  }
+}
+
 fysh::Emit fysh::Compyler::loop(const fysh::ast::FyshLoopStmt &stmt,
                                 llvm::Function *fn) {
   llvm::Function *parent{builder->GetInsertBlock()->getParent()};
@@ -130,7 +265,7 @@ fysh::Emit fysh::Compyler::loop(const fysh::ast::FyshLoopStmt &stmt,
 
   builder->SetInsertPoint(conditionBlock);
   Emit condEmit{expression(&stmt.condition)};
-  if (std::holds_alternative<ast::Error>(condEmit)) {
+  if (isError(condEmit)) {
     return condEmit;
   }
   llvm::Value *loopCond{std::get<llvm::Value *>(condEmit)};
@@ -138,7 +273,7 @@ fysh::Emit fysh::Compyler::loop(const fysh::ast::FyshLoopStmt &stmt,
   builder->CreateCondBr(loopCond, loopBodyBlock, loopExit);
   builder->SetInsertPoint(loopBodyBlock);
   Emit blockEmit{block(stmt.body, fn)};
-  if (std::holds_alternative<ast::Error>(blockEmit)) {
+  if (isError(blockEmit)) {
     return blockEmit;
   }
   builder->CreateBr(conditionBlock);
@@ -225,6 +360,8 @@ fysh::Emit fysh::Compyler::statement(const ast::FyshStmt &stmt,
           return decrement(arg, fn);
         } else if constexpr (std::is_same_v<T, ast::FyshAssignmentStmt>) {
           return assignment(arg, fn);
+        } else if constexpr (std::is_same_v<T, ast::FyshAnchorStmt>) {
+          return anchorStmt(arg, fn);
         } else {
           static_assert(always_false_v<T>, "non-exhaustive visitor!");
         }
@@ -305,67 +442,31 @@ fysh::Emit fysh::Compyler::binary(const fysh::ast::FyshBinaryExpr &expr) {
   if (const ast::Error * err{std::get_if<ast::Error>(&right)}) {
     return *err;
   }
-  llvm::Value *leftVal{std::get<llvm::Value *>(left)};
-  llvm::Value *rightVal{std::get<llvm::Value *>(right)};
+  llvm::Value *l{std::get<llvm::Value *>(left)};
+  llvm::Value *r{std::get<llvm::Value *>(right)};
 
-  if (expr.op == ast::FyshBinary::Add) {
-    return builder->CreateAdd(leftVal, rightVal, "addtmp");
+  using FB = ast::FyshBinary;
+  switch (expr.op) {
+    // clang-format off
+  case FB::Add:        return builder->CreateAdd(l, r, "addtmp");
+  case FB::Mul:        return builder->CreateMul(l, r, "multmp");
+  case FB::Div:        return builder->CreateSDiv(l, r, "divtmp");
+  case FB::Equal:      return builder->CreateICmpEQ(l, r, "eqtmp");
+  case FB::NotEqual:   return builder->CreateICmpNE(l, r, "netmp");
+  case FB::GT:         return builder->CreateICmpSGT(l, r, "gttmp");
+  case FB::LT:         return builder->CreateICmpSLT(l, r, "lttmp");
+  case FB::GTE:        return builder->CreateICmpSGE(l, r, "gtetmp");
+  case FB::LTE:        return builder->CreateICmpSLE(l, r, "ltetmp");
+  case FB::BitwiseAnd: return builder->CreateAnd(l, r, "andtmp");
+  case FB::BitwiseOr:  return builder->CreateOr(l, r, "ortmp");
+  case FB::BitwiseXor: return builder->CreateXor(l, r, "xortmp");
+  case FB::ShiftLeft:  return builder->CreateShl(l, r, "shltmp");
+  case FB::ShiftRight: return builder->CreateAShr(l, r, "ashrtmp");
+  case FB::AnchorIn:   return anchorIn(expr);
+  case FB::AnchorOut:  return anchorOut(expr);
+  default:             return nullptr;
+    // clang-format on
   }
-
-  if (expr.op == ast::FyshBinary::Mul) {
-    return builder->CreateMul(leftVal, rightVal, "multmp");
-  }
-
-  if (expr.op == ast::FyshBinary::Div) {
-    return builder->CreateSDiv(leftVal, rightVal, "divtmp");
-  }
-
-  if (expr.op == ast::FyshBinary::GT) {
-    return builder->CreateICmpSGT(leftVal, rightVal, "gttmp");
-  }
-
-  if (expr.op == ast::FyshBinary::Equal) {
-    return builder->CreateICmpEQ(leftVal, rightVal, "eqtmp");
-  }
-
-  if (expr.op == ast::FyshBinary::NotEqual) {
-    return builder->CreateICmpNE(leftVal, rightVal, "netmp");
-  }
-
-  if (expr.op == ast::FyshBinary::LT) {
-    return builder->CreateICmpSLT(leftVal, rightVal, "lttmp");
-  }
-
-  if (expr.op == ast::FyshBinary::LTE) {
-    return builder->CreateICmpSLE(leftVal, rightVal, "ltetmp");
-  }
-
-  if (expr.op == ast::FyshBinary::GTE) {
-    return builder->CreateICmpSGE(leftVal, rightVal, "gtetmp");
-  }
-
-  if (expr.op == ast::FyshBinary::BitwiseAnd) {
-    return builder->CreateAnd(leftVal, rightVal, "andtmp");
-  }
-
-  if (expr.op == ast::FyshBinary::BitwiseOr) {
-    return builder->CreateOr(leftVal, rightVal, "ortmp");
-  }
-
-  if (expr.op == ast::FyshBinary::BitwiseXor) {
-    return builder->CreateXor(leftVal, rightVal, "xortmp");
-  }
-
-  if (expr.op == ast::FyshBinary::ShiftLeft) {
-    return builder->CreateShl(leftVal, rightVal, "shltmp");
-  }
-
-  if (expr.op == ast::FyshBinary::ShiftRight) {
-    return builder->CreateAShr(leftVal, rightVal, "ashrtmp");
-  }
-
-  // TODO Any remaining binary expressions
-  return nullptr;
 }
 
 fysh::Emit fysh::Compyler::identifier(const fysh::ast::FyshIdentifier &expr) {

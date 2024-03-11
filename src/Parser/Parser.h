@@ -52,6 +52,7 @@ private:
   ast::FyshExpr parseComparative();
   ast::FyshExpr parseAnd();
   ast::FyshExpr parseOr();
+  ast::FyshExpr parseAnchor();
 
   ast::FyshExpr parseExpression();
   ast::FyshStmt parseStatement();

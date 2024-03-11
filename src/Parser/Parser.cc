@@ -58,7 +58,8 @@ fysh::ast::Error fysh::FyshParser::expectFysh(fysh::Species species) {
 }
 
 fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
-  if (curFysh == Species::FYSH_LITERAL) {
+  switch (curFysh.getSpecies()) {
+  case Species::FYSH_LITERAL: {
     ast::FyshLiteral value{curFysh.getValue().value()};
     bool negate{curFysh.negate};
     nextFysh();
@@ -66,7 +67,8 @@ fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
       return ast::FyshUnaryExpr{ast::FyshUnary::Neg, value};
     }
     return value;
-  } else if (curFysh == Species::FYSH_IDENTIFIER) {
+  }
+  case Species::FYSH_IDENTIFIER: {
     ast::FyshIdentifier ident{curFysh.getBody()};
     bool negate{curFysh.negate};
     nextFysh();
@@ -74,7 +76,8 @@ fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
       return ast::FyshUnaryExpr{ast::FyshUnary::Neg, ident};
     }
     return ident;
-  } else if (curFysh == Species::FYSH_BOWL_OPEN) {
+  }
+  case Species::FYSH_BOWL_OPEN: {
     nextFysh();
     ast::FyshExpr expr{parseExpression()};
     if (curFysh != Species::FYSH_BOWL_CLOSE) {
@@ -83,29 +86,34 @@ fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
     nextFysh();
     return expr;
   }
-  std::stringstream ss;
-  ss << "Parser error at line " << lexer.fyshingLine();
-  return ast::Error{ss.str()};
+  default: {
+    std::stringstream ss;
+    ss << "Parser error at line " << lexer.fyshingLine();
+    return ast::Error{ss.str()};
+  }
+  }
 }
 
 static std::optional<fysh::ast::FyshBinary> binaryOp(fysh::Fysh fysh) {
-  using fysh::Species;
-  using fysh::ast::FyshBinary;
+  using S = fysh::Species;
+  using FB = fysh::ast::FyshBinary;
   switch (fysh.getSpecies()) {
     // clang-format off
-  case Species::HEART_MULTIPLY: return FyshBinary::Mul;
-  case Species::HEART_DIVIDE:   return FyshBinary::Div;
-  case Species::TADPOLE_LT:     return FyshBinary::LT;
-  case Species::TADPOLE_GT:     return FyshBinary::GT;
-  case Species::TADPOLE_LTE:    return FyshBinary::LTE;
-  case Species::TADPOLE_GTE:    return FyshBinary::GTE;
-  case Species::EQUAL:          return FyshBinary::Equal;
-  case Species::NOT_EQUAL:      return FyshBinary::NotEqual;
-  case Species::BITWISE_AND:    return FyshBinary::BitwiseAnd;
-  case Species::BITWISE_OR:     return FyshBinary::BitwiseOr;
-  case Species::CARET:          return FyshBinary::BitwiseXor;
-  case Species::SHIFT_LEFT:     return FyshBinary::ShiftLeft;
-  case Species::SHIFT_RIGHT:    return FyshBinary::ShiftRight;
+  case S::HEART_MULTIPLY: return FB::Mul;
+  case S::HEART_DIVIDE:   return FB::Div;
+  case S::TADPOLE_LT:     return FB::LT;
+  case S::TADPOLE_GT:     return FB::GT;
+  case S::TADPOLE_LTE:    return FB::LTE;
+  case S::TADPOLE_GTE:    return FB::GTE;
+  case S::EQUAL:          return FB::Equal;
+  case S::NOT_EQUAL:      return FB::NotEqual;
+  case S::BITWISE_AND:    return FB::BitwiseAnd;
+  case S::BITWISE_OR:     return FB::BitwiseOr;
+  case S::CARET:          return FB::BitwiseXor;
+  case S::SHIFT_LEFT:     return FB::ShiftLeft;
+  case S::SHIFT_RIGHT:    return FB::ShiftRight;
+  case S::ANCHOR_LEFT:    return FB::AnchorOut;
+  case S::ANCHOR_RIGHT:   return FB::AnchorIn;
     // clang-format on
   default:
     return {};
@@ -159,8 +167,20 @@ fysh::ast::FyshExpr fysh::FyshParser::parseComparative() {
   return left;
 }
 
+fysh::ast::FyshExpr fysh::FyshParser::parseAnchor() {
+  ast::FyshExpr left{parseComparative()};
+  std::optional<ast::FyshBinary> op{binaryOp(curFysh)};
+  while (op == ast::FyshBinary::AnchorIn || op == ast::FyshBinary::AnchorOut) {
+    nextFysh();
+    ast::FyshExpr right{parseAnchor()};
+    left = ast::FyshBinaryExpr{left, right, op.value()};
+    op = binaryOp(curFysh);
+  }
+  return left;
+}
+
 fysh::ast::FyshExpr fysh::FyshParser::parseExpression() {
-  return parseComparative();
+  return parseAnchor();
 }
 
 fysh::ast::FyshStmt fysh::FyshParser::parseAssignment() {
@@ -252,23 +272,35 @@ fysh::ast::FyshStmt fysh::FyshParser::parseLoop() {
 }
 
 fysh::ast::FyshStmt fysh::FyshParser::parseStatement() {
-  if (curFysh == Species::INCREMENT) {
+  switch (curFysh.getSpecies()) {
+  case Species::INCREMENT: {
     ast::FyshIdentifier ident{curFysh.getBody()};
     nextFysh();
     return terminateStatement(ast::FyshIncrementStmt{ident});
-  } else if (curFysh == Species::DECREMENT) {
+  }
+  case Species::DECREMENT: {
     ast::FyshIdentifier ident{curFysh.getBody()};
     nextFysh();
     return terminateStatement(ast::FyshDecrementStmt{ident});
-  } else if (curFysh == Species::FYSH_IDENTIFIER &&
-             peekFysh == Species::ASSIGN) {
-    return parseAssignment();
-  } else if (curFysh == Species::FYSH_LOOP) {
+  }
+  case Species::FYSH_LOOP:
     return parseLoop();
-  } else if (curFysh == Species::IF) {
+  case Species::IF:
     return parseIfElse();
-  } else {
-    return terminateStatement(parseExpression());
+  case Species::ANCHOR_LEFT:
+  case Species::ANCHOR_RIGHT: {
+    // We know it's one of these two
+    ast::FyshBinary op{binaryOp(curFysh).value()};
+    nextFysh();
+    return terminateStatement(ast::FyshAnchorStmt{op, parseExpression()});
+  }
+  default: {
+    if (curFysh == Species::FYSH_IDENTIFIER && peekFysh == Species::ASSIGN) {
+      return parseAssignment();
+    } else {
+      return terminateStatement(parseExpression());
+    }
+  }
   }
 }
 

@@ -23,23 +23,25 @@
 #include <sstream>
 
 constexpr const char *str(const fysh::ast::FyshBinary &op) {
-  using fysh::ast::FyshBinary;
+  using FB = fysh::ast::FyshBinary;
   switch (op) {
     // clang-format off
-  case FyshBinary::Add:        return "+";
-  case FyshBinary::Mul:        return "*";
-  case FyshBinary::Div:        return "/";
-  case FyshBinary::Equal:      return "==";
-  case FyshBinary::NotEqual:   return "!=";
-  case FyshBinary::GT:         return ">";
-  case FyshBinary::LT:         return "<";
-  case FyshBinary::GTE:        return ">=";
-  case FyshBinary::LTE:        return "<=";
-  case FyshBinary::BitwiseAnd: return "&";
-  case FyshBinary::BitwiseOr:  return "|";
-  case FyshBinary::BitwiseXor: return "^";
-  case FyshBinary::ShiftLeft:  return "<<";
-  case FyshBinary::ShiftRight: return ">>";
+  case FB::Add:        return "+";
+  case FB::Mul:        return "*";
+  case FB::Div:        return "/";
+  case FB::Equal:      return "==";
+  case FB::NotEqual:   return "!=";
+  case FB::GT:         return ">";
+  case FB::LT:         return "<";
+  case FB::GTE:        return ">=";
+  case FB::LTE:        return "<=";
+  case FB::BitwiseAnd: return "&";
+  case FB::BitwiseOr:  return "|";
+  case FB::BitwiseXor: return "^";
+  case FB::ShiftLeft:  return "<<";
+  case FB::ShiftRight: return ">>";
+  case FB::AnchorIn:   return "o+)";
+  case FB::AnchorOut:  return "(+o";
     // clang-format on
   }
 
@@ -119,6 +121,8 @@ std::ostream &fysh::ast::operator<<(std::ostream &os,
           if (arg.alternative.has_value()) {
             os << "else\n" << arg.alternative.value();
           }
+        } else if constexpr (std::is_same_v<T, FyshAnchorStmt>) {
+          os << str(arg.op) << " " << arg.right << ";\n";
         } else {
           static_assert(always_false_v<T>, "non-exhaustive visitor!");
         }

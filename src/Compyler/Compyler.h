@@ -55,11 +55,14 @@ private:
   Emit increment(const ast::FyshIncrementStmt &stmt, llvm::Function *fn);
   Emit decrement(const ast::FyshDecrementStmt &stmt, llvm::Function *fn);
   Emit assignment(const ast::FyshAssignmentStmt &stmt, llvm::Function *fn);
+  Emit anchorStmt(const ast::FyshAnchorStmt &stmt, llvm::Function *fn);
 
   /* Compiling expressions */
   Emit expression(const ast::FyshExpr *expr);
   Emit identifier(const ast::FyshIdentifier &expr);
   Emit binary(const fysh::ast::FyshBinaryExpr &expr);
+  Emit anchorIn(const fysh::ast::FyshBinaryExpr &expr);
+  Emit anchorOut(const fysh::ast::FyshBinaryExpr &expr);
   Emit unary(const fysh::ast::FyshUnaryExpr &expr);
 
   std::unordered_map<std::string_view, llvm::AllocaInst *> namedValues;

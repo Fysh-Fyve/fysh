@@ -51,6 +51,8 @@ enum class FyshBinary {
   BitwiseXor,
   ShiftLeft,
   ShiftRight,
+  AnchorIn,
+  AnchorOut,
 };
 
 // !True
@@ -106,13 +108,18 @@ struct FyshAssignmentStmt {
   FyshExpr right;
 };
 
+struct FyshAnchorStmt {
+  FyshBinary op;
+  FyshExpr right;
+};
+
 struct FyshBlock;
 struct FyshLoopStmt;
 struct FyshIfStmt;
 
-using FyshStmt =
-    std::variant<Error, FyshExpr, FyshIncrementStmt, FyshDecrementStmt,
-                 FyshAssignmentStmt, FyshBlock, FyshLoopStmt, FyshIfStmt>;
+using FyshStmt = std::variant<Error, FyshExpr, FyshIncrementStmt,
+                              FyshDecrementStmt, FyshAssignmentStmt, FyshBlock,
+                              FyshLoopStmt, FyshIfStmt, FyshAnchorStmt>;
 
 struct FyshBlock : public std::vector<FyshStmt> {
   using std::vector<FyshStmt>::vector;
