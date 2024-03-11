@@ -263,9 +263,9 @@ To call a subroutine, put the submarine in a fysh tank along with its arguments 
 
 To interact with the ocean floor (GPIO), use the anchor. 
 ```fysh
-	><{({°> o+) <fysh>< ><//>  get value from gpio pin b'101'
-	><{({°> (+o <fysh>< ><//> write to gpio pin b'101'
-	(+o ><fysh> ~ ><//> Write the value of Fysh to the GPIO pins
+><{({°> o+) <fysh>< ><//>  get value from gpio pin b'101'
+><{({°> (+o <fysh>< ><//> write to gpio pin b'101'
+(+o ><fysh> ~ ><//> Write the value of Fysh to the GPIO pins
 
 ```
 
