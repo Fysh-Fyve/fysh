@@ -110,8 +110,12 @@ begin
       if rising_edge(ir_clk) then
         write(l, string'("dmem_out: "));
         write(l, to_hstring(dmem_out));
+        write(l, string'(" draddr: "));
+        write(l, to_hstring(draddr));
         write(l, string'(" imem_out: "));
         write(l, to_hstring(imem_out));
+        write(l, string'(" iraddr: "));
+        write(l, to_hstring(iraddr));
         writeline(output, l);
       end if;
     end process print_reg;
@@ -241,9 +245,10 @@ begin
     pc_alu          when "00",
     (others => 'X') when others;
 
-  -- Branch to the same instruction (infinite loop) to signal being "done"
+  -- Branch/Jump to the same instruction (infinite loop) to signal being "done"
   with insn(6 downto 2) select done <=
     nor(imm_ex & pc_alu_sel & pc_next_sel) when OPCODE_BRANCH,
+    nor(imm_ex)                            when OPCODE_JAL,
     '0'                                    when others;
 
   grilled_fysh_inst : entity work.grilled_fysh(rtl) port map (
