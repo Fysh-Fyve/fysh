@@ -11,7 +11,7 @@ entity topmodule is
   generic (
     VERBOSE      : boolean := false;
     GPIO_VERBOSE : boolean := false;
-    DIV_CLK      : integer := DIV_10_HZ);
+    DIV_CLK      : integer := DIV_1_KHZ);
   port (
     clk   : in    std_ulogic;
     reset : in    std_ulogic;
@@ -245,10 +245,9 @@ begin
     pc_alu          when "00",
     (others => 'X') when others;
 
-  -- Branch/Jump to the same instruction (infinite loop) to signal being "done"
+  -- Branch to the same instruction (infinite loop) to signal being "done"
   with insn(6 downto 2) select done <=
     nor(imm_ex & pc_alu_sel & pc_next_sel) when OPCODE_BRANCH,
-    nor(imm_ex)                            when OPCODE_JAL,
     '0'                                    when others;
 
   grilled_fysh_inst : entity work.grilled_fysh(rtl) port map (

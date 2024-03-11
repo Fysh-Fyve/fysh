@@ -47,7 +47,10 @@ begin
     wait for 20 ns;
     pin_write_i     <= x"FFFFFFFF";
     write_en_i      <= '1';
-    wait for 30 ns;
+    wait for 40 ns;
+    report to_hstring(pin_read_o);
+    pin_write_i     <= x"00000000";
+    wait for 40 ns;
     report to_hstring(pin_read_o);
     stop;
   end process gpio_pins_test_cases;

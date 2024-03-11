@@ -60,6 +60,8 @@ package fysh_fyve is
   constant DIV_NORMAL   : integer := 1;
   constant DIV_1_HZ     : integer := 62500000;
   constant DIV_10_HZ    : integer := 6250000;
+  constant DIV_50_HZ    : integer := 312500;
+  constant DIV_100_HZ   : integer := 625000;
   constant DIV_1_KHZ    : integer := 62500;
   constant DIV_62_5_MHZ : integer := 2;
 

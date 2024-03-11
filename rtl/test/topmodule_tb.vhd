@@ -9,7 +9,7 @@ use work.fysh_fyve.all;
 
 --! Test bench for the top module.
 entity topmodule_tb is
-  generic (VERBOSE : boolean := true; GPIO_VERBOSE : boolean := true);
+  generic (VERBOSE : boolean := false; GPIO_VERBOSE : boolean := true);
 end topmodule_tb;
 
 architecture test_bench of topmodule_tb is
@@ -34,7 +34,7 @@ begin
   drive_clock : process
   begin
     clk <= not clk;
-    wait for 10 ns;
+    wait for 8 ns;
   end process drive_clock;
 
   adc_data : process(clk)
@@ -58,13 +58,13 @@ begin
       adc   => adc);
   process
   begin
-    wait for 10 ns;
+    wait for 8 ns;
     reset <= '1';
-    wait for 10 ns;
+    wait for 8 ns;
     reset <= '0';
-    wait for 10 ns;
+    wait for 8 ns;
     reset <= '1';
-    wait for 10 ns;
+    wait for 8 ns;
     reset <= '0';
     wait until rising_edge(done);
     wait for 100 ns;
