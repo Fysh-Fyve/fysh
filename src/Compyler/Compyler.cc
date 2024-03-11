@@ -172,8 +172,10 @@ fysh::Emit fysh::Compyler::anchorIn(const fysh::ast::FyshBinaryExpr &expr) {
     }
     llvm::AllocaInst *alloca{namedValues[ident->name]};
     llvm::Function *fn = module->getFunction("fysh_gpio_read");
-    if (!fn)
+    if (!fn) {
       fn = defineRead(module.get(), context.get());
+      p.add(module->getFunction("fysh_gpio_read"));
+    }
     llvm::FunctionType *ft{llvm::FunctionType::get(
         llvm::Type::getInt32Ty(*context),
         std::vector<llvm::Type *>{llvm::Type::getInt32Ty(*context)}, false)};
@@ -196,8 +198,10 @@ fysh::Emit fysh::Compyler::anchorOut(const fysh::ast::FyshBinaryExpr &expr) {
     return value;
   }
   llvm::Function *fn = module->getFunction("fysh_gpio_write");
-  if (!fn)
+  if (!fn) {
     fn = defineWrite(module.get(), context.get());
+    p.add(module->getFunction("fysh_gpio_write"));
+  }
   llvm::FunctionType *ft{llvm::FunctionType::get(
       llvm::Type::getInt32Ty(*context),
       std::vector<llvm::Type *>{llvm::Type::getInt32Ty(*context)}, false)};
@@ -218,8 +222,10 @@ fysh::Emit fysh::Compyler::anchorStmt(const fysh::ast::FyshAnchorStmt &stmt,
       }
       llvm::AllocaInst *alloca{namedValues[ident->name]};
       llvm::Function *fn = module->getFunction("fysh_gpio_read_all");
-      if (!fn)
+      if (!fn) {
         fn = defineReadAll(module.get(), context.get());
+        p.add(module->getFunction("fysh_gpio_read_all"));
+      }
       llvm::FunctionType *ft{
           llvm::FunctionType::get(llvm::Type::getInt32Ty(*context),
                                   std::vector<llvm::Type *>(), false)};
@@ -234,8 +240,10 @@ fysh::Emit fysh::Compyler::anchorStmt(const fysh::ast::FyshAnchorStmt &stmt,
     Emit val{expression(&stmt.right)};
     if (llvm::Value * *expr{std::get_if<llvm::Value *>(&val)}) {
       llvm::Function *fn = module->getFunction("fysh_gpio_write_all");
-      if (!fn)
+      if (!fn) {
         fn = defineWriteAll(module.get(), context.get());
+        p.add(module->getFunction("fysh_gpio_write_all"));
+      }
       llvm::FunctionType *ft{llvm::FunctionType::get(
           llvm::Type::getVoidTy(*context),
           std::vector<llvm::Type *>{llvm::Type::getInt32Ty(*context)}, false)};
@@ -388,9 +396,11 @@ fysh::Emit fysh::Compyler::block(const std::vector<fysh::ast::FyshStmt> &block,
   return retVal;
 }
 
-llvm::Function *
-fysh::Compyler::compyle(const std::vector<fysh::ast::FyshStmt> &program,
+fysh::Program
+fysh::Compyler::compyle(const std::vector<fysh::ast::FyshStmt> &ast,
                         bool noOpt) {
+  fysh::Program newProgram;
+  p = newProgram;
   // int() function type
   llvm::FunctionType *ft{llvm::FunctionType::get(
       llvm::Type::getInt32Ty(*context), std::vector<llvm::Type *>(), false)};
@@ -400,7 +410,7 @@ fysh::Compyler::compyle(const std::vector<fysh::ast::FyshStmt> &program,
   llvm::BasicBlock *bb{llvm::BasicBlock::Create(*context, "entry", prototype)};
   builder->SetInsertPoint(bb);
 
-  Emit emit{block(program, prototype)};
+  Emit emit{block(ast, prototype)};
 
   if (llvm::Value * *expr{std::get_if<llvm::Value *>(&emit)}) {
     // Finish off the function.
@@ -411,15 +421,15 @@ fysh::Compyler::compyle(const std::vector<fysh::ast::FyshStmt> &program,
     if (!noOpt) {
       fpm->run(*prototype, *fam);
     }
-
-    return prototype;
+    p.add(prototype);
+    return p;
   } else if (const ast::Error * error{std::get_if<ast::Error>(&emit)}) {
     std::cerr << error << std::endl;
   }
 
   // Something went wrong!
   prototype->eraseFromParent();
-  return nullptr;
+  return {};
 }
 
 fysh::Emit fysh::Compyler::unary(const fysh::ast::FyshUnaryExpr &expr) {
@@ -500,3 +510,31 @@ fysh::Emit fysh::Compyler::expression(const fysh::ast::FyshExpr *expr) {
       },
       *expr);
 }
+
+void fysh::Program::print(const std::string &path) {
+  if (path == "-") {
+    for (const auto &fn : *this) {
+      fn->print(llvm::outs());
+    }
+  } else {
+    std::error_code ec;
+    llvm::raw_fd_ostream outputFile(path.c_str(), ec);
+    if (outputFile.error()) {
+      std::cerr << "Error opening file " << path
+                << " for writing: " << ec.message() << "\n";
+      std::exit(1);
+    } else {
+
+      for (const auto &fn : *this) {
+        fn->print(outputFile);
+      }
+    }
+  }
+  for (const auto &fn : *this) {
+    fn->eraseFromParent();
+  }
+}
+
+bool fysh::Program::empty() const { return this->size() == 0; }
+
+void fysh::Program::add(llvm::Function *fn) { this->push_back(fn); }

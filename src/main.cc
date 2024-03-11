@@ -56,24 +56,11 @@ void compyle(std::istream &stream, Options opts) {
   }
 
   fysh::Compyler cumpyler;
-  llvm::Function *fn{cumpyler.compyle(program, opts.noOpt)};
-  if (fn == nullptr) {
+  fysh::Program p{cumpyler.compyle(program, opts.noOpt)};
+  if (p.empty()) {
     std::cerr << "error compyling?" << std::endl;
   } else {
-    if (opts.outputFilename == "-") {
-      fn->print(llvm::outs());
-    } else {
-      std::error_code ec;
-      llvm::raw_fd_ostream outputFile(opts.outputFilename.c_str(), ec);
-      if (outputFile.error()) {
-        std::cerr << "Error opening file " << opts.outputFilename
-                  << " for writing: " << ec.message() << "\n";
-        std::exit(1);
-      } else {
-        fn->print(outputFile);
-      }
-    }
-    fn->eraseFromParent();
+    p.print(opts.outputFilename);
   }
 }
 

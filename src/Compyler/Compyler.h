@@ -39,12 +39,20 @@
 
 namespace fysh {
 using Emit = std::variant<llvm::Value *, ast::Error>;
+class Program : std::vector<llvm::Function *> {
+public:
+  void print(const std::string &outputFile);
+  void add(llvm::Function *fn);
+  bool empty() const;
+
+private:
+  using std::vector<llvm::Function *>::vector;
+};
 class Compyler {
 public:
   Compyler();
 
-  llvm::Function *compyle(const std::vector<ast::FyshStmt> &program,
-                          bool noOpt);
+  Program compyle(const std::vector<ast::FyshStmt> &ast, bool noOpt);
 
 private:
   /* Compiling statements */
@@ -64,6 +72,8 @@ private:
   Emit anchorIn(const fysh::ast::FyshBinaryExpr &expr);
   Emit anchorOut(const fysh::ast::FyshBinaryExpr &expr);
   Emit unary(const fysh::ast::FyshUnaryExpr &expr);
+
+  Program p;
 
   std::unordered_map<std::string_view, llvm::AllocaInst *> namedValues;
   std::unique_ptr<llvm::LLVMContext> context;
