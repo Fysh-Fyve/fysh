@@ -59,12 +59,15 @@ begin
 
   gpio : process(clk_i)
   begin
-    -- This basically are just output pins right now
-    -- TODO: Implement masking to be able to take input
+    -- Takes in value and applies bitmask
     if falling_edge(clk_i) then
       pin_read_o <= gp_io;
       if write_en_i then
-        gp_io <= pin_write_i;
+        for i in 0 to 31 loop
+            if pin_mode_i(i) then
+                gp_io(i) <= pin_write_i(i);
+            end if;
+        end loop;
       end if;
     end if;
   end process gpio;
