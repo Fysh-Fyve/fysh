@@ -37,8 +37,8 @@ rom: rtl/core/rom_pkg.vhd
 
 rtl/core/rom_pkg.vhd: asm/example.hex \
 	build/fyve-rom \
-	scripts/rom/rom_pkg.part1.vhd \
-	scripts/rom/rom_pkg.part2.vhd
+	scripts/rom_pkg.part1.vhd \
+	scripts/rom_pkg.part2.vhd
 	./scripts/make_rom.sh $<
 
 %.dump: asm/%.elf
