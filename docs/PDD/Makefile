@@ -1,6 +1,6 @@
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 MD:=$(call rwildcard,md,*.md)
-OUT:=ECE492_RISCV_PDD_V01.pdf
+OUT:=ECE492_RISCV_PDD_V02.pdf
 ENGINE:=xelatex
 TEMPLATE:=custom.tex
 FONTS:=$(patsubst %,ttf/Carlito-%.ttf,Regular Italic Bold BoldItalic)

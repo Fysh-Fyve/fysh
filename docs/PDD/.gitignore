@@ -1,7 +1,8 @@
 ttf/*.ttf
 plantuml-images/*
 !plantuml-images/.keep
-ECE492_RISCV_PDD_V01.pdf
+!ECE492_RISCV_PDD_V01.pdf
+ECE492_RISCV_PDD_V02.pdf
 ieee-with-url.csl
 indent.log
 *.bak*
