@@ -23,7 +23,7 @@ SRC := $(call rwildcard,src,*.cc) \
        $(call rwildcard,asm,*.cc) \
        $(call rwildcard,asm,*.h)
 
-all: doctest/doctest.h build/compile_commands.json
+all: doctest/doctest.h build/compile_commands.json | build
 	cd build && $(BUILD)
 
 fmt: $(SRC)
@@ -47,7 +47,14 @@ test: all
 run: all
 	./build/fysh
 
-clean:
+release:
+	rm -rf build
+	RELEASE=1 $(MAKE) all
+
+install:
+	cp ./build/fysh /usr/local/bin/fysh
+
+clean: build
 	cd build && $(BUILD) clean
 
-.PHONY: clean run test all
+.PHONY: clean run test all release
