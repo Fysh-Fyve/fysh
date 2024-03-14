@@ -1,5 +1,3 @@
-\newpage
-
 # High-Level Hardware Design
 
 Outlined in Section \ref{Tab:hardware}, this design presents a typical computer
