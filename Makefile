@@ -1,6 +1,7 @@
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) \
 	  $(filter $(subst *,%,$2),$d))
 
+FYSH := $(shell command -v fysh 2> /dev/null)
 RTL_DIR := rtl
 SRC_DIR := $(RTL_DIR)/core
 TEST_DIR := $(RTL_DIR)/test
@@ -50,7 +51,14 @@ rtl/core/rom_pkg.vhd: asm/example.hex \
 %.dump: sw/%.elf
 	llvm-objdump -D --section=.text --section=.sdata --arch-name=riscv32 $<
 
+%.dump: fysh/%.elf
+	llvm-objdump -D --section=.text --section=.sdata --arch-name=riscv32 $<
+
 %.rom: asm/%.hex
+	./scripts/make_rom.sh $<
+
+.SECONDARY:
+%.rom: fysh/%.hex
 	./scripts/make_rom.sh $<
 
 %.hex: %.elf
@@ -61,6 +69,9 @@ rtl/core/rom_pkg.vhd: asm/example.hex \
 
 %.o: %.c
 	clang -c $< -O3 --target=riscv32 -march=rv32i -nostdlib -o $@
+
+%.s: %.fysh
+	$(FYSH) $< | llc -O3 -march=riscv32 -o $@
 
 %.s: %.c
 	clang -S $< -O3 --target=riscv32 -march=rv32i -nostdlib -o $@

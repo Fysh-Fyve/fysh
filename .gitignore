@@ -10,3 +10,6 @@ rtl/core/rom_pkg.vhd
 wave.ghw
 build/*
 !build/.keep
+fysh/*
+!fysh/*.fysh
+sw/*.o
