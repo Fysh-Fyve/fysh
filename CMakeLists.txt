@@ -21,7 +21,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 
 add_subdirectory(src)
 
-add_executable(fysh src/main.cc)
-target_link_libraries(fysh common ${llvm_libs})
+add_executable(fysh-sea src/main.cc)
+target_link_libraries(fysh-sea common ${llvm_libs})
 
 add_subdirectory(test)

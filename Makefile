@@ -45,14 +45,14 @@ test: all
 	./build/test/tests
 
 run: all
-	./build/fysh
+	./build/fysh-sea
 
 release:
 	rm -rf build
 	RELEASE=1 $(MAKE) all
 
 install:
-	cp ./build/fysh /usr/local/bin/fysh
+	cp ./build/fysh-sea /usr/local/bin/fysh-sea
 
 clean: build
 	cd build && $(BUILD) clean
