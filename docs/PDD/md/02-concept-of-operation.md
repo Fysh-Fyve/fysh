@@ -27,8 +27,8 @@ We are also curious about the internals of real-world CPUs. We have only
 encountered a "toy" VHDL implementation of a CPU in electrical and computer
 engineering (ECE) 410, our digital logic design course. Our initial idea was to
 run the compiled program written in our esoteric programming language on an
-ESP-32 C3 MCU[@esp32]. However, we are required to have a hardware aspect to our
-project.
+ESP-32 C3 microcontroller unit (MCU)[@esp32]. However, we are required to have a
+hardware aspect to our project.
 
 Because of this, we decided to implement a RISC-V CPU ourselves with a custom
 CPU instruction to showcase the extensibility of RISC-V. Implementing the CPU in
@@ -49,7 +49,7 @@ four main use cases that can be invoked by the Computer Engineering student are
 
 - Initialize Chyp - program the FPGA with the softcore CPU.
 - Compyle Fysh - compile the Fysh program into a binary.
-- Program Board - load the compiled binary into the development board's ROM.
+- Program Board - load the compiled binary into the development board's read-only memory (ROM).
 - Run Fysh - Turn on the CPU on the development board.
 
 \input{tex/use-case}
