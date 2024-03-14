@@ -1,7 +1,7 @@
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) \
 	  $(filter $(subst *,%,$2),$d))
 
-FYSH := $(shell command -v fysh 2> /dev/null)
+FYSH := $(shell command -v fysh-sea 2> /dev/null)
 RTL_DIR := rtl
 SRC_DIR := $(RTL_DIR)/core
 TEST_DIR := $(RTL_DIR)/test
