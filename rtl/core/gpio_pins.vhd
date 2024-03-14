@@ -36,6 +36,8 @@ entity gpio_pins is
 end gpio_pins;
 
 architecture rtl of gpio_pins is
+  -- Set all pins to be output by default
+  signal mode_latch : std_ulogic_vector (31 downto 0) := (others => '1');
 begin
   verbose_gpio_print :
   if VERBOSE generate
@@ -46,12 +48,8 @@ begin
         variable l : line;
       begin
         if gp_io(i)'event then
-          report to_string(gp_io(i));
-        -- write(l, string'("gpio "));
-        -- write(l, i);
-        -- write(l, string'(": "));
-        -- write(l, gp_io(i));
-        -- writeline(output, l);
+          report string'("gpio ") & to_string(i)
+            & string'(": ") & to_string(gp_io(i));
         end if;
       end process;
     end generate print_gpio_g;
@@ -61,14 +59,18 @@ begin
   begin
     -- Takes in value and applies bitmask
     if falling_edge(clk_i) then
-      pin_read_o <= gp_io;
+      if mode_write_en_i = '1' then
+        mode_latch <= pin_mode_i;
+      end if;
       if write_en_i = '1' then
         for i in 0 to 31 loop
-          if pin_mode_i(i) = '1' then
+          if mode_latch(i) = '1' then
             gp_io(i) <= pin_write_i(i);
           end if;
         end loop;
       end if;
+      pin_read_o <= gp_io;
+      mode_o     <= mode_latch;
     end if;
   end process gpio;
 end rtl;

@@ -44,7 +44,7 @@ begin
   begin
     pin_mode_i      <= x"F0F0F0F0";
     mode_write_en_i <= '1';
-    wait for 20 ns;
+    wait for 40 ns;
     pin_write_i     <= x"FFFFFFFF";
     write_en_i      <= '1';
     wait for 40 ns;
