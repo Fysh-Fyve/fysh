@@ -49,7 +49,8 @@ four main use cases that can be invoked by the Computer Engineering student are
 
 - Initialize Chyp - program the FPGA with the softcore CPU.
 - Compyle Fysh - compile the Fysh program into a binary.
-- Program Board - load the compiled binary into the development board's read-only memory (ROM).
+- Program Board - load the compiled binary into the development board's
+  read-only memory (ROM).
 - Run Fysh - Turn on the CPU on the development board.
 
 \input{tex/use-case}
