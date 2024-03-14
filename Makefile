@@ -18,6 +18,9 @@ export GHDL_FLAGS := compile --std=08
 # GHDL_FLAGS += -frelaxed
 # If you wanna silence annoying errors
 export RUN_FLAGS := --ieee-asserts=disable
+ifdef VERBOSE
+RUN_FLAGS += -gVERBOSE=$(VERBOSE)
+endif
 ifdef WAVE
 RUN_FLAGS += --wave=wave.ghw
 endif
