@@ -424,7 +424,7 @@ fysh::Compyler::compyle(const std::vector<fysh::ast::FyshStmt> &ast,
     p.add(prototype);
     return p;
   } else if (const ast::Error * error{std::get_if<ast::Error>(&emit)}) {
-    std::cerr << error << std::endl;
+    std::cerr << error->getraw() << std::endl;
   }
 
   // Something went wrong!
