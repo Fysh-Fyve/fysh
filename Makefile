@@ -33,7 +33,7 @@ wave:
 	WAVE=1 $(MAKE) topmodule_tb
 
 clean:
-	rm -fv **/*~ asm/*.hex asm/*.elf asm/*.o sw/*.o
+	rm -fv **/*~ asm/*.hex asm/*.elf asm/*.o sw/*.o fysh/*.o fysh/*.hex
 
 hex: $(ASM_HEX)
 
@@ -57,10 +57,10 @@ rtl/core/rom_pkg.vhd: asm/example.hex \
 %.rom: asm/%.hex
 	./scripts/make_rom.sh $<
 
-.SECONDARY:
 %.rom: fysh/%.hex
 	./scripts/make_rom.sh $<
 
+.PRECIOUS: %.hex
 %.hex: %.elf
 	llvm-objcopy -O binary $< $@
 
