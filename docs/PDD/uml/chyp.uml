@@ -1,5 +1,5 @@
 @startuml
-component "Target Processor (Zybo Board)" {
+node "Target Processor (Zybo Board)" {
   [Controller] as CTL
   [ALU] as ALU
   [Instruction Register] as IR
