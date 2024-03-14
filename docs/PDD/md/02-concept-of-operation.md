@@ -37,12 +37,13 @@ potentially aid in the learning of other computer engineering students.
 
 ## Use Cases
 
-The use case diagram below summarizes the use cases for this project. The only
-actor in this system is the Computer Engineering student that intends to run a
-program written in Fysh on the RISC-V CPU. The four main use cases that can be
-invoked by the Computer Engineering student are "Initialize Chyp" (Table
-\ref{Tab:UC-001}), "Compyle Fysh" (Table \ref{Tab:UC-002}), "Program Board"
-(Table \ref{Tab:UC-003}), and "Run Fysh" (Table \ref{Tab:UC-004}).
+The use case diagram below (Figure \ref{fig:use-case}) summarizes the use cases
+for this project. The only actor in this system is the Computer Engineering
+student that intends to run a program written in Fysh on the RISC-V CPU. The
+four main use cases that can be invoked by the Computer Engineering student are
+"Initialize Chyp" (Table \ref{Tab:UC-001}), "Compyle Fysh" (Table
+\ref{Tab:UC-002}), "Program Board" (Table \ref{Tab:UC-003}), and "Run Fysh"
+(Table \ref{Tab:UC-004}).
 
 - Initialize Chyp - program the FPGA with the softcore CPU.
 - Compyle Fysh - compile the Fysh program into a binary.
