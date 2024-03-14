@@ -1,6 +1,6 @@
 # Minimum Design
 
-In this section a minimum design, the "walking skeleton" is described. The
+In this section a minimum design, the "swimming fish bone" is described. The
 purpose is to define the functionality to be implemented in the first
 development iteration. The outcome is reported to the client providing an
 opportunity for early feedback.
