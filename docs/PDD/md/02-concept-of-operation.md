@@ -15,10 +15,11 @@ did not yet have an operating system, rendering the project infeasible and
 impractical.
 
 However, we insisted on working on a compiler. This time, we are targeting
-RISC-V[@riscv], an open standard ISA that is gaining popularity in the industry.
-It was initially stated in the proposal that we are taking inspiration from
-modern languages like Rust, Zig, or Go[@ppr], but we have also decided to
-unleash our creativity and make our programming language esoteric[@esolang].
+RISC-V[@riscv], an open standard instruction set architecture (ISA) that is
+gaining popularity in the industry. It was initially stated in the proposal that
+we are taking inspiration from modern languages like Rust, Zig, or Go[@ppr], but
+we have also decided to unleash our creativity and make our programming language
+esoteric[@esolang].
 
 ### Learning about RISC-V ISA
 
