@@ -23,10 +23,11 @@ unleash our creativity and make our programming language esoteric[@esolang].
 ### Learning about RISC-V ISA
 
 We are also curious about the internals of real-world CPUs. We have only
-encountered a "toy" VHDL implementation of a CPU in ECE 410, our digital logic
-design course. Our initial idea was to run the compiled program written in our
-esoteric programming language on an ESP-32 C3 MCU[@esp32]. However, we are
-required to have a hardware aspect to our project.
+encountered a "toy" VHDL implementation of a CPU in electrical and computer
+engineering (ECE) 410, our digital logic design course. Our initial idea was to
+run the compiled program written in our esoteric programming language on an
+ESP-32 C3 MCU[@esp32]. However, we are required to have a hardware aspect to our
+project.
 
 Because of this, we decided to implement a RISC-V CPU ourselves with a custom
 CPU instruction to showcase the extensibility of RISC-V. Implementing the CPU in
