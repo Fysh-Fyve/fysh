@@ -1,26 +1,21 @@
 @startuml
-frame "Front end" {
-  [FyshLexer]
-  [FyshParser]
-  [Semantic Analyzer] as SA
-}
+node "Dev Machine" {
+  frame "Front end" as FE {
+    [FyshLexer]
+    [FyshParser]
+    [Semantic Analyzer] as SA
+  }
 
-frame "Middle end" as ME {
-  frame "LLVM/GCC Compiler Infrastructure" {
-    [Intermediate Representation] as IR #Lightblue
-    [Optimization Passes] as OP #Lightblue
+  frame "LLVM Compiler Infrastructure" as ME {
+    [Intermediate Representation] as IR
+    [Optimization Passes] as OP
+    [Code Generator] as CG
   }
 }
 
-frame "Back end" {
-  [Code Generator] as CG
-}
-
-
 FyshLexer -right-> FyshParser
 FyshParser -right-> SA
-SA -[dashed]-> IR
+SA -down-> (IR)
 IR -right-> (OP)
 OP -right-> (CG)
-SA -right-> (CG)
 @enduml
