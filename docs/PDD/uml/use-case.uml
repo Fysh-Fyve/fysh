@@ -17,6 +17,8 @@ compyleFysh -[dashed]- programBoard
 
 student --> compyleFysh
 student --> runFysh
+student --> initialize
+student --> programBoard
 
 runFysh .> initialize : include
 runFysh .> programBoard : include
