@@ -259,9 +259,10 @@ begin
     pc_alu          when "00",
     (others => 'X') when others;
 
-  -- Branch to the same instruction (infinite loop) to signal being "done"
+  -- Branch/Jump to the same instruction (infinite loop) to signal being "done"
   with insn(6 downto 2) select done <=
     nor(imm_ex & pc_alu_sel & pc_next_sel) when OPCODE_BRANCH,
+    nor(imm_ex)                            when OPCODE_JAL,
     '0'                                    when others;
 
   grilled_fysh_inst : entity work.grilled_fysh(rtl) port map (
