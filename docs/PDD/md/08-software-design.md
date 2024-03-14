@@ -3,8 +3,8 @@
 This document outlines the design of the Fysh programming language compiler and
 its execution on custom hardware. As shown in Section \ref{Tab:software}, the
 Fysh compiler translates Fysh code into executable machine code using C++ for
-backend processing. This process is divided into three primary stages: Front
-End, Middle End (optional), and Back End.
+backend processing. This process is divided into two stages: the Front End, and
+Low-Level Virtual Machine (LLVM) Compiler Infrastructure.
 
 ## Compiler Architecture
 
@@ -17,7 +17,7 @@ End, Middle End (optional), and Back End.
 - **Semantic Analyzer**: The Semantic Analyzer traverses the AST to verify
   semantic consistency, ensuring the code follows the rules of the language.
 
-### Middle End (Optional)
+### LLVM Compiler Infrastructure
 
 - **Intermediate Representation (IR)**: This stage involves translating the AST
   into a platform-independent, intermediate representation. This step is crucial
@@ -25,9 +25,6 @@ End, Middle End (optional), and Back End.
 - **Optimization Passes**: The IR undergoes various optimization passes to
   improve efficiency and performance. These optimizations may include code
   simplification and dead code elimination.
-
-### Back End
-
 - **Code Generation**: The final stage converts the optimized IR into machine
   code specific to the target hardware, making the program executable.
 
