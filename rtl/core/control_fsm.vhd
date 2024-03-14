@@ -9,12 +9,14 @@ use work.fysh_fyve.all;
 --! The Big Brain of the CPU.\n
 
 entity control_fsm is
+  generic (VERBOSE : boolean := false);
   port (
     clk_i     : in std_ulogic;          --! Clock Signal.
     reset_i   : in std_ulogic;
     eq_i      : in std_ulogic;          --! Equal flag (A == B).
     lt_i      : in std_ulogic;          --! Less than flag (A < B).
     ltu_i     : in std_ulogic;  --! Unsigned less than flag (A < B (unsigned)).
+    load_i    : in std_ulogic;  --! Whether the next instruction is a load instruction.
     opcode_i  : in std_ulogic_vector (6 downto 0) := (others => '0');
     op_bits_i : in std_ulogic_vector (2 downto 0);
     sub_sra_i : in std_ulogic;  --! subtract or shift right arithmetic flag (0 = add, logical shift right; 1 = subtract, arithmetic shift right).
@@ -38,7 +40,7 @@ entity control_fsm is
 end control_fsm;
 
 architecture rtl of control_fsm is
-  type state_t is (init, decode, drive, done);
+  type state_t is (init, decode, reg_wait, drive, done);
   type write_dest_t is (mem, reg, none);
 
   signal pc_clk       : std_ulogic := '0';
@@ -52,8 +54,21 @@ architecture rtl of control_fsm is
 
   signal write_dest : write_dest_t := none;
   signal state      : state_t      := init;
+  signal next_state : state_t      := drive;
 
   signal mux_sels : std_ulogic_vector(8 downto 0);
+
+  procedure write (l : inout std.textio.line; s : in state_t) is
+    use std.textio.all;
+  begin
+    case s is
+      when init     => write(l, string'("init"));
+      when decode   => write(l, string'("decode"));
+      when reg_wait => write(l, string'("reg_wait"));
+      when drive    => write(l, string'("drive"));
+      when done     => write(l, string'("done"));
+    end case;
+  end write;
 
   procedure write (l : inout std.textio.line; wd : in write_dest_t) is
     use std.textio.all;
@@ -77,6 +92,10 @@ begin
     mem  when OPCODE_STORE,
     none when others;
 
+  with load_i select next_state <=
+    reg_wait when '1',
+    drive    when others;
+
   with op_bits_i select is_add <=
     '1' when OP_ADD_SUB,
     '0' when others;
@@ -91,7 +110,6 @@ begin
     '0'       when others;
 
   with opcode_i(6 downto 2) select sub_sra_o <=
-    '0'                      when OPCODE_AUIPC,   -- 0 for sure
     sub_sra_i and not is_add when OPCODE_REG_IM,  -- There is no subi
     sub_sra_i                when OPCODE_REG_REG,
     '0'                      when others;
@@ -144,6 +162,11 @@ begin
       state  <= init;
       done_o <= '0';
     elsif rising_edge(clk_i) then
+      if VERBOSE then
+        write(l, string'("state: "));
+        write(l, state);
+        writeline(output, l);
+      end if;
       case state is
         when init =>
           state <= decode;
@@ -152,7 +175,9 @@ begin
           rd_clk       <= '0';
           ir_clk       <= '1';
           pc_clk       <= '0';
-          state        <= drive;
+          state        <= next_state;
+        when reg_wait =>
+          state <= drive;
         when drive =>
           case write_dest is
             when mem =>

@@ -58,6 +58,7 @@ architecture rtl of topmodule is
   signal rd_sel     : std_ulogic_vector (1 downto 0)  := (others => '0');
   signal alu        : std_ulogic_vector (31 downto 0) := (others => '0');
   signal pc         : std_ulogic_vector (31 downto 0) := (others => '0');
+  signal load       : std_ulogic                      := '0';
 
   signal rd_val                            : std_ulogic_vector (31 downto 0);
   signal gf                                : std_ulogic_vector (31 downto 0);
@@ -156,30 +157,43 @@ begin
     less_than_flag_o          => lt,
     less_than_unsigned_flag_o => ltu);
 
-  control_fsm_inst : entity work.control_fsm(rtl) port map(
-    clk_i     => clk_div,
-    reset_i   => reset,
-    eq_i      => eq,
-    lt_i      => lt,
-    ltu_i     => ltu,
-    opcode_i  => insn(6 downto 0),
-    op_bits_i => insn(14 downto 12),
-    sub_sra_i => insn(30),
+  -- WARNING: all LOADs now take 3 clock cycles instead of the typical 2 per
+  -- instruction!
+  --
+  -- The clocking shenanigans only seem to be happening in the RAM.
+  -- Now the question is: should we make all LOADs 3 cycles to be consistent,
+  -- or optimize the LOADs from ROM to be 2 clock cycles?
+  with imem_out(6 downto 2) select load <=
+    '1' when OPCODE_LOAD,
+    '0' when others;
 
-    sub_sra_o      => sub_sra,
-    op_bits_o      => op_bits,
-    waddr_sel_o    => waddr_sel,
-    iraddr_sel_o   => iraddr_sel,
-    draddr_sel_o   => draddr_sel,
-    alu_a_sel_o    => alu_a_sel,
-    alu_b_sel_o    => alu_b_sel,
-    rd_sel_o       => rd_sel,
-    mem_write_en_o => mem_write_en,
-    rd_clk_o       => rd_clk,
-    pc_clk_o       => pc_clk,
-    ir_clk_o       => ir_clk,
-    pc_alu_sel_o   => pc_alu_sel,
-    pc_next_sel_o  => pc_next_sel);
+  control_fsm_inst : entity work.control_fsm(rtl)
+    generic map (VERBOSE => VERBOSE)
+    port map(
+      clk_i     => clk_div,
+      reset_i   => reset,
+      eq_i      => eq,
+      lt_i      => lt,
+      ltu_i     => ltu,
+      load_i    => load,
+      opcode_i  => insn(6 downto 0),
+      op_bits_i => insn(14 downto 12),
+      sub_sra_i => insn(30),
+
+      sub_sra_o      => sub_sra,
+      op_bits_o      => op_bits,
+      waddr_sel_o    => waddr_sel,
+      iraddr_sel_o   => iraddr_sel,
+      draddr_sel_o   => draddr_sel,
+      alu_a_sel_o    => alu_a_sel,
+      alu_b_sel_o    => alu_b_sel,
+      rd_sel_o       => rd_sel,
+      mem_write_en_o => mem_write_en,
+      rd_clk_o       => rd_clk,
+      pc_clk_o       => pc_clk,
+      ir_clk_o       => ir_clk,
+      pc_alu_sel_o   => pc_alu_sel,
+      pc_next_sel_o  => pc_next_sel);
 
 
   with alu_a_sel select alu_a_op <=
