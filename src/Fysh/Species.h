@@ -73,6 +73,7 @@ enum class Species {
   ANCHOR_LEFT,       // (+o
   ANCHOR_RIGHT,      // o+)
   SUBMARINE,         // (submarine)<
+  BABY_SQUID,        // <~ return operator
 };
 
 }

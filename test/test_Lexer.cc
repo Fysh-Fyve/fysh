@@ -410,3 +410,22 @@ TEST_CASE("Submarines (SUBroutines)") {
   SUB_DIR("submarine", false);
   SUB_DIR("submarine", true);
 }
+
+TEST_CASE("BABY SQUID (Return)") {
+  FyshLexer lexer{R"(
+  >(submarine) ><fysh> 
+  ><>
+    >><fysh> ~
+    <~ <fysh>< ~
+    ~<~<fysh><~
+  <><
+  )"};
+  SUB_DIR("submarine", false); IDENT_DIR("fysh", false);
+  T(S::FYSH_OPEN);
+  Fysh fysh{lexer.nextFysh()};
+  CHECK(fysh == "fysh"); CHECK(fysh == S::INCREMENT); T(S::FYSH_WATER);
+  T(S::BABY_SQUID); IDENT_DIR("fysh", true); T(S::FYSH_WATER); 
+  T(S::FYSH_WATER); T(S::BABY_SQUID); IDENT_DIR("fysh", true); T(S::FYSH_WATER);
+  T(S::FYSH_CLOSE);
+  T(S::END);
+}

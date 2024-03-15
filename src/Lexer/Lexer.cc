@@ -387,6 +387,8 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
     switch (periscope()) {
     case ('3'):
       return goFysh(Species::HEART_MULTIPLY); // <3 multiplication heart
+    case ('~'):
+      return goFysh(Species::BABY_SQUID); // return operator
     case ('<'):
       return goFysh(Species::SHIFT_LEFT);
     case ('/'):
@@ -421,6 +423,7 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
   }
 }
 
+// Token starts with '<' 
 fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
   // current is the 2nd character of the token
   switch (periscope()) {

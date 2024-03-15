@@ -115,8 +115,9 @@ constexpr const char *debugType(const fysh::Species &species) {
     return "o+)";
   case Species::SUBMARINE:
     return "SUBMARINE";
+  case Species::BABY_SQUID:
+    return "return";
   }
-
   assert(false);
 }
 
