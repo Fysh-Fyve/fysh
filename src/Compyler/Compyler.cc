@@ -167,10 +167,7 @@ fysh::Emit fysh::Compyler::anchorIn(const fysh::ast::FyshBinaryExpr &expr) {
   }
   if (const ast::FyshIdentifier *ident =
           std::get_if<ast::FyshIdentifier>(&expr.right)) {
-    if (namedValues.find(ident->name) == namedValues.end()) {
-      return ast::Error{"unknown variable"};
-    }
-    llvm::AllocaInst *alloca{namedValues[ident->name]};
+    llvm::AllocaInst *alloca{resolveVariable(ident->name, true)};
     llvm::Function *fn = module->getFunction("fysh_gpio_read");
     if (!fn) {
       fn = defineRead(module.get(), context.get());
@@ -211,16 +208,26 @@ fysh::Emit fysh::Compyler::anchorOut(const fysh::ast::FyshBinaryExpr &expr) {
                                  std::get<llvm::Value *>(value)});
 }
 
+llvm::AllocaInst *fysh::Compyler::resolveVariable(const std::string_view &name,
+                                                  bool define = false) {
+  if (namedValues.find(name) == namedValues.end()) {
+    if (define) {
+      namedValues[name] = builder->CreateAlloca(
+          llvm::Type::getInt32Ty(*context), nullptr, name);
+    } else {
+      return nullptr;
+    }
+  }
+  return namedValues[name];
+}
+
 fysh::Emit fysh::Compyler::anchorStmt(const fysh::ast::FyshAnchorStmt &stmt,
                                       llvm::Function *fn) {
   if (stmt.op == fysh::ast::FyshBinary::AnchorIn) {
     // Only handle assignments to identifiers for now
     if (const ast::FyshIdentifier *ident =
             std::get_if<ast::FyshIdentifier>(&stmt.right)) {
-      if (namedValues.find(ident->name) == namedValues.end()) {
-        return ast::Error{"unknown variable"};
-      }
-      llvm::AllocaInst *alloca{namedValues[ident->name]};
+      llvm::AllocaInst *alloca{resolveVariable(ident->name, true)};
       llvm::Function *fn = module->getFunction("fysh_gpio_read_all");
       if (!fn) {
         fn = defineReadAll(module.get(), context.get());
@@ -294,10 +301,10 @@ fysh::Emit fysh::Compyler::increment(const fysh::ast::FyshIncrementStmt &stmt,
                                      llvm::Function *fn) {
   if (const ast::FyshIdentifier *ident =
           std::get_if<ast::FyshIdentifier>(&stmt.expr)) {
-    if (namedValues.find(ident->name) == namedValues.end()) {
+    llvm::AllocaInst *alloca{resolveVariable(ident->name)};
+    if (!alloca) {
       return ast::Error{"unknown variable"};
     }
-    llvm::AllocaInst *alloca{namedValues[ident->name]};
     llvm::Value *load{
         builder->CreateLoad(alloca->getAllocatedType(), alloca, ident->name)};
     llvm::Value *inc{builder->CreateAdd(load, builder->getInt32(1))};
@@ -312,10 +319,10 @@ fysh::Emit fysh::Compyler::decrement(const fysh::ast::FyshDecrementStmt &stmt,
                                      llvm::Function *fn) {
   if (const ast::FyshIdentifier *ident =
           std::get_if<ast::FyshIdentifier>(&stmt.expr)) {
-    if (namedValues.find(ident->name) == namedValues.end()) {
+    llvm::AllocaInst *alloca{resolveVariable(ident->name)};
+    if (!alloca) {
       return ast::Error{"unknown variable"};
     }
-    llvm::AllocaInst *alloca{namedValues[ident->name]};
     llvm::Value *load{
         builder->CreateLoad(alloca->getAllocatedType(), alloca, ident->name)};
     llvm::Value *dec{builder->CreateSub(load, builder->getInt32(1))};
@@ -331,11 +338,7 @@ fysh::Emit fysh::Compyler::assignment(const fysh::ast::FyshAssignmentStmt &stmt,
   // Only handle assignments to identifiers for now
   if (const ast::FyshIdentifier *ident =
           std::get_if<ast::FyshIdentifier>(&stmt.left)) {
-    if (namedValues.find(ident->name) == namedValues.end()) {
-      namedValues[ident->name] = builder->CreateAlloca(
-          llvm::Type::getInt32Ty(*context), nullptr, ident->name);
-    }
-    llvm::AllocaInst *alloca{namedValues[ident->name]};
+    llvm::AllocaInst *alloca{resolveVariable(ident->name, true)};
     Emit val{expression(&stmt.right)};
     if (llvm::Value * *expr{std::get_if<llvm::Value *>(&val)}) {
       builder->CreateStore(*expr, alloca);
@@ -417,7 +420,7 @@ fysh::Program fysh::Compyler::compyle(const fysh::ast::FyshProgram &ast,
         [this, prototype](auto &&arg) -> Emit {
           using T = std::decay_t<decltype(arg)>;
           if constexpr (std::is_same_v<T, ast::Error>) {
-            std::cerr << arg.getraw() << std::endl;
+            return arg;
           } else if constexpr (std::is_same_v<T, ast::FyshStmt>) {
             return statement(arg, prototype);
           } else if constexpr (std::is_same_v<T, ast::SUBroutine>) {

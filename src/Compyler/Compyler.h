@@ -73,6 +73,8 @@ private:
   Emit anchorOut(const fysh::ast::FyshBinaryExpr &expr);
   Emit unary(const fysh::ast::FyshUnaryExpr &expr);
 
+  llvm::AllocaInst *resolveVariable(const std::string_view &name, bool define);
+
   Program p;
 
   std::unordered_map<std::string_view, llvm::AllocaInst *> namedValues;
