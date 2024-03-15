@@ -187,7 +187,7 @@ TEST_CASE("Swim Left") {
 TEST_CASE("identifiers") {
   FyshLexer lexer{
       "><pos> <neg>< ><ostart> <ostart>< ><鱼> ><とと> <魚>< "
-      "<سمكة>< ><ᜁᜐ᜔ᜇ> ><ᠨᡳᠮᠠᡥᠠ> "
+      "<سمكة>< ><ᜁᜐ᜔ᜇ> ><ᠨᡳᠮᠠᡥᠠ> ><𒐫> ><🐠🐟🐡🦈🐬🐳🐋🦐🦑🦞🦀🐙>"
       // "<°isthisallowed>< ><whataboutthis°>"
   };
 
@@ -201,6 +201,8 @@ TEST_CASE("identifiers") {
   IDENT_DIR("سمكة", true);
   IDENT_DIR("ᜁᜐ᜔ᜇ", false);
   IDENT_DIR("ᠨᡳᠮᠠᡥᠠ", false);
+  IDENT_DIR("𒐫", false);
+  IDENT_DIR("🐠🐟🐡🦈🐬🐳🐋🦐🦑🦞🦀🐙", false);
 
   // Comment out until we decide what to do with it
   // IDENT_DIR("°isthisallowed", true);
