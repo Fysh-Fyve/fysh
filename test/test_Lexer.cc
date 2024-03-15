@@ -3,13 +3,14 @@
 #include "doctest.h"
 
 using namespace fysh;
+using S = Species;
 
 #define T(x) CHECK(lexer.nextFysh() == (x));
 #define IDENT_DIR(x, n)                                                        \
   do {                                                                         \
     Fysh fysh{lexer.nextFysh()};                                               \
     CHECK(fysh == (x));                                                        \
-    CHECK(fysh == Species::FYSH_IDENTIFIER);                                   \
+    CHECK(fysh == S::FYSH_IDENTIFIER);                                         \
     CHECK(fysh.negate == n);                                                   \
   } while (0)
 
@@ -17,7 +18,7 @@ using namespace fysh;
   do {                                                                         \
     Fysh fysh{lexer.nextFysh()};                                               \
     CHECK(fysh == (x));                                                        \
-    CHECK(fysh == Species::SUBMARINE);                                         \
+    CHECK(fysh == S::SUBMARINE);                                               \
     CHECK(fysh.negate == n);                                                   \
   } while (0)
 
@@ -27,7 +28,7 @@ using namespace fysh;
   do {                                                                         \
     Fysh fysh{lexer.nextFysh()};                                               \
     CHECK(fysh == (x));                                                        \
-    CHECK(fysh == Species::INVALID);                                           \
+    CHECK(fysh == S::INVALID);                                                 \
   } while (0)
 
 TEST_CASE("operators") {
@@ -53,43 +54,43 @@ TEST_CASE("operators") {
                   ">> "
                   "<< "};
 
-  T(Species::HEART_MULTIPLY);
-  T(Species::HEART_MULTIPLY);
-  T(Species::HEART_DIVIDE);
-  T(Species::HEART_DIVIDE);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_DIVIDE);
+  T(S::HEART_DIVIDE);
 
-  T(Species::BITWISE_AND);
-  T(Species::BITWISE_OR);
-  T(Species::CARET);
+  T(S::BITWISE_AND);
+  T(S::BITWISE_OR);
+  T(S::CARET);
 
-  T(Species::NOT_EQUAL);
-  T(Species::NOT_EQUAL);
-  T(Species::EQUAL);
-  T(Species::EQUAL);
+  T(S::NOT_EQUAL);
+  T(S::NOT_EQUAL);
+  T(S::EQUAL);
+  T(S::EQUAL);
 
-  T(Species::ASSIGN);
-  T(Species::ASSIGN);
+  T(S::ASSIGN);
+  T(S::ASSIGN);
 
-  T(Species::TADPOLE_GT);
-  T(Species::TADPOLE_LT);
-  T(Species::TADPOLE_GTE);
-  T(Species::TADPOLE_GTE);
-  T(Species::TADPOLE_LTE);
-  T(Species::TADPOLE_LTE);
+  T(S::TADPOLE_GT);
+  T(S::TADPOLE_LT);
+  T(S::TADPOLE_GTE);
+  T(S::TADPOLE_GTE);
+  T(S::TADPOLE_LTE);
+  T(S::TADPOLE_LTE);
 
-  T(Species::SHIFT_RIGHT);
-  T(Species::SHIFT_LEFT);
+  T(S::SHIFT_RIGHT);
+  T(S::SHIFT_LEFT);
 
-  T(Species::END);
+  T(S::END);
 }
 
 TEST_CASE("positive fysh multiply") {
   FyshLexer lexer{"><{{({(o> <3 ><{{({(o>"};
 
   T(0b011010);
-  T(Species::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
   T(0b011010);
-  T(Species::END);
+  T(S::END);
 }
 
 TEST_CASE("biblically accurate fysh") {
@@ -100,49 +101,49 @@ TEST_CASE("biblically accurate fysh") {
   IDENT_DIR("oolong", false);
   IDENT_DIR("oomph", true);
 
-  T(Species::END);
+  T(S::END);
 }
 
 TEST_CASE("fysh open & wtf open") {
   FyshLexer lexer{"><> <3 ><{{({(o> ><!@#$> ><> ><!@#$>"};
 
-  T(Species::FYSH_OPEN);
-  T(Species::HEART_MULTIPLY);
+  T(S::FYSH_OPEN);
+  T(S::HEART_MULTIPLY);
   T(0b011010);
-  T(Species::WTF_OPEN);
-  T(Species::FYSH_OPEN);
-  T(Species::WTF_OPEN);
-  T(Species::END);
+  T(S::WTF_OPEN);
+  T(S::FYSH_OPEN);
+  T(S::WTF_OPEN);
+  T(S::END);
 }
 
 TEST_CASE("random fysh") {
   FyshLexer lexer{"><##> ><###> ><####> <###><"};
 
   INVALID("><##>");
-  T(Species::RANDOM);
+  T(S::RANDOM);
   INVALID("><####>");
   INVALID("<###><");
-  T(Species::END);
+  T(S::END);
 }
 
 TEST_CASE("fysh eye") {
   FyshLexer lexer{"><{{({(°> <3 <°})}>< <°})}><"};
 
   T(0b011010);
-  T(Species::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
   T(-0b0101);
   T(-0b0101);
-  T(Species::END);
+  T(S::END);
 }
 
 TEST_CASE("negative fysh") {
   FyshLexer lexer{"><{{({(o> <3 <o})}>< <o})}><"};
 
   T(0b011010);
-  T(Species::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
   T(-0b0101);
   T(-0b0101);
-  T(Species::END);
+  T(S::END);
 }
 
 TEST_CASE("weird fysh") {
@@ -153,7 +154,7 @@ TEST_CASE("weird fysh") {
   T(-0b0111001);
   T(-0b0111001);
   T(0b011);
-  T(Species::END);
+  T(S::END);
 }
 
 TEST_CASE("Bad fysh") {
@@ -169,19 +170,19 @@ TEST_CASE("Bad fysh") {
   INVALID("><o{{}}><");
   INVALID("><{{({(o");
   INVALID("<o{{}}o");
-  T(Species::FYSH_OPEN);
-  T(Species::END);
+  T(S::FYSH_OPEN);
+  T(S::END);
 }
 
 TEST_CASE("Swim Left") {
   FyshLexer lexer{"<!@#$>< <>< <!@%$>< <!@#$> <><"};
 
-  T(Species::WTF_CLOSE);
-  T(Species::FYSH_CLOSE);
+  T(S::WTF_CLOSE);
+  T(S::FYSH_CLOSE);
   INVALID("<!@%$><");
   INVALID("<!@#$>");
-  T(Species::FYSH_CLOSE);
-  T(Species::END);
+  T(S::FYSH_CLOSE);
+  T(S::END);
 }
 
 TEST_CASE("identifiers") {
@@ -209,7 +210,7 @@ TEST_CASE("identifiers") {
   // IDENT_DIR("°isthisallowed", true);
   // IDENT_DIR("whataboutthis°", false);
 
-  T(Species::END);
+  T(S::END);
 }
 
 TEST_CASE("increment & decrement") {
@@ -217,30 +218,30 @@ TEST_CASE("increment & decrement") {
 
   Fysh fysh{lexer.nextFysh()};
   CHECK(fysh == "inc");
-  CHECK(fysh == Species::INCREMENT);
+  CHECK(fysh == S::INCREMENT);
 
   fysh = lexer.nextFysh();
   CHECK(fysh == "dec");
-  CHECK(fysh == Species::DECREMENT);
+  CHECK(fysh == S::DECREMENT);
 
-  T(Species::END);
+  T(S::END);
 }
 
 TEST_CASE("Terminate") {
   FyshLexer lexer{"~ ~~"};
 
-  T(Species::FYSH_WATER);
-  T(Species::FYSH_WATER);
-  T(Species::FYSH_WATER);
-  T(Species::END);
+  T(S::FYSH_WATER);
+  T(S::FYSH_WATER);
+  T(S::FYSH_WATER);
+  T(S::END);
 }
 
 TEST_CASE("Fysh Tank") {
   FyshLexer lexer{"[]"};
 
-  T(Species::FYSH_TANK_OPEN);
-  T(Species::FYSH_TANK_CLOSE);
-  T(Species::END);
+  T(S::FYSH_TANK_OPEN);
+  T(S::FYSH_TANK_CLOSE);
+  T(S::END);
 }
 
 TEST_CASE("Fysh If Else") {
@@ -250,40 +251,40 @@ TEST_CASE("Fysh If Else") {
 ><(((*> ><> <><
 )"};
 
-  T(Species::IF);
-  T(Species::FYSH_TANK_OPEN);
+  T(S::IF);
+  T(S::FYSH_TANK_OPEN);
   IDENT("fysh");
-  T(Species::FYSH_TANK_CLOSE);
-  T(Species::FYSH_OPEN);
-  T(Species::FYSH_CLOSE);
+  T(S::FYSH_TANK_CLOSE);
+  T(S::FYSH_OPEN);
+  T(S::FYSH_CLOSE);
 
-  T(Species::ELSE);
-  T(Species::IF);
-  T(Species::FYSH_TANK_OPEN);
+  T(S::ELSE);
+  T(S::IF);
+  T(S::FYSH_TANK_OPEN);
   IDENT("result");
-  T(Species::FYSH_TANK_CLOSE);
-  T(Species::FYSH_OPEN);
-  T(Species::FYSH_CLOSE);
+  T(S::FYSH_TANK_CLOSE);
+  T(S::FYSH_OPEN);
+  T(S::FYSH_CLOSE);
 
-  T(Species::ELSE);
-  T(Species::FYSH_OPEN);
-  T(Species::FYSH_CLOSE);
+  T(S::ELSE);
+  T(S::FYSH_OPEN);
+  T(S::FYSH_CLOSE);
 
-  T(Species::END);
+  T(S::END);
 }
 
 TEST_CASE("Arrays") {
   FyshLexer lexer{"><fysh> = [ ><{}o> - ><{}o> ] ~"};
 
   IDENT("fysh");
-  T(Species::ASSIGN);
-  T(Species::FYSH_TANK_OPEN);
+  T(S::ASSIGN);
+  T(S::FYSH_TANK_OPEN);
   T(3);
-  T(Species::FYSH_FOOD);
+  T(S::FYSH_FOOD);
   T(3);
-  T(Species::FYSH_TANK_CLOSE);
-  T(Species::FYSH_WATER);
-  T(Species::END);
+  T(S::FYSH_TANK_CLOSE);
+  T(S::FYSH_WATER);
+  T(S::END);
 }
 
 TEST_CASE("Anchors") {
@@ -294,24 +295,17 @@ TEST_CASE("Anchors") {
   ><{{> o+) ><fysh> ~
   )"};
 
-  T(Species::ANCHOR_LEFT);
-  IDENT("fysh");
-  T(Species::FYSH_WATER);
+  // clang-format off
+  T(S::ANCHOR_LEFT); IDENT("fysh"); T(S::FYSH_WATER);
 
-  T(Species::ANCHOR_RIGHT);
-  IDENT("fysh");
-  T(Species::FYSH_WATER);
+  T(S::ANCHOR_RIGHT); IDENT("fysh"); T(S::FYSH_WATER);
 
-  T(3);
-  T(Species::ANCHOR_LEFT);
-  IDENT("fysh");
-  T(Species::FYSH_WATER);
+  T(3); T(S::ANCHOR_LEFT); IDENT("fysh"); T(S::FYSH_WATER);
 
-  T(3);
-  T(Species::ANCHOR_RIGHT);
-  IDENT("fysh");
-  T(Species::FYSH_WATER);
-  T(Species::END);
+  T(3); T(S::ANCHOR_RIGHT); IDENT("fysh"); T(S::FYSH_WATER);
+  // clang-format on
+
+  T(S::END);
 }
 
 TEST_CASE("Fysh Factorial") {
@@ -326,41 +320,31 @@ TEST_CASE("Fysh Factorial") {
 <><
 )"};
 
-  IDENT("fysh");
-  T(Species::ASSIGN);
-  T(5);
-  T(Species::FYSH_WATER);
+  // clang-format off
+  IDENT("fysh"); T(S::ASSIGN); T(5); T(S::FYSH_WATER);
 
-  IDENT("result");
-  T(Species::ASSIGN);
-  T(1);
-  T(Species::FYSH_WATER);
+  IDENT("result"); T(S::ASSIGN); T(1); T(S::FYSH_WATER);
 
-  T(Species::FYSH_LOOP);
+  T(S::FYSH_LOOP);
 
-  T(Species::FYSH_TANK_OPEN);
-  IDENT("fysh");
-  T(Species::TADPOLE_GT);
-  T(1);
-  T(Species::FYSH_TANK_CLOSE);
+  T(S::FYSH_TANK_OPEN);
+    IDENT("fysh"); T(S::TADPOLE_GT); T(1);
+  T(S::FYSH_TANK_CLOSE);
 
-  T(Species::FYSH_OPEN);
+  T(S::FYSH_OPEN);
 
-  IDENT("result");
-  T(Species::ASSIGN);
-  IDENT("result");
-  T(Species::HEART_MULTIPLY);
-  IDENT("fysh");
-  T(Species::FYSH_WATER);
+    IDENT("result"); T(S::ASSIGN);
+      IDENT("result"); T(S::HEART_MULTIPLY); IDENT("fysh"); T(S::FYSH_WATER);
 
-  Fysh fysh{lexer.nextFysh()};
-  CHECK(fysh == "fysh");
-  CHECK(fysh == Species::DECREMENT);
-  T(Species::FYSH_WATER);
+    Fysh fysh{lexer.nextFysh()};
+    CHECK(fysh == "fysh");
+    CHECK(fysh == S::DECREMENT);
+    T(S::FYSH_WATER);
 
-  T(Species::FYSH_CLOSE);
+  T(S::FYSH_CLOSE);
 
-  T(Species::END);
+  T(S::END);
+  // clang-format on
 }
 
 TEST_CASE("Comments") {
@@ -373,28 +357,29 @@ This is also a comment
 
   Fysh fysh{lexer.nextFysh()};
   CHECK(fysh == "This is a comment");
-  CHECK(fysh == Species::COMMENT);
+  CHECK(fysh == S::COMMENT);
 
   fysh = lexer.nextFysh();
   CHECK(fysh.getBody() == "This is also a comment");
-  CHECK(fysh == Species::MULTILINE_COMMENT);
+  CHECK(fysh == S::MULTILINE_COMMENT);
 
   T(Species::END);
 }
 
 TEST_CASE("Fysh Bowl") {
   FyshLexer lexer{"><> ♡ ( ><fysh> ♡ <{{{(())}}}>< ♡ ><fysh> ) <><"};
-  T(Species::FYSH_OPEN);
-  T(Species::HEART_MULTIPLY);
-  T(Species::FYSH_BOWL_OPEN);
+
+  T(S::FYSH_OPEN);
+  T(S::HEART_MULTIPLY);
+  T(S::FYSH_BOWL_OPEN);
   IDENT("fysh");
-  T(Species::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
   T(-0b1110000111);
-  T(Species::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
   IDENT("fysh");
-  T(Species::FYSH_BOWL_CLOSE);
-  T(Species::FYSH_CLOSE);
-  T(Species::END);
+  T(S::FYSH_BOWL_CLOSE);
+  T(S::FYSH_CLOSE);
+  T(S::END);
 }
 
 TEST_CASE("TOUCHING") {
@@ -402,22 +387,22 @@ TEST_CASE("TOUCHING") {
       "><>♡(><fysh>♡<{{{(())}}}><<{{{(())}}}><><)))>♡><)))><FYSH><><)))>♡)<><"};
   // ><> ♡ ( ><fysh> ♡ <{{{(())}}}>< <{{{(())}}}>< ><)))> ♡ ><)))> <FYSH><
   // ><)))> ♡ ) <><
-  T(Species::FYSH_OPEN);
-  T(Species::HEART_MULTIPLY);
-  T(Species::FYSH_BOWL_OPEN);
+  T(S::FYSH_OPEN);
+  T(S::HEART_MULTIPLY);
+  T(S::FYSH_BOWL_OPEN);
   IDENT_DIR("fysh", false);
-  T(Species::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
   T(-0b1110000111);
   T(-0b1110000111);
   T(0b000);
-  T(Species::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
   T(0b000);
   IDENT_DIR("FYSH", true);
   T(0b000);
-  T(Species::HEART_MULTIPLY);
-  T(Species::FYSH_BOWL_CLOSE);
-  T(Species::FYSH_CLOSE);
-  T(Species::END);
+  T(S::HEART_MULTIPLY);
+  T(S::FYSH_BOWL_CLOSE);
+  T(S::FYSH_CLOSE);
+  T(S::END);
 }
 
 TEST_CASE("Submarines (SUBroutines)") {
