@@ -28,7 +28,7 @@ class FyshParser {
 
 public:
   FyshParser(FyshLexer lexer);
-  std::vector<ast::FyshSurfaceLevel> parseProgram();
+  ast::FyshProgram parseProgram();
 
 private:
   void nextFysh();

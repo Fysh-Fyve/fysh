@@ -45,6 +45,7 @@ public:
   Fysh() noexcept : species{Species::INVALID} {}
   Fysh(Species inType) noexcept : species{inType} {}
 
+  // fysh literals
   Fysh(std::uint32_t integer, bool negate) noexcept
       : negate{negate}, species{Species::FYSH_LITERAL}, value{integer} {}
 
@@ -54,6 +55,7 @@ public:
   Fysh(Species inType, const char *start, const char *end) noexcept
       : species{inType}, body(start, std::distance(start, end)) {}
 
+  // fysh identifiers & submarines
   Fysh(Species inType, const char *start, const char *end, bool negate) noexcept
       : negate{negate}, species{inType},
         body(start, std::distance(start, end)) {}

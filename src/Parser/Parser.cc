@@ -245,7 +245,34 @@ fysh::ast::FyshStmt fysh::FyshParser::parseIfElse() {
   return ast::FyshIfStmt{condition, consequence, alternative};
 }
 
-fysh::ast::FyshSurfaceLevel fysh::FyshParser::parseSUBroutine() {}
+fysh::ast::FyshSurfaceLevel fysh::FyshParser::parseSUBroutine() {
+  std::string_view name{curFysh.getBody()}; // Name of the subroutine
+  std::vector<std::string_view> parameters;
+  nextFysh();
+  // Parse parameters
+  while (curFysh != Species::FYSH_OPEN) {
+    if (curFysh != Species::FYSH_IDENTIFIER) {
+      return expectFysh(Species::FYSH_IDENTIFIER);
+    }
+    parameters.push_back(curFysh.getBody());
+    nextFysh();
+  }
+  // Parse body
+  nextFysh();
+  ast::FyshBlock body{parseBlock()};
+  if (body.size() == 1 &&
+      std::holds_alternative<ast::Error>(body[0])) {
+    return body[0];
+  }
+
+  // Return the subroutine
+  if (curFysh != Species::FYSH_CLOSE) {
+    return expectFysh(Species::FYSH_CLOSE);
+  } else {
+    nextFysh();
+    return ast::SUBroutine{name, parameters, body};
+  }
+}
 
 fysh::ast::FyshStmt fysh::FyshParser::parseLoop() {
   nextFysh();
@@ -306,8 +333,27 @@ fysh::ast::FyshStmt fysh::FyshParser::parseStatement() {
   }
 }
 
-std::vector<fysh::ast::FyshSurfaceLevel> fysh::FyshParser::parseProgram() {
-  return {parseBlock()};
+// Parse entire program
+fysh::ast::FyshProgram fysh::FyshParser::parseProgram() {
+
+  fysh::ast::FyshProgram program;
+
+  while ((curFysh != Species::END)) {
+    if (curFysh == Species::SUBMARINE) {
+      fysh::ast::FyshSurfaceLevel sub{parseSUBroutine()};
+      if (std::holds_alternative<ast::Error>(sub)) {
+        return {sub};
+      }
+      program.push_back(sub);
+    } else {
+      fysh::ast::FyshStmt stmt{parseStatement()};
+      if (std::holds_alternative<ast::Error>(stmt)) {
+        return {stmt};
+      }
+      program.push_back(stmt);
+    }
+  }
+  return program;
 }
 
 std::vector<fysh::ast::FyshStmt> fysh::FyshParser::parseBlock() {
