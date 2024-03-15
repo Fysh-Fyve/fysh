@@ -410,8 +410,9 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
       if (periscope() == '<') {
         return identifier(FyshDirection::RIGHT, true);
       }
-
       return Species::SHIFT_RIGHT;
+    case ('('):
+      return submarine(FyshDirection::LEFT); // submarine
     default:
       return cullDeformedFysh();
     }
@@ -472,7 +473,6 @@ fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
     // clang-format off
   case ('{'):
   case ('('):
-      return submarine(FyshDirection::LEFT); // submarine
   case ('}'):
   case (')'): return scales(FyshDirection::RIGHT); // fysh literal ><{{({(°>
   case ('>'): return goFysh(Species::FYSH_OPEN);
@@ -540,7 +540,7 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
       }
     }
     else if (isUnicode(periscope()) || std::isalpha(periscope())) {
-      return submarine(FyshDirection::RIGHT);
+      return submarine(FyshDirection::LEFT);
     } else {
       // We already reeled in (, do not go fysh.
       return Species::FYSH_BOWL_OPEN;

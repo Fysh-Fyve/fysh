@@ -114,7 +114,7 @@ constexpr const char *debugType(const fysh::Species &species) {
   case Species::ANCHOR_RIGHT:
     return "o+)";
   case Species::SUBMARINE:
-    return "Submarine";
+    return "SUBMARINE";
   }
 
   assert(false);
@@ -141,6 +141,7 @@ std::ostream &fysh::operator<<(std::ostream &os, const fysh::Fysh &f) {
   case Species::DECREMENT:
   case Species::FYSH_IDENTIFIER:
   case Species::COMMENT:
+  case Species::SUBMARINE:
   case Species::MULTILINE_COMMENT:
   case Species::INVALID: {
     os << debugType(f.getSpecies()) << "`" << f.getBody() << "`";
@@ -163,6 +164,7 @@ bool fysh::Fysh::operator==(const char *other) const noexcept {
   case Species::DECREMENT:
   case Species::COMMENT:
   case Species::MULTILINE_COMMENT:
+  case Species::SUBMARINE:
   case Species::INVALID:
     return body == other;
   default:
