@@ -4,6 +4,7 @@
 #define DOCTEST_CONFIG_TREAT_CHAR_STAR_AS_STRING
 
 #include "doctest.h"
+#include <iostream>
 #include <variant>
 
 using namespace fysh::ast;
@@ -16,7 +17,8 @@ void check_program(fysh::ast::FyshProgram program, std::size_t size) {
   }
   REQUIRE(program.size() == size);
 }
-void check_program(std::vector<fysh::ast::FyshStmt> program, std::size_t size) {
+
+void check_block(std::vector<fysh::ast::FyshStmt> program, std::size_t size) {
   if (program.size() == 1) {
     if (std::holds_alternative<Error>(program[0])) {
       FAIL(std::get<Error>(program[0]).getraw());
@@ -37,6 +39,16 @@ template <typename T> T unwrap(FyshSurfaceLevel decl) {
     stmt = std::get<FyshBlock>(stmt)[0];
   }
   return get_stmt<T>(stmt);
+}
+
+std::vector<FyshStmt> unwrap_block(FyshStmt stmt) {
+  FyshBlock block{std::get<FyshBlock>(stmt)};
+  FyshStmt s{stmt};
+  while (std::holds_alternative<FyshBlock>(s) &&
+         std::holds_alternative<FyshBlock>(std::get<FyshBlock>(s)[0])) {
+    s = std::get<FyshBlock>(s)[0];
+  }
+  return std::get<FyshBlock>(s);
 }
 
 template <typename T> T get_expr(FyshSurfaceLevel decl) {
@@ -73,7 +85,7 @@ TEST_CASE("Loop Statement") {
   check_program(program, 1);
   FyshLoopStmt stmt{unwrap<FyshLoopStmt>(program[0])};
   check_ident(stmt.condition, "fysh");
-  check_program(stmt.body, 1);
+  check_block(stmt.body, 1);
   CHECK(get_expr<FyshLiteral>(unwrap<FyshExpr>(stmt.body[0])).num == 1);
 }
 
@@ -121,4 +133,31 @@ TEST_CASE("Decrement Statement") {
   check_program(program, 1);
   FyshDecrementStmt stmt{unwrap<FyshDecrementStmt>(program[0])};
   check_ident(stmt.expr, "fysh");
+}
+
+TEST_CASE("Subroutines") {
+  fysh::FyshParser p{fysh::FyshLexer{R"(
+>(foo) ><arg1>
+><>
+    o+) ><local> ~
+    (+o ><local> ><arg1> ~
+<><
+  )"}};
+  fysh::ast::FyshProgram program{p.parseProgram()};
+  check_program(program, 1);
+  REQUIRE(std::holds_alternative<SUBroutine>(program[0]));
+  SUBroutine func{std::get<SUBroutine>(program[0])};
+  CHECK(func.name == "foo");
+  REQUIRE(func.parameters.size() == 1);
+  CHECK(func.parameters[0] == "arg1");
+  std::vector<FyshStmt> block{unwrap_block(func.body)};
+  check_block(block, 2);
+
+  FyshAnchorStmt stmt{unwrap<FyshAnchorStmt>(block[0])};
+  CHECK(stmt.op == FyshBinary::AnchorIn);
+  check_ident(stmt.right, "local");
+
+  stmt = unwrap<FyshAnchorStmt>(block[1]);
+  CHECK(stmt.op == FyshBinary::AnchorOut);
+  CHECK(stmt.right == "(local + arg1)");
 }

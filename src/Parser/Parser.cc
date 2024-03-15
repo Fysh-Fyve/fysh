@@ -209,7 +209,7 @@ fysh::ast::FyshStmt fysh::FyshParser::parseIfElse() {
     return expectFysh(Species::FYSH_OPEN);
   }
   nextFysh();
-  ast::FyshBlock consequence{parseBlock()};
+  std::vector<ast::FyshStmt> consequence{parseBlock()};
   if (consequence.size() == 1 &&
       std::holds_alternative<ast::Error>(consequence[0])) {
     return consequence[0];
@@ -233,7 +233,7 @@ fysh::ast::FyshStmt fysh::FyshParser::parseIfElse() {
     return expectFysh(Species::FYSH_OPEN);
   }
   nextFysh();
-  ast::FyshBlock alternative{parseBlock()};
+  std::vector<ast::FyshStmt> alternative{parseBlock()};
   if (alternative.size() == 1 &&
       std::holds_alternative<ast::Error>(alternative[0])) {
     return alternative[0];
@@ -288,7 +288,7 @@ fysh::ast::FyshStmt fysh::FyshParser::parseLoop() {
     return expectFysh(Species::FYSH_OPEN);
   }
   nextFysh();
-  ast::FyshBlock block{parseBlock()};
+  std::vector<ast::FyshStmt> block{parseBlock()};
   if (block.size() == 1 && std::holds_alternative<ast::Error>(block[0])) {
     return block[0];
   }
@@ -338,7 +338,6 @@ fysh::ast::FyshStmt fysh::FyshParser::parseStatement() {
 
 // Parse entire program
 fysh::ast::FyshProgram fysh::FyshParser::parseProgram() {
-
   fysh::ast::FyshProgram program;
 
   while ((curFysh != Species::END)) {
