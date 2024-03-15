@@ -58,6 +58,7 @@ private:
 
   char reel() noexcept;
   bool isUnicode() const noexcept;
+  bool isUnicode(char c) const noexcept;
   bool match(char x) noexcept;
   bool match(const char *x) noexcept;
 #ifdef FYSH_DEBUG
@@ -75,7 +76,9 @@ private:
   Fysh swimRight() noexcept;
   Fysh random() noexcept;
   Fysh slashOrComment() noexcept;
-  Fysh identifier(FyshDirection dir, bool increment = false) noexcept;
+  Fysh identifier(FyshDirection dir, bool increment = false,
+                  bool submarine = false) noexcept;
+  Fysh submarine(FyshDirection dir, bool increment = false) noexcept;
   Fysh cullDeformedFysh() noexcept;
   Fysh tilde() noexcept;
   FyshChar eatFyshChar() noexcept;

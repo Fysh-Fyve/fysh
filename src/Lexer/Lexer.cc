@@ -78,6 +78,16 @@ bool fysh::FyshLexer::isUnicode() const noexcept {
   return (c & 0xE0) == 0xC0 || (c & 0xF0) == 0xE0 || (c & 0xF8) == 0xF0;
 }
 
+// Checks if the current character is a Unicode character
+bool fysh::FyshLexer::isUnicode(char c) const noexcept {
+  if ((c & 0x80) == 0x00)
+    return false; // ASCII (first byte is 0xxxxxxx)
+
+  // Unicode start byte (2, 3, or 4 byte sequence (start with 110xxxxx,
+  // 1110xxxx, or 11110xxx respectively))
+  return (c & 0xE0) == 0xC0 || (c & 0xF0) == 0xE0 || (c & 0xF8) == 0xF0;
+}
+
 char fysh::FyshLexer::reel() noexcept {
   char c{*current++};
   if (c == '\n')
@@ -249,8 +259,10 @@ fysh::Fysh fysh::FyshLexer::slashOrComment() noexcept {
   }
 }
 
+
 fysh::Fysh fysh::FyshLexer::identifier(FyshDirection dir,
-                                       bool increment) noexcept {
+                                       bool increment, bool submarine) noexcept {
+  char closingChar = submarine ? ')' : '>';
   if (increment) {
     reel();
   }
@@ -267,7 +279,7 @@ fysh::Fysh fysh::FyshLexer::identifier(FyshDirection dir,
       reel();
     }
   }
-  if (periscope() != '>') {
+  if (periscope() != closingChar) {
     return cullDeformedFysh();
   }
   const char *identEnd{current};
@@ -285,8 +297,13 @@ fysh::Fysh fysh::FyshLexer::identifier(FyshDirection dir,
     return {Species::INCREMENT, identStart, identEnd};
   }
 
-  return {Species::FYSH_IDENTIFIER, identStart, identEnd,
+  return {submarine ? Species::SUBMARINE : Species::FYSH_IDENTIFIER, identStart, identEnd,
           dir == FyshDirection::LEFT};
+}
+
+fysh::Fysh fysh::FyshLexer::submarine(FyshDirection dir,
+                                       bool increment) noexcept {
+return identifier(dir, increment, true);
 }
 
 fysh::Fysh fysh::FyshLexer::random() noexcept {
@@ -455,6 +472,7 @@ fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
     // clang-format off
   case ('{'):
   case ('('):
+      return submarine(FyshDirection::LEFT); // submarine
   case ('}'):
   case (')'): return scales(FyshDirection::RIGHT); // fysh literal ><{{({(°>
   case ('>'): return goFysh(Species::FYSH_OPEN);
@@ -520,6 +538,9 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
       } else {
         return cullDeformedFysh();
       }
+    }
+    else if (isUnicode(periscope()) || std::isalpha(periscope())) {
+      return submarine(FyshDirection::RIGHT);
     } else {
       // We already reeled in (, do not go fysh.
       return Species::FYSH_BOWL_OPEN;

@@ -13,6 +13,14 @@ using namespace fysh;
     CHECK(fysh.negate == n);                                                   \
   } while (0)
 
+#define SUB_DIR(x, n)                                                          \
+  do {                                                                         \
+    Fysh fysh{lexer.nextFysh()};                                               \
+    CHECK(fysh == (x));                                                        \
+    CHECK(fysh == Species::SUBMARINE);                                         \
+    CHECK(fysh.negate == n);                                                   \
+  } while (0)
+
 #define IDENT(x) IDENT_DIR(x, false)
 
 #define INVALID(x)                                                             \
@@ -407,4 +415,10 @@ TEST_CASE("TOUCHING") {
   T(Species::FYSH_BOWL_CLOSE);
   T(Species::FYSH_CLOSE);
   T(Species::END);
+}
+
+TEST_CASE("Submarines (SUBroutines)") {
+  FyshLexer lexer{">(submarine) (submarine)<"};
+  SUB_DIR("submarine", false);
+  SUB_DIR("submarine", true);
 }

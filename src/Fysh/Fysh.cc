@@ -113,6 +113,8 @@ constexpr const char *debugType(const fysh::Species &species) {
     return "(+o";
   case Species::ANCHOR_RIGHT:
     return "o+)";
+  case Species::SUBMARINE:
+    return "Submarine";
   }
 
   assert(false);
