@@ -72,7 +72,7 @@ enum class Species {
   FYSH_FOOD,         // -
   ANCHOR_LEFT,       // (+o
   ANCHOR_RIGHT,      // o+)
-  SUBMARINE,    // (submarine)<
+  SUBMARINE,         // (submarine)<
 };
 
 }

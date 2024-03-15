@@ -259,9 +259,8 @@ fysh::Fysh fysh::FyshLexer::slashOrComment() noexcept {
   }
 }
 
-
-fysh::Fysh fysh::FyshLexer::identifier(FyshDirection dir,
-                                       bool increment, bool submarine) noexcept {
+fysh::Fysh fysh::FyshLexer::identifier(FyshDirection dir, bool increment,
+                                       bool submarine) noexcept {
   char closingChar = submarine ? ')' : '>';
   if (increment) {
     reel();
@@ -297,13 +296,13 @@ fysh::Fysh fysh::FyshLexer::identifier(FyshDirection dir,
     return {Species::INCREMENT, identStart, identEnd};
   }
 
-  return {submarine ? Species::SUBMARINE : Species::FYSH_IDENTIFIER, identStart, identEnd,
-          dir == FyshDirection::LEFT};
+  return {submarine ? Species::SUBMARINE : Species::FYSH_IDENTIFIER, identStart,
+          identEnd, dir == FyshDirection::LEFT};
 }
 
 fysh::Fysh fysh::FyshLexer::submarine(FyshDirection dir,
-                                       bool increment) noexcept {
-return identifier(dir, increment, true);
+                                      bool increment) noexcept {
+  return identifier(dir, increment, true);
 }
 
 fysh::Fysh fysh::FyshLexer::random() noexcept {
@@ -412,7 +411,8 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
       }
       return Species::SHIFT_RIGHT;
     case ('('):
-      return submarine(FyshDirection::LEFT); // submarine
+      reel();
+      return submarine(FyshDirection::RIGHT); // submarine
     default:
       return cullDeformedFysh();
     }
@@ -538,8 +538,7 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
       } else {
         return cullDeformedFysh();
       }
-    }
-    else if (isUnicode(periscope()) || std::isalpha(periscope())) {
+    } else if (isUnicode(periscope()) || std::isalpha(periscope())) {
       return submarine(FyshDirection::LEFT);
     } else {
       // We already reeled in (, do not go fysh.
