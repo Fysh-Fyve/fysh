@@ -140,3 +140,28 @@ bool fysh::ast::operator==(const fysh::ast::FyshExpr &expr, const char *str) {
 bool fysh::ast::operator!=(const fysh::ast::FyshExpr &expr, const char *str) {
   return !(expr == str);
 }
+
+std::ostream &fysh::ast::operator<<(std::ostream &os,
+                                    const fysh::ast::FyshProgram &f) {
+  for (const auto &stmt : f) {
+    std::visit(
+        [&os](auto &&arg) {
+          using T = std::decay_t<decltype(arg)>;
+          if constexpr (std::is_same_v<T, Error>) {
+            os << "ERROR(\"" << *arg.t << "\")";
+          } else if constexpr (std::is_same_v<T, FyshStmt>) {
+            os << arg;
+          } else if constexpr (std::is_same_v<T, SUBroutine>) {
+            os << "sub " << arg.name << "(";
+            for (const auto &param : arg.parameters) {
+              os << param << ", ";
+            }
+            os << ")\n" << arg.body;
+          } else {
+            static_assert(always_false_v<T>, "non-exhaustive visitor!");
+          }
+        },
+        stmt);
+  }
+  return os;
+}

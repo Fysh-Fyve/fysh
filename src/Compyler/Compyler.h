@@ -52,7 +52,7 @@ class Compyler {
 public:
   Compyler();
 
-  Program compyle(const std::vector<ast::FyshStmt> &ast, bool noOpt);
+  Program compyle(const ast::FyshProgram &ast, bool noOpt);
 
 private:
   /* Compiling statements */

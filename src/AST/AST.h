@@ -154,7 +154,6 @@ std::ostream &operator<<(std::ostream &os, const FyshExpr &f);
 std::ostream &operator<<(std::ostream &os, const FyshStmt &f);
 std::ostream &operator<<(std::ostream &os, const FyshProgram &f);
 
-
 }; // namespace fysh::ast
 
 #endif // !FYSH_AST_H_

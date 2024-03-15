@@ -396,9 +396,8 @@ fysh::Emit fysh::Compyler::block(const std::vector<fysh::ast::FyshStmt> &block,
   return retVal;
 }
 
-fysh::Program
-fysh::Compyler::compyle(const std::vector<fysh::ast::FyshStmt> &ast,
-                        bool noOpt) {
+fysh::Program fysh::Compyler::compyle(const fysh::ast::FyshProgram &ast,
+                                      bool noOpt) {
   fysh::Program newProgram;
   p = newProgram;
   // int() function type
@@ -410,7 +409,23 @@ fysh::Compyler::compyle(const std::vector<fysh::ast::FyshStmt> &ast,
   llvm::BasicBlock *bb{llvm::BasicBlock::Create(*context, "entry", prototype)};
   builder->SetInsertPoint(bb);
 
-  Emit emit{block(ast, prototype)};
+  Emit emit;
+  for (const auto &declarations : ast) {
+    emit = {std::visit(
+        [this, prototype](auto &&arg) -> Emit {
+          using T = std::decay_t<decltype(arg)>;
+          if constexpr (std::is_same_v<T, ast::Error>) {
+            std::cerr << arg.getraw() << std::endl;
+          } else if constexpr (std::is_same_v<T, ast::FyshStmt>) {
+            return statement(arg, prototype);
+          } else if constexpr (std::is_same_v<T, ast::SUBroutine>) {
+            return ast::Error{"unimplemented"};
+          } else {
+            static_assert(always_false_v<T>, "non-exhaustive visitor!");
+          }
+        },
+        declarations)};
+  }
 
   if (llvm::Value * *expr{std::get_if<llvm::Value *>(&emit)}) {
     // Finish off the function.
