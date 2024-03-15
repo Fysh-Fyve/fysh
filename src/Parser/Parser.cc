@@ -245,6 +245,8 @@ fysh::ast::FyshStmt fysh::FyshParser::parseIfElse() {
   return ast::FyshIfStmt{condition, consequence, alternative};
 }
 
+fysh::ast::FyshSurfaceLevel fysh::FyshParser::parseSUBroutine() {}
+
 fysh::ast::FyshStmt fysh::FyshParser::parseLoop() {
   nextFysh();
   if (curFysh != Species::FYSH_TANK_OPEN) {
@@ -304,8 +306,8 @@ fysh::ast::FyshStmt fysh::FyshParser::parseStatement() {
   }
 }
 
-std::vector<fysh::ast::FyshStmt> fysh::FyshParser::parseProgram() {
-  return parseBlock();
+std::vector<fysh::ast::FyshSurfaceLevel> fysh::FyshParser::parseProgram() {
+  return {parseBlock()};
 }
 
 std::vector<fysh::ast::FyshStmt> fysh::FyshParser::parseBlock() {

@@ -28,7 +28,7 @@ class FyshParser {
 
 public:
   FyshParser(FyshLexer lexer);
-  std::vector<ast::FyshStmt> parseProgram();
+  std::vector<ast::FyshSurfaceLevel> parseProgram();
 
 private:
   void nextFysh();
@@ -60,6 +60,7 @@ private:
   ast::FyshStmt parseAssignment();
   ast::FyshStmt parseIfElse();
   std::vector<ast::FyshStmt> parseBlock();
+  ast::FyshSurfaceLevel parseSUBroutine();
 
   ast::Error expectFysh(Species species);
 

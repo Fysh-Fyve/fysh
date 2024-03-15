@@ -137,11 +137,23 @@ struct FyshIfStmt {
   std::optional<FyshBlock> alternative;
 };
 
+struct SUBroutine {
+  std::string_view name;
+  std::vector<std::string_view> parameters;
+  FyshBlock body;
+};
+
+using FyshSurfaceLevel = std::variant<Error, FyshStmt, SUBroutine>;
+
+using FyshProgram = std::vector<FyshSurfaceLevel>;
+
 constexpr const char *toStr(const FyshBinary &op);
 constexpr const char *toStr(const FyshUnary &op);
 
 std::ostream &operator<<(std::ostream &os, const FyshExpr &f);
 std::ostream &operator<<(std::ostream &os, const FyshStmt &f);
+std::ostream &operator<<(std::ostream &os, const FyshProgram &f);
+
 
 }; // namespace fysh::ast
 

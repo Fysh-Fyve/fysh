@@ -40,7 +40,7 @@ void compyle(std::istream &stream, Options opts) {
   std::string source{ss.str()};
   fysh::FyshLexer lexer{source.data()};
   fysh::FyshParser parser{lexer};
-  fysh::ast::FyshBlock program{parser.parseProgram()};
+  fysh::ast::FyshProgram program{parser.parseProgram()};
 
   if (opts.output == Options::Output::AST) {
     std::cout << program;
@@ -90,7 +90,6 @@ Options parseOptions(int argc, char *argv[]) {
       break;
     }
   }
-
   return opts;
 }
 
