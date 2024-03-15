@@ -259,6 +259,7 @@ fysh::Fysh fysh::FyshLexer::slashOrComment() noexcept {
   }
 }
 
+// TODO: pass species instead of bool
 fysh::Fysh fysh::FyshLexer::identifier(FyshDirection dir, bool increment,
                                        bool submarine) noexcept {
   char closingChar = submarine ? ')' : '>';
@@ -300,9 +301,8 @@ fysh::Fysh fysh::FyshLexer::identifier(FyshDirection dir, bool increment,
           identEnd, dir == FyshDirection::LEFT};
 }
 
-fysh::Fysh fysh::FyshLexer::submarine(FyshDirection dir,
-                                      bool increment) noexcept {
-  return identifier(dir, increment, true);
+fysh::Fysh fysh::FyshLexer::submarine(FyshDirection dir) noexcept {
+  return identifier(dir, false, true);
 }
 
 fysh::Fysh fysh::FyshLexer::random() noexcept {

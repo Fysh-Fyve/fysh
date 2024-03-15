@@ -78,7 +78,7 @@ private:
   Fysh slashOrComment() noexcept;
   Fysh identifier(FyshDirection dir, bool increment = false,
                   bool submarine = false) noexcept;
-  Fysh submarine(FyshDirection dir, bool increment = false) noexcept;
+  Fysh submarine(FyshDirection dir) noexcept;
   Fysh cullDeformedFysh() noexcept;
   Fysh tilde() noexcept;
   FyshChar eatFyshChar() noexcept;
