@@ -123,6 +123,8 @@ std::ostream &fysh::ast::operator<<(std::ostream &os,
           }
         } else if constexpr (std::is_same_v<T, FyshAnchorStmt>) {
           os << str(arg.op) << " " << arg.right << ";\n";
+        } else if constexpr (std::is_same_v<T, BabySquid>) {
+          os << "return " << arg.expr << ";\n";
         } else {
           static_assert(always_false_v<T>, "non-exhaustive visitor!");
         }

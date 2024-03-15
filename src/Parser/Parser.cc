@@ -260,8 +260,7 @@ fysh::ast::FyshSurfaceLevel fysh::FyshParser::parseSUBroutine() {
   // Parse body
   nextFysh();
   ast::FyshBlock body{parseBlock()};
-  if (body.size() == 1 &&
-      std::holds_alternative<ast::Error>(body[0])) {
+  if (body.size() == 1 && std::holds_alternative<ast::Error>(body[0])) {
     return body[0];
   }
 
@@ -322,6 +321,10 @@ fysh::ast::FyshStmt fysh::FyshParser::parseStatement() {
     ast::FyshBinary op{binaryOp(curFysh).value()};
     nextFysh();
     return terminateStatement(ast::FyshAnchorStmt{op, parseExpression()});
+  }
+  case Species::BABY_SQUID: {
+    nextFysh();
+    return terminateStatement(ast::BabySquid{parseExpression()});
   }
   default: {
     if (curFysh == Species::FYSH_IDENTIFIER && peekFysh == Species::ASSIGN) {

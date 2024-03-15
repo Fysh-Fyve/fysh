@@ -370,6 +370,8 @@ fysh::Emit fysh::Compyler::statement(const ast::FyshStmt &stmt,
           return assignment(arg, fn);
         } else if constexpr (std::is_same_v<T, ast::FyshAnchorStmt>) {
           return anchorStmt(arg, fn);
+        } else if constexpr (std::is_same_v<T, ast::BabySquid>) {
+          return ast::Error{"unimplemented"};
         } else {
           static_assert(always_false_v<T>, "non-exhaustive visitor!");
         }

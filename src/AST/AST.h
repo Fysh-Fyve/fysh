@@ -113,13 +113,19 @@ struct FyshAnchorStmt {
   FyshExpr right;
 };
 
+// <~ return operator
+struct BabySquid {
+  FyshExpr expr;
+};
+
 struct FyshBlock;
 struct FyshLoopStmt;
 struct FyshIfStmt;
 
-using FyshStmt = std::variant<Error, FyshExpr, FyshIncrementStmt,
-                              FyshDecrementStmt, FyshAssignmentStmt, FyshBlock,
-                              FyshLoopStmt, FyshIfStmt, FyshAnchorStmt>;
+using FyshStmt =
+    std::variant<Error, FyshExpr, FyshIncrementStmt, FyshDecrementStmt,
+                 FyshAssignmentStmt, FyshBlock, FyshLoopStmt, FyshIfStmt,
+                 FyshAnchorStmt, BabySquid>;
 
 struct FyshBlock : public std::vector<FyshStmt> {
   using std::vector<FyshStmt>::vector;
