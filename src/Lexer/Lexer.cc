@@ -423,7 +423,7 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
   }
 }
 
-// Token starts with '<' 
+// Token starts with '<'
 fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
   // current is the 2nd character of the token
   switch (periscope()) {
