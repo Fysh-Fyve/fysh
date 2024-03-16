@@ -41,6 +41,7 @@
 
 namespace fysh {
 using Emit = std::variant<llvm::Value *, ast::Error>;
+llvm::Value *unwrap(const Emit &v);
 class Compyler {
 public:
   Compyler();
@@ -65,11 +66,20 @@ private:
   Emit anchorOut(const fysh::ast::FyshBinaryExpr &expr);
   Emit unary(const fysh::ast::FyshUnaryExpr &expr);
 
+  /* Utility methods */
   llvm::AllocaInst *resolveVariable(const std::string_view &name, bool define);
+  llvm::Type *intTy() { return llvm::Type::getInt32Ty(*context); };
+  llvm::Type *voidTy() { return llvm::Type::getVoidTy(*context); };
+  llvm::Function *define(const char *name, llvm::Type *returnType,
+                         std::vector<llvm::Type *> params);
+  llvm::Function *getOrDefine(const char *name, llvm::Type *returnType,
+                              std::vector<llvm::Type *> params);
 
+  /* Current program */
   Program p;
+  std::unordered_map<std::string_view, llvm::AllocaInst *> globalValues;
 
-  std::unordered_map<std::string_view, llvm::AllocaInst *> namedValues;
+  /* LLVM stuff */
   std::unique_ptr<llvm::LLVMContext> context;
   std::unique_ptr<llvm::Module> module;
   std::unique_ptr<llvm::IRBuilder<>> builder;

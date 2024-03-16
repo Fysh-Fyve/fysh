@@ -30,6 +30,8 @@
 #include <unordered_map>
 #include <variant>
 
+using Params = std::vector<llvm::Type *>;
+
 fysh::Compyler::Compyler()
     : context{std::make_unique<llvm::LLVMContext>()},
       module{std::make_unique<llvm::Module>("fysh", *context)},
@@ -63,6 +65,24 @@ static constexpr bool isError(const fysh::Emit &emit) {
   return std::holds_alternative<fysh::ast::Error>(emit);
 }
 
+llvm::Function *fysh::Compyler::define(const char *name, llvm::Type *returnType,
+                                       std::vector<llvm::Type *> params) {
+  return llvm::Function::Create(
+      llvm::FunctionType::get(returnType, params, false),
+      llvm::Function::ExternalLinkage, name, module.get());
+};
+
+llvm::Function *fysh::Compyler::getOrDefine(const char *name,
+                                            llvm::Type *returnType,
+                                            std::vector<llvm::Type *> params) {
+  llvm::Function *func{module->getFunction(name)};
+  if (!func) {
+    func = define(name, returnType, params);
+    p.add(func);
+  }
+  return func;
+};
+
 fysh::Emit fysh::Compyler::ifStmt(const fysh::ast::FyshIfStmt &stmt,
                                   llvm::Function *fn) {
   llvm::Function *parent{builder->GetInsertBlock()->getParent()};
@@ -84,7 +104,7 @@ fysh::Emit fysh::Compyler::ifStmt(const fysh::ast::FyshIfStmt &stmt,
   if (isError(condEmit)) {
     return condEmit;
   }
-  llvm::Value *ifCond{std::get<llvm::Value *>(condEmit)};
+  llvm::Value *ifCond{unwrap(condEmit)};
 
   builder->CreateCondBr(ifCond, thenBlock, elseBlock ? elseBlock : exitBlock);
 
@@ -103,61 +123,17 @@ fysh::Emit fysh::Compyler::ifStmt(const fysh::ast::FyshIfStmt &stmt,
     builder->CreateBr(exitBlock);
     elseBlock = builder->GetInsertBlock();
     builder->SetInsertPoint(exitBlock);
-    llvm::PHINode *phiNode =
-        builder->CreatePHI(llvm::Type::getInt32Ty(*context), 2, "iftmp");
-    phiNode->addIncoming(std::get<llvm::Value *>(thenEmit), thenBlock);
-    phiNode->addIncoming(std::get<llvm::Value *>(elseEmit), elseBlock);
+    llvm::PHINode *phiNode = builder->CreatePHI(intTy(), 2, "iftmp");
+    phiNode->addIncoming(unwrap(thenEmit), thenBlock);
+    phiNode->addIncoming(unwrap(elseEmit), elseBlock);
     return phiNode;
   } else {
     builder->SetInsertPoint(exitBlock);
-    llvm::PHINode *phiNode =
-        builder->CreatePHI(llvm::Type::getInt32Ty(*context), 2, "iftmp");
-    phiNode->addIncoming(std::get<llvm::Value *>(thenEmit), thenBlock);
-    phiNode->addIncoming(llvm::ConstantInt::get(*context, llvm::APInt(32, 0)),
-                         conditionBlock);
+    llvm::PHINode *phiNode = builder->CreatePHI(intTy(), 2, "iftmp");
+    phiNode->addIncoming(unwrap(thenEmit), thenBlock);
+    phiNode->addIncoming(builder->getInt32(0), conditionBlock);
     return phiNode;
   }
-}
-
-static llvm::Function *defineReadAll(llvm::Module *module,
-                                     llvm::LLVMContext *context) {
-  // int fysh_gpio_read_all()
-  llvm::FunctionType *ft{llvm::FunctionType::get(
-      llvm::Type::getInt32Ty(*context), std::vector<llvm::Type *>(), false)};
-  return llvm::Function::Create(ft, llvm::Function::ExternalLinkage,
-                                "fysh_gpio_read_all", module);
-}
-
-static llvm::Function *defineRead(llvm::Module *module,
-                                  llvm::LLVMContext *context) {
-  // int fysh_gpio_read(int pin)
-  llvm::FunctionType *ft{llvm::FunctionType::get(
-      llvm::Type::getInt32Ty(*context),
-      std::vector<llvm::Type *>{llvm::Type::getInt32Ty(*context)}, false)};
-  return llvm::Function::Create(ft, llvm::Function::ExternalLinkage,
-                                "fysh_gpio_read", module);
-}
-
-static llvm::Function *defineWriteAll(llvm::Module *module,
-                                      llvm::LLVMContext *context) {
-  // void fysh_gpio_write_all(int value)
-  llvm::FunctionType *ft{llvm::FunctionType::get(
-      llvm::Type::getVoidTy(*context),
-      std::vector<llvm::Type *>{llvm::Type::getInt32Ty(*context)}, false)};
-  return llvm::Function::Create(ft, llvm::Function::ExternalLinkage,
-                                "fysh_gpio_write_all", module);
-}
-
-static llvm::Function *defineWrite(llvm::Module *module,
-                                   llvm::LLVMContext *context) {
-  // void fysh_gpio_write(int pin, int value)
-  llvm::FunctionType *ft{llvm::FunctionType::get(
-      llvm::Type::getVoidTy(*context),
-      std::vector<llvm::Type *>{llvm::Type::getInt32Ty(*context),
-                                llvm::Type::getInt32Ty(*context)},
-      false)};
-  return llvm::Function::Create(ft, llvm::Function::ExternalLinkage,
-                                "fysh_gpio_write", module);
 }
 
 fysh::Emit fysh::Compyler::anchorIn(const fysh::ast::FyshBinaryExpr &expr) {
@@ -168,16 +144,12 @@ fysh::Emit fysh::Compyler::anchorIn(const fysh::ast::FyshBinaryExpr &expr) {
   if (const ast::FyshIdentifier *ident =
           std::get_if<ast::FyshIdentifier>(&expr.right)) {
     llvm::AllocaInst *alloca{resolveVariable(ident->name, true)};
-    llvm::Function *fn = module->getFunction("fysh_gpio_read");
-    if (!fn) {
-      fn = defineRead(module.get(), context.get());
-      p.add(module->getFunction("fysh_gpio_read"));
-    }
-    llvm::FunctionType *ft{llvm::FunctionType::get(
-        llvm::Type::getInt32Ty(*context),
-        std::vector<llvm::Type *>{llvm::Type::getInt32Ty(*context)}, false)};
-    llvm::Value *retVal{builder->CreateCall(
-        ft, fn, std::vector<llvm::Value *>{std::get<llvm::Value *>(pin)})};
+    // int fysh_gpio_read(int pin)
+    llvm::Function *func{
+        getOrDefine("fysh_gpio_read", intTy(), Params{intTy()})};
+    llvm::Value *retVal{
+        builder->CreateCall(func->getFunctionType(), func,
+                            std::vector<llvm::Value *>{unwrap(pin)})};
     builder->CreateStore(retVal, alloca);
     return retVal;
   } else {
@@ -194,31 +166,24 @@ fysh::Emit fysh::Compyler::anchorOut(const fysh::ast::FyshBinaryExpr &expr) {
   if (isError(value)) {
     return value;
   }
-  llvm::Function *fn = module->getFunction("fysh_gpio_write");
-  if (!fn) {
-    fn = defineWrite(module.get(), context.get());
-    p.add(module->getFunction("fysh_gpio_write"));
-  }
-  llvm::FunctionType *ft{llvm::FunctionType::get(
-      llvm::Type::getInt32Ty(*context),
-      std::vector<llvm::Type *>{llvm::Type::getInt32Ty(*context)}, false)};
+  // void fysh_gpio_write(int pin, int value)
+  llvm::Function *func{
+      getOrDefine("fysh_gpio_write", voidTy(), Params{intTy(), intTy()})};
   return builder->CreateCall(
-      ft, fn,
-      std::vector<llvm::Value *>{std::get<llvm::Value *>(pin),
-                                 std::get<llvm::Value *>(value)});
+      func->getFunctionType(), func,
+      std::vector<llvm::Value *>{unwrap(pin), unwrap(value)});
 }
 
 llvm::AllocaInst *fysh::Compyler::resolveVariable(const std::string_view &name,
                                                   bool define = false) {
-  if (namedValues.find(name) == namedValues.end()) {
+  if (globalValues.find(name) == globalValues.end()) {
     if (define) {
-      namedValues[name] = builder->CreateAlloca(
-          llvm::Type::getInt32Ty(*context), nullptr, name);
+      globalValues[name] = builder->CreateAlloca(intTy(), nullptr, name);
     } else {
       return nullptr;
     }
   }
-  return namedValues[name];
+  return globalValues[name];
 }
 
 fysh::Emit fysh::Compyler::anchorStmt(const fysh::ast::FyshAnchorStmt &stmt,
@@ -228,16 +193,11 @@ fysh::Emit fysh::Compyler::anchorStmt(const fysh::ast::FyshAnchorStmt &stmt,
     if (const ast::FyshIdentifier *ident =
             std::get_if<ast::FyshIdentifier>(&stmt.right)) {
       llvm::AllocaInst *alloca{resolveVariable(ident->name, true)};
-      llvm::Function *fn = module->getFunction("fysh_gpio_read_all");
-      if (!fn) {
-        fn = defineReadAll(module.get(), context.get());
-        p.add(module->getFunction("fysh_gpio_read_all"));
-      }
-      llvm::FunctionType *ft{
-          llvm::FunctionType::get(llvm::Type::getInt32Ty(*context),
-                                  std::vector<llvm::Type *>(), false)};
-      llvm::Value *retVal{
-          builder->CreateCall(ft, fn, std::vector<llvm::Value *>())};
+      // int fysh_gpio_read_all()
+      llvm::Function *func{
+          getOrDefine("fysh_gpio_read_all", intTy(), Params{})};
+      llvm::Value *retVal{builder->CreateCall(func->getFunctionType(), func,
+                                              std::vector<llvm::Value *>())};
       builder->CreateStore(retVal, alloca);
       return retVal;
     } else {
@@ -246,16 +206,11 @@ fysh::Emit fysh::Compyler::anchorStmt(const fysh::ast::FyshAnchorStmt &stmt,
   } else if (stmt.op == fysh::ast::FyshBinary::AnchorOut) {
     Emit val{expression(&stmt.right)};
     if (llvm::Value * *expr{std::get_if<llvm::Value *>(&val)}) {
-      llvm::Function *fn = module->getFunction("fysh_gpio_write_all");
-      if (!fn) {
-        fn = defineWriteAll(module.get(), context.get());
-        p.add(module->getFunction("fysh_gpio_write_all"));
-      }
-      llvm::FunctionType *ft{llvm::FunctionType::get(
-          llvm::Type::getVoidTy(*context),
-          std::vector<llvm::Type *>{llvm::Type::getInt32Ty(*context)}, false)};
-      llvm::Value *retVal{
-          builder->CreateCall(ft, fn, std::vector<llvm::Value *>{*expr})};
+      // void fysh_gpio_write_all(int value)
+      llvm::Function *func{
+          getOrDefine("fysh_gpio_write_all", voidTy(), Params{intTy()})};
+      llvm::Value *retVal{builder->CreateCall(
+          func->getFunctionType(), func, std::vector<llvm::Value *>{*expr})};
       return *expr;
     } else {
       return val;
@@ -283,7 +238,7 @@ fysh::Emit fysh::Compyler::loop(const fysh::ast::FyshLoopStmt &stmt,
   if (isError(condEmit)) {
     return condEmit;
   }
-  llvm::Value *loopCond{std::get<llvm::Value *>(condEmit)};
+  llvm::Value *loopCond{unwrap(condEmit)};
 
   builder->CreateCondBr(loopCond, loopBodyBlock, loopExit);
   builder->SetInsertPoint(loopBodyBlock);
@@ -294,7 +249,7 @@ fysh::Emit fysh::Compyler::loop(const fysh::ast::FyshLoopStmt &stmt,
   builder->CreateBr(conditionBlock);
   builder->SetInsertPoint(loopExit);
 
-  return std::get<llvm::Value *>(blockEmit);
+  return unwrap(blockEmit);
 }
 
 fysh::Emit fysh::Compyler::increment(const fysh::ast::FyshIncrementStmt &stmt,
@@ -388,11 +343,10 @@ fysh::Emit fysh::Compyler::block(const std::vector<fysh::ast::FyshStmt> &block,
 
   for (const ast::FyshStmt &stmt : block) {
     fysh::Emit emit{statement(stmt, fn)};
-    if (const ast::Error * error{std::get_if<ast::Error>(&emit)}) {
-      return *error;
-    }
-    if (llvm::Value * *expr{std::get_if<llvm::Value *>(&emit)}) {
-      retVal = *expr;
+    if (isError(emit)) {
+      return emit;
+    } else if (llvm::Value *expr = unwrap(emit)) {
+      retVal = expr;
     }
   }
 
@@ -405,12 +359,8 @@ fysh::Program fysh::Compyler::compyle(const fysh::ast::FyshProgram &ast,
                                       bool noOpt) {
   fysh::Program newProgram;
   p = newProgram;
-  // int() function type
-  llvm::FunctionType *ft{llvm::FunctionType::get(
-      llvm::Type::getInt32Ty(*context), std::vector<llvm::Type *>(), false)};
-  llvm::Function *prototype{llvm::Function::Create(
-      ft, llvm::Function::ExternalLinkage, "main", module.get())};
-
+  // int main()
+  llvm::Function *prototype{define("main", intTy(), Params{})};
   llvm::BasicBlock *bb{llvm::BasicBlock::Create(*context, "entry", prototype)};
   builder->SetInsertPoint(bb);
 
@@ -432,9 +382,11 @@ fysh::Program fysh::Compyler::compyle(const fysh::ast::FyshProgram &ast,
         declarations)};
   }
 
-  if (llvm::Value * *expr{std::get_if<llvm::Value *>(&emit)}) {
+  if (isError(emit)) {
+    std::cerr << std::get<ast::Error>(emit).getraw() << std::endl;
+  } else if (llvm::Value *expr = unwrap(emit)) {
     // Finish off the function.
-    builder->CreateRet(*expr);
+    builder->CreateRet(expr);
     // Validate the generated code, checking for consistency.
     llvm::verifyFunction(*prototype);
 
@@ -443,8 +395,6 @@ fysh::Program fysh::Compyler::compyle(const fysh::ast::FyshProgram &ast,
     }
     p.add(prototype);
     return p;
-  } else if (const ast::Error * error{std::get_if<ast::Error>(&emit)}) {
-    std::cerr << error->getraw() << std::endl;
   }
 
   // Something went wrong!
@@ -454,11 +404,11 @@ fysh::Program fysh::Compyler::compyle(const fysh::ast::FyshProgram &ast,
 
 fysh::Emit fysh::Compyler::unary(const fysh::ast::FyshUnaryExpr &expr) {
   Emit emit{expression(&expr.expr)};
-  if (const ast::Error * err{std::get_if<ast::Error>(&emit)}) {
-    return *err;
+  if (isError(emit)) {
+    return emit;
   }
   if (expr.op == ast::FyshUnary::Neg) {
-    return builder->CreateNeg(std::get<llvm::Value *>(emit));
+    return builder->CreateNeg(unwrap(emit));
   }
   return nullptr;
 }
@@ -466,14 +416,14 @@ fysh::Emit fysh::Compyler::unary(const fysh::ast::FyshUnaryExpr &expr) {
 fysh::Emit fysh::Compyler::binary(const fysh::ast::FyshBinaryExpr &expr) {
   fysh::Emit left{expression(&expr.left)};
   fysh::Emit right{expression(&expr.right)};
-  if (const ast::Error * err{std::get_if<ast::Error>(&left)}) {
-    return *err;
+  if (isError(left)) {
+    return left;
   }
-  if (const ast::Error * err{std::get_if<ast::Error>(&right)}) {
-    return *err;
+  if (isError(right)) {
+    return right;
   }
-  llvm::Value *l{std::get<llvm::Value *>(left)};
-  llvm::Value *r{std::get<llvm::Value *>(right)};
+  llvm::Value *l{unwrap(left)};
+  llvm::Value *r{unwrap(right)};
 
   using FB = ast::FyshBinary;
   switch (expr.op) {
@@ -500,10 +450,10 @@ fysh::Emit fysh::Compyler::binary(const fysh::ast::FyshBinaryExpr &expr) {
 }
 
 fysh::Emit fysh::Compyler::identifier(const fysh::ast::FyshIdentifier &expr) {
-  if (namedValues.find(expr.name) == namedValues.end()) {
+  llvm::AllocaInst *alloc{resolveVariable(expr.name)};
+  if (!alloc) {
     return ast::Error{"unknown variable"};
   }
-  llvm::AllocaInst *alloc{namedValues[expr.name]};
   return builder->CreateLoad(alloc->getAllocatedType(), alloc, expr.name);
 }
 
@@ -523,10 +473,12 @@ fysh::Emit fysh::Compyler::expression(const fysh::ast::FyshExpr *expr) {
         } else if constexpr (std::is_same_v<T, ast::FyshIdentifier>) {
           return identifier(arg);
         } else if constexpr (std::is_same_v<T, ast::FyshLiteral>) {
-          return llvm::ConstantInt::get(*context, llvm::APInt(32, arg.num));
+          return builder->getInt32(arg.num);
         } else {
           static_assert(always_false_v<T>, "non-exhaustive visitor!");
         }
       },
       *expr);
 }
+
+llvm::Value *fysh::unwrap(const Emit &v) { return std::get<llvm::Value *>(v); }
