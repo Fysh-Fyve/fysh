@@ -78,16 +78,6 @@ bool fysh::FyshLexer::isUnicode() const noexcept {
   return (c & 0xE0) == 0xC0 || (c & 0xF0) == 0xE0 || (c & 0xF8) == 0xF0;
 }
 
-// Checks if the current character is a Unicode character
-bool fysh::FyshLexer::isUnicode(char c) const noexcept {
-  if ((c & 0x80) == 0x00)
-    return false; // ASCII (first byte is 0xxxxxxx)
-
-  // Unicode start byte (2, 3, or 4 byte sequence (start with 110xxxxx,
-  // 1110xxxx, or 11110xxx respectively))
-  return (c & 0xE0) == 0xC0 || (c & 0xF0) == 0xE0 || (c & 0xF8) == 0xF0;
-}
-
 char fysh::FyshLexer::reel() noexcept {
   char c{*current++};
   if (c == '\n')
@@ -531,7 +521,7 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
       } else {
         return cullDeformedFysh();
       }
-    } else if (isUnicode(periscope()) || std::isalpha(periscope())) {
+    } else if (isUnicode() || std::isalpha(periscope())) {
       return namedFysh(FyshDirection::LEFT, Species::SUBMARINE);
     } else {
       // We already reeled in (, do not go fysh.
