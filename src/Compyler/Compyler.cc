@@ -83,8 +83,7 @@ llvm::Function *fysh::Compyler::getOrDefine(const char *name,
   return func;
 };
 
-fysh::Emit fysh::Compyler::ifStmt(const fysh::ast::FyshIfStmt &stmt,
-                                  llvm::Function *fn) {
+fysh::Emit fysh::Compyler::ifStmt(const fysh::ast::FyshIfStmt &stmt) {
   llvm::Function *parent{builder->GetInsertBlock()->getParent()};
   llvm::BasicBlock *conditionBlock{
       llvm::BasicBlock::Create(*context, "if_cond", parent)};
@@ -109,14 +108,14 @@ fysh::Emit fysh::Compyler::ifStmt(const fysh::ast::FyshIfStmt &stmt,
   builder->CreateCondBr(ifCond, thenBlock, elseBlock ? elseBlock : exitBlock);
 
   builder->SetInsertPoint(thenBlock);
-  Emit thenEmit{block(stmt.consequence, fn)};
+  Emit thenEmit{block(stmt.consequence)};
   if (isError(thenEmit)) {
     return thenEmit;
   }
   builder->CreateBr(exitBlock);
   if (elseBlock) {
     builder->SetInsertPoint(elseBlock);
-    Emit elseEmit{block(stmt.consequence, fn)};
+    Emit elseEmit{block(stmt.consequence)};
     if (isError(elseEmit)) {
       return elseEmit;
     }
@@ -186,8 +185,7 @@ llvm::AllocaInst *fysh::Compyler::resolveVariable(const std::string_view &name,
   return globalValues[name];
 }
 
-fysh::Emit fysh::Compyler::anchorStmt(const fysh::ast::FyshAnchorStmt &stmt,
-                                      llvm::Function *fn) {
+fysh::Emit fysh::Compyler::anchorStmt(const fysh::ast::FyshAnchorStmt &stmt) {
   if (stmt.op == fysh::ast::FyshBinary::AnchorIn) {
     // Only handle assignments to identifiers for now
     if (const ast::FyshIdentifier *ident =
@@ -220,8 +218,7 @@ fysh::Emit fysh::Compyler::anchorStmt(const fysh::ast::FyshAnchorStmt &stmt,
   }
 }
 
-fysh::Emit fysh::Compyler::loop(const fysh::ast::FyshLoopStmt &stmt,
-                                llvm::Function *fn) {
+fysh::Emit fysh::Compyler::loop(const fysh::ast::FyshLoopStmt &stmt) {
   llvm::Function *parent{builder->GetInsertBlock()->getParent()};
 
   llvm::BasicBlock *conditionBlock{
@@ -242,7 +239,7 @@ fysh::Emit fysh::Compyler::loop(const fysh::ast::FyshLoopStmt &stmt,
 
   builder->CreateCondBr(loopCond, loopBodyBlock, loopExit);
   builder->SetInsertPoint(loopBodyBlock);
-  Emit blockEmit{block(stmt.body, fn)};
+  Emit blockEmit{block(stmt.body)};
   if (isError(blockEmit)) {
     return blockEmit;
   }
@@ -252,8 +249,7 @@ fysh::Emit fysh::Compyler::loop(const fysh::ast::FyshLoopStmt &stmt,
   return unwrap(blockEmit);
 }
 
-fysh::Emit fysh::Compyler::increment(const fysh::ast::FyshIncrementStmt &stmt,
-                                     llvm::Function *fn) {
+fysh::Emit fysh::Compyler::increment(const fysh::ast::FyshIncrementStmt &stmt) {
   if (const ast::FyshIdentifier *ident =
           std::get_if<ast::FyshIdentifier>(&stmt.expr)) {
     llvm::AllocaInst *alloca{resolveVariable(ident->name)};
@@ -270,8 +266,7 @@ fysh::Emit fysh::Compyler::increment(const fysh::ast::FyshIncrementStmt &stmt,
   }
 }
 
-fysh::Emit fysh::Compyler::decrement(const fysh::ast::FyshDecrementStmt &stmt,
-                                     llvm::Function *fn) {
+fysh::Emit fysh::Compyler::decrement(const fysh::ast::FyshDecrementStmt &stmt) {
   if (const ast::FyshIdentifier *ident =
           std::get_if<ast::FyshIdentifier>(&stmt.expr)) {
     llvm::AllocaInst *alloca{resolveVariable(ident->name)};
@@ -288,8 +283,8 @@ fysh::Emit fysh::Compyler::decrement(const fysh::ast::FyshDecrementStmt &stmt,
   }
 }
 
-fysh::Emit fysh::Compyler::assignment(const fysh::ast::FyshAssignmentStmt &stmt,
-                                      llvm::Function *fn) {
+fysh::Emit
+fysh::Compyler::assignment(const fysh::ast::FyshAssignmentStmt &stmt) {
   // Only handle assignments to identifiers for now
   if (const ast::FyshIdentifier *ident =
           std::get_if<ast::FyshIdentifier>(&stmt.left)) {
@@ -305,29 +300,28 @@ fysh::Emit fysh::Compyler::assignment(const fysh::ast::FyshAssignmentStmt &stmt,
   }
 }
 
-fysh::Emit fysh::Compyler::statement(const ast::FyshStmt &stmt,
-                                     llvm::Function *fn) {
+fysh::Emit fysh::Compyler::statement(const ast::FyshStmt &stmt) {
   return std::visit(
-      [this, fn](auto &&arg) -> fysh::Emit {
+      [this](auto &&arg) -> fysh::Emit {
         using T = std::decay_t<decltype(arg)>;
         if constexpr (std::is_same_v<T, ast::Error>) {
           return arg;
         } else if constexpr (std::is_same_v<T, ast::FyshExpr>) {
           return expression(&arg);
         } else if constexpr (std::is_same_v<T, ast::FyshBlock>) {
-          return block(arg, fn);
+          return block(arg);
         } else if constexpr (std::is_same_v<T, ast::FyshLoopStmt>) {
-          return loop(arg, fn);
+          return loop(arg);
         } else if constexpr (std::is_same_v<T, ast::FyshIfStmt>) {
-          return ifStmt(arg, fn);
+          return ifStmt(arg);
         } else if constexpr (std::is_same_v<T, ast::FyshIncrementStmt>) {
-          return increment(arg, fn);
+          return increment(arg);
         } else if constexpr (std::is_same_v<T, ast::FyshDecrementStmt>) {
-          return decrement(arg, fn);
+          return decrement(arg);
         } else if constexpr (std::is_same_v<T, ast::FyshAssignmentStmt>) {
-          return assignment(arg, fn);
+          return assignment(arg);
         } else if constexpr (std::is_same_v<T, ast::FyshAnchorStmt>) {
-          return anchorStmt(arg, fn);
+          return anchorStmt(arg);
         } else if constexpr (std::is_same_v<T, ast::BabySquid>) {
           return ast::Error{"unimplemented"};
         } else {
@@ -337,12 +331,12 @@ fysh::Emit fysh::Compyler::statement(const ast::FyshStmt &stmt,
       stmt);
 }
 
-fysh::Emit fysh::Compyler::block(const std::vector<fysh::ast::FyshStmt> &block,
-                                 llvm::Function *fn) {
+fysh::Emit
+fysh::Compyler::block(const std::vector<fysh::ast::FyshStmt> &block) {
   llvm::Value *retVal{nullptr}; // Initialize retVal explicitly
 
   for (const ast::FyshStmt &stmt : block) {
-    fysh::Emit emit{statement(stmt, fn)};
+    fysh::Emit emit{statement(stmt)};
     if (isError(emit)) {
       return emit;
     } else if (llvm::Value *expr = unwrap(emit)) {
@@ -372,7 +366,7 @@ fysh::Program fysh::Compyler::compyle(const fysh::ast::FyshProgram &ast,
           if constexpr (std::is_same_v<T, ast::Error>) {
             return arg;
           } else if constexpr (std::is_same_v<T, ast::FyshStmt>) {
-            return statement(arg, prototype);
+            return statement(arg);
           } else if constexpr (std::is_same_v<T, ast::SUBroutine>) {
             return ast::Error{"unimplemented"};
           } else {
@@ -380,6 +374,12 @@ fysh::Program fysh::Compyler::compyle(const fysh::ast::FyshProgram &ast,
           }
         },
         declarations)};
+    if (isError(emit)) {
+      std::cerr << std::get<ast::Error>(emit).getraw() << std::endl;
+      // Something went wrong!
+      prototype->eraseFromParent();
+      return {};
+    }
   }
 
   if (isError(emit)) {

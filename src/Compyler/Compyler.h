@@ -49,14 +49,14 @@ public:
 
 private:
   /* Compiling statements */
-  Emit statement(const ast::FyshStmt &stmt, llvm::Function *fn);
-  Emit block(const std::vector<ast::FyshStmt> &block, llvm::Function *fn);
-  Emit ifStmt(const ast::FyshIfStmt &stmt, llvm::Function *fn);
-  Emit loop(const ast::FyshLoopStmt &stmt, llvm::Function *fn);
-  Emit increment(const ast::FyshIncrementStmt &stmt, llvm::Function *fn);
-  Emit decrement(const ast::FyshDecrementStmt &stmt, llvm::Function *fn);
-  Emit assignment(const ast::FyshAssignmentStmt &stmt, llvm::Function *fn);
-  Emit anchorStmt(const ast::FyshAnchorStmt &stmt, llvm::Function *fn);
+  Emit statement(const ast::FyshStmt &stmt);
+  Emit block(const std::vector<ast::FyshStmt> &block);
+  Emit ifStmt(const ast::FyshIfStmt &stmt);
+  Emit loop(const ast::FyshLoopStmt &stmt);
+  Emit increment(const ast::FyshIncrementStmt &stmt);
+  Emit decrement(const ast::FyshDecrementStmt &stmt);
+  Emit assignment(const ast::FyshAssignmentStmt &stmt);
+  Emit anchorStmt(const ast::FyshAnchorStmt &stmt);
 
   /* Compiling expressions */
   Emit expression(const ast::FyshExpr *expr);
