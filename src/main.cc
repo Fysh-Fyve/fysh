@@ -28,13 +28,7 @@
 #include <llvm/Support/raw_ostream.h>
 #include <sstream>
 
-struct Options {
-  enum class Output { AST, IR } output;
-  bool noOpt = false;
-  std::string outputFilename = "-";
-};
-
-void compyle(std::istream &stream, Options opts) {
+void compyle(std::istream &stream, const char *name, fysh::Options opts) {
   std::stringstream ss;
   ss << stream.rdbuf();
   std::string source{ss.str()};
@@ -42,7 +36,7 @@ void compyle(std::istream &stream, Options opts) {
   fysh::FyshParser parser{lexer};
   fysh::ast::FyshProgram program{parser.parseProgram()};
 
-  if (opts.output == Options::Output::AST) {
+  if (opts.output == fysh::Options::Output::AST) {
     std::cout << program;
     return;
   }
@@ -55,22 +49,17 @@ void compyle(std::istream &stream, Options opts) {
     }
   }
 
-  fysh::Compyler cumpyler;
-  fysh::Program p{cumpyler.compyle(program, opts.noOpt)};
-  if (p.empty()) {
-    std::cerr << "error compyling?" << std::endl;
-  } else {
-    p.print(opts.outputFilename);
-  }
+  fysh::Compyler cumpyler{name};
+  cumpyler.compyle(program, opts);
 }
 
-Options parseOptions(int argc, char *argv[]) {
-  Options opts;
+fysh::Options parseOptions(int argc, char *argv[]) {
+  fysh::Options opts;
   char c;
   while ((c = getopt(argc, argv, "o:nah")) != -1) {
     switch (c) {
     case 'a': {
-      opts.output = Options::Output::AST;
+      opts.output = fysh::Options::Output::AST;
       break;
     }
     case 'n': {
@@ -94,16 +83,16 @@ Options parseOptions(int argc, char *argv[]) {
 }
 
 int main(int argc, char *argv[]) {
-  Options opts = parseOptions(argc, argv);
+  fysh::Options opts = parseOptions(argc, argv);
   if (argv[optind] == NULL) {
-    compyle(std::cin, opts);
+    compyle(std::cin, "stdin", opts);
   } else {
     std::ifstream inputFile(argv[optind]);
     if (!inputFile.is_open()) {
       std::cerr << "Error opening file " << argv[optind] << " for reading\n";
       return 1;
     }
-    compyle(inputFile, opts);
+    compyle(inputFile, argv[optind], opts);
   }
   return 0;
 }

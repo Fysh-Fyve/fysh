@@ -21,7 +21,6 @@
 #define FYSH_COMPYLER_H_
 
 #include "../AST/AST.h"
-#include "Program.h"
 
 #include <llvm/IR/Function.h>
 #include <llvm/IR/IRBuilder.h>
@@ -42,10 +41,17 @@
 namespace fysh {
 using Emit = std::variant<llvm::Value *, ast::Error>;
 llvm::Value *unwrap(const Emit &v);
+
+struct Options {
+  enum class Output { AST, IR } output;
+  bool noOpt = false;
+  std::string outputFilename = "-";
+};
+
 class Compyler {
 public:
-  Compyler();
-  Program compyle(const ast::FyshProgram &ast, bool noOpt);
+  Compyler(std::string filename);
+  void compyle(const ast::FyshProgram &ast, Options opts);
 
 private:
   /* Compiling statements */
@@ -67,7 +73,8 @@ private:
   Emit unary(const fysh::ast::FyshUnaryExpr &expr);
 
   /* Utility methods */
-  llvm::AllocaInst *resolveVariable(const std::string_view &name, bool define);
+  llvm::GlobalVariable *resolveVariable(const std::string_view &name,
+                                        bool define);
   llvm::Type *intTy() { return llvm::Type::getInt32Ty(*context); };
   llvm::Type *voidTy() { return llvm::Type::getVoidTy(*context); };
   llvm::Function *define(const char *name, llvm::Type *returnType,
@@ -75,9 +82,8 @@ private:
   llvm::Function *getOrDefine(const char *name, llvm::Type *returnType,
                               std::vector<llvm::Type *> params);
 
-  /* Current program */
-  Program p;
-  std::unordered_map<std::string_view, llvm::AllocaInst *> globalValues;
+  /* Current program's globals */
+  std::unordered_map<std::string_view, llvm::GlobalVariable *> globals;
 
   /* LLVM stuff */
   std::unique_ptr<llvm::LLVMContext> context;

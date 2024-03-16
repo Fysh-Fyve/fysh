@@ -32,7 +32,7 @@
 
 using Params = std::vector<llvm::Type *>;
 
-fysh::Compyler::Compyler()
+fysh::Compyler::Compyler(std::string filename)
     : context{std::make_unique<llvm::LLVMContext>()},
       module{std::make_unique<llvm::Module>("fysh", *context)},
       builder{std::make_unique<llvm::IRBuilder<>>(*context)},
@@ -44,6 +44,7 @@ fysh::Compyler::Compyler()
       pic{std::make_unique<llvm::PassInstrumentationCallbacks>()},
       si{std::make_unique<llvm::StandardInstrumentations>(
           *context, /*DebugLogging*/ true)} {
+  module->setSourceFileName(filename.substr(filename.find_last_of("/\\") + 1));
 
   // Add transform passes.
   // Do simple "peephole" optimizations and bit-twiddling optzns.
@@ -78,7 +79,6 @@ llvm::Function *fysh::Compyler::getOrDefine(const char *name,
   llvm::Function *func{module->getFunction(name)};
   if (!func) {
     func = define(name, returnType, params);
-    p.add(func);
   }
   return func;
 };
@@ -142,14 +142,14 @@ fysh::Emit fysh::Compyler::anchorIn(const fysh::ast::FyshBinaryExpr &expr) {
   }
   if (const ast::FyshIdentifier *ident =
           std::get_if<ast::FyshIdentifier>(&expr.right)) {
-    llvm::AllocaInst *alloca{resolveVariable(ident->name, true)};
+    llvm::GlobalVariable *variable{resolveVariable(ident->name, true)};
     // int fysh_gpio_read(int pin)
     llvm::Function *func{
         getOrDefine("fysh_gpio_read", intTy(), Params{intTy()})};
     llvm::Value *retVal{
         builder->CreateCall(func->getFunctionType(), func,
                             std::vector<llvm::Value *>{unwrap(pin)})};
-    builder->CreateStore(retVal, alloca);
+    builder->CreateStore(retVal, variable);
     return retVal;
   } else {
     return ast::Error{"assigning to non-variable"};
@@ -173,16 +173,19 @@ fysh::Emit fysh::Compyler::anchorOut(const fysh::ast::FyshBinaryExpr &expr) {
       std::vector<llvm::Value *>{unwrap(pin), unwrap(value)});
 }
 
-llvm::AllocaInst *fysh::Compyler::resolveVariable(const std::string_view &name,
-                                                  bool define = false) {
-  if (globalValues.find(name) == globalValues.end()) {
+llvm::GlobalVariable *
+fysh::Compyler::resolveVariable(const std::string_view &name,
+                                bool define = false) {
+  if (globals.find(name) == globals.end()) {
     if (define) {
-      globalValues[name] = builder->CreateAlloca(intTy(), nullptr, name);
+      globals[name] = new llvm::GlobalVariable(
+          *module.get(), intTy(), false, llvm::GlobalValue::PrivateLinkage,
+          builder->getInt32(0), name);
     } else {
       return nullptr;
     }
   }
-  return globalValues[name];
+  return globals[name];
 }
 
 fysh::Emit fysh::Compyler::anchorStmt(const fysh::ast::FyshAnchorStmt &stmt) {
@@ -190,13 +193,13 @@ fysh::Emit fysh::Compyler::anchorStmt(const fysh::ast::FyshAnchorStmt &stmt) {
     // Only handle assignments to identifiers for now
     if (const ast::FyshIdentifier *ident =
             std::get_if<ast::FyshIdentifier>(&stmt.right)) {
-      llvm::AllocaInst *alloca{resolveVariable(ident->name, true)};
+      llvm::GlobalVariable *variable{resolveVariable(ident->name, true)};
       // int fysh_gpio_read_all()
       llvm::Function *func{
           getOrDefine("fysh_gpio_read_all", intTy(), Params{})};
       llvm::Value *retVal{builder->CreateCall(func->getFunctionType(), func,
                                               std::vector<llvm::Value *>())};
-      builder->CreateStore(retVal, alloca);
+      builder->CreateStore(retVal, variable);
       return retVal;
     } else {
       return ast::Error{"assigning to non-variable"};
@@ -252,14 +255,14 @@ fysh::Emit fysh::Compyler::loop(const fysh::ast::FyshLoopStmt &stmt) {
 fysh::Emit fysh::Compyler::increment(const fysh::ast::FyshIncrementStmt &stmt) {
   if (const ast::FyshIdentifier *ident =
           std::get_if<ast::FyshIdentifier>(&stmt.expr)) {
-    llvm::AllocaInst *alloca{resolveVariable(ident->name)};
-    if (!alloca) {
+    llvm::GlobalVariable *variable{resolveVariable(ident->name)};
+    if (!variable) {
       return ast::Error{"unknown variable"};
     }
     llvm::Value *load{
-        builder->CreateLoad(alloca->getAllocatedType(), alloca, ident->name)};
+        builder->CreateLoad(variable->getType(), variable, ident->name)};
     llvm::Value *inc{builder->CreateAdd(load, builder->getInt32(1))};
-    builder->CreateStore(inc, alloca);
+    builder->CreateStore(inc, variable);
     return inc;
   } else {
     return ast::Error{"incrementing non-variable"};
@@ -269,14 +272,14 @@ fysh::Emit fysh::Compyler::increment(const fysh::ast::FyshIncrementStmt &stmt) {
 fysh::Emit fysh::Compyler::decrement(const fysh::ast::FyshDecrementStmt &stmt) {
   if (const ast::FyshIdentifier *ident =
           std::get_if<ast::FyshIdentifier>(&stmt.expr)) {
-    llvm::AllocaInst *alloca{resolveVariable(ident->name)};
-    if (!alloca) {
+    llvm::GlobalVariable *variable{resolveVariable(ident->name)};
+    if (!variable) {
       return ast::Error{"unknown variable"};
     }
     llvm::Value *load{
-        builder->CreateLoad(alloca->getAllocatedType(), alloca, ident->name)};
+        builder->CreateLoad(variable->getType(), variable, ident->name)};
     llvm::Value *dec{builder->CreateSub(load, builder->getInt32(1))};
-    builder->CreateStore(dec, alloca);
+    builder->CreateStore(dec, variable);
     return dec;
   } else {
     return ast::Error{"decrementing non-variable"};
@@ -288,13 +291,13 @@ fysh::Compyler::assignment(const fysh::ast::FyshAssignmentStmt &stmt) {
   // Only handle assignments to identifiers for now
   if (const ast::FyshIdentifier *ident =
           std::get_if<ast::FyshIdentifier>(&stmt.left)) {
-    llvm::AllocaInst *alloca{resolveVariable(ident->name, true)};
+    llvm::GlobalVariable *variable{resolveVariable(ident->name, true)};
     Emit val{expression(&stmt.right)};
-    if (llvm::Value * *expr{std::get_if<llvm::Value *>(&val)}) {
-      builder->CreateStore(*expr, alloca);
-      return *expr;
+    if (isError(val)) {
+      return val;
     }
-    return nullptr;
+    builder->CreateStore(unwrap(val), variable);
+    return unwrap(val);
   } else {
     return ast::Error{"assigning to non-variable"};
   }
@@ -349,10 +352,24 @@ fysh::Compyler::block(const std::vector<fysh::ast::FyshStmt> &block) {
   return retVal;
 }
 
-fysh::Program fysh::Compyler::compyle(const fysh::ast::FyshProgram &ast,
-                                      bool noOpt) {
-  fysh::Program newProgram;
-  p = newProgram;
+static void print(llvm::Module *m, const std::string &path) {
+  if (path == "-") {
+    llvm::outs() << *m;
+  } else {
+    std::error_code ec;
+    llvm::raw_fd_ostream outputFile{path.c_str(), ec};
+    if (outputFile.error()) {
+      std::cerr << "Error opening file " << path
+                << " for writing: " << ec.message() << "\n";
+      std::exit(1);
+    } else {
+      outputFile << m;
+    }
+  }
+}
+
+void fysh::Compyler::compyle(const fysh::ast::FyshProgram &ast,
+                             fysh::Options opts) {
   // int main()
   llvm::Function *prototype{define("main", intTy(), Params{})};
   llvm::BasicBlock *bb{llvm::BasicBlock::Create(*context, "entry", prototype)};
@@ -378,7 +395,7 @@ fysh::Program fysh::Compyler::compyle(const fysh::ast::FyshProgram &ast,
       std::cerr << std::get<ast::Error>(emit).getraw() << std::endl;
       // Something went wrong!
       prototype->eraseFromParent();
-      return {};
+      return;
     }
   }
 
@@ -390,16 +407,15 @@ fysh::Program fysh::Compyler::compyle(const fysh::ast::FyshProgram &ast,
     // Validate the generated code, checking for consistency.
     llvm::verifyFunction(*prototype);
 
-    if (!noOpt) {
+    if (!opts.noOpt) {
       fpm->run(*prototype, *fam);
     }
-    p.add(prototype);
-    return p;
+
+    print(module.get(), opts.outputFilename);
   }
 
   // Something went wrong!
   prototype->eraseFromParent();
-  return {};
 }
 
 fysh::Emit fysh::Compyler::unary(const fysh::ast::FyshUnaryExpr &expr) {
@@ -450,11 +466,11 @@ fysh::Emit fysh::Compyler::binary(const fysh::ast::FyshBinaryExpr &expr) {
 }
 
 fysh::Emit fysh::Compyler::identifier(const fysh::ast::FyshIdentifier &expr) {
-  llvm::AllocaInst *alloc{resolveVariable(expr.name)};
-  if (!alloc) {
+  llvm::GlobalVariable *variable{resolveVariable(expr.name)};
+  if (!variable) {
     return ast::Error{"unknown variable"};
   }
-  return builder->CreateLoad(alloc->getAllocatedType(), alloc, expr.name);
+  return builder->CreateLoad(variable->getValueType(), variable, expr.name);
 }
 
 fysh::Emit fysh::Compyler::expression(const fysh::ast::FyshExpr *expr) {
