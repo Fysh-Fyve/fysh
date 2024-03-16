@@ -76,9 +76,7 @@ private:
   Fysh swimRight() noexcept;
   Fysh random() noexcept;
   Fysh slashOrComment() noexcept;
-  Fysh identifier(FyshDirection dir, bool increment = false,
-                  bool submarine = false) noexcept;
-  Fysh submarine(FyshDirection dir) noexcept;
+  Fysh namedFysh(FyshDirection dir, Species species) noexcept;
   Fysh cullDeformedFysh() noexcept;
   Fysh tilde() noexcept;
   FyshChar eatFyshChar() noexcept;

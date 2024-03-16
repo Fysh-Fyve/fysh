@@ -259,11 +259,10 @@ fysh::Fysh fysh::FyshLexer::slashOrComment() noexcept {
   }
 }
 
-// TODO: pass species instead of bool
-fysh::Fysh fysh::FyshLexer::identifier(FyshDirection dir, bool increment,
-                                       bool submarine) noexcept {
-  char closingChar = submarine ? ')' : '>';
-  if (increment) {
+fysh::Fysh fysh::FyshLexer::namedFysh(FyshDirection dir,
+                                      Species species) noexcept {
+  char closingChar = species == Species::SUBMARINE ? ')' : '>';
+  if (species == Species::INCREMENT) {
     reel();
   }
   const char *identStart{current};
@@ -293,16 +292,7 @@ fysh::Fysh fysh::FyshLexer::identifier(FyshDirection dir, bool increment,
     }
   }
 
-  if (increment) {
-    return {Species::INCREMENT, identStart, identEnd};
-  }
-
-  return {submarine ? Species::SUBMARINE : Species::FYSH_IDENTIFIER, identStart,
-          identEnd, dir == FyshDirection::LEFT};
-}
-
-fysh::Fysh fysh::FyshLexer::submarine(FyshDirection dir) noexcept {
-  return identifier(dir, false, true);
+  return {species, identStart, identEnd, dir == FyshDirection::LEFT};
 }
 
 fysh::Fysh fysh::FyshLexer::random() noexcept {
@@ -409,12 +399,12 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
     case ('>'):
       reel();
       if (periscope() == '<') {
-        return identifier(FyshDirection::RIGHT, true);
+        return namedFysh(FyshDirection::RIGHT, Species::INCREMENT);
       }
       return Species::SHIFT_RIGHT;
     case ('('):
       reel();
-      return submarine(FyshDirection::RIGHT); // submarine
+      return namedFysh(FyshDirection::RIGHT, Species::SUBMARINE); // submarine
     default:
       return cullDeformedFysh();
     }
@@ -451,7 +441,7 @@ fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
     default:
       // negative fysh identifier starting with 'o' <open><
       current = identStart;
-      return identifier(FyshDirection::LEFT);
+      return namedFysh(FyshDirection::LEFT, Species::FYSH_IDENTIFIER);
     }
     return scales(FyshDirection::LEFT);
   }
@@ -462,7 +452,7 @@ fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
         ;
       return scales(FyshDirection::LEFT);
     } else if (std::isalpha(periscope()) || isUnicode()) {
-      return identifier(FyshDirection::LEFT);
+      return namedFysh(FyshDirection::LEFT, Species::FYSH_IDENTIFIER);
     } else {
       return cullDeformedFysh();
     }
@@ -485,7 +475,7 @@ fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
     // clang-format on
   default:
     if (std::isalpha(periscope()) || isUnicode()) {
-      return identifier(FyshDirection::RIGHT);
+      return namedFysh(FyshDirection::RIGHT, Species::FYSH_IDENTIFIER);
     }
     return cullDeformedFysh();
   }
@@ -542,7 +532,7 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
         return cullDeformedFysh();
       }
     } else if (isUnicode(periscope()) || std::isalpha(periscope())) {
-      return submarine(FyshDirection::LEFT);
+      return namedFysh(FyshDirection::LEFT, Species::SUBMARINE);
     } else {
       // We already reeled in (, do not go fysh.
       return Species::FYSH_BOWL_OPEN;
