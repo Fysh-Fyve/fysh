@@ -530,31 +530,3 @@ fysh::Emit fysh::Compyler::expression(const fysh::ast::FyshExpr *expr) {
       },
       *expr);
 }
-
-void fysh::Program::print(const std::string &path) {
-  if (path == "-") {
-    for (const auto &fn : *this) {
-      fn->print(llvm::outs());
-    }
-  } else {
-    std::error_code ec;
-    llvm::raw_fd_ostream outputFile(path.c_str(), ec);
-    if (outputFile.error()) {
-      std::cerr << "Error opening file " << path
-                << " for writing: " << ec.message() << "\n";
-      std::exit(1);
-    } else {
-
-      for (const auto &fn : *this) {
-        fn->print(outputFile);
-      }
-    }
-  }
-  for (const auto &fn : *this) {
-    fn->eraseFromParent();
-  }
-}
-
-bool fysh::Program::empty() const { return this->size() == 0; }
-
-void fysh::Program::add(llvm::Function *fn) { this->push_back(fn); }

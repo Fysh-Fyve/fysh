@@ -21,6 +21,8 @@
 #define FYSH_COMPYLER_H_
 
 #include "../AST/AST.h"
+#include "Program.h"
+
 #include <llvm/IR/Function.h>
 #include <llvm/IR/IRBuilder.h>
 #include <llvm/IR/LLVMContext.h>
@@ -39,19 +41,9 @@
 
 namespace fysh {
 using Emit = std::variant<llvm::Value *, ast::Error>;
-class Program : std::vector<llvm::Function *> {
-public:
-  void print(const std::string &outputFile);
-  void add(llvm::Function *fn);
-  bool empty() const;
-
-private:
-  using std::vector<llvm::Function *>::vector;
-};
 class Compyler {
 public:
   Compyler();
-
   Program compyle(const ast::FyshProgram &ast, bool noOpt);
 
 private:

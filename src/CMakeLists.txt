@@ -5,6 +5,8 @@ add_library (
 	AST/Box.h
 	Compyler/Compyler.cc
 	Compyler/Compyler.h
+	Compyler/Program.cc
+	Compyler/Program.h
 	Fysh/Fysh.cc
 	Fysh/Fysh.h
 	Fysh/Species.h
