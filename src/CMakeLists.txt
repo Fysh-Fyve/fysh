@@ -12,6 +12,4 @@ add_library (
 	Parser/AST/AST.cc
 	Parser/AST/AST.h
 	Parser/AST/Box.h
-	SemanticAnalyzer/SemanticAnalyzer.cc
-	SemanticAnalyzer/SemanticAnalyzer.h
 )
