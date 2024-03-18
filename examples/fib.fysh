@@ -1,0 +1,34 @@
+></*>
+Fysh Fibonacci as a Submarine
+<*/><
+
+>(fib) ><fysh>
+><>
+	><(((^> [ ><fysh> ~o ><})> ]
+	><>
+	    🦑 ><fysh> ~
+	<><
+	
+	><(((*>
+	><>
+		><a> = [>(fib) (><fysh> <({><)] ~
+		><b> = [>(fib) (><fysh> <{(><)] ~
+		🦑 ><a> ><b> ~
+	<><
+<><
+
+ ><//> fib(5) = 5, fib(6) = 8
+><fib5> ≈ [>(fib) ><})}°>] ~ 
+><fib6> ≈ [>(fib) ><}})°>] ~
+
+><complete> = ><)°> ~
+
+><//> result of 13
+><(((^> [(><fib5> ><fib6>) ≈≈ ([>(fib) ><}}}°>])]
+><>
+	>><complete> ~
+<><
+
+><//> 1 if everything works right
+><complete> ~
+
