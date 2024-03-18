@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * \file VybeChecker.cc
+ * \file SemanticAnalyzer.cc
  */
 #include <iostream>
 #include <map>
@@ -45,7 +45,7 @@ public:
   }
 };
 
-class VybeChecker {
+class SemanticAnalyzer {
 private:
   SymbolTable symbolTable;
 
