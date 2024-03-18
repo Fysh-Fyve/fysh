@@ -9,11 +9,12 @@ illustrated by the following user stories and use cases.
 
 Our capstone project is focused on developing an esoteric programming language -
 Fysh. Fysh is designed for RISC-V architechture. Inspired by leaders in the
-esoteric world, languages like brainfuck and chicken, Fysh aims to introduce a
-unique sytax and a hardware noise based random number generator. Our goal is to
-combine our technical skills and creativity to create a language that is not
-only fun but also expands our experience and knowledge in compiler design. This
-project aims towards exploring new possibilites in programming language design.
+esoteric world, languages like brainfuck [@brainfuck] and Chicken [@chicken],
+Fysh aims to introduce a unique sytax and a hardware noise based random number
+generator. Our goal is to combine our technical skills and creativity to create
+a language that is not only fun but also expands our experience and knowledge in
+compiler design. This project aims towards exploring new possibilites in
+programming language design.
 
 ### Learning about RISC-V ISA
 
