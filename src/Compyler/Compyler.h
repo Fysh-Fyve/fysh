@@ -58,7 +58,7 @@ private:
   Emit statement(const ast::FyshStmt &stmt);
   Emit block(const std::vector<ast::FyshStmt> &block);
   Emit ifStmt(const ast::FyshIfStmt &stmt);
-  Emit squidStmt(const ast::BabySquid &stmt);
+  Emit squidStmt(const ast::Squid &stmt);
   Emit loop(const ast::FyshLoopStmt &stmt);
   Emit increment(const ast::FyshIncrementStmt &stmt);
   Emit decrement(const ast::FyshDecrementStmt &stmt);

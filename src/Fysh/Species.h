@@ -55,7 +55,7 @@ enum class Species {
   FYSH_CLOSE,        // <>< (same as closing curly bracket '}' )
   WTF_OPEN,          // WHAT THE FYSH (Throw error opening) ><!@#$>
   WTF_CLOSE,         // WHAT THE FYSH (Throw error closing) <!@#$><
-  RANDOM,            // Random fysh ><###>
+  GRILLED_FYSH,      // Random fysh ><###>
   FYSH_LOOP,         // ><(((@>
   COMMENT,           // ><//> Comment
   MULTILINE_COMMENT, // ></*> Comment <*/><
@@ -73,7 +73,7 @@ enum class Species {
   ANCHOR_LEFT,       // (+o
   ANCHOR_RIGHT,      // o+)
   SUBMARINE,         // (submarine)<
-  BABY_SQUID,        // <~ return operator
+  SQUID,             // <~ return operator
 };
 
 }

@@ -120,7 +120,7 @@ TEST_CASE("random fysh") {
   FyshLexer lexer{"><##> ><###> ><####> <###><"};
 
   INVALID("><##>");
-  T(S::RANDOM);
+  T(S::GRILLED_FYSH);
   INVALID("><####>");
   INVALID("<###><");
   T(S::END);
@@ -426,9 +426,9 @@ TEST_CASE("BABY SQUID (Return)") {
   T(S::FYSH_OPEN);
   Fysh fysh{lexer.nextFysh()};
   CHECK(fysh == "fysh"); CHECK(fysh == S::INCREMENT); T(S::FYSH_WATER);
-  T(S::BABY_SQUID); IDENT_DIR("fysh", true); T(S::FYSH_WATER);
-  T(S::BABY_SQUID); T(S::BABY_SQUID); 
-  T(S::FYSH_WATER); T(S::BABY_SQUID); IDENT_DIR("fysh", true); T(S::FYSH_WATER);
+  T(S::SQUID); IDENT_DIR("fysh", true); T(S::FYSH_WATER);
+  T(S::SQUID); T(S::SQUID);
+  T(S::FYSH_WATER); T(S::SQUID); IDENT_DIR("fysh", true); T(S::FYSH_WATER);
   T(S::FYSH_CLOSE);
   T(S::END);
   // clang-format on

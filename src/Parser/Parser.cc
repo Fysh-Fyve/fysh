@@ -322,9 +322,9 @@ fysh::ast::FyshStmt fysh::FyshParser::parseStatement() {
     nextFysh();
     return terminateStatement(ast::FyshAnchorStmt{op, parseExpression()});
   }
-  case Species::BABY_SQUID: {
+  case Species::SQUID: {
     nextFysh();
-    return terminateStatement(ast::BabySquid{parseExpression()});
+    return terminateStatement(ast::Squid{parseExpression()});
   }
   default: {
     if (curFysh == Species::FYSH_IDENTIFIER && peekFysh == Species::ASSIGN) {

@@ -293,7 +293,7 @@ fysh::Fysh fysh::FyshLexer::random() noexcept {
     }
   }
   if (match('>')) {
-    return Species::RANDOM;
+    return Species::GRILLED_FYSH;
   }
   return cullDeformedFysh();
 }
@@ -368,7 +368,7 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
     case ('3'):
       return goFysh(Species::HEART_MULTIPLY); // <3 multiplication heart
     case ('~'):
-      return goFysh(Species::BABY_SQUID); // return operator
+      return goFysh(Species::SQUID); // return operator
     case ('<'):
       return goFysh(Species::SHIFT_LEFT);
     case ('/'):
@@ -572,7 +572,7 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
       }
       return Species::ASSIGN;
     } else if (expectFyshChar("🦑")) {
-      return Species::BABY_SQUID;
+      return Species::SQUID;
     } else {
       return cullDeformedFysh();
     }

@@ -81,8 +81,8 @@ constexpr const char *debugType(const fysh::Species &species) {
     return "WTF(";
   case Species::WTF_CLOSE:
     return ")WTF";
-  case Species::RANDOM:
-    return "RANDOM";
+  case Species::GRILLED_FYSH:
+    return "GRILLED_FYSH";
   case Species::COMMENT:
     return "//";
   case Species::MULTILINE_COMMENT:
@@ -115,7 +115,7 @@ constexpr const char *debugType(const fysh::Species &species) {
     return "o+)";
   case Species::SUBMARINE:
     return "SUBMARINE";
-  case Species::BABY_SQUID:
+  case Species::SQUID:
     return "return";
   }
   assert(false);

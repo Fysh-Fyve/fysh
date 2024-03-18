@@ -188,7 +188,7 @@ fysh::Compyler::resolveVariable(const std::string_view &name,
   return globals[name];
 }
 
-fysh::Emit fysh::Compyler::squidStmt(const fysh::ast::BabySquid &stmt) {
+fysh::Emit fysh::Compyler::squidStmt(const fysh::ast::Squid &stmt) {
   Emit retVal = expression(&stmt.expr);
   if (isError(retVal)) {
     return retVal;
@@ -334,7 +334,7 @@ fysh::Emit fysh::Compyler::statement(const ast::FyshStmt &stmt) {
           return assignment(arg);
         } else if constexpr (std::is_same_v<T, ast::FyshAnchorStmt>) {
           return anchorStmt(arg);
-        } else if constexpr (std::is_same_v<T, ast::BabySquid>) {
+        } else if constexpr (std::is_same_v<T, ast::Squid>) {
           return squidStmt(arg);
         } else {
           static_assert(always_false_v<T>, "non-exhaustive visitor!");
