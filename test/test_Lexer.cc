@@ -417,6 +417,7 @@ TEST_CASE("BABY SQUID (Return)") {
   ><>
     >><fysh> ~
     <~ <fysh>< ~
+    🦑🦑
     ~<~<fysh><~
   <><
   )"};
@@ -426,6 +427,7 @@ TEST_CASE("BABY SQUID (Return)") {
   Fysh fysh{lexer.nextFysh()};
   CHECK(fysh == "fysh"); CHECK(fysh == S::INCREMENT); T(S::FYSH_WATER);
   T(S::BABY_SQUID); IDENT_DIR("fysh", true); T(S::FYSH_WATER);
+  T(S::BABY_SQUID); T(S::BABY_SQUID); 
   T(S::FYSH_WATER); T(S::BABY_SQUID); IDENT_DIR("fysh", true); T(S::FYSH_WATER);
   T(S::FYSH_CLOSE);
   T(S::END);

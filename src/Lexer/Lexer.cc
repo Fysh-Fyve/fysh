@@ -571,6 +571,8 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
         return Species::EQUAL;
       }
       return Species::ASSIGN;
+    } else if (expectFyshChar("🦑")) {
+      return Species::BABY_SQUID;
     } else {
       return cullDeformedFysh();
     }
