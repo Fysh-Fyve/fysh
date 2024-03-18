@@ -18,19 +18,11 @@ new possibilites in programming language design.
 
 ### Learning about RISC-V ISA
 
-We are also curious about the internals of real-world CPUs. We have only
-encountered a "toy" VHDL implementation of a CPU in electrical and computer
-engineering (ECE) 410, our digital logic design course. Our initial idea was to
-run the compiled program written in our esoteric programming language on an
-ESP-32 C3 microcontroller unit (MCU)[@esp32]. However, we are required to have a
-hardware aspect to our project.
-
-Because of this, we decided to implement a RISC-V CPU ourselves with a custom
-CPU instruction to showcase the extensibility of RISC-V. Implementing the CPU in
-VHDL and programming a Zybo board means that the project can be used by all ECE
-students. With a softcore microprocessor and a compiler, we have a real
-full-stack computer engineering project that we can be proud of and can
-potentially aid in the learning of other computer engineering students.
+We are developing a RISC-V CPU with a custom instruction, highlighting RISC-V's
+extensibility. By employing VHDL for the CPU and programming a Zybo board, the
+project becomes accessible to all ECE students. With a softcore microprocessor
+and a compiler included, we are creating a comprehensive full-stack computer
+engineering project, providing a valuable learning tool for other students.
 
 ## Use Cases
 
