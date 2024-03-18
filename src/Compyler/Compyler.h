@@ -58,6 +58,7 @@ private:
   Emit statement(const ast::FyshStmt &stmt);
   Emit block(const std::vector<ast::FyshStmt> &block);
   Emit ifStmt(const ast::FyshIfStmt &stmt);
+  Emit squidStmt(const ast::BabySquid &stmt);
   Emit loop(const ast::FyshLoopStmt &stmt);
   Emit increment(const ast::FyshIncrementStmt &stmt);
   Emit decrement(const ast::FyshDecrementStmt &stmt);
@@ -71,6 +72,9 @@ private:
   Emit anchorIn(const fysh::ast::FyshBinaryExpr &expr);
   Emit anchorOut(const fysh::ast::FyshBinaryExpr &expr);
   Emit unary(const fysh::ast::FyshUnaryExpr &expr);
+
+  /* Compiling subroutines */
+  Emit subroutine(const fysh::ast::SUBroutine &sub);
 
   /* Utility methods */
   llvm::GlobalVariable *resolveVariable(const std::string_view &name,

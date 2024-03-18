@@ -188,6 +188,15 @@ fysh::Compyler::resolveVariable(const std::string_view &name,
   return globals[name];
 }
 
+fysh::Emit fysh::Compyler::squidStmt(const fysh::ast::BabySquid &stmt) {
+  Emit retVal = expression(&stmt.expr);
+  if (isError(retVal)) {
+    return retVal;
+  }
+  builder->CreateRet(unwrap(retVal));
+  return unwrap(retVal);
+}
+
 fysh::Emit fysh::Compyler::anchorStmt(const fysh::ast::FyshAnchorStmt &stmt) {
   if (stmt.op == fysh::ast::FyshBinary::AnchorIn) {
     // Only handle assignments to identifiers for now
@@ -326,7 +335,7 @@ fysh::Emit fysh::Compyler::statement(const ast::FyshStmt &stmt) {
         } else if constexpr (std::is_same_v<T, ast::FyshAnchorStmt>) {
           return anchorStmt(arg);
         } else if constexpr (std::is_same_v<T, ast::BabySquid>) {
-          return ast::Error{"unimplemented"};
+          return squidStmt(arg);
         } else {
           static_assert(always_false_v<T>, "non-exhaustive visitor!");
         }
@@ -368,6 +377,10 @@ static void print(llvm::Module *m, const std::string &path) {
   }
 }
 
+fysh::Emit fysh::Compyler::subroutine(const fysh::ast::SUBroutine &sub) {
+  return nullptr;
+}
+
 void fysh::Compyler::compyle(const fysh::ast::FyshProgram &ast,
                              fysh::Options opts) {
   // int main()
@@ -377,7 +390,7 @@ void fysh::Compyler::compyle(const fysh::ast::FyshProgram &ast,
 
   Emit emit;
   for (const auto &declarations : ast) {
-    emit = {std::visit(
+    Emit e{std::visit(
         [this, prototype](auto &&arg) -> Emit {
           using T = std::decay_t<decltype(arg)>;
           if constexpr (std::is_same_v<T, ast::Error>) {
@@ -385,37 +398,39 @@ void fysh::Compyler::compyle(const fysh::ast::FyshProgram &ast,
           } else if constexpr (std::is_same_v<T, ast::FyshStmt>) {
             return statement(arg);
           } else if constexpr (std::is_same_v<T, ast::SUBroutine>) {
-            return ast::Error{"unimplemented"};
+            return subroutine(arg);
           } else {
             static_assert(always_false_v<T>, "non-exhaustive visitor!");
           }
         },
         declarations)};
-    if (isError(emit)) {
-      std::cerr << std::get<ast::Error>(emit).getraw() << std::endl;
+    if (isError(e)) {
+      std::cerr << std::get<ast::Error>(e).getraw() << std::endl;
       // Something went wrong!
       prototype->eraseFromParent();
       return;
     }
+    if (llvm::Value *expr = unwrap(e)) {
+      emit = expr;
+    }
   }
 
-  if (isError(emit)) {
-    std::cerr << std::get<ast::Error>(emit).getraw() << std::endl;
-  } else if (llvm::Value *expr = unwrap(emit)) {
+  if (llvm::Value *expr = unwrap(emit)) {
     // Finish off the function.
     builder->CreateRet(expr);
-    // Validate the generated code, checking for consistency.
-    llvm::verifyFunction(*prototype);
-
-    if (!opts.noOpt) {
-      fpm->run(*prototype, *fam);
-    }
-
-    print(module.get(), opts.outputFilename);
+  } else {
+    // Implicitly return 0
+    builder->CreateRet(builder->getInt32(0));
   }
 
-  // Something went wrong!
-  prototype->eraseFromParent();
+  // Validate the generated code, checking for consistency.
+  llvm::verifyFunction(*prototype);
+
+  if (!opts.noOpt) {
+    fpm->run(*prototype, *fam);
+  }
+
+  print(module.get(), opts.outputFilename);
 }
 
 fysh::Emit fysh::Compyler::unary(const fysh::ast::FyshUnaryExpr &expr) {
