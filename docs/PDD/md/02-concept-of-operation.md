@@ -6,20 +6,7 @@ illustrated by the following user stories and use cases.
 ## User Stories
 
 ### Writing a Compiler
-
-Upon receiving the project list for this semester's capstone project, we were
-excited to see that there is a project described as "Likely the most difficult
-project on our list": a native C compiler for a single board computer with a
-custom CPU and instruction set. It was to our disappointment that the computer
-did not yet have an operating system, rendering the project infeasible and
-impractical.
-
-However, we insisted on working on a compiler. This time, we are targeting
-RISC-V[@riscv], an open standard instruction set architecture (ISA) that is
-gaining popularity in the industry. It was initially stated in the proposal that
-we are taking inspiration from modern languages like Rust, Zig, or Go[@ppr], but
-we have also decided to unleash our creativity and make our programming language
-esoteric[@esolang].
+Our capstone project is focused on developing an esoteric programming language - Fysh. Fysh is designed for RISC-V architechture. Inspired by leaders in the esoteric world, languages like brainfuck and chicken, Fysh aims to introduce a unique sytax and a hardware noise based random number generator. Our goal is to combine our technical skills and creativity to create a language that is not only fun but also expands our experience and knowledge in compiler design. This project aims towards exploring new possibilites in programming language design. 
 
 ### Learning about RISC-V ISA
 
