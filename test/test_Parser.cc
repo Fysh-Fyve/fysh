@@ -150,7 +150,7 @@ TEST_CASE("Subroutines") {
   CHECK(func.name == "foo");
   REQUIRE(func.parameters.size() == 1);
   CHECK(func.parameters[0] == "arg1");
-  std::vector<FyshStmt> block{unwrap_block(func.body)};
+  std::vector<FyshStmt> block = unwrap_block(func.body);
   check_block(block, 2);
 
   FyshAnchorStmt stmt{unwrap<FyshAnchorStmt>(block[0])};
