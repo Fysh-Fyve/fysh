@@ -48,7 +48,17 @@ module.exports = grammar({
   ],
 
   rules: {
-    source_file: ($) => seq(repeat($._statement)),
+    source_file: ($) => seq(repeat(choice($._statement, $.subroutine))),
+
+    subroutine: ($) =>
+      seq(
+        $.left_sub,
+        field("params", repeat($.positive_ident)),
+        field("body", $.block),
+      ),
+
+    left_sub: ($) => seq(">(", field("name", $.name), ")"),
+    right_sub: ($) => seq("(", field("name", $.name), ")<"),
 
     _statement: ($) =>
       choice(
@@ -118,6 +128,7 @@ module.exports = grammar({
         $.negative_ident,
         $.negative_literal,
         $.grilled_fysh,
+        $.call_expression,
       ),
 
     fysh_tank: ($) => seq("[", $._expression, "]"),
@@ -156,6 +167,15 @@ module.exports = grammar({
         prec.left(PREC.additive, $.addition),
       );
     },
+
+    call_expression: ($) =>
+      seq(
+        "[",
+        repeat(prec(PREC.primary, $._expression)),
+        choice($.left_sub, $.right_sub),
+        repeat(prec(PREC.primary, $._expression)),
+        "]",
+      ),
 
     addition: ($) =>
       seq(field("left", $._expression), field("right", $._expression)),

@@ -12,6 +12,10 @@
             "named": true
           },
           {
+            "type": "call_expression",
+            "named": true
+          },
+          {
             "type": "fysh_bowl",
             "named": true
           },
@@ -43,6 +47,10 @@
         "types": [
           {
             "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "call_expression",
             "named": true
           },
           {
@@ -100,6 +108,10 @@
             "named": true
           },
           {
+            "type": "call_expression",
+            "named": true
+          },
+          {
             "type": "fysh_bowl",
             "named": true
           },
@@ -150,6 +162,10 @@
             "named": true
           },
           {
+            "type": "call_expression",
+            "named": true
+          },
+          {
             "type": "fysh_bowl",
             "named": true
           },
@@ -187,6 +203,10 @@
         "types": [
           {
             "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "call_expression",
             "named": true
           },
           {
@@ -314,6 +334,10 @@
             "named": true
           },
           {
+            "type": "call_expression",
+            "named": true
+          },
+          {
             "type": "fysh_bowl",
             "named": true
           },
@@ -395,6 +419,57 @@
     }
   },
   {
+    "type": "call_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "fysh_bowl",
+          "named": true
+        },
+        {
+          "type": "grilled_fysh",
+          "named": true
+        },
+        {
+          "type": "left_sub",
+          "named": true
+        },
+        {
+          "type": "negative_ident",
+          "named": true
+        },
+        {
+          "type": "negative_literal",
+          "named": true
+        },
+        {
+          "type": "positive_ident",
+          "named": true
+        },
+        {
+          "type": "positive_literal",
+          "named": true
+        },
+        {
+          "type": "right_sub",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "dead_fysh",
     "named": true,
     "fields": {}
@@ -424,6 +499,10 @@
       "types": [
         {
           "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "call_expression",
           "named": true
         },
         {
@@ -466,6 +545,10 @@
           "named": true
         },
         {
+          "type": "call_expression",
+          "named": true
+        },
+        {
           "type": "fysh_bowl",
           "named": true
         },
@@ -502,6 +585,10 @@
       "types": [
         {
           "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "call_expression",
           "named": true
         },
         {
@@ -611,6 +698,22 @@
     }
   },
   {
+    "type": "left_sub",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "name",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "loop_statement",
     "named": true,
     "fields": {
@@ -712,6 +815,22 @@
     }
   },
   {
+    "type": "right_sub",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "name",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "scales",
     "named": true,
     "fields": {},
@@ -769,6 +888,46 @@
         {
           "type": "loop_statement",
           "named": true
+        },
+        {
+          "type": "subroutine",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "subroutine",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "params": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "positive_ident",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "left_sub",
+          "named": true
         }
       ]
     }
@@ -795,6 +954,10 @@
   },
   {
     "type": ")",
+    "named": false
+  },
+  {
+    "type": ")<",
     "named": false
   },
   {
@@ -831,6 +994,10 @@
   },
   {
     "type": ">",
+    "named": false
+  },
+  {
+    "type": ">(",
     "named": false
   },
   {

@@ -1,0 +1,102 @@
+================================================================================
+SUBroutines
+================================================================================
+
+>(foo) ><arg1> ><arg2> ><arg3>
+><>
+    o+) ><local> ~
+    (+o ><local> ><arg1> ><arg2> <arg3>< ~
+<><
+
+[><}> >(foo) (><}> ><}>) ><}>] ~
+[>(foo) ><}> (><}> ><}>) ><}>] ~
+[><}> (><}> ><}>) ><}> (foo)<] ~
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (subroutine
+    (left_sub
+      (name))
+    (positive_ident
+      (name))
+    (positive_ident
+      (name))
+    (positive_ident
+      (name))
+    (block
+      (anchor_statement
+        (positive_ident
+          (name)))
+      (anchor_statement
+        (binary_expression
+          (addition
+            (binary_expression
+              (addition
+                (binary_expression
+                  (addition
+                    (positive_ident
+                      (name))
+                    (positive_ident
+                      (name))))
+                (positive_ident
+                  (name))))
+            (negative_ident
+              (name)))))))
+  (expression_statement
+    (call_expression
+      (positive_literal
+        (scales
+          (one)))
+      (left_sub
+        (name))
+      (fysh_bowl
+        (binary_expression
+          (addition
+            (positive_literal
+              (scales
+                (one)))
+            (positive_literal
+              (scales
+                (one))))))
+      (positive_literal
+        (scales
+          (one)))))
+  (expression_statement
+    (call_expression
+      (left_sub
+        (name))
+      (positive_literal
+        (scales
+          (one)))
+      (fysh_bowl
+        (binary_expression
+          (addition
+            (positive_literal
+              (scales
+                (one)))
+            (positive_literal
+              (scales
+                (one))))))
+      (positive_literal
+        (scales
+          (one)))))
+  (expression_statement
+    (call_expression
+      (positive_literal
+        (scales
+          (one)))
+      (fysh_bowl
+        (binary_expression
+          (addition
+            (positive_literal
+              (scales
+                (one)))
+            (positive_literal
+              (scales
+                (one))))))
+      (positive_literal
+        (scales
+          (one)))
+      (right_sub
+        (name)))))
