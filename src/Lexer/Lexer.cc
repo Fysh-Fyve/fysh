@@ -19,10 +19,10 @@
  */
 
 #include "Lexer.h"
-#include "../Fysh/Species.h"
+
 #include <cctype>
 #include <variant>
-
+#include "../Lexer/Fysh/Species.h"
 #ifdef FYSH_DEBUG
 #include <iostream>
 #endif

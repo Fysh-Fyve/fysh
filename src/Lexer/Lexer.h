@@ -20,7 +20,7 @@
 #ifndef FYSH_LEXER_H_
 #define FYSH_LEXER_H_
 
-#include "../Fysh/Fysh.h"
+#include "../Lexer/Fysh/Fysh.h"
 #include <variant>
 
 // Uncomment to print the current line where periscope is called

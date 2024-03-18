@@ -5,9 +5,9 @@ add_library (
 	AST/Box.h
 	Compyler/Compyler.cc
 	Compyler/Compyler.h
-	Fysh/Fysh.cc
-	Fysh/Fysh.h
-	Fysh/Species.h
+	Lexer/Fysh/Fysh.cc
+	Lexer/Fysh/Fysh.h
+	Lexer/Fysh/Species.h
 	Lexer/Lexer.cc
 	Lexer/Lexer.h
 	Parser/Parser.cc
