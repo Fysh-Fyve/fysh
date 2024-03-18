@@ -18,7 +18,7 @@
  * \file Compyler.cc
  */
 #include "Compyler.h"
-#include "../AST/AST.h"
+#include "../Parser/AST/AST.h"
 
 #include <iostream>
 #include <llvm/ADT/APInt.h>

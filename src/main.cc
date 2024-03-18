@@ -17,7 +17,7 @@
 /**
  * \file main.cc
  */
-#include "AST/AST.h"
+#include "Parser/AST/AST.h"
 #include "Compyler/Compyler.h"
 #include "Lexer/Lexer.h"
 #include "Parser/Parser.h"

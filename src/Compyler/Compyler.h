@@ -20,7 +20,7 @@
 #ifndef FYSH_COMPYLER_H_
 #define FYSH_COMPYLER_H_
 
-#include "../AST/AST.h"
+#include "../Parser/AST/AST.h"
 
 #include <llvm/IR/Function.h>
 #include <llvm/IR/IRBuilder.h>

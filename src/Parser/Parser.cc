@@ -19,7 +19,7 @@
  */
 
 #include "Parser.h"
-#include "../AST/AST.h"
+#include "../Parser/AST/AST.h"
 #include "../Lexer/Fysh/Species.h"
 
 #include <iostream>
