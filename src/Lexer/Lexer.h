@@ -20,7 +20,7 @@
 #ifndef FYSH_LEXER_H_
 #define FYSH_LEXER_H_
 
-#include "../Lexer/Fysh/Fysh.h"
+#include "Fysh/Fysh.h"
 #include <llvm/Support/raw_ostream.h>
 #include <variant>
 

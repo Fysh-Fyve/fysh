@@ -20,8 +20,8 @@
 #ifndef FYSH_PARSER_H_
 #define FYSH_PARSER_H_
 
-#include "../Parser/AST/AST.h"
 #include "../Lexer/Lexer.h"
+#include "AST/AST.h"
 
 namespace fysh {
 class FyshParser {

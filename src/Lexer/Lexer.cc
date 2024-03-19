@@ -20,7 +20,7 @@
 
 #include "Lexer.h"
 
-#include "../Lexer/Fysh/Species.h"
+#include "Fysh/Species.h"
 #include <cctype>
 #include <variant>
 

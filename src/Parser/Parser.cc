@@ -20,7 +20,7 @@
 
 #include "Parser.h"
 #include "../Lexer/Fysh/Species.h"
-#include "../Parser/AST/AST.h"
+#include "AST/AST.h"
 
 #include <llvm/Support/raw_ostream.h>
 #include <variant>
