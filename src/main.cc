@@ -79,6 +79,12 @@ fysh::Options parseOptions(int argc, char *argv[]) {
 int main(int argc, char *argv[]) {
   fysh::Options opts = parseOptions(argc, argv);
   const char *file{argv[optind] == NULL ? "-" : argv[optind]};
-  compyle(llvm::MemoryBuffer::getFileOrSTDIN(file).get(), argv[optind], opts);
+  auto inputFile{llvm::MemoryBuffer::getFileOrSTDIN(file)};
+  if (inputFile) {
+    compyle(inputFile.get(), argv[optind], opts);
+  } else {
+    llvm::errs() << "Error getting input: " << inputFile.getError().message()
+                 << "\n";
+  }
   return 0;
 }
