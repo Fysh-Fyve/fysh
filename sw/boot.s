@@ -1,4 +1,5 @@
 .globl _start
+.globl fysh_grilled
 
 .text
 _start:
@@ -8,3 +9,7 @@ _start:
 	call	main
 done:
 	beqz	zero, done
+fysh_grilled:
+	# fysh a0 (store random number into a0)
+	.word 0x0000056b
+	ret
