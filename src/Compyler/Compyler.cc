@@ -250,7 +250,8 @@ fysh::Emit fysh::Compyler::loop(const fysh::ast::FyshLoopStmt &stmt) {
   }
   llvm::Value *loopCond{unwrap(condEmit)};
 
-  builder->CreateCondBr(loopCond, loopBodyBlock, loopExit);
+  builder->CreateCondBr(builder->CreateICmpNE(loopCond, builder->getInt32(0)),
+                        loopBodyBlock, loopExit);
   builder->SetInsertPoint(loopBodyBlock);
   Emit blockEmit{block(stmt.body)};
   if (isError(blockEmit)) {
