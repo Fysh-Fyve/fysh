@@ -77,6 +77,10 @@ fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
     }
     return ident;
   }
+  case Species::GRILLED_FYSH: {
+    nextFysh();
+    return ast::GrilledFysh{};
+  }
   case Species::FYSH_BOWL_OPEN: {
     nextFysh();
     ast::FyshExpr expr{parseExpression()};

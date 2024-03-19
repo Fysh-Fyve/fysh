@@ -72,6 +72,7 @@ private:
   Emit anchorIn(const fysh::ast::FyshBinaryExpr &expr);
   Emit anchorOut(const fysh::ast::FyshBinaryExpr &expr);
   Emit unary(const fysh::ast::FyshUnaryExpr &expr);
+  Emit grilledFysh();
 
   /* Compiling subroutines */
   Emit subroutine(const fysh::ast::SUBroutine &sub);

@@ -83,7 +83,8 @@ llvm::raw_ostream &fysh::ast::operator<<(llvm::raw_ostream &os,
 
         } else if constexpr (std::is_same_v<T, FyshLiteral>) {
           os << arg.num;
-
+        } else if constexpr (std::is_same_v<T, GrilledFysh>) {
+          os << "><###>";
         } else {
           static_assert(always_false_v<T>, "non-exhaustive visitor!");
         }

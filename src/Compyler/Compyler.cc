@@ -490,6 +490,12 @@ fysh::Emit fysh::Compyler::identifier(const fysh::ast::FyshIdentifier &expr) {
   return builder->CreateLoad(variable->getValueType(), variable, expr.name);
 }
 
+fysh::Emit fysh::Compyler::grilledFysh() {
+  llvm::Function *func{getOrDefine("fysh_grilled", intTy(), Params{})};
+  return builder->CreateCall(func->getFunctionType(), func,
+                             std::vector<llvm::Value *>());
+}
+
 fysh::Emit fysh::Compyler::expression(const fysh::ast::FyshExpr *expr) {
   if (expr == nullptr) {
     return nullptr;
@@ -507,6 +513,8 @@ fysh::Emit fysh::Compyler::expression(const fysh::ast::FyshExpr *expr) {
           return identifier(arg);
         } else if constexpr (std::is_same_v<T, ast::FyshLiteral>) {
           return builder->getInt32(arg.num);
+        } else if constexpr (std::is_same_v<T, ast::GrilledFysh>) {
+          return grilledFysh();
         } else {
           static_assert(always_false_v<T>, "non-exhaustive visitor!");
         }
