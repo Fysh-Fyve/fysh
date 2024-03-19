@@ -20,19 +20,20 @@
 
 #include "Lexer.h"
 
+#include "../Lexer/Fysh/Species.h"
 #include <cctype>
 #include <variant>
-#include "../Lexer/Fysh/Species.h"
+
 #ifdef FYSH_DEBUG
-#include <iostream>
+#include <llvm/Support/raw_ostream.h>
 #endif
 
 #ifdef FYSH_DEBUG
-void printRest(const std::string_view &rest) { std::cerr << rest << std::endl; }
+void printRest(const std::string_view &rest) { llvm::errs() << rest << "\n"; }
 
 char periscope(const char *current, int line) noexcept {
   if (line > 0) {
-    std::cerr << "Current (line:" << line << "): " << *current << std::endl;
+    llvm::errs() << "Current (line:" << line << "): " << *current << "\n";
   }
   return *current;
 }
@@ -579,7 +580,8 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
   }
 }
 
-std::ostream &fysh::operator<<(std::ostream &os, const fysh::FyshChar &f) {
+llvm::raw_ostream &fysh::operator<<(llvm::raw_ostream &os,
+                                    const fysh::FyshChar &f) {
   if (std::holds_alternative<const char *>(f)) {
     os << *std::get<const char *>(f);
   } else {

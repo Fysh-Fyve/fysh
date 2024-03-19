@@ -17,34 +17,29 @@
 /**
  * \file main.cc
  */
-#include "Parser/AST/AST.h"
 #include "Compyler/Compyler.h"
 #include "Lexer/Lexer.h"
+#include "Parser/AST/AST.h"
 #include "Parser/Parser.h"
-#include <fstream>
 #include <getopt.h>
-#include <iostream>
-#include <llvm-18/llvm/Support/JSON.h>
+#include <llvm/Support/MemoryBuffer.h>
 #include <llvm/Support/raw_ostream.h>
-#include <sstream>
 
-void compyle(std::istream &stream, const char *name, fysh::Options opts) {
-  std::stringstream ss;
-  ss << stream.rdbuf();
-  std::string source{ss.str()};
-  fysh::FyshLexer lexer{source.data()};
+void compyle(std::unique_ptr<llvm::MemoryBuffer> &stream, const char *name,
+             fysh::Options opts) {
+  fysh::FyshLexer lexer{stream->getBufferStart()};
   fysh::FyshParser parser{lexer};
   fysh::ast::FyshProgram program{parser.parseProgram()};
 
   if (opts.output == fysh::Options::Output::AST) {
-    std::cout << program;
+    llvm::outs() << program;
     return;
   }
 
   if (program.size() == 1) {
     if (const fysh::ast::Error *err =
             std::get_if<fysh::ast::Error>(&program[0])) {
-      std::cerr << "Error: " << err->getraw() << std::endl;
+      llvm::errs() << "Error: " << err->getraw() << "\n";
       return;
     }
   }
@@ -71,8 +66,7 @@ fysh::Options parseOptions(int argc, char *argv[]) {
       break;
     }
     case 'h': {
-      std::cout << "USAGE: " << argv[0] << "[-o OUTPUT] [-an] [INPUT]"
-                << std::endl;
+      llvm::outs() << "USAGE: " << argv[0] << "[-o OUTPUT] [-an] [INPUT]\n";
       std::exit(0);
     }
     default:
@@ -84,15 +78,7 @@ fysh::Options parseOptions(int argc, char *argv[]) {
 
 int main(int argc, char *argv[]) {
   fysh::Options opts = parseOptions(argc, argv);
-  if (argv[optind] == NULL) {
-    compyle(std::cin, "stdin", opts);
-  } else {
-    std::ifstream inputFile(argv[optind]);
-    if (!inputFile.is_open()) {
-      std::cerr << "Error opening file " << argv[optind] << " for reading\n";
-      return 1;
-    }
-    compyle(inputFile, argv[optind], opts);
-  }
+  const char *file{argv[optind] == NULL ? "-" : argv[optind]};
+  compyle(llvm::MemoryBuffer::getFileOrSTDIN(file).get(), argv[optind], opts);
   return 0;
 }

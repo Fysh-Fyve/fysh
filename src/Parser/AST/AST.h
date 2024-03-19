@@ -22,8 +22,8 @@
 
 #include "Box.h"
 #include <cstdint>
+#include <llvm/Support/raw_ostream.h>
 #include <optional>
-#include <ostream>
 #include <string_view>
 #include <variant>
 #include <vector>
@@ -155,9 +155,9 @@ using FyshProgram = std::vector<FyshSurfaceLevel>;
 constexpr const char *toStr(const FyshBinary &op);
 constexpr const char *toStr(const FyshUnary &op);
 
-std::ostream &operator<<(std::ostream &os, const FyshExpr &f);
-std::ostream &operator<<(std::ostream &os, const FyshStmt &f);
-std::ostream &operator<<(std::ostream &os, const FyshProgram &f);
+llvm::raw_ostream &operator<<(llvm::raw_ostream &os, const FyshExpr &f);
+llvm::raw_ostream &operator<<(llvm::raw_ostream &os, const FyshStmt &f);
+llvm::raw_ostream &operator<<(llvm::raw_ostream &os, const FyshProgram &f);
 
 }; // namespace fysh::ast
 

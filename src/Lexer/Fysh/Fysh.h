@@ -33,8 +33,8 @@ Current: the current position in the input string
 
 #include "Species.h"
 #include <cstdint>
+#include <llvm/Support/raw_ostream.h>
 #include <optional>
-#include <ostream>
 #include <string_view>
 
 namespace fysh {
@@ -94,7 +94,7 @@ private:
 };
 
 // string representation of token type (for testing)
-std::ostream &operator<<(std::ostream &os, const Fysh &body);
+llvm::raw_ostream &operator<<(llvm::raw_ostream &os, const Fysh &body);
 
 }; // namespace fysh
 

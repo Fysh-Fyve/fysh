@@ -21,6 +21,7 @@
 #define FYSH_LEXER_H_
 
 #include "../Lexer/Fysh/Fysh.h"
+#include <llvm/Support/raw_ostream.h>
 #include <variant>
 
 // Uncomment to print the current line where periscope is called
@@ -33,7 +34,7 @@ struct FyshChar : public std::variant<const char *, std::string_view> {
   bool operator==(const char *x) const;
 };
 
-std::ostream &operator<<(std::ostream &os, const fysh::FyshChar &f);
+llvm::raw_ostream &operator<<(llvm::raw_ostream &os, const fysh::FyshChar &f);
 
 enum class FyshDirection { RIGHT, LEFT };
 

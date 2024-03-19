@@ -19,8 +19,7 @@
  */
 #include "AST.h"
 #include <cassert>
-#include <ostream>
-#include <sstream>
+#include <llvm/Support/raw_ostream.h>
 
 constexpr const char *str(const fysh::ast::FyshBinary &op) {
   using FB = fysh::ast::FyshBinary;
@@ -66,10 +65,10 @@ constexpr const char *fysh::ast::toStr(const fysh::ast::FyshUnary &op) {
   return str(op);
 }
 
-std::ostream &fysh::ast::operator<<(std::ostream &os,
-                                    const fysh::ast::FyshExpr &f) {
+llvm::raw_ostream &fysh::ast::operator<<(llvm::raw_ostream &os,
+                                         const fysh::ast::FyshExpr &f) {
   return std::visit(
-      [&os](auto &&arg) -> std::ostream & {
+      [&os](auto &&arg) -> llvm::raw_ostream & {
         using T = std::decay_t<decltype(arg)>;
         if constexpr (std::is_same_v<T, Error>) {
           os << "ERROR(\"" << *arg.t << "\")";
@@ -93,10 +92,10 @@ std::ostream &fysh::ast::operator<<(std::ostream &os,
       f);
 }
 
-std::ostream &fysh::ast::operator<<(std::ostream &os,
-                                    const fysh::ast::FyshStmt &f) {
+llvm::raw_ostream &fysh::ast::operator<<(llvm::raw_ostream &os,
+                                         const fysh::ast::FyshStmt &f) {
   return std::visit(
-      [&os](auto &&arg) -> std::ostream & {
+      [&os](auto &&arg) -> llvm::raw_ostream & {
         using T = std::decay_t<decltype(arg)>;
         if constexpr (std::is_same_v<T, Error>)
           os << "ERROR(\"" << *arg.t << "\");";
@@ -134,7 +133,8 @@ std::ostream &fysh::ast::operator<<(std::ostream &os,
 }
 
 bool fysh::ast::operator==(const fysh::ast::FyshExpr &expr, const char *str) {
-  std::stringstream ss;
+  std::string exprString;
+  llvm::raw_string_ostream ss{exprString};
   ss << expr;
   return ss.str() == str;
 }
@@ -143,8 +143,8 @@ bool fysh::ast::operator!=(const fysh::ast::FyshExpr &expr, const char *str) {
   return !(expr == str);
 }
 
-std::ostream &fysh::ast::operator<<(std::ostream &os,
-                                    const fysh::ast::FyshProgram &f) {
+llvm::raw_ostream &fysh::ast::operator<<(llvm::raw_ostream &os,
+                                         const fysh::ast::FyshProgram &f) {
   for (const auto &stmt : f) {
     std::visit(
         [&os](auto &&arg) {

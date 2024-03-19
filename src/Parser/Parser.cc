@@ -19,11 +19,10 @@
  */
 
 #include "Parser.h"
-#include "../Parser/AST/AST.h"
 #include "../Lexer/Fysh/Species.h"
+#include "../Parser/AST/AST.h"
 
-#include <iostream>
-#include <sstream>
+#include <llvm/Support/raw_ostream.h>
 #include <variant>
 #include <vector>
 
@@ -42,7 +41,7 @@ void fysh::FyshParser::nextFysh() {
         peekFysh.getBody() == "fysh bad") {
       // >:(
       int *p{nullptr};
-      std::cout << *p;
+      llvm::outs() << *p;
     }
 
     // Skip all comment tokens for now
@@ -52,7 +51,8 @@ void fysh::FyshParser::nextFysh() {
 }
 
 fysh::ast::Error fysh::FyshParser::expectFysh(fysh::Species species) {
-  std::stringstream ss;
+  std::string str;
+  llvm::raw_string_ostream ss{str};
   ss << "Expected " << species << " at line " << lexer.fyshingLine();
   return ss.str();
 }
@@ -87,7 +87,8 @@ fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
     return expr;
   }
   default: {
-    std::stringstream ss;
+    std::string s;
+    llvm::raw_string_ostream ss{s};
     ss << "Parser error at line " << lexer.fyshingLine();
     return ast::Error{ss.str()};
   }

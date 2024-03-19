@@ -4,7 +4,6 @@
 #define DOCTEST_CONFIG_TREAT_CHAR_STAR_AS_STRING
 
 #include "doctest.h"
-#include <iostream>
 #include <variant>
 
 using namespace fysh::ast;

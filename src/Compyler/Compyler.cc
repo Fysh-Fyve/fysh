@@ -20,12 +20,12 @@
 #include "Compyler.h"
 #include "../Parser/AST/AST.h"
 
-#include <iostream>
 #include <llvm/ADT/APInt.h>
 #include <llvm/IR/DerivedTypes.h>
 #include <llvm/IR/Instructions.h>
 #include <llvm/IR/Type.h>
 #include <llvm/IR/Verifier.h>
+#include <llvm/Support/raw_ostream.h>
 #include <memory>
 #include <unordered_map>
 #include <variant>
@@ -193,8 +193,9 @@ fysh::Emit fysh::Compyler::squidStmt(const fysh::ast::Squid &stmt) {
   if (isError(retVal)) {
     return retVal;
   }
-  builder->CreateRet(unwrap(retVal));
-  return unwrap(retVal);
+  llvm::Value *val{unwrap(retVal)};
+  builder->CreateRet(val);
+  return val;
 }
 
 fysh::Emit fysh::Compyler::anchorStmt(const fysh::ast::FyshAnchorStmt &stmt) {
@@ -269,7 +270,7 @@ fysh::Emit fysh::Compyler::increment(const fysh::ast::FyshIncrementStmt &stmt) {
       return ast::Error{"unknown variable"};
     }
     llvm::Value *load{
-        builder->CreateLoad(variable->getType(), variable, ident->name)};
+        builder->CreateLoad(variable->getValueType(), variable, ident->name)};
     llvm::Value *inc{builder->CreateAdd(load, builder->getInt32(1))};
     builder->CreateStore(inc, variable);
     return inc;
@@ -286,7 +287,7 @@ fysh::Emit fysh::Compyler::decrement(const fysh::ast::FyshDecrementStmt &stmt) {
       return ast::Error{"unknown variable"};
     }
     llvm::Value *load{
-        builder->CreateLoad(variable->getType(), variable, ident->name)};
+        builder->CreateLoad(variable->getValueType(), variable, ident->name)};
     llvm::Value *dec{builder->CreateSub(load, builder->getInt32(1))};
     builder->CreateStore(dec, variable);
     return dec;
@@ -368,8 +369,8 @@ static void print(llvm::Module *m, const std::string &path) {
     std::error_code ec;
     llvm::raw_fd_ostream outputFile{path.c_str(), ec};
     if (outputFile.error()) {
-      std::cerr << "Error opening file " << path
-                << " for writing: " << ec.message() << "\n";
+      llvm::errs() << "Error opening file " << path
+                   << " for writing: " << ec.message() << "\n";
       std::exit(1);
     } else {
       outputFile << m;
@@ -405,7 +406,7 @@ void fysh::Compyler::compyle(const fysh::ast::FyshProgram &ast,
         },
         declarations)};
     if (isError(e)) {
-      std::cerr << std::get<ast::Error>(e).getraw() << std::endl;
+      llvm::errs() << std::get<ast::Error>(e).getraw() << "\n";
       // Something went wrong!
       prototype->eraseFromParent();
       return;
