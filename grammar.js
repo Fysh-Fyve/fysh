@@ -138,9 +138,11 @@ module.exports = grammar({
     fysh_bowl: ($) => seq("(", $._expression, ")"),
 
     positive_ident: ($) => rightFysh(field("name", $._name)),
-    positive_literal: ($) => rightFysh($.scales, repeat(choice("o", "°"))),
+    positive_literal: ($) =>
+      rightFysh($.scales, repeat(token.immediate(choice("o", "°")))),
     negative_ident: ($) => leftFysh(field("name", $._name)),
-    negative_literal: ($) => leftFysh(repeat(choice("o", "°")), $.scales),
+    negative_literal: ($) =>
+      leftFysh(repeat(token.immediate(choice("o", "°"))), $.scales),
 
     scales: ($) => seq(choice($.one, $.zero), repeat(choice($.one, $.zero))),
     one: (_) => token(choice("{", "}")),

@@ -1,5 +1,12 @@
-===
-Biblically accurate fysh doesn't work at the moment sadly
-===
-><//> ><})oo> ~ ><//> WHY DO YOU KEEP GETTING PARSED AS `_name`??
----
+================================================================================
+Biblically accurate fysh
+================================================================================
+><})oooooooooo> ~
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (positive_literal
+      (scales
+        (one)
+        (zero)))))
