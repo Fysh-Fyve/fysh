@@ -1,5 +1,6 @@
 {
   "name": "fysh",
+  "word": "_name",
   "rules": {
     "source_file": {
       "type": "SEQ",
@@ -62,7 +63,7 @@
           "name": "name",
           "content": {
             "type": "SYMBOL",
-            "name": "name"
+            "name": "_name"
           }
         },
         {
@@ -83,7 +84,7 @@
           "name": "name",
           "content": {
             "type": "SYMBOL",
-            "name": "name"
+            "name": "_name"
           }
         },
         {
@@ -404,8 +405,12 @@
                 "value": "><"
               },
               {
-                "type": "SYMBOL",
-                "name": "name"
+                "type": "FIELD",
+                "name": "name",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_name"
+                }
               },
               {
                 "type": "STRING",
@@ -430,8 +435,12 @@
                 "value": "<"
               },
               {
-                "type": "SYMBOL",
-                "name": "name"
+                "type": "FIELD",
+                "name": "name",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_name"
+                }
               },
               {
                 "type": "STRING",
@@ -559,8 +568,12 @@
           "value": "><"
         },
         {
-          "type": "SYMBOL",
-          "name": "name"
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_name"
+          }
         },
         {
           "type": "STRING",
@@ -609,8 +622,12 @@
           "value": "<"
         },
         {
-          "type": "SYMBOL",
-          "name": "name"
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_name"
+          }
         },
         {
           "type": "STRING",
@@ -1019,16 +1036,16 @@
         }
       ]
     },
-    "name": {
+    "_name": {
       "type": "PATTERN",
       "value": "[_\\p{XID_Start}][_\\p{XID_Continue}]*"
     },
     "comment": {
-      "type": "TOKEN",
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "TOKEN",
+          "content": {
             "type": "SEQ",
             "members": [
               {
@@ -1040,26 +1057,55 @@
                 "value": "[^\\n]*"
               }
             ]
-          },
-          {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "STRING",
-                "value": "></*>"
-              },
-              {
-                "type": "PATTERN",
-                "value": ".*"
-              },
-              {
-                "type": "STRING",
-                "value": "<*/><"
-              }
-            ]
           }
-        ]
-      }
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "></*>"
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SEQ",
+                    "members": [
+                      {
+                        "type": "PATTERN",
+                        "value": "[^\\n]+"
+                      },
+                      {
+                        "type": "CHOICE",
+                        "members": [
+                          {
+                            "type": "STRING",
+                            "value": "\n"
+                          },
+                          {
+                            "type": "BLANK"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "\n"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "STRING",
+              "value": "<*/><"
+            }
+          ]
+        }
+      ]
     }
   },
   "extras": [
@@ -1073,6 +1119,10 @@
     }
   ],
   "conflicts": [
+    [
+      "comment",
+      "_name"
+    ],
     [
       "loop_statement",
       "if_statement",

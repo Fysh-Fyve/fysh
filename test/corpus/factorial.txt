@@ -24,8 +24,7 @@ Factorial Example
 (source_file
   (comment)
   (assignment_statement
-    (positive_ident
-      (name))
+    (positive_ident)
     (positive_literal
       (scales
         (one)
@@ -33,8 +32,7 @@ Factorial Example
         (one))))
   (comment)
   (assignment_statement
-    (positive_ident
-      (name))
+    (positive_ident)
     (positive_literal
       (scales
         (zero)
@@ -46,8 +44,7 @@ Factorial Example
     (loopy_fysh)
     (fysh_tank
       (binary_expression
-        (positive_ident
-          (name))
+        (positive_ident)
         (positive_literal
           (scales
             (zero)
@@ -56,17 +53,12 @@ Factorial Example
     (block
       (comment)
       (assignment_statement
-        (positive_ident
-          (name))
+        (positive_ident)
         (binary_expression
-          (positive_ident
-            (name))
-          (positive_ident
-            (name))))
+          (positive_ident)
+          (positive_ident)))
       (comment)
-      (dec_statement
-        (name))))
+      (dec_statement)))
   (comment)
   (expression_statement
-    (positive_ident
-      (name))))
+    (positive_ident)))

@@ -36,12 +36,15 @@ const PREC = {
 module.exports = grammar({
   name: "fysh",
 
+  word: ($) => $._name,
+
   extras: ($) => [
     $.comment,
     /\s/,
   ],
 
   conflicts: ($) => [
+    [$.comment, $._name],
     [$.loop_statement, $.if_statement, $.scales],
     [$.addition],
     [$.if_statement],
@@ -57,8 +60,8 @@ module.exports = grammar({
         field("body", $.block),
       ),
 
-    left_sub: ($) => seq(">(", field("name", $.name), ")"),
-    right_sub: ($) => seq("(", field("name", $.name), ")<"),
+    left_sub: ($) => seq(">(", field("name", $._name), ")"),
+    right_sub: ($) => seq("(", field("name", $._name), ")<"),
 
     _statement: ($) =>
       choice(
@@ -109,8 +112,10 @@ module.exports = grammar({
       ),
 
     expression_statement: ($) => $._expression,
-    inc_statement: ($) => prec(PREC.primary, seq(">", rightFysh($.name))),
-    dec_statement: ($) => prec(PREC.primary, seq(leftFysh($.name), "<")),
+    inc_statement: ($) =>
+      prec(PREC.primary, seq(">", rightFysh(field("name", $._name)))),
+    dec_statement: ($) =>
+      prec(PREC.primary, seq(leftFysh(field("name", $._name)), "<")),
 
     assignment_statement: ($) =>
       seq(
@@ -134,9 +139,9 @@ module.exports = grammar({
     fysh_tank: ($) => seq("[", $._expression, "]"),
     fysh_bowl: ($) => seq("(", $._expression, ")"),
 
-    positive_ident: ($) => rightFysh($.name),
+    positive_ident: ($) => rightFysh(field("name", $._name)),
     positive_literal: ($) => rightFysh($.scales, fysh_eyes),
-    negative_ident: ($) => leftFysh($.name),
+    negative_ident: ($) => leftFysh(field("name", $._name)),
     negative_literal: ($) => leftFysh(fysh_eyes, $.scales),
 
     scales: ($) => seq(choice($.one, $.zero), repeat(choice($.one, $.zero))),
@@ -180,10 +185,17 @@ module.exports = grammar({
     addition: ($) =>
       seq(field("left", $._expression), field("right", $._expression)),
 
-    name: (_) => /[_\p{XID_Start}][_\p{XID_Continue}]*/,
+    _name: (_) => /[_\p{XID_Start}][_\p{XID_Continue}]*/,
 
     comment: (_) =>
-      token(choice(seq("><//>", /[^\n]*/), seq("></*>", /.*/, "<*/><"))),
+      choice(
+        token(seq("><//>", /[^\n]*/)),
+        seq(
+          "></*>",
+          repeat(choice(seq(/[^\n]+/, optional("\n")), "\n")),
+          "<*/><",
+        ),
+      ),
   },
 });
 

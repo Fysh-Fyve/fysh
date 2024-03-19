@@ -470,6 +470,11 @@
     }
   },
   {
+    "type": "comment",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "dead_fysh",
     "named": true,
     "fields": {}
@@ -477,17 +482,7 @@
   {
     "type": "dec_statement",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "name",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "expression_statement",
@@ -685,33 +680,12 @@
   {
     "type": "inc_statement",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "name",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "left_sub",
     "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "name",
-            "named": true
-          }
-        ]
-      }
-    }
+    "fields": {}
   },
   {
     "type": "loop_statement",
@@ -757,17 +731,7 @@
   {
     "type": "negative_ident",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "name",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "negative_literal",
@@ -787,17 +751,7 @@
   {
     "type": "positive_ident",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "name",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "positive_literal",
@@ -817,18 +771,7 @@
   {
     "type": "right_sub",
     "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "name",
-            "named": true
-          }
-        ]
-      }
-    }
+    "fields": {}
   },
   {
     "type": "scales",
@@ -933,6 +876,10 @@
     }
   },
   {
+    "type": "\n",
+    "named": false
+  },
+  {
     "type": "###",
     "named": false
   },
@@ -966,6 +913,10 @@
   },
   {
     "type": "<",
+    "named": false
+  },
+  {
+    "type": "<*/><",
     "named": false
   },
   {
@@ -1005,6 +956,10 @@
     "named": false
   },
   {
+    "type": "></*>",
+    "named": false
+  },
+  {
     "type": "><>",
     "named": false
   },
@@ -1027,14 +982,6 @@
   {
     "type": "^",
     "named": false
-  },
-  {
-    "type": "comment",
-    "named": true
-  },
-  {
-    "type": "name",
-    "named": true
   },
   {
     "type": "o",

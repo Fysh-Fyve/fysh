@@ -16,18 +16,13 @@ SUBroutines
 
 (source_file
   (subroutine
-    (left_sub
-      (name))
-    (positive_ident
-      (name))
-    (positive_ident
-      (name))
-    (positive_ident
-      (name))
+    (left_sub)
+    (positive_ident)
+    (positive_ident)
+    (positive_ident)
     (block
       (anchor_statement
-        (positive_ident
-          (name)))
+        (positive_ident))
       (anchor_statement
         (binary_expression
           (addition
@@ -35,21 +30,16 @@ SUBroutines
               (addition
                 (binary_expression
                   (addition
-                    (positive_ident
-                      (name))
-                    (positive_ident
-                      (name))))
-                (positive_ident
-                  (name))))
-            (negative_ident
-              (name)))))))
+                    (positive_ident)
+                    (positive_ident)))
+                (positive_ident)))
+            (negative_ident))))))
   (expression_statement
     (call_expression
       (positive_literal
         (scales
           (one)))
-      (left_sub
-        (name))
+      (left_sub)
       (fysh_bowl
         (binary_expression
           (addition
@@ -64,8 +54,7 @@ SUBroutines
           (one)))))
   (expression_statement
     (call_expression
-      (left_sub
-        (name))
+      (left_sub)
       (positive_literal
         (scales
           (one)))
@@ -98,5 +87,4 @@ SUBroutines
       (positive_literal
         (scales
           (one)))
-      (right_sub
-        (name)))))
+      (right_sub))))

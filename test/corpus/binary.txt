@@ -10,8 +10,7 @@ Binary Expressions
 
 (source_file
   (assignment_statement
-    (positive_ident
-      (name))
+    (positive_ident)
     (binary_expression
       (positive_literal
         (scales
@@ -26,8 +25,7 @@ Binary Expressions
           (zero)
           (one)))))
   (assignment_statement
-    (positive_ident
-      (name))
+    (positive_ident)
     (binary_expression
       (positive_literal
         (scales
@@ -42,8 +40,7 @@ Binary Expressions
           (zero)
           (one)))))
   (assignment_statement
-    (positive_ident
-      (name))
+    (positive_ident)
     (binary_expression
       (addition
         (binary_expression

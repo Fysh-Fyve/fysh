@@ -24,36 +24,31 @@ If/Else
     (happy_fysh)
     (fysh_tank
       (binary_expression
-        (positive_ident
-          (name))
+        (positive_ident)
         (positive_literal
           (scales
             (one)
             (zero)
             (zero)))))
     (block
-      (dec_statement
-        (name)))
+      (dec_statement))
     (dead_fysh)
     (if_statement
       (happy_fysh)
       (fysh_tank
         (binary_expression
-          (positive_ident
-            (name))
+          (positive_ident)
           (positive_literal
             (scales
               (one)
               (zero)
               (zero)))))
       (block
-        (inc_statement
-          (name)))
+        (inc_statement))
       (dead_fysh)
       (block
         (assignment_statement
-          (positive_ident
-            (name))
+          (positive_ident)
           (positive_literal
             (scales
               (zero)
