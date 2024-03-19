@@ -75,19 +75,25 @@ their division is symbolized by a heartbreak.
 ><steven> = ><{{(({o> </3 ><{({o> ~
 ```
 
-Fysh are often mistreated are forced into fyshbowls for human entertainment. This isolates the fysh and makes them sad. This is represented by `( ><{{(({°> <°}))}>< )`. 
+Fysh are often mistreated are forced into fyshbowls for human entertainment.
+This isolates the fysh and makes them sad. This is represented by
+`( ><{{(({°> <°}))}>< )`.
+
 ```fysh
 ><steven> ≈ ><steven> 💔 ( ><{{(({°> <°}))>< ) ~
 ```
 
-BEDMAS/PEDMAS has been taught to humans for years. But what about fysh? Fysh have a different way of doing things. Introducing FISHS: Fyshbowl, Increment, Sexual reproduction, Heartbreak, School of fish.
+BEDMAS/PEDMAS has been taught to humans for years. But what about fysh? Fysh
+have a different way of doing things. Introducing FISHS: Fyshbowl, Increment,
+Sexual reproduction, Heartbreak, School of fish.
+
 ```fysh
 ><steven> ≈ ><{{(({°>  ><{{(°> ♡ ><{{(({°> <°}})>< 💔 ( ><{{(°> ><{{(°> )  ~
-
 ```
 
 As life goes on, we learn from our mistakes and improve. Steven’s self help
 journey allowed them to grow an extra tail, incrementing their value by 1.
+
 ```fysh
 >><steven> ~
 ```
@@ -129,16 +135,18 @@ using `~≈` or `~=`.
 ```
 
 Tadpoles also exist in the fysh language. Tadpoles swim towards bigger fysh
-(they like the danger) and are represented by `~o or o~`. ( `~o is <`, `o~ is >`).
-Here we are checking if Steven is bigger than 5. Then if they're less than 7.
+(they like the danger) and are represented by `~o or o~`. ( `~o is <`,
+`o~ is >`). Here we are checking if Steven is bigger than 5. Then if they're
+less than 7.
 
 ```fysh
 ><steven> o~ ><{({°>
 ><steven> ~o ><{{{°>
 ```
 
-Tadpoles aren`t too picky and will also swim towards fysh that are greater than or equal to the other fysh. 
-Here we are checking if Steven is greater than or equal to 5. Then if they're less than or equal to 7.
+Tadpoles aren`t too picky and will also swim towards fysh that are greater than
+or equal to the other fysh. Here we are checking if Steven is greater than or
+equal to 5. Then if they're less than or equal to 7.
 
 ```fysh
 ><steven> o~≈ ><{({°>
@@ -157,9 +165,9 @@ is not real and this is all a simulation, they find it. (!!Steven)
 !! ><steven> ~
 ```
 
-Steven is bored and looking to have their bits
-rearranged. At Fysh, we're here to help! We have provided Steven with a
-variety of tools and bitwise manipulations to satisfy their bit busting needs: `AND (&)`, `OR (|)`,
+Steven is bored and looking to have their bits rearranged. At Fysh, we're here
+to help! We have provided Steven with a variety of tools and bitwise
+manipulations to satisfy their bit busting needs: `AND (&)`, `OR (|)`,
 `XOR (^)`, `NOT (!)`. For those moments when they're feeling particularly
 adventurous, they might even consider the `logical shift left (<<)` or
 `logical shift right (>>)` operators.
@@ -244,9 +252,9 @@ These fysh tanks can be traversed using a fysh.
 ><steven>[><(({°>] ~
 ```
 
-To define a SUBroutine named `submarine`, use `>(submarine)` along with any parameters as Fysh.
-The last expression in the subroutine implicitly acts as the return value. 
-To explicitly return a value, use a baby squid `<~`. 
+To define a SUBroutine named `submarine`, use `>(submarine)` along with any
+parameters as Fysh. The last expression in the subroutine implicitly acts as the
+return value. To explicitly return a value, use a baby squid `<~`.
 
 ```fysh
 >(submarine) ><fysh> ><fysh2>
@@ -255,18 +263,19 @@ To explicitly return a value, use a baby squid `<~`.
 <><
 ```
 
-To call a subroutine, put the submarine in a fysh tank along with its arguments in any order:
+To call a subroutine, put the submarine in a fysh tank along with its arguments
+in any order:
 
 ```fysh
 [><fysh2> >(submarine) ><fysh4>] ~
 ```
 
-To interact with the ocean floor (GPIO), use the anchor. 
+To interact with the ocean floor (GPIO), use the anchor.
+
 ```fysh
 ><{({°> o+) <fysh>< ><//>  get value from gpio pin b'101'
 ><{({°> (+o <fysh>< ><//> write to gpio pin b'101'
 (+o ><fysh> ~ ><//> Write the value of Fysh to the GPIO pins
-
 ```
 
 ### Factorial Example

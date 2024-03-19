@@ -12,6 +12,7 @@ debug your code and octopuses could optimize your algorithms. It's not just a
 programming language; it's an aquatic revolution!
 
 ### 🐟 A Revolutionary Ripple in the Digital Ocean
+
 For centuries, the fishy citizens of our planet's vast waters have been
 overlooked, their contributions to the tech world as invisible as their thoughts
 on quantum mechanics. But no longer! Fysh gives these silent swimmers the
@@ -20,9 +21,11 @@ symbol of unity across species, a... well, let's be honest, a bit of a wet dream
 for those who've always believed in inter-species collaboration.
 
 ### 🌐 Fysh: Coding Without Borders
-Fysh – because why should humans have all the fun? With Fysh, we're scripting a better, brighter, more inclusive tomorrow. Envision a world where salmon suggest improvements to your UI, and jellyfish judiciously refactor
-your backend. Together, we can create a wave of change, one line of code at a
-time.
+
+Fysh – because why should humans have all the fun? With Fysh, we're scripting a
+better, brighter, more inclusive tomorrow. Envision a world where salmon suggest
+improvements to your UI, and jellyfish judiciously refactor your backend.
+Together, we can create a wave of change, one line of code at a time.
 
 ### 🚫 **Discalmers:**
 
@@ -87,15 +90,21 @@ fysh thing.)
 ><steven> ~
 ```
 
-An autopsy of Steven's binary scales reveals the following pattern: `})}` where `}` represents 1 and `)` represents 0. Steven's body is valued at `b101`. (5 in decimal)
+An autopsy of Steven's binary scales reveals the following pattern: `})}` where
+`}` represents 1 and `)` represents 0. Steven's body is valued at `b101`. (5 in
+decimal)
+
 ```fysh
 ><steven> = ><})}>
 ```
 
-Steven doesn't give a flying fysh about their scale direction. ≈ for variable assignment is cool with them too.
+Steven doesn't give a flying fysh about their scale direction. ≈ for variable
+assignment is cool with them too.
+
 ```fysh
 ><steven> ≈ ><}({>
 ```
+
 Steven is blind. You have the power to bless them with sight, but it's
 completely optional.
 
@@ -111,8 +120,8 @@ valued at b1010 (10 in decimal)
 ><steven> = ><steven>  ♡  ><({(°>
 ```
 
-Since fysh are lonely, they aren't too picky. They’ll make do with a lesser
-form of love `<3`.
+Since fysh are lonely, they aren't too picky. They’ll make do with a lesser form
+of love `<3`.
 
 ```
 ><steven> = ><steven> <3 ><({(°> ~
@@ -120,6 +129,7 @@ form of love `<3`.
 
 When there is a school of fysh, their collective value is equal to the sum of
 each individual member. This gives Steven a value of `b101 = b100+ b001`.
+
 ```
 ><steven> ≈ ><{((°> ><(({°> ~
 ```
