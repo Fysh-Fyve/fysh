@@ -96,47 +96,41 @@ CONTROLLER := $(patsubst %, $(SRC_DIR)/%.vhd, $(_CONTROLLER))
 control_fsm_tb: $(TEST_DIR)/control_fsm_tb.vhd $(CONTROLLER)
 	@TB="$@" ./scripts/run_test.sh $^
 
-_ALU := alu \
-	fysh_fyve_pkg \
-
-ALU := $(patsubst %, $(SRC_DIR)/%.vhd, $(_ALU))
-
+_ALU := alu fysh_fyve_pkg
+_IMM_SX := imm_sx fysh_fyve_pkg
 _ALU_CONTROL := imm_sx \
 		program_counter \
 		control_fsm \
-		clk_divider \
-
-ALU_CONTROL := $(patsubst %, $(SRC_DIR)/%.vhd, $(_ALU_CONTROL)) \
-	$(ALU) \
-
-alu_tb: $(TEST_DIR)/alu_tb.vhd $(ALU)
-	@TB="$@" ./scripts/run_test.sh $^
-
-
+		clk_divider
 _MEM := mem \
 	brom \
 	bram \
 	rom_pkg \
-	fysh_fyve_pkg \
-
-MEM := $(patsubst %, $(SRC_DIR)/%.vhd, $(_MEM))
-
-mem_tb: $(TEST_DIR)/mem_tb.vhd $(MEM)
-	@TB="$@" ./scripts/run_test.sh $^
-
+	fysh_fyve_pkg
 _MEMORY := $(_MEM) \
 	   phy_map \
 	   gpio_pins \
 	   mbr_sx \
 	   register_file \
-	   grilled_fysh \
+	   grilled_fysh
 
+ALU := $(patsubst %, $(SRC_DIR)/%.vhd, $(_ALU))
+alu_tb: $(TEST_DIR)/alu_tb.vhd $(ALU)
+	@TB="$@" ./scripts/run_test.sh $^
+
+IMM_SX := $(patsubst %, $(SRC_DIR)/%.vhd, $(_IMM_SX))
+imm_sx_tb: $(TEST_DIR)/imm_sx_tb.vhd $(IMM_SX)
+	@TB="$@" ./scripts/run_test.sh $^
+
+MEM := $(patsubst %, $(SRC_DIR)/%.vhd, $(_MEM))
+mem_tb: $(TEST_DIR)/mem_tb.vhd $(MEM)
+	@TB="$@" ./scripts/run_test.sh $^
 
 MEMORY := $(patsubst %, $(SRC_DIR)/%.vhd, $(_MEMORY))
-
 phy_map_tb: $(TEST_DIR)/phy_map_tb.vhd $(MEMORY)
 	@TB="$@" ./scripts/run_test.sh $^
 
+ALU_CONTROL := $(patsubst %, $(SRC_DIR)/%.vhd, $(_ALU_CONTROL)) $(ALU)
 topmodule_tb: $(TEST_DIR)/topmodule_tb.vhd \
 	$(SRC_DIR)/topmodule.vhd \
 	$(ALU_CONTROL) $(MEMORY)

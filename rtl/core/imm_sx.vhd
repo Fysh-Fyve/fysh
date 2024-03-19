@@ -3,6 +3,7 @@
 --! @cond Doxygen_Suppress
 library ieee;
 use ieee.std_logic_1164.all;
+use work.fysh_fyve.all;
 --! @endcond
 
 --! Immediate Value Sign-extender.\n
@@ -37,11 +38,11 @@ architecture rtl of imm_sx is
   signal j_type : std_ulogic_vector (31 downto 0);
 begin
   with instruction_i(6 downto 2) select imm_val_o <=
-    u_type          when "00101" |"01101",
-    i_type          when "00000" | "00100" | "11001",
-    s_type          when "01000",
-    b_type          when "11000",
-    j_type          when "11011",
+    u_type          when OPCODE_AUIPC | OPCODE_LUI,
+    i_type          when OPCODE_LOAD | OPCODE_REG_IM | OPCODE_JALR,
+    s_type          when OPCODE_STORE,
+    b_type          when OPCODE_BRANCH,
+    j_type          when OPCODE_JAL,
     (others => 'X') when others;
 
   -- long immediate
