@@ -1120,10 +1120,6 @@
   ],
   "conflicts": [
     [
-      "comment",
-      "_name"
-    ],
-    [
       "loop_statement",
       "if_statement",
       "scales"

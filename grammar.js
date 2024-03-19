@@ -30,8 +30,7 @@ const PREC = {
     "~o=",
     "~o≈",
   ],
-  anchor = choice("(+o", "o+)"),
-  fysh_eyes = repeat(choice("o", "°"));
+  anchor = choice("(+o", "o+)");
 
 module.exports = grammar({
   name: "fysh",
@@ -44,7 +43,6 @@ module.exports = grammar({
   ],
 
   conflicts: ($) => [
-    [$.comment, $._name],
     [$.loop_statement, $.if_statement, $.scales],
     [$.addition],
     [$.if_statement],
@@ -140,9 +138,9 @@ module.exports = grammar({
     fysh_bowl: ($) => seq("(", $._expression, ")"),
 
     positive_ident: ($) => rightFysh(field("name", $._name)),
-    positive_literal: ($) => rightFysh($.scales, fysh_eyes),
+    positive_literal: ($) => rightFysh($.scales, repeat(choice("o", "°"))),
     negative_ident: ($) => leftFysh(field("name", $._name)),
-    negative_literal: ($) => leftFysh(fysh_eyes, $.scales),
+    negative_literal: ($) => leftFysh(repeat(choice("o", "°")), $.scales),
 
     scales: ($) => seq(choice($.one, $.zero), repeat(choice($.one, $.zero))),
     one: (_) => token(choice("{", "}")),
