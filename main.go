@@ -7,6 +7,8 @@ import (
 	"io"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 
 	fysh "github.com/Fysh-Fyve/fyshls/bindings"
 	"github.com/Fysh-Fyve/fyshls/version"
@@ -23,7 +25,8 @@ func getLogger() io.WriteCloser {
 	if version.LogStderr == "true" {
 		return os.Stderr
 	} else {
-		file, err := os.CreateTemp(".", "fyshls")
+		// file, err := os.CreateTemp(".", "fyshls")
+		file, err := os.Create("log.txt")
 		if err != nil {
 			panic(err)
 		}
@@ -44,7 +47,7 @@ type FyshLS struct {
 	version   string
 	logger    *log.Logger
 	documents map[string][]byte
-	trees     map[string]*sitter.Node
+	trees     map[string]*sitter.Tree
 
 	handler protocol.Handler
 }
@@ -55,7 +58,7 @@ func NewFyshLs(logger *log.Logger) *FyshLS {
 		version:   version.BuildVersion(),
 		logger:    logger,
 		documents: map[string][]byte{},
-		trees:     map[string]*sitter.Node{},
+		trees:     map[string]*sitter.Tree{},
 	}
 
 	ls.handler = protocol.Handler{
@@ -81,12 +84,14 @@ func (ls *FyshLS) logTrace(context *glsp.Context, params *protocol.LogTraceParam
 	return nil
 }
 
-func getTree(file []byte) (*sitter.Node, error) {
-	n, err := sitter.ParseCtx(ctx.Background(), file, fysh.GetLanguage())
+func getTree(content []byte) (*sitter.Tree, error) {
+	p := sitter.NewParser()
+	p.SetLanguage(fysh.GetLanguage())
+	tree, err := p.ParseCtx(ctx.Background(), nil, content)
 	if err != nil {
 		return nil, err
 	}
-	return n, nil
+	return tree, nil
 }
 
 func (ls *FyshLS) saveDocument(
@@ -148,12 +153,78 @@ func (ls *FyshLS) openDocument(
 	return ls.updateDoc(params.TextDocument.URI, params.TextDocument.Text)
 }
 
+func getFysh(v int64) string {
+	if v < 0 {
+		return fmt.Sprintf("<%s><",
+			strings.ReplaceAll(
+				strings.ReplaceAll(
+					strconv.FormatInt(-v, 2), "0", ")"),
+				"1", "}"))
+	} else {
+		return fmt.Sprintf("><%s>",
+			strings.ReplaceAll(
+				strings.ReplaceAll(
+					strconv.FormatInt(v, 2), "0", "("),
+				"1", "{"))
+	}
+}
+
 func (ls *FyshLS) completion(
 	context *glsp.Context,
 	params *protocol.CompletionParams,
 ) (any, error) {
-	// TODO: complete??
-	return []protocol.CompletionItem{}, nil
+	n := ls.trees[params.TextDocument.URI]
+	it := sitter.NewIterator(n.RootNode(), sitter.BFSMode)
+	r, c := params.Position.Line, params.Position.Character
+	for {
+		n, err := it.Next()
+		if err != nil {
+			if err == io.EOF {
+				return []protocol.CompletionItem{}, nil
+			} else {
+				ls.log("completion: error iterating", err)
+				return nil, err
+			}
+		}
+		start, end := n.StartPoint(), n.EndPoint()
+		if r >= start.Row && r <= end.Row && c >= start.Column && c <= end.Column {
+			if n.ChildCount() == 0 {
+				// this is the node
+				ls.log("completion: this is the node: ", n.Content(ls.documents[params.TextDocument.URI]))
+				return []protocol.CompletionItem{}, nil
+			} else if n.IsError() {
+				text := n.Content(ls.documents[params.TextDocument.URI])
+				v, err := strconv.ParseInt(strings.TrimSpace(text), 10, 64)
+				if err == nil {
+					ls.log("completion: got a number: ", n.Content(ls.documents[params.TextDocument.URI]))
+					return []protocol.CompletionItem{
+						{
+							Label: text,
+							TextEdit: protocol.TextEdit{
+								Range: protocol.Range{
+									Start: protocol.Position{
+										Line:      start.Row,
+										Character: start.Column,
+									},
+									End: protocol.Position{
+										Line:      end.Row,
+										Character: end.Column,
+									},
+								},
+								NewText: getFysh(v),
+							},
+						},
+					}, nil
+				} else {
+					ls.log("completion: not a number: ", n.Content(ls.documents[params.TextDocument.URI]))
+					return []protocol.CompletionItem{}, nil
+				}
+			} else {
+				ls.log("completion: new iter: ", n.Content(ls.documents[params.TextDocument.URI]))
+				it = sitter.NewIterator(n, sitter.BFSMode)
+			}
+		}
+	}
 }
 
 func (ls *FyshLS) semanticTokensFull(
@@ -176,7 +247,7 @@ func (ls *FyshLS) semanticTokensFull(
 		row = r
 		column = c
 	}
-	sitter.NewIterator(n, sitter.BFSMode).ForEach(func(node *sitter.Node) error {
+	sitter.NewIterator(n.RootNode(), sitter.BFSMode).ForEach(func(node *sitter.Node) error {
 		switch node.Type() {
 		case "comment":
 			handle(0, node) // comment
