@@ -1,9 +1,12 @@
 ---@diagnostic disable: undefined-global
----
-vim.lsp.start({
+local client = vim.lsp.start({
   name = "fyshls",
   cmd = { "./bin/fyshls" },
   root_dir = vim.fn.getcwd(),
 })
+if not client then
+  vim.notify("failed to start fysh")
+  return
+end
 
-vim.lsp.buf_attach_client(0, 1)
+vim.lsp.buf_attach_client(client, 1)
