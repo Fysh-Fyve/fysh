@@ -4,6 +4,7 @@ import (
 	ctx "context"
 	_ "embed"
 	"fmt"
+	"io"
 	"log"
 	"os"
 
@@ -18,12 +19,22 @@ import (
 //go:embed tree-sitter-fysh/queries/highlights.scm
 var highlights []byte
 
-func main() {
-	file, err := os.Create("log.txt")
-	if err != nil {
-		panic(err)
+func getLogger() io.WriteCloser {
+	if version.LogStderr == "true" {
+		return os.Stderr
+	} else {
+		file, err := os.CreateTemp(".", "fyshls")
+		if err != nil {
+			panic(err)
+		}
+		return file
 	}
-	logger := log.New(file, "[fyshls] ", log.LstdFlags|log.Lshortfile)
+}
+
+func main() {
+	w := getLogger()
+	defer w.Close()
+	logger := log.New(w, "[fyshls] ", log.LstdFlags|log.Lshortfile)
 	fysh := NewFyshLs(logger)
 	fysh.RunStdio()
 }
@@ -48,16 +59,19 @@ func NewFyshLs(logger *log.Logger) *FyshLS {
 	}
 
 	ls.handler = protocol.Handler{
-		LogTrace:                       ls.logTrace,
-		Initialize:                     ls.initialize,
-		Shutdown:                       ls.shutdown,
-		TextDocumentCompletion:         ls.completion,
+		LogTrace:   ls.logTrace,
+		Initialize: ls.initialize,
+		Shutdown:   ls.shutdown,
+
+		TextDocumentDidOpen:   ls.openDocument,
+		TextDocumentDidSave:   ls.saveDocument,
+		TextDocumentDidChange: ls.changeDocument,
+
+		TextDocumentHover:      ls.hover,
+		TextDocumentDefinition: ls.definition,
+		TextDocumentCompletion: ls.completion,
+
 		TextDocumentSemanticTokensFull: ls.semanticTokensFull,
-		TextDocumentDidOpen:            ls.openDocument,
-		TextDocumentDidChange:          ls.changeDocument,
-		TextDocumentHover:              ls.hover,
-		TextDocumentDefinition:         ls.definition,
-		TextDocumentDidSave:            ls.saveDocument,
 	}
 	return ls
 }
@@ -206,6 +220,12 @@ func (ls *FyshLS) initialize(
 			TokenModifiers: []string{},
 		},
 	}
+
+	// n, err := json.MarshalIndent(params.Capabilities.TextDocument.ColorProvider, "", " ")
+	// if err != nil {
+	// 	ls.logger.Fatal(err)
+	// }
+	// ls.log(string(n))
 
 	return protocol.InitializeResult{
 		Capabilities: capabilities,

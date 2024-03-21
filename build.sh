@@ -11,6 +11,12 @@ LDFLAGS=(
   "-X '${PACKAGE}/version.version=${VERSION}'"
   "-X '${PACKAGE}/version.commitHash=${COMMIT_HASH}'"
   "-X '${PACKAGE}/version.buildTimestamp=${BUILD_TIMESTAMP}'"
+  "-X '${PACKAGE}/version.LogStderr=true'"
 )
 
-go build -o $1 -ldflags="${LDFLAGS[*]}"
+if [[ "$#" -gt 0 ]]
+then
+  go build -o $1
+else
+  go install -ldflags="${LDFLAGS[*]}" .
+fi

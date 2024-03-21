@@ -8,6 +8,7 @@ var (
 	version        = "dev"
 	commitHash     = "n/a"
 	buildTimestamp = "n/a"
+	LogStderr      = "false"
 )
 
 func BuildVersion() string {
