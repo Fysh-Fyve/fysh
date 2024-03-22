@@ -47,9 +47,6 @@ public:
   Fysh nextFysh() noexcept;
   unsigned int fyshingLine() { return line; }
   const char *rest() const noexcept { return current; }
-#ifdef FYSH_DEBUG
-  void printRest();
-#endif // FYSH_DEBUG
 
 private:
   const char *current = nullptr;

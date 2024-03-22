@@ -31,24 +31,25 @@ using S = Species;
     CHECK(fysh == S::INVALID);                                                 \
   } while (0)
 
-/* TODO
+// TODO: Do the other characters
 TEST_CASE("Zero Width Joiner") {
-  FyshLexer lexer{"❤️ "
-                  "❤️‍🔥 "
-                  "❤️‍🩹 "
-                  "💝 "
-                  "❣️ "};
+  FyshLexer lexer{
+      "❤️ "
+      "❤️‍🔥 "
+      "❤️‍🩹 "
+      // "💝 "
+      // "❣️ "
   };
 
   T(S::HEART_MULTIPLY);
   T(S::HEART_MULTIPLY);
   T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
+  // T(S::HEART_MULTIPLY);
+  // T(S::HEART_MULTIPLY);
 
   T(S::END);
 }
-*/
+
 TEST_CASE("operators") {
   FyshLexer lexer{"☙ "
                   "♡ "

@@ -30,14 +30,15 @@
 #endif
 
 #ifdef FYSH_DEBUG
-void printRest(const std::string_view &rest) { llvm::errs() << rest << "\n"; }
-
-char periscope(const char *current, int line) noexcept {
+char fysh::FyshLexer::periscope(int line) const noexcept {
   if (line > 0) {
-    llvm::errs() << "Current (line:" << line << "): " << *current << "\n";
+    llvm::errs() << "Current (line:" << line << "): " << *current << " "
+                 << ((int)(*current)) << "\n";
   }
   return *current;
 }
+
+#define periscope() periscope(__LINE__)
 #endif
 
 // -------------- Utility functions --------------
@@ -132,12 +133,7 @@ bool fysh::FyshLexer::expectFyshChar(
 // Peeks at the next character without consuming it, supporting multi-byte
 // characters
 fysh::FyshChar fysh::FyshLexer::peekFyshChar() noexcept {
-  size_t offset{0};
-  // Skip continuation bytes;
-  while ((current[offset] & 0xC0) == 0x80) {
-    offset++;
-  }
-  const char *start{current + offset};
+  const char *start{current};
   size_t bytesToRead{1};
   // Determine the number of bytes to read based on the first byte
   if ((*start & 0xE0) == 0xC0) {
@@ -579,7 +575,7 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
             "♡",
             "♥",
             "❣",
-            "❤",
+            // "❤",
             "❥",
             "❦",
             "❧",
@@ -607,6 +603,18 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
             "💞",
             "💟",
         })) {
+      return Species::HEART_MULTIPLY;
+    } else if (expectFyshChar("❤")) {
+      expectFyshChar("\ufe0f");
+      if (expectFyshChar("\u200d")) {
+        // TODO: add more zwj emojis
+        if (expectFyshChar({"🔥", "🩹"})) {
+          return Species::HEART_MULTIPLY;
+        } else {
+          // invalid ZWJ heart
+          return cullDeformedFysh();
+        }
+      }
       return Species::HEART_MULTIPLY;
     } else if (expectFyshChar("💔")) {
       return Species::HEART_DIVIDE;
