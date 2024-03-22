@@ -1,6 +1,8 @@
 #include "../src/Lexer/Lexer.h"
 
 #include "doctest.h"
+#include <initializer_list>
+#include <sstream>
 
 using namespace fysh;
 using S = Species;
@@ -31,6 +33,14 @@ using S = Species;
     CHECK(fysh == S::INVALID);                                                 \
   } while (0)
 
+// https://stackoverflow.com/a/20986310
+static std::string join_chars(const std::initializer_list<const char *> &vs) {
+  std::ostringstream result_stream;
+  std::ostream_iterator<std::string> oit(result_stream, " ");
+  std::copy(vs.begin(), vs.end(), oit);
+  return result_stream.str();
+}
+
 // TODO: Do the other characters
 TEST_CASE("Zero Width Joiner") {
   FyshLexer lexer{
@@ -50,91 +60,27 @@ TEST_CASE("Zero Width Joiner") {
   T(S::END);
 }
 
-TEST_CASE("operators") {
-  FyshLexer lexer{"☙ "
-                  "♡ "
-                  "♥ "
-                  "❣ "
-                  "❤ "
-                  "❥ "
-                  "❦ "
-                  "❧ "
-                  "🎔 "
-                  "🖤 "
-                  "💙 "
-                  "💚 "
-                  "💛 "
-                  "💜 "
-                  "🧡 "
-                  "🤍 "
-                  "🤎 "
-                  //"❤️ "
-                  "💓 "
-                  "💕 "
-                  "💖 "
-                  "💗 "
-                  "💘 "
-                  //"❤️‍🔥 "
-                  //"❤️‍🩹 "
-                  //"💝 "
-                  //"❣️ "
-                  "🫀 "
-                  "💌 "
-                  "💞 "
-                  "💟 "
-                  "<3 "
-                  "💔 "
-                  "</3 "
-                  "& "
-                  "| "
-                  "^ "
-                  "~= "
-                  "~≈ "
-                  "== "
-                  "≈≈ "
-                  "= "
-                  "≈ "
-                  "o~ "
-                  "~o "
-                  "o~= "
-                  "o~≈ "
-                  "~o= "
-                  "~o≈ "
-                  ">> "
-                  "<< "};
+TEST_CASE("hearts") {
+  const std::initializer_list<const char *> vs = {
+      "☙",  "♡",  "♥",  "❣",  "❤",  "❥",  "❦",  "❧",  "🎔",
+      "🖤", "💙", "💚", "💛", "💜", "🧡", "🤍", "🤎", "💓",
+      "💕", "💖", "💗", "💘", "🫀", "💌", "💞", "💟", "<3"};
+  std::string input = join_chars(vs);
+  FyshLexer lexer{input.data()};
 
-  // T(S::HEART_MULTIPLY);
-  // T(S::HEART_MULTIPLY);
-  // T(S::HEART_MULTIPLY);
-  // T(S::HEART_MULTIPLY);
-  // T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
-  T(S::HEART_MULTIPLY);
+  for (const auto &_ : vs) {
+    T(S::HEART_MULTIPLY);
+  }
+  T(S::END);
+}
+
+TEST_CASE("operators") {
+  const std::initializer_list<const char *> vs = {
+      "💔", "</3", "&",  "|",   "^",   "~=",  "~≈",  "==", "≈≈", "=",
+      "≈",  "o~",  "~o", "o~=", "o~≈", "~o=", "~o≈", ">>", "<<"};
+  std::string input = join_chars(vs);
+  FyshLexer lexer{input.data()};
+
   T(S::HEART_DIVIDE);
   T(S::HEART_DIVIDE);
 
