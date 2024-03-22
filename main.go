@@ -3,6 +3,7 @@ package main
 import (
 	ctx "context"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -18,21 +19,26 @@ import (
 	"github.com/tliron/glsp/server"
 )
 
-func getLogger() io.WriteCloser {
-	if version.LogStderr == "true" {
+func getLogger(file string) io.WriteCloser {
+	if version.LogStderr == "true" && file == "-" {
 		return os.Stderr
 	} else {
 		// file, err := os.CreateTemp(".", "fyshls")
-		file, err := os.Create("log.txt")
+		if file == "-" {
+			file = "log.txt"
+		}
+		f, err := os.Create(file)
 		if err != nil {
 			panic(err)
 		}
-		return file
+		return f
 	}
 }
 
 func main() {
-	w := getLogger()
+	file := flag.String("output", "-", "log output destination")
+	flag.Parse()
+	w := getLogger(*file)
 	defer w.Close()
 	logger := log.New(w, "[fyshls] ", log.LstdFlags|log.Lshortfile)
 	fysh := NewFyshLs(logger)
