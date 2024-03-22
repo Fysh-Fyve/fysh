@@ -4,6 +4,7 @@ import (
 	_ "embed"
 
 	fysh "github.com/Fysh-Fyve/fyshls/bindings"
+	"github.com/Fysh-Fyve/fyshls/support"
 	sitter "github.com/smacker/go-tree-sitter"
 	protocol "github.com/tliron/glsp/protocol_3_16"
 )
@@ -51,14 +52,15 @@ func encode(n *sitter.Node) []protocol.UInteger {
 		row = r
 		column = c
 	}
+	_, m := support.GetTokenTypes()
 	sitter.NewIterator(n, sitter.DFSMode).ForEach(func(node *sitter.Node) error {
 		switch node.Type() {
 		case "comment":
-			handle(0, node) // comment
+			handle(m[protocol.SemanticTokenTypeComment], node)
 		case "zero":
-			handle(1, node) // string
+			handle(m[protocol.SemanticTokenTypeString], node)
 		case "one":
-			handle(2, node) // number
+			handle(m[protocol.SemanticTokenTypeNumber], node) // number
 		default:
 		}
 		return nil

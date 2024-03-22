@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	fysh "github.com/Fysh-Fyve/fyshls/bindings"
+	"github.com/Fysh-Fyve/fyshls/support"
 	"github.com/Fysh-Fyve/fyshls/version"
 	sitter "github.com/smacker/go-tree-sitter"
 	"github.com/tliron/glsp"
@@ -37,6 +38,7 @@ func getLogger(file string) io.WriteCloser {
 
 func main() {
 	file := flag.String("output", "-", "log output destination")
+	_ = flag.Bool("stdio", true, "Make VS C*de stop erroring out")
 	flag.Parse()
 	w := getLogger(*file)
 	defer w.Close()
@@ -232,20 +234,18 @@ func (s *Server) initialize(
 		TriggerCharacters: []string{"0", "1", "2", "3", "4", "5", "6", "7", "8",
 			"9", "0", "-"},
 	}
+
+	tokenTypes, _ := support.GetTokenTypes()
+	tokenModifiers, _ := support.GetTokenModifiers()
 	capabilities.SemanticTokensProvider = &protocol.SemanticTokensOptions{
 		Full: true,
 		Legend: protocol.SemanticTokensLegend{
-			TokenTypes: []string{
-				string(protocol.SemanticTokenTypeComment),
-				string(protocol.SemanticTokenTypeEnum),
-				string(protocol.SemanticTokenTypeNumber),
-				string(protocol.SemanticTokenTypeKeyword),
-			},
-			TokenModifiers: []string{},
+			TokenTypes:     tokenTypes,
+			TokenModifiers: tokenModifiers,
 		},
 	}
 
-	n, err := json.MarshalIndent(params.Capabilities.TextDocument.ColorProvider, "", " ")
+	n, err := json.MarshalIndent(params, "", " ")
 	if err != nil {
 		s.log.Fatal(err)
 	}
