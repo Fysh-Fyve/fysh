@@ -22,6 +22,7 @@
 
 #include "Fysh/Species.h"
 #include <cctype>
+#include <initializer_list>
 #include <variant>
 
 #ifdef FYSH_DEBUG
@@ -114,6 +115,16 @@ bool fysh::FyshLexer::expectFyshChar(const char *c) noexcept {
   if (peekFyshChar() == c) {
     eatFyshChar();
     return true;
+  }
+  return false;
+}
+
+bool fysh::FyshLexer::expectFyshChar(
+    std::initializer_list<const char *> c) noexcept {
+  for (const char *ch : c) {
+    if (expectFyshChar(ch)) {
+      return true;
+    }
   }
   return false;
 }
@@ -563,7 +574,7 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
   }
   default:
     // Ascii characters
-    if (expectFyshChar("♡")) {
+    if (expectFyshChar({"♡", "♥", "❤", "💖", "💗", "💓", "💕", "💞", "💘", "💝"})) {
       return Species::HEART_MULTIPLY;
     } else if (expectFyshChar("💔")) {
       return Species::HEART_DIVIDE;

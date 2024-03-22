@@ -82,6 +82,7 @@ private:
   FyshChar eatFyshChar() noexcept;
   FyshChar peekFyshChar() noexcept;
   bool expectFyshChar(const char *c) noexcept;
+  bool expectFyshChar(std::initializer_list<const char *> c) noexcept;
 };
 
 }; // namespace fysh

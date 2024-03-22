@@ -33,6 +33,15 @@ using S = Species;
 
 TEST_CASE("operators") {
   FyshLexer lexer{"♡ "
+                  "♥ "
+                  "❤ "
+                  "💖 "
+                  "💗 "
+                  "💓 "
+                  "💕 "
+                  "💞 "
+                  "💘 "
+                  "💝 "
                   "<3 "
                   "💔 "
                   "</3 "
@@ -54,6 +63,15 @@ TEST_CASE("operators") {
                   ">> "
                   "<< "};
 
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
   T(S::HEART_MULTIPLY);
   T(S::HEART_MULTIPLY);
   T(S::HEART_DIVIDE);
