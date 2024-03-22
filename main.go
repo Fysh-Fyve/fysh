@@ -199,6 +199,7 @@ func (s *Server) completion(
 				if err == nil {
 					completionList = append(completionList, item)
 				}
+				return completionList, nil
 			} else {
 				s.log.Println("completion: new iter: ", n.Content(s.documents[params.TextDocument.URI]))
 				it = sitter.NewIterator(n, sitter.BFSMode)
