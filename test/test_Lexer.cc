@@ -31,17 +31,56 @@ using S = Species;
     CHECK(fysh == S::INVALID);                                                 \
   } while (0)
 
+/* TODO
+TEST_CASE("Zero Width Joiner") {
+  FyshLexer lexer{"❤️ "
+                  "❤️‍🔥 "
+                  "❤️‍🩹 "
+                  "💝 "
+                  "❣️ "};
+  };
+
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+
+  T(S::END);
+}
+*/
 TEST_CASE("operators") {
-  FyshLexer lexer{"♡ "
+  FyshLexer lexer{"☙ "
+                  "♡ "
                   "♥ "
+                  "❣ "
                   "❤ "
-                  "💖 "
-                  "💗 "
+                  "❥ "
+                  "❦ "
+                  "❧ "
+                  "🎔 "
+                  "🖤 "
+                  "💙 "
+                  "💚 "
+                  "💛 "
+                  "💜 "
+                  "🧡 "
+                  "🤍 "
+                  "🤎 "
+                  //"❤️ "
                   "💓 "
                   "💕 "
-                  "💞 "
+                  "💖 "
+                  "💗 "
                   "💘 "
-                  "💝 "
+                  //"❤️‍🔥 "
+                  //"❤️‍🩹 "
+                  //"💝 "
+                  //"❣️ "
+                  "🫀 "
+                  "💌 "
+                  "💞 "
+                  "💟 "
                   "<3 "
                   "💔 "
                   "</3 "
@@ -63,6 +102,27 @@ TEST_CASE("operators") {
                   ">> "
                   "<< "};
 
+  // T(S::HEART_MULTIPLY);
+  // T(S::HEART_MULTIPLY);
+  // T(S::HEART_MULTIPLY);
+  // T(S::HEART_MULTIPLY);
+  // T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
+  T(S::HEART_MULTIPLY);
   T(S::HEART_MULTIPLY);
   T(S::HEART_MULTIPLY);
   T(S::HEART_MULTIPLY);
