@@ -2,7 +2,7 @@ package main
 
 import (
 	ctx "context"
-	_ "embed"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -17,9 +17,6 @@ import (
 	protocol "github.com/tliron/glsp/protocol_3_16"
 	"github.com/tliron/glsp/server"
 )
-
-//go:embed tree-sitter-fysh/queries/highlights.scm
-var highlights []byte
 
 func getLogger() io.WriteCloser {
 	if version.LogStderr == "true" {
@@ -42,45 +39,45 @@ func main() {
 	fysh.RunStdio()
 }
 
-type FyshLS struct {
+type Server struct {
 	name      string
 	version   string
-	logger    *log.Logger
+	log       *log.Logger
 	documents map[string][]byte
 	trees     map[string]*sitter.Tree
 
 	handler protocol.Handler
 }
 
-func NewFyshLs(logger *log.Logger) *FyshLS {
-	ls := &FyshLS{
+func NewFyshLs(logger *log.Logger) *Server {
+	s := &Server{
 		name:      "fyshls",
 		version:   version.BuildVersion(),
-		logger:    logger,
+		log:       logger,
 		documents: map[string][]byte{},
 		trees:     map[string]*sitter.Tree{},
 	}
 
-	ls.handler = protocol.Handler{
-		LogTrace:   ls.logTrace,
-		Initialize: ls.initialize,
-		Shutdown:   ls.shutdown,
+	s.handler = protocol.Handler{
+		LogTrace:   s.logTrace,
+		Initialize: s.initialize,
+		Shutdown:   s.shutdown,
 
-		TextDocumentDidOpen:   ls.openDocument,
-		TextDocumentDidSave:   ls.saveDocument,
-		TextDocumentDidChange: ls.changeDocument,
+		TextDocumentDidOpen:   s.openDocument,
+		TextDocumentDidSave:   s.saveDocument,
+		TextDocumentDidChange: s.changeDocument,
 
-		TextDocumentHover:      ls.hover,
-		TextDocumentDefinition: ls.definition,
-		TextDocumentCompletion: ls.completion,
+		TextDocumentHover:      s.hover,
+		TextDocumentDefinition: s.definition,
+		TextDocumentCompletion: s.completion,
 
-		TextDocumentSemanticTokensFull: ls.semanticTokensFull,
+		TextDocumentSemanticTokensFull: s.semanticTokensFull,
 	}
-	return ls
+	return s
 }
 
-func (ls *FyshLS) logTrace(context *glsp.Context, params *protocol.LogTraceParams) error {
-	ls.log(params.Message)
+func (s *Server) logTrace(context *glsp.Context, params *protocol.LogTraceParams) error {
+	s.log.Println(params.Message)
 	return nil
 }
 
@@ -94,48 +91,48 @@ func getTree(content []byte) (*sitter.Tree, error) {
 	return tree, nil
 }
 
-func (ls *FyshLS) saveDocument(
+func (s *Server) saveDocument(
 	context *glsp.Context,
 	params *protocol.DidSaveTextDocumentParams,
 ) error {
 	if params.Text != nil {
-		return ls.updateDoc(params.TextDocument.URI, *params.Text)
+		return s.updateDoc(params.TextDocument.URI, *params.Text)
 	}
 	return nil
 }
 
-func (ls *FyshLS) definition(
+func (s *Server) definition(
 	context *glsp.Context,
 	params *protocol.DefinitionParams,
 ) (any, error) {
 	return nil, nil
 }
 
-func (ls *FyshLS) hover(
+func (s *Server) hover(
 	context *glsp.Context,
 	params *protocol.HoverParams,
 ) (*protocol.Hover, error) {
 	return nil, nil
 }
 
-func (ls *FyshLS) updateDoc(uri, text string) error {
+func (s *Server) updateDoc(uri, text string) error {
 	file := []byte(text)
-	ls.documents[uri] = file
+	s.documents[uri] = file
 	var err error
-	if ls.trees[uri], err = getTree(file); err != nil {
+	if s.trees[uri], err = getTree(file); err != nil {
 		return fmt.Errorf("failed to get root node: %v", err)
 	}
 	return nil
 }
 
-func (ls *FyshLS) changeDocument(
+func (s *Server) changeDocument(
 	context *glsp.Context,
 	params *protocol.DidChangeTextDocumentParams,
 ) error {
 	for _, changes := range params.ContentChanges {
 		c, ok := changes.(protocol.TextDocumentContentChangeEventWhole)
 		if ok {
-			err := ls.updateDoc(params.TextDocument.URI, c.Text)
+			err := s.updateDoc(params.TextDocument.URI, c.Text)
 			if err != nil {
 				return err
 			}
@@ -146,43 +143,39 @@ func (ls *FyshLS) changeDocument(
 	return nil
 }
 
-func (ls *FyshLS) openDocument(
+func (s *Server) openDocument(
 	context *glsp.Context,
 	params *protocol.DidOpenTextDocumentParams,
 ) error {
-	return ls.updateDoc(params.TextDocument.URI, params.TextDocument.Text)
+	return s.updateDoc(params.TextDocument.URI, params.TextDocument.Text)
 }
 
 func getFysh(v int64) string {
+	format, zero, one := "><%s°>", "(", "{"
 	if v < 0 {
-		return fmt.Sprintf("<%s><",
-			strings.ReplaceAll(
-				strings.ReplaceAll(
-					strconv.FormatInt(-v, 2), "0", ")"),
-				"1", "}"))
-	} else {
-		return fmt.Sprintf("><%s>",
-			strings.ReplaceAll(
-				strings.ReplaceAll(
-					strconv.FormatInt(v, 2), "0", "("),
-				"1", "{"))
+		v, format, zero, one = -v, "<°%s><", ")", "}"
 	}
+	binary := strconv.FormatInt(v, 2)
+	return fmt.Sprintf(
+		format,
+		strings.ReplaceAll(strings.ReplaceAll(binary, "0", zero), "1", one),
+	)
 }
 
-func (ls *FyshLS) completion(
+func (s *Server) completion(
 	context *glsp.Context,
 	params *protocol.CompletionParams,
 ) (any, error) {
-	n := ls.trees[params.TextDocument.URI]
+	n := s.trees[params.TextDocument.URI]
 	it := sitter.NewIterator(n.RootNode(), sitter.BFSMode)
-	r, c := params.Position.Line, params.Position.Character
+	r, c := fromPosition(params.Position)
 	for {
 		n, err := it.Next()
 		if err != nil {
 			if err == io.EOF {
 				return []protocol.CompletionItem{}, nil
 			} else {
-				ls.log("completion: error iterating", err)
+				s.log.Println("completion: error iterating", err)
 				return nil, err
 			}
 		}
@@ -190,87 +183,40 @@ func (ls *FyshLS) completion(
 		if r >= start.Row && r <= end.Row && c >= start.Column && c <= end.Column {
 			if n.ChildCount() == 0 {
 				// this is the node
-				ls.log("completion: this is the node: ", n.Content(ls.documents[params.TextDocument.URI]))
 				return []protocol.CompletionItem{}, nil
 			} else if n.IsError() {
-				text := n.Content(ls.documents[params.TextDocument.URI])
-				v, err := strconv.ParseInt(strings.TrimSpace(text), 10, 64)
+				text := n.Content(s.documents[params.TextDocument.URI])
+				completionList := []protocol.CompletionItem{}
+				item, err := tryNumberCompletion(text, start, end)
 				if err == nil {
-					ls.log("completion: got a number: ", n.Content(ls.documents[params.TextDocument.URI]))
-					return []protocol.CompletionItem{
-						{
-							Label: text,
-							TextEdit: protocol.TextEdit{
-								Range: protocol.Range{
-									Start: protocol.Position{
-										Line:      start.Row,
-										Character: start.Column,
-									},
-									End: protocol.Position{
-										Line:      end.Row,
-										Character: end.Column,
-									},
-								},
-								NewText: getFysh(v),
-							},
-						},
-					}, nil
-				} else {
-					ls.log("completion: not a number: ", n.Content(ls.documents[params.TextDocument.URI]))
-					return []protocol.CompletionItem{}, nil
+					completionList = append(completionList, item)
 				}
 			} else {
-				ls.log("completion: new iter: ", n.Content(ls.documents[params.TextDocument.URI]))
+				s.log.Println("completion: new iter: ", n.Content(s.documents[params.TextDocument.URI]))
 				it = sitter.NewIterator(n, sitter.BFSMode)
 			}
 		}
 	}
 }
 
-func (ls *FyshLS) semanticTokensFull(
+func (s *Server) semanticTokensFull(
 	context *glsp.Context,
 	params *protocol.SemanticTokensParams,
 ) (*protocol.SemanticTokens, error) {
-	n := ls.trees[params.TextDocument.URI]
-	data := []protocol.UInteger{}
-	var row, column uint32 = 0, 0
-	handle := func(t uint32, node *sitter.Node) {
-		sp := node.StartPoint()
-		r, c := sp.Row, sp.Column
-		dRow := r - row
-		dCol := c
-		if row == r {
-			dCol = c - column
-		}
-		tokLen := node.EndByte() - node.StartByte()
-		data = append(data, dRow, dCol, tokLen, t, 0)
-		row = r
-		column = c
-	}
-	sitter.NewIterator(n.RootNode(), sitter.BFSMode).ForEach(func(node *sitter.Node) error {
-		switch node.Type() {
-		case "comment":
-			handle(0, node) // comment
-		case "zero":
-			handle(1, node) // string
-		case "one":
-			handle(2, node) // number
-		default:
-			ls.log("unhandled:", node.Type())
-		}
-		return nil
-	})
+	data := encode(s.trees[params.TextDocument.URI].RootNode())
+	var lineNum uint32 = 0
 	for i := 0; i < len(data)/5; i++ {
-		ls.log(data[i*5 : i*5+5])
+		lineNum += data[i*5]
+		s.log.Println(lineNum, data[i*5:i*5+5])
 	}
 	return &protocol.SemanticTokens{Data: data}, nil
 }
 
-func (ls *FyshLS) initialize(
+func (s *Server) initialize(
 	context *glsp.Context,
 	params *protocol.InitializeParams,
 ) (any, error) {
-	capabilities := ls.handler.CreateServerCapabilities()
+	capabilities := s.handler.CreateServerCapabilities()
 
 	// FULL sync only
 	capabilities.TextDocumentSync = 1
@@ -285,38 +231,35 @@ func (ls *FyshLS) initialize(
 		Legend: protocol.SemanticTokensLegend{
 			TokenTypes: []string{
 				string(protocol.SemanticTokenTypeComment),
-				string(protocol.SemanticTokenTypeKeyword),
+				string(protocol.SemanticTokenTypeEnum),
 				string(protocol.SemanticTokenTypeNumber),
+				string(protocol.SemanticTokenTypeKeyword),
 			},
 			TokenModifiers: []string{},
 		},
 	}
 
-	// n, err := json.MarshalIndent(params.Capabilities.TextDocument.ColorProvider, "", " ")
-	// if err != nil {
-	// 	ls.logger.Fatal(err)
-	// }
-	// ls.log(string(n))
+	n, err := json.MarshalIndent(params.Capabilities.TextDocument.ColorProvider, "", " ")
+	if err != nil {
+		s.log.Fatal(err)
+	}
+	s.log.Println(string(n))
 
 	return protocol.InitializeResult{
 		Capabilities: capabilities,
 		ServerInfo: &protocol.InitializeResultServerInfo{
-			Name:    ls.name,
-			Version: &ls.version,
+			Name:    s.name,
+			Version: &s.version,
 		},
 	}, nil
 }
 
-func (ls *FyshLS) log(v ...any) {
-	ls.logger.Println(v...)
-}
-
-func (ls *FyshLS) shutdown(context *glsp.Context) error {
+func (s *Server) shutdown(context *glsp.Context) error {
 	return nil
 }
 
-func (ls *FyshLS) RunStdio() {
-	ls.logger.Printf("%s - Starting server...", ls.version)
-	server := server.NewServer(&ls.handler, ls.name, true)
+func (s *Server) RunStdio() {
+	s.log.Printf("%s - Starting server...", s.version)
+	server := server.NewServer(&s.handler, s.name, true)
 	server.RunStdio()
 }
