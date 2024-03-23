@@ -1,0 +1,23 @@
+><//> Calculates average of an array (assuming last value = -1 as terminator)
+>(average) ><numbers>
+><>
+  ><sum>   = ><}> ~ 
+  ><itter> = ><)> ~
+
+  ><(((@> [><}>] 
+  ><> 
+      ><//> breaks loop if current value = -1
+      ><(((^> [><numbers>[><itter>] == <{><]
+      ><>
+        ><\/> ~
+      <><
+
+      ><sum> = ><sum> ><numbers>[><itter>] ~
+      >><itter> ~
+  <><
+  <~ ><sum> 💔 ><itter> ~ ><//> floor of average
+<><
+
+><numbers> = [><})}> - ><}})> - ><}}}> - <({><] ~
+
+><average> = [>(average) ><numbers>] ~
