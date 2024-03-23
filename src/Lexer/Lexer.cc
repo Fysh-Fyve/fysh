@@ -415,6 +415,13 @@ fysh::Fysh fysh::FyshLexer::fyshOutline() noexcept {
 fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
   // current is the 2nd character of the token
   switch (periscope()) {
+  case ('\\'):
+    reel();
+    if (match("/") && match(">") && match("<")) {
+      return Species::BROKEN_FYSH;
+    } else {
+      return cullDeformedFysh();
+    }
   case ('{'):
   case ('('):
   case ('}'):
@@ -462,6 +469,13 @@ fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
   reel(); // 2nd swim right character '<'
   switch (periscope()) {
     // clang-format off
+  case('\\'):
+    reel();
+    if (match("/") && match(">")) {
+      return Species::BROKEN_FYSH;
+    } else {
+      return cullDeformedFysh();
+    }
   case ('{'):
   case ('('):
   case ('}'):

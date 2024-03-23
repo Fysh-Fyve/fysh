@@ -117,6 +117,8 @@ constexpr const char *debugType(const fysh::Species &species) {
     return "SUBMARINE";
   case Species::SQUID:
     return "return";
+  case Species::BROKEN_FYSH:
+    return "break";
   }
   assert(false);
 }

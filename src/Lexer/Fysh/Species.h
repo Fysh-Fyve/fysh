@@ -74,6 +74,7 @@ enum class Species {
   ANCHOR_RIGHT,      // o+)
   SUBMARINE,         // (submarine)<
   SQUID,             // <~ return operator
+  BROKEN_FYSH,       // ><\/> or <\/>< (break)
 };
 
 }

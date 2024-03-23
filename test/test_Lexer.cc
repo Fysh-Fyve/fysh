@@ -458,3 +458,11 @@ TEST_CASE("BABY SQUID (Return)") {
   T(S::END);
   // clang-format on
 }
+
+TEST_CASE("Broken Fysh") {
+  FyshLexer lexer{R"(><\/> <\/><)"};
+
+  T(S::BROKEN_FYSH);
+  T(S::BROKEN_FYSH);
+  T(S::END);
+}
