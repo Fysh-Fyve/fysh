@@ -106,11 +106,13 @@ struct FyshDecrementStmt {
   FyshExpr expr;
 };
 
+// ><steven> = ><)})>
 struct FyshAssignmentStmt {
   FyshExpr left;
   FyshExpr right;
 };
 
+// ><})}> (+o ><steven>
 struct FyshAnchorStmt {
   FyshBinary op;
   FyshExpr right;
@@ -121,13 +123,16 @@ struct Squid {
   FyshExpr expr;
 };
 
+// ><\/> or <\/>< (break)
+struct Break {};
+
 struct FyshBlock;
 struct FyshLoopStmt;
 struct FyshIfStmt;
 
 using FyshStmt = std::variant<Error, FyshExpr, FyshIncrementStmt,
                               FyshDecrementStmt, FyshAssignmentStmt, FyshBlock,
-                              FyshLoopStmt, FyshIfStmt, FyshAnchorStmt, Squid>;
+                              FyshLoopStmt, FyshIfStmt, FyshAnchorStmt, Squid, Break>;
 
 struct FyshBlock : public std::vector<FyshStmt> {
   using std::vector<FyshStmt>::vector;

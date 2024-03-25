@@ -612,8 +612,6 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
             "💖",
             "💗",
             "💘",
-            //"❤️‍🔥",
-            //"❤️‍🩹",
             //"💝",
             //"❣️",
             "💌",
@@ -622,10 +620,11 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
             "🫶",
         })) {
       return Species::HEART_MULTIPLY;
+      
     } else if (expectFyshChar("❤")) {
       expectFyshChar("\ufe0f");
+      // Zero width joiner for ❤️‍🔥 and ❤️‍🩹
       if (expectFyshChar("\u200d")) {
-        // TODO: add more zwj emojis
         if (expectFyshChar({"🔥", "🩹"})) {
           return Species::HEART_MULTIPLY;
         } else {

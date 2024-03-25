@@ -133,6 +133,12 @@ TEST_CASE("Decrement Statement") {
   FyshDecrementStmt stmt{unwrap<FyshDecrementStmt>(program[0])};
   check_ident(stmt.expr, "fysh");
 }
+TEST_CASE("Break") {
+  fysh::FyshParser p{fysh::FyshLexer{R"(><\/> ~)"}};
+  fysh::ast::FyshProgram program{p.parseProgram()};
+  check_program(program, 1);
+  REQUIRE(std::holds_alternative<Break>(program[0]));
+}
 
 TEST_CASE("Subroutines") {
   fysh::FyshParser p{fysh::FyshLexer{R"(
