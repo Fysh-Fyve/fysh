@@ -1,12 +1,12 @@
 {
   "name": "vscode-fysh",
-  "description": "Language Support for Fysh",
+  "description": "VSCode Language Support for Fysh",
   "author": "Microsoft Corporation",
   "license": "MIT",
   "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Fysh-Fyve/fysh-language-support"
+    "url": "https://github.com/Fysh-Fyve/vscode-fysh"
   },
   "publisher": "cbebe",
   "categories": [],
