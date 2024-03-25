@@ -382,6 +382,17 @@ static void print(llvm::Module *m, const std::string &path) {
 }
 
 fysh::Emit fysh::Compyler::subroutine(const fysh::ast::SUBroutine &sub) {
+  llvm::BasicBlock::iterator mainBB{builder->GetInsertPoint()};
+  Params params;
+  for (const auto &_ : sub.parameters) {
+    params.push_back(intTy());
+  }
+  llvm::Function *subPrototype{define(sub.name.data(), intTy(), params)};
+  llvm::BasicBlock *bb{
+      llvm::BasicBlock::Create(*context, "entry", subPrototype)};
+  builder->SetInsertPoint(bb);
+
+  builder->SetInsertPoint(mainBB);
   return nullptr;
 }
 
