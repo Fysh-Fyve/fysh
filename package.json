@@ -1,12 +1,12 @@
 {
   "name": "vscode-fysh",
-  "description": "A language server example",
+  "description": "Language Support for Fysh",
   "author": "Microsoft Corporation",
   "license": "MIT",
   "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Microsoft/vscode-extension-samples"
+    "url": "https://github.com/Fysh-Fyve/fysh-language-support"
   },
   "publisher": "cbebe",
   "categories": [],
