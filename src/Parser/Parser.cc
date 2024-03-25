@@ -26,6 +26,8 @@
 #include <variant>
 #include <vector>
 
+using FB = fysh::ast::FyshBinary;
+
 fysh::FyshParser::FyshParser(fysh::FyshLexer lexer) : lexer(lexer) {
   nextFysh(); // curFysh
   nextFysh(); // peekFysh
@@ -36,8 +38,7 @@ void fysh::FyshParser::nextFysh() {
   do {
     peekFysh = lexer.nextFysh();
 
-    if ((peekFysh == Species::COMMENT ||
-         peekFysh == Species::MULTILINE_COMMENT) &&
+    if ((peekFysh.isOneOf(Species::COMMENT, Species::MULTILINE_COMMENT)) &&
         peekFysh.getBody() == "fysh bad") {
       // >:(
       int *p{nullptr};
@@ -46,8 +47,7 @@ void fysh::FyshParser::nextFysh() {
 
     // Skip all comment tokens for now
     // maybe we'll do something with them eventually?
-  } while (peekFysh == Species::COMMENT ||
-           peekFysh == Species::MULTILINE_COMMENT);
+  } while (peekFysh.isOneOf(Species::COMMENT, Species::MULTILINE_COMMENT));
 }
 
 fysh::ast::Error fysh::FyshParser::expectFysh(fysh::Species species) {
@@ -99,9 +99,8 @@ fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
   }
 }
 
-static std::optional<fysh::ast::FyshBinary> binaryOp(fysh::Fysh fysh) {
+static std::optional<FB> binaryOp(fysh::Fysh fysh) {
   using S = fysh::Species;
-  using FB = fysh::ast::FyshBinary;
   switch (fysh.getSpecies()) {
     // clang-format off
   case S::HEART_MULTIPLY: return FB::Mul;
@@ -127,11 +126,9 @@ static std::optional<fysh::ast::FyshBinary> binaryOp(fysh::Fysh fysh) {
 
 fysh::ast::FyshExpr fysh::FyshParser::parseMultiplicative() {
   ast::FyshExpr left{parsePrimary()};
-  std::optional<ast::FyshBinary> op{binaryOp(curFysh)};
-  while (op == ast::FyshBinary::Mul || op == ast::FyshBinary::Div ||
-         op == ast::FyshBinary::ShiftLeft ||
-         op == ast::FyshBinary::ShiftRight ||
-         op == ast::FyshBinary::BitwiseAnd) {
+  std::optional<FB> op{binaryOp(curFysh)};
+  while (op == FB::Mul || op == FB::Div || op == FB::ShiftLeft ||
+         op == FB::ShiftRight || op == FB::BitwiseAnd) {
     nextFysh();
     ast::FyshExpr right{parseMultiplicative()};
     left = ast::FyshBinaryExpr{left, right, op.value()};
@@ -142,18 +139,18 @@ fysh::ast::FyshExpr fysh::FyshParser::parseMultiplicative() {
 
 fysh::ast::FyshExpr fysh::FyshParser::parseAdditive() {
   ast::FyshExpr left{parseMultiplicative()};
-  std::optional<ast::FyshBinary> op{binaryOp(curFysh)};
+  std::optional<FB> op{binaryOp(curFysh)};
   while (
-      op == ast::FyshBinary::BitwiseOr || op == ast::FyshBinary::BitwiseXor ||
+      op == FB::BitwiseOr || op == FB::BitwiseXor ||
       // TODO: This might break when it comes to parsing unaries, not sure yet
-      (!op.has_value() && curFysh != Species::FYSH_WATER &&
-       curFysh != Species::FYSH_BOWL_CLOSE &&
-       curFysh != Species::FYSH_TANK_CLOSE)) {
+      (!op.has_value() &&
+       !curFysh.isOneOf(Species::FYSH_WATER, Species::FYSH_BOWL_CLOSE,
+                        Species::FYSH_TANK_CLOSE))) {
     if (op.has_value()) {
       nextFysh();
     }
     ast::FyshExpr right{parseAdditive()};
-    left = ast::FyshBinaryExpr{left, right, op.value_or(ast::FyshBinary::Add)};
+    left = ast::FyshBinaryExpr{left, right, op.value_or(FB::Add)};
     op = binaryOp(curFysh);
   }
   return left;
@@ -161,9 +158,8 @@ fysh::ast::FyshExpr fysh::FyshParser::parseAdditive() {
 
 fysh::ast::FyshExpr fysh::FyshParser::parseComparative() {
   ast::FyshExpr left{parseAdditive()};
-  std::optional<ast::FyshBinary> op{binaryOp(curFysh)};
-  while (op == ast::FyshBinary::LT || op == ast::FyshBinary::GT ||
-         op == ast::FyshBinary::LTE || op == ast::FyshBinary::GTE) {
+  std::optional<FB> op{binaryOp(curFysh)};
+  while (op == FB::LT || op == FB::GT || op == FB::LTE || op == FB::GTE) {
     nextFysh();
     ast::FyshExpr right{parseComparative()};
     left = ast::FyshBinaryExpr{left, right, op.value()};
@@ -174,8 +170,8 @@ fysh::ast::FyshExpr fysh::FyshParser::parseComparative() {
 
 fysh::ast::FyshExpr fysh::FyshParser::parseAnchor() {
   ast::FyshExpr left{parseComparative()};
-  std::optional<ast::FyshBinary> op{binaryOp(curFysh)};
-  while (op == ast::FyshBinary::AnchorIn || op == ast::FyshBinary::AnchorOut) {
+  std::optional<FB> op{binaryOp(curFysh)};
+  while (op == FB::AnchorIn || op == FB::AnchorOut) {
     nextFysh();
     ast::FyshExpr right{parseAnchor()};
     left = ast::FyshBinaryExpr{left, right, op.value()};
@@ -327,7 +323,7 @@ fysh::ast::FyshStmt fysh::FyshParser::parseStatement() {
   case Species::ANCHOR_LEFT:
   case Species::ANCHOR_RIGHT: {
     // We know it's one of these two
-    ast::FyshBinary op{binaryOp(curFysh).value()};
+    FB op{binaryOp(curFysh).value()};
     nextFysh();
     return terminateStatement(ast::FyshAnchorStmt{op, parseExpression()});
   }
