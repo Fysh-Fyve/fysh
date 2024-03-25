@@ -125,6 +125,8 @@ llvm::raw_ostream &fysh::ast::operator<<(llvm::raw_ostream &os,
           os << str(arg.op) << " " << arg.right << ";\n";
         } else if constexpr (std::is_same_v<T, Squid>) {
           os << "return " << arg.expr << ";\n";
+        } else if constexpr (std::is_same_v<T, BrokenFysh>) {
+          os << "break;\n";
         } else {
           static_assert(always_false_v<T>, "non-exhaustive visitor!");
         }

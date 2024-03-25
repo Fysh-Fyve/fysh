@@ -318,7 +318,7 @@ fysh::ast::FyshStmt fysh::FyshParser::parseStatement() {
   }
   case Species::BROKEN_FYSH:
     nextFysh();
-    return terminateStatement(ast::Break{}); // Break statement
+    return terminateStatement(ast::BrokenFysh{}); // Break statement
 
   case Species::FYSH_LOOP:
     return parseLoop();
