@@ -10,26 +10,16 @@
   },
   "publisher": "cbebe",
   "categories": [],
-  "keywords": [
-    "multi-root ready"
-  ],
-  "engines": {
-    "vscode": "^1.75.0"
-  },
-  "activationEvents": [
-    "onLanguage:plaintext"
-  ],
+  "keywords": ["multi-root ready"],
+  "engines": { "vscode": "^1.75.0" },
+  "activationEvents": ["onLanguage:plaintext"],
   "main": "./client/out/extension",
   "contributes": {
     "languages": [
       {
         "id": "fysh",
-        "extensions": [
-          ".fysh"
-        ],
-        "aliases": [
-          "Fysh"
-        ],
+        "extensions": [".fysh"],
+        "aliases": ["Fysh"],
         "configuration": "./language-configuration.json"
       }
     ],
@@ -62,8 +52,7 @@
     "compile": "tsc -b",
     "watch": "tsc -b -w",
     "lint": "eslint ./client/src --ext .ts,.tsx",
-    "postinstall": "cd client && npm install && cd ..",
-    "test": "sh ./scripts/e2e.sh"
+    "postinstall": "cd client && npm install && cd .."
   },
   "devDependencies": {
     "@types/mocha": "^10.0.6",
