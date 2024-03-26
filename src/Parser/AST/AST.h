@@ -124,15 +124,16 @@ struct Squid {
 };
 
 // ><\/> or <\/>< (break)
-struct BrokenFysh{};
+struct BrokenFysh {};
 
 struct FyshBlock;
 struct FyshLoopStmt;
 struct FyshIfStmt;
 
-using FyshStmt = std::variant<Error, FyshExpr, FyshIncrementStmt,
-                              FyshDecrementStmt, FyshAssignmentStmt, FyshBlock,
-                              FyshLoopStmt, FyshIfStmt, FyshAnchorStmt, Squid, BrokenFysh>;
+using FyshStmt =
+    std::variant<Error, FyshExpr, FyshIncrementStmt, FyshDecrementStmt,
+                 FyshAssignmentStmt, FyshBlock, FyshLoopStmt, FyshIfStmt,
+                 FyshAnchorStmt, Squid, BrokenFysh>;
 
 struct FyshBlock : public std::vector<FyshStmt> {
   using std::vector<FyshStmt>::vector;

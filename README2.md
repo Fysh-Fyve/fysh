@@ -6,10 +6,10 @@
 
 **Introducing Fysh** - the latest, greatest splash in the programming waters!
 Fysh isn't your garden-variety coding language; oh no, it's the world's most
-_inclusive_ dialect, decipherable by organisms on land and under sea\*.
-Imagine, if you will, a language so fluid, so versatile, that dolphins could
-debug your code and octopuses could optimize your algorithms. It's not just a
-programming language; it's an aquatic revolution!
+_inclusive_ dialect, decipherable by organisms on land and under sea\*. Imagine,
+if you will, a language so fluid, so versatile, that dolphins could debug your
+code and octopuses could optimize your algorithms. It's not just a programming
+language; it's an aquatic revolution!
 
 ### 🐟 A Revolutionary Ripple in the Digital Ocean
 
@@ -31,8 +31,7 @@ Together, we can create a wave of change, one line of code at a time.
 
 - **Aquatic Comprehension**\*: The ability of sea creatures to actually
   understand Fysh remains unconfirmed. Any effort to test this understanding
-  might result in puzzled expressions from marine and terrestrial
-  observers.
+  might result in puzzled expressions from marine and terrestrial observers.
 
 - **Communication Limitations**: Given the current linguistic barrier with our
   underwater counterparts, Fysh temporarily excludes string variables. Our
@@ -47,7 +46,6 @@ Dive into Fysh, and let's make waves in the world of programming, together!
 TODO: Add instructions on how to compile and run fysh.
 
 ## 🐠 Fysh Syntax
-
 
 This is Steven. They are our icon. Our industry plant. Our fysh.
 

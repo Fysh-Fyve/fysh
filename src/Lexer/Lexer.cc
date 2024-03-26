@@ -556,7 +556,7 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     if (match('=')) {
       return Species::EQUAL;
     } else if (match('o')) {
-        return Species::TADPOLE_LTE;
+      return Species::TADPOLE_LTE;
     } else {
       // We already reeled in =, do not go fysh.
       return Species::ASSIGN;
@@ -590,46 +590,22 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
   default:
     // Ascii characters
     if (expectFyshChar({
-            "☙",
-            "♡",
-            "♥",
-            "❣",
+            "☙", "♡", "♥", "❣",
             // "❤",
-            "❥",
-            "❦",
-            "❧",
-            "🎔",
-            "🫀",
-            "🖤",
-            "💙",
-            "🩷",
-            "🩵",
-            "💚",
-            "💛",
-            "💜",
-            "🧡",
-            "🤍",
-            "🤎",
-            "🩶",
+            "❥", "❦", "❧", "🎔", "🫀", "🖤", "💙", "🩷", "🩵", "💚",
+            "💛", "💜", "🧡", "🤍", "🤎", "🩶",
             // "❤️",
-            "💓",
-            "💕",
-            "💖",
-            "💗",
-            "💘",
+            "💓", "💕", "💖", "💗", "💘",
             //"💝",
             //"❣️",
-            "💌",
-            "💞",
-            "💟",
-            "🫶",
+            "💌", "💞", "💟", "🫶",
             //"🫶🏻",
             //"🫶🏽",
             //"🫶🏾",
             //"🫶🏿",
         })) {
       return Species::HEART_MULTIPLY;
-      
+
     } else if (expectFyshChar("❤")) {
       expectFyshChar("\ufe0f");
       // Zero width joiner for ❤️‍🔥 and ❤️‍🩹

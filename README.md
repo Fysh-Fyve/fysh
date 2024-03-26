@@ -43,15 +43,15 @@ completely optional. (you can give them multiple eyes)
 ><steven> = ><{({°o°> ~
 ```
 
-A school of fysh's value is equal to the sum of
-each individual member. This gives Steven a value of `b101 = b100 + b001`.
+A school of fysh's value is equal to the sum of each individual member. This
+gives Steven a value of `b101 = b100 + b001`.
 
 ```fysh
 ><steven> ≈ ><{((°> ><(({°> ~
 ```
 
 Sometimes fysh want to be different and swim the other direction. This takes
-away from the school’s value. This gives Steven a value of. 
+away from the school’s value. This gives Steven a value of.
 `b101 = b111 - b010`.
 
 ```fysh
@@ -78,18 +78,19 @@ proliferate. This gives Steven a value of `b101010 = b110 * b111`.
 ><//> (works with any heart, if we're missing any, please let us know)
 ```
 
-
 Not every fysh story is a happy one. At times, separation is unavoidable, and
-their division breaks their heart. This gives Steven a value of `b101 = b11001 / b101` 
+their division breaks their heart. This gives Steven a value of
+`b101 = b11001 / b101`
 
 ```fysh
 ><steven> ≈ ><{{(({°> 💔 ><{({°> ~
 ><steven> = ><{{(({o> </3 ><{({o> ~
 ```
 
-Fysh are often abducted and forced into fyshbowls for terrestrial's entertainment. 
-This isolates the fysh and makes them sad. Fyshbowls are represented by
-`( )`. This gives Steven a value of `b101 = b101 / (b101 - b100)`.
+Fysh are often abducted and forced into fyshbowls for terrestrial's
+entertainment. This isolates the fysh and makes them sad. Fyshbowls are
+represented by `( )`. This gives Steven a value of
+`b101 = b101 / (b101 - b100)`.
 
 ```fysh
 ><steven> ≈ ><{({°> 💔 ( ><{({°> <°}))>< ) ~
@@ -113,16 +114,17 @@ by 1.
 <steven><< ~
 ```
 
-BEDMAS/PEMDAS has been taught to humans for over a century. But what about fysh? Fysh
-have a different way of doing things. Introducing FISHS: Fyshbowl, Increment,
-Species reproduction, Heartbreak, and School of fish. This gives Steven a value of
-`b10101111 = (b11001 + 1) + b110 * b11001 - b1100 / (b110 + b110) `
+BEDMAS/PEMDAS has been taught to humans for over a century. But what about fysh?
+Fysh have a different way of doing things. Introducing FISHS: Fyshbowl,
+Increment, Species reproduction, Heartbreak, and School of fish. This gives
+Steven a value of
+`b10101111 = (b11001 + 1) + b110 * b11001 - b1100 / (b110 + b110)`
 
 ```fysh
 ><steven> ≈ >><{{(({°>  ><{{(°> ♡ ><{{(({°> <°}}))>< 💔 ( ><{{(°> ><{{(°> )  ~
 ```
 
-Sometimes Steven fyshs up and throws an error. This can be done using two WTF 
+Sometimes Steven fyshs up and throws an error. This can be done using two WTF
 (What The Fysh) fysh encompassing a string.
 
 ```fysh
@@ -158,16 +160,16 @@ doneness of the fysh.
 ><###> ~
 ```
 
-Not all fysh are created equal. But sometimes they are. We can check using
-`≈≈` or `==`.
+Not all fysh are created equal. But sometimes they are. We can check using `≈≈`
+or `==`.
 
 ```fysh
 ><steven> ≈≈ ><theFysh> ~
 ><steven> == ><theFysh> ~
 ```
 
-But sometimes we want to check if two fysh are different. This can be done
-using `~≈` or `~=`.
+But sometimes we want to check if two fysh are different. This can be done using
+`~≈` or `~=`.
 
 ```fysh
 ><steven> ~≈ ><theFysh> ~
@@ -175,7 +177,10 @@ using `~≈` or `~=`.
 ```
 
 Tadpoles also exist in the fysh language. Tadpoles swim towards bigger fysh
-(they like the danger) and are represented by `~o or o~`. Here we are checking if Steven is bigger than 5 and less than 7 respectively. Use `≈` or `=` for greater/less than or equal to.
+(they like the danger) and are represented by `~o or o~`. Here we are checking
+if Steven is bigger than 5 and less than 7 respectively. Use `≈` or `=` for
+greater/less than or equal to.
+
 ```fysh
 ><//> Greater, Less than (respectively)
 ><steven> o~ ><{({°>
@@ -191,10 +196,10 @@ Tadpoles also exist in the fysh language. Tadpoles swim towards bigger fysh
 ```
 
 Steven is a curious fysh and often wonders if the world is as it seems. They
-ponder the meaning of life, the universe, and everything in between. They seek the truth,
-and if both steven and theTruth are true, they find it. (Steven && theTruth). Or
-if steven or theTruth is true, they find it. (Steven || theTruth). or if steven
-is not real and this is all a simulation, they find it. (!!Steven)
+ponder the meaning of life, the universe, and everything in between. They seek
+the truth, and if both steven and theTruth are true, they find it. (Steven &&
+theTruth). Or if steven or theTruth is true, they find it. (Steven || theTruth).
+or if steven is not real and this is all a simulation, they find it. (!!Steven)
 
 ```fysh
 ><steven> && ><theTruth> ~
