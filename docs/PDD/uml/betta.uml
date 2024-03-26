@@ -1,0 +1,29 @@
+@startuml
+left to right direction
+
+component "Fysh Interpreter (BabelFysh)" as BF
+component "Fysh Compyler (FyshSea)" as FS
+component "Fysh Language Server (FyshLS)" as FLS
+
+component "VSCode extension for Fysh (VSCodeFysh)" as VSF
+
+component "FyshSea on Windows" as FW
+component "FyshSea on Linux" as FL
+component "FyshSea on Mac" as FM
+
+component "BabelFysh on Windows" as BFW
+component "BabelFysh on Linux" as BFL
+component "BabelFysh on Mac" as BFM
+
+FS --> FW
+FS --> FL
+FS --> FM
+
+BF --> BFW
+BF --> BFL
+BF --> BFM
+
+
+FLS --> VSF
+
+@enduml
