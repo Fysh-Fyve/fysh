@@ -4,7 +4,7 @@ This is fysh.
 ><>
 ```
 
-Fysh have to be terminated `~`.
+Every fysh has to be terminated `~`.
 
 ```fysh
 ><> ~
@@ -23,7 +23,7 @@ valued at `b101`. (5 in decimal)
 ><steven> = ><})}> ~
 ```
 
-Steven doesn’t give a flying fysh about their scale direction. ≈ for variable
+Steven doesn’t give a flying fysh about scale direction. ≈ for variable
 assignment is cool with them too.
 
 ```fysh
@@ -31,22 +31,27 @@ assignment is cool with them too.
 ```
 
 Steven is blind. You have the power to bless them with sight, but it's
-completely optional.
+completely optional. (you can give them multiple eyes)
 
 ```fysh
 ><steven> ≈ ><{({°> ~
-><steven> = ><{({o> ~
+><steven> ≈ ><{({o> ~
+
+><steven> ≈ ><{({°°> ~
+><steven> ≈ ><{({o°> ~
+
+><steven> = ><{({°o°> ~
 ```
 
-When there is a school of fysh, their collective value is equal to the sum of
-each individual member. This gives Steven a value of `b101 = b100+ b001`.
+A school of fysh's value is equal to the sum of
+each individual member. This gives Steven a value of `b101 = b100 + b001`.
 
 ```fysh
 ><steven> ≈ ><{((°> ><(({°> ~
 ```
 
 Sometimes fysh want to be different and swim the other direction. This takes
-away from the school’s value. This gives Steven a value of.
+away from the school’s value. This gives Steven a value of. 
 `b101 = b111 - b010`.
 
 ```fysh
@@ -57,18 +62,25 @@ Fysh often get lonely. This loneliness causes fysh to meet new fysh and
 proliferate. This gives Steven a value of `b101010 = b110 * b111`.
 
 ```fysh
-><steven> ≈ ><{{(°> ♡ ><{{{°> ~
+><steven> = ><{{(°> <3 ><{{{°> ~
+><steven> ≈ ><{{(o>  ♡ ><{{{o> ~
+
+><steven> ≈ ><{{(o°> ❤️ ><{{{°°> ~
+><steven> ≈ ><{{(oo> 🫀 ><{{{°o> ~
+
+><steven> ≈ ><{{(°°°> ❤️‍🔥 ><{{{ooo> ~
+><steven> ≈ ><{{(°o°> 🫶 ><{{{o°o> ~
+
+.
+.
+.
+
+><//> (works with any heart, if we're missing any, please let us know)
 ```
 
-Since the fysh are lonely, they aren't too picky. They’ll make do with a lesser
-form of love `<3`.
-
-```fysh
-><steven> = ><{{(o> <3 ><{{{o> ~
-```
 
 Not every fysh story is a happy one. At times, separation is unavoidable, and
-their division is symbolized by a heartbreak.
+their division breaks their heart. This gives Steven a value of `b101 = b11001 / b101` 
 
 ```fysh
 ><steven> ≈ ><{{(({°> 💔 ><{({°> ~
@@ -77,18 +89,13 @@ their division is symbolized by a heartbreak.
 
 Fysh are often mistreated are forced into fyshbowls for human entertainment.
 This isolates the fysh and makes them sad. This is represented by
-`( ><{{(({°> <°}))}>< )`.
+
+Fysh are often abducted and forced into fyshbowls for terrestrial's entertainment. 
+This isolates the fysh and makes them sad. Fyshbowls are represented by
+`( )`. This gives Steven a value of `b101 = b101 / (b101 - b100)`.
 
 ```fysh
-><steven> ≈ ><steven> 💔 ( ><{{(({°> <°}))>< ) ~
-```
-
-BEDMAS/PEDMAS has been taught to humans for years. But what about fysh? Fysh
-have a different way of doing things. Introducing FISHS: Fyshbowl, Increment,
-Sexual reproduction, Heartbreak, School of fish.
-
-```fysh
-><steven> ≈ ><{{(({°>  ><{{(°> ♡ ><{{(({°> <°}})>< 💔 ( ><{{(°> ><{{(°> )  ~
+><steven> ≈ ><{({°> 💔 ( ><{({°> <°}))>< ) ~
 ```
 
 As life goes on, we learn from our mistakes and improve. Steven’s self help
@@ -109,8 +116,17 @@ by 1.
 <steven><< ~
 ```
 
-Sometimes Steven fyshs up and throws an error. This can be done using two WTF
-(What The Fysh) encompassing a string.
+BEDMAS/PEMDAS has been taught to humans for over a century. But what about fysh? Fysh
+have a different way of doing things. Introducing FISHS: Fyshbowl, Increment,
+Species reproduction, Heartbreak, and School of fish. This gives Steven a value of
+`b10101111 = (b11001 + 1) + b110 * b11001 - b1100 / (b110 + b110) `
+
+```fysh
+><steven> ≈ >><{{(({°>  ><{{(°> ♡ ><{{(({°> <°}}))>< 💔 ( ><{{(°> ><{{(°> )  ~
+```
+
+Sometimes Steven fyshs up and throws an error. This can be done using two WTF 
+(What The Fysh) fysh encompassing a string.
 
 ```fysh
 ><!@#$>
@@ -118,7 +134,34 @@ Sometimes Steven fyshs up and throws an error. This can be done using two WTF
 <!@#$><
 ```
 
-Not all fysh are created equal. But sometimes they are. We can check this using
+Navigator fysh are used to guide the reader through the code. They are
+represented by `><//>`.
+
+```fysh
+><//> What's fyshin good lookin?
+```
+
+Sometimes, the journey through the code is long and arduous. In these cases,
+multiline comments are used to provide a more detailed explanation of the code.
+They are represented by `></*>` and `<*\><`.
+
+```fysh
+></*>
+How to grill a fysh:
+1. Catch a fysh
+2. Grill the fysh
+3. Eat the fysh
+<*/><
+```
+
+This is a grilled fysh. It generates a random 32-bit number that determines the
+doneness of the fysh.
+
+```fysh
+><###> ~
+```
+
+Not all fysh are created equal. But sometimes they are. We can check using
 `≈≈` or `==`.
 
 ```fysh
@@ -126,7 +169,7 @@ Not all fysh are created equal. But sometimes they are. We can check this using
 ><steven> == ><theFysh> ~
 ```
 
-But sometimes we want to ensure that two fysh are different. This can be done
+But sometimes we want to check if two fysh are different. This can be done
 using `~≈` or `~=`.
 
 ```fysh
@@ -135,26 +178,23 @@ using `~≈` or `~=`.
 ```
 
 Tadpoles also exist in the fysh language. Tadpoles swim towards bigger fysh
-(they like the danger) and are represented by `~o or o~`. ( `~o is <`,
-`o~ is >`). Here we are checking if Steven is bigger than 5. Then if they're
-less than 7.
-
+(they like the danger) and are represented by `~o or o~`. Here we are checking if Steven is bigger than 5 and less than 7 respectively. Use `≈` or `=` for greater/less than or equal to.
 ```fysh
+><//> Greater, Less than (respectively)
 ><steven> o~ ><{({°>
 ><steven> ~o ><{{{°>
-```
 
-Tadpoles aren`t too picky and will also swim towards fysh that are greater than
-or equal to the other fysh. Here we are checking if Steven is greater than or
-equal to 5. Then if they're less than or equal to 7.
-
-```fysh
+><//> Greater, Less than or equal to (respectively)
 ><steven> o~≈ ><{({°>
-><steven> ~o≈ ><{{{°>
+><steven> ~o= ><{{{°>
+
+><//> Greater, Less than or equal to (shorthand)
+><steven> o≈ ><{({°>
+><steven> =o ><{{{°>
 ```
 
 Steven is a curious fysh and often wonders if the world is as it seems. They
-ponder the meaning of life, the universe, and everything. They seek the truth,
+ponder the meaning of life, the universe, and everything in between. They seek the truth,
 and if both steven and theTruth are true, they find it. (Steven && theTruth). Or
 if steven or theTruth is true, they find it. (Steven || theTruth). or if steven
 is not real and this is all a simulation, they find it. (!!Steven)
@@ -211,33 +251,6 @@ uncharted else.
 ><>
 	><steven> ≈ ><(((°> ~
 <><
-```
-
-This is a grilled fysh. It generates a random 32-bit number that determines the
-doneness of the fysh.
-
-```fysh
-><###> ~
-```
-
-Navigator fysh are used to guide the reader through the code. They are
-represented by `><//>`.
-
-```fysh
-><//> Dayum, fysh got grillz
-```
-
-Sometimes, the journey through the code is long and arduous. In these cases,
-multiline comments are used to provide a more detailed explanation of the code.
-They are represented by `></*>` and `<*\><`.
-
-```fysh
-></*>
-How to grill a fysh:
-1. Get a fysh
-2. Grill the fysh
-3. Eat the fysh
-<*/><
 ```
 
 A fysh tank `[ ]` is an array of fysh separated by fysh food `-`.

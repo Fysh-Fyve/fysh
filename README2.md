@@ -6,7 +6,7 @@
 
 **Introducing Fysh** - the latest, greatest splash in the programming waters!
 Fysh isn't your garden-variety coding language; oh no, it's the world's most
-_inclusive_ dialect, decipherable by brains both on land and under sea\*.
+_inclusive_ dialect, decipherable by organisms on land and under sea\*.
 Imagine, if you will, a language so fluid, so versatile, that dolphins could
 debug your code and octopuses could optimize your algorithms. It's not just a
 programming language; it's an aquatic revolution!
@@ -31,7 +31,7 @@ Together, we can create a wave of change, one line of code at a time.
 
 - **Aquatic Comprehension**\*: The ability of sea creatures to actually
   understand Fysh remains unconfirmed. Any effort to test this understanding
-  might result in puzzled expressions from both marine and terrestrial
+  might result in puzzled expressions from marine and terrestrial
   observers.
 
 - **Communication Limitations**: Given the current linguistic barrier with our
@@ -42,49 +42,21 @@ Together, we can create a wave of change, one line of code at a time.
 Dive into Fysh, and let's make waves in the world of programming, together!
 🌊👩‍💻🐟
 
+## 👩‍💻 How to compyle and run fysh:
+
+TODO: Add instructions on how to compile and run fysh.
+
+## 🐠 Fysh Syntax
+
+
 This is Steven. They are our icon. Our industry plant. Our fysh.
 
 ```
 ><steven>
 ```
 
-Although Steven is a fysh, they are also a symbol. A symbol of hope. A symbol of
-unity. A symbol of change. A symbol of the future. A symbol of the past. A
-symbol of the present. A symbol of the ocean. A symbol of the land. A symbol of
-the air. A symbol of the fire. A symbol of the water. A symbol of the earth. A
-symbol of the heart. A symbol of the soul. A symbol of the mind. A symbol of the
-body. A symbol of the spirit. A symbol of the human. A symbol of the animal. A
-symbol of the plant. A symbol of the rock. A symbol of the star. A symbol of the
-galaxy. A symbol of the universe. A symbol of fysh.
-
-```
-                                    o
-                                   $""$o
-                                  $"  $$
-                                   $$$$
-                                   o "$o
-                                  o"  "$
-             oo"$$$"  oo$"$ooo   o$    "$    ooo"$oo  $$$"o
-o o o o    oo"  o"      "o    $$o$"     o o$""  o$      "$  "oo   o o o o
-"$o   ""$$$"   $$         $      "   o   ""    o"         $   "o$$"    o$$
-  ""o       o  $          $"       $$$$$       o          $  ooo     o""
-     "o   $$$$o $o       o$        $$$$$"       $o        " $$$$   o"
-      ""o $$$$o  oo o  o$"         $$$$$"        "o o o o"  "$$$  $
-        "" "$"     """""            ""$"            """      """ "
-         "oooooooooooooooooooooooooooooooooooooooooooooooooooooo$
-          "$$$$"$$$$" $$$$$$$"$$$$$$ " "$$$$$"$$$$$$"  $$$""$$$$
-           $$$oo$$$$   $$$$$$o$$$$$$o" $$$$$$$$$$$$$$ o$$$$o$$$"
-           $"""""""""""""""""""""""""""""""""""""""""""""""""""$
-           $"                                                 "$
-           $"$"$"$"$"$"$"$"$"$"$"$"$"$"$"$"$"$"$"$"$"$"$"$"$"$"$
-                                  ><steven>
-
-- Art by Babak Habibi
-```
-
 Although we love Steven, every fysh has to be terminated at some point. That's
-why we end every line of fysh with `~`. (This is a tilde, not a dash. It's a
-fysh thing.)
+why we end every line of fysh with `~` (flowing water)
 
 ```
 ><steven> ~
