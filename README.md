@@ -66,9 +66,9 @@ proliferate. This gives Steven a value of `b101010 = b110 * b111`.
 ><steven> ≈ ><{{(o>  ♡ ><{{{o> ~
 
 ><steven> ≈ ><{{(o°> ❤️ ><{{{°°> ~
-><steven> ≈ ><{{(oo> 🫀 ><{{{°o> ~
+><steven> ≈ ><{{(oo> ❤️‍🔥><{{{°o> ~
 
-><steven> ≈ ><{{(°°°> ❤️‍🔥 ><{{{ooo> ~
+><steven> ≈ ><{{(°°°> 🫀 ><{{{ooo> ~
 ><steven> ≈ ><{{(°o°> 🫶 ><{{{o°o> ~
 
 .
@@ -86,9 +86,6 @@ their division breaks their heart. This gives Steven a value of `b101 = b11001 /
 ><steven> ≈ ><{{(({°> 💔 ><{({°> ~
 ><steven> = ><{{(({o> </3 ><{({o> ~
 ```
-
-Fysh are often mistreated are forced into fyshbowls for human entertainment.
-This isolates the fysh and makes them sad. This is represented by
 
 Fysh are often abducted and forced into fyshbowls for terrestrial's entertainment. 
 This isolates the fysh and makes them sad. Fyshbowls are represented by
