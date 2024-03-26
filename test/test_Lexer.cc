@@ -49,6 +49,10 @@ TEST_CASE("Zero Width Joiner") {
       "❤️‍🩹 "
       // "💝 "
       // "❣️ "
+      // "🫶🏻 "
+      // "🫶🏽 "
+      // "🫶🏾 "
+      // "🫶🏿 "
   };
 
   T(S::HEART_MULTIPLY);
@@ -78,7 +82,7 @@ TEST_CASE("hearts") {
 TEST_CASE("operators") {
   const std::initializer_list<const char *> vs = {
       "💔", "</3", "&",  "|",   "^",   "~=",  "~≈",  "==", "≈≈", "=",
-      "≈", "o~",  "~o", "o~=", "o~≈", "~o=", "~o≈", ">>", "<<"};
+      "≈", "o~",  "~o", "o~=", "o~≈", "~o=", "~o≈","=o","o=","o≈","≈o", ">>", "<<"};
   std::string input = join_chars(vs);
   FyshLexer lexer{input.data()};
 
@@ -102,6 +106,10 @@ TEST_CASE("operators") {
   T(S::TADPOLE_GTE);
   T(S::TADPOLE_GTE);
   T(S::TADPOLE_LTE);
+  T(S::TADPOLE_LTE);
+  T(S::TADPOLE_LTE);
+  T(S::TADPOLE_GTE);
+  T(S::TADPOLE_GTE);
   T(S::TADPOLE_LTE);
 
   T(S::SHIFT_RIGHT);

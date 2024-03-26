@@ -493,6 +493,7 @@ fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
   }
 }
 
+// starts with ~
 fysh::Fysh fysh::FyshLexer::tilde() noexcept {
   reel();
   if (match('=')) {
@@ -554,6 +555,8 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     reel();
     if (match('=')) {
       return Species::EQUAL;
+    } else if (match('o')) {
+        return Species::TADPOLE_LTE;
     } else {
       // We already reeled in =, do not go fysh.
       return Species::ASSIGN;
@@ -577,6 +580,8 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
       } else {
         return cullDeformedFysh();
       }
+    } else if (match('=') || expectFyshChar("≈")) {
+      return Species::TADPOLE_GTE;
     } else {
       // must be o~ or o+
       return cullDeformedFysh();
@@ -618,6 +623,10 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
             "💞",
             "💟",
             "🫶",
+            //"🫶🏻",
+            //"🫶🏽",
+            //"🫶🏾",
+            //"🫶🏿",
         })) {
       return Species::HEART_MULTIPLY;
       
@@ -638,6 +647,8 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     } else if (expectFyshChar("≈")) {
       if (expectFyshChar("≈")) {
         return Species::EQUAL;
+      } else if (match("o")) {
+        return Species::TADPOLE_LTE;
       }
       return Species::ASSIGN;
     } else if (expectFyshChar("🦑")) {
