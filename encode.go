@@ -12,8 +12,7 @@ import (
 //go:embed tree-sitter-fysh/queries/highlights.scm
 var highlights []byte
 
-func (s *Server) highlight(uri string) {
-	// TODO: Use this instead to be consistent with tree-sitter
+func (s *Server) highlight(uri string) []protocol.UInteger {
 	n := s.trees[uri]
 	sourceCode := s.documents[uri]
 	q, err := sitter.NewQuery(highlights, fysh.GetLanguage())
@@ -23,6 +22,12 @@ func (s *Server) highlight(uri string) {
 	qc := sitter.NewQueryCursor()
 	qc.Exec(q, n.RootNode())
 
+	x := []protocol.UInteger{}
+	var j int
+	var lastLine uint32
+	var lastStart uint32
+
+	_, mTyp := support.GetTokenTypes()
 	for {
 		m, ok := qc.NextMatch()
 		if !ok {
@@ -31,40 +36,51 @@ func (s *Server) highlight(uri string) {
 		// Apply predicates filtering
 		m = qc.FilterPredicates(m, sourceCode)
 		for _, c := range m.Captures {
-			s.log.Println(q.CaptureNameForId(c.Index), c.Node.Content(sourceCode))
+			curLine, curStart := fromPoint(c.Node.StartPoint())
+			// We can't re-apply highlighting...
+			if curLine == lastLine && curStart == lastStart {
+				continue
+			}
+
+			var typ uint32
+			switch q.CaptureNameForId(c.Index) {
+			case "comment":
+				typ = mTyp[protocol.SemanticTokenTypeComment]
+			case "spell":
+				// Also comment
+				typ = mTyp[protocol.SemanticTokenTypeComment]
+			case "type":
+				// Positive identifier
+				typ = mTyp[protocol.SemanticTokenTypeClass]
+			case "type.definition":
+				// Negative identifier
+				typ = mTyp[protocol.SemanticTokenTypeEnum]
+			case "punctuation.special":
+				// One
+				typ = mTyp[protocol.SemanticTokenTypeNumber]
+			case "constant":
+				// Zero
+				typ = mTyp[protocol.SemanticTokenTypeString]
+			case "punctuation.bracket":
+				// Bracket
+				typ = mTyp[protocol.SemanticTokenTypeRegexp]
+			case "keyword":
+				typ = mTyp[protocol.SemanticTokenTypeKeyword]
+			case "operators":
+				typ = mTyp[protocol.SemanticTokenTypeOperator]
+			}
+			line, start := curLine, curStart
+			if j != 0 {
+				line -= lastLine
+			}
+			if j > 0 && line == 0 {
+				start -= lastStart
+			}
+			tokLen := c.Node.EndByte() - c.Node.StartByte()
+			x = append(x, line, start, tokLen, typ, 0)
+			lastLine, lastStart = curLine, curStart
 		}
 	}
-}
 
-func encode(n *sitter.Node) []protocol.UInteger {
-	// TODO: Use tree-sitter query instead of manually searching
-	data := []protocol.UInteger{}
-	var row, column uint32 = 0, 0
-	handle := func(t uint32, node *sitter.Node) {
-		r, c := fromPoint(node.StartPoint())
-		dRow := r - row
-		dCol := c
-		if row == r {
-			dCol = c - column
-		}
-		tokLen := node.EndByte() - node.StartByte()
-		data = append(data, dRow, dCol, tokLen, t, 0)
-		row = r
-		column = c
-	}
-	_, m := support.GetTokenTypes()
-	sitter.NewIterator(n, sitter.DFSMode).ForEach(func(node *sitter.Node) error {
-		switch node.Type() {
-		case "comment":
-			handle(m[protocol.SemanticTokenTypeComment], node)
-		case "zero":
-			handle(m[protocol.SemanticTokenTypeString], node)
-		case "one":
-			handle(m[protocol.SemanticTokenTypeNumber], node) // number
-		default:
-		}
-		return nil
-	})
-
-	return data
+	return x
 }

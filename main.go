@@ -213,7 +213,7 @@ func (s *Server) semanticTokensFull(
 	context *glsp.Context,
 	params *protocol.SemanticTokensParams,
 ) (*protocol.SemanticTokens, error) {
-	data := encode(s.trees[params.TextDocument.URI].RootNode())
+	data := s.highlight(params.TextDocument.URI)
 	var lineNum uint32 = 0
 	for i := 0; i < len(data)/5; i++ {
 		lineNum += data[i*5]
