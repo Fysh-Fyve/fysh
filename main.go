@@ -38,8 +38,13 @@ func getLogger(file string) io.WriteCloser {
 
 func main() {
 	file := flag.String("output", "-", "log output destination")
+	v := flag.Bool("version", false, "Print FyshLS version")
 	_ = flag.Bool("stdio", true, "Make VS C*de stop erroring out")
 	flag.Parse()
+	if *v {
+		fmt.Println("fyshls version", version.BuildVersion())
+		return
+	}
 	w := getLogger(*file)
 	defer w.Close()
 	logger := log.New(w, "[fyshls] ", log.LstdFlags|log.Lshortfile)
