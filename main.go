@@ -196,7 +196,7 @@ func (s *Server) completion(
 		if r >= start.Row && r <= end.Row && c >= start.Column && c <= end.Column {
 			if n.ChildCount() == 0 {
 				// this is the node
-				s.log.Println("completion: how did you get here: ", n.Content(s.documents[params.TextDocument.URI]))
+				// s.log.Println("completion: how did you get here: ", n.Content(s.documents[params.TextDocument.URI]))
 				text := n.Content(s.documents[params.TextDocument.URI])
 				completionList := []protocol.CompletionItem{}
 				item, err := tryNumberCompletion(text, start, end)
@@ -205,7 +205,7 @@ func (s *Server) completion(
 				}
 				return completionList, nil
 			} else {
-				s.log.Println("completion: new iter: ", n.Content(s.documents[params.TextDocument.URI]))
+				// s.log.Println("completion: new iter: ", n.Content(s.documents[params.TextDocument.URI]))
 				it = sitter.NewIterator(n, sitter.BFSMode)
 				// This is the node rn
 				it.Next()
@@ -219,11 +219,11 @@ func (s *Server) semanticTokensFull(
 	params *protocol.SemanticTokensParams,
 ) (*protocol.SemanticTokens, error) {
 	data := s.highlight(params.TextDocument.URI)
-	var lineNum uint32 = 0
-	for i := 0; i < len(data)/5; i++ {
-		lineNum += data[i*5]
-		s.log.Println(lineNum, data[i*5:i*5+5])
-	}
+	// var lineNum uint32 = 0
+	// for i := 0; i < len(data)/5; i++ {
+	// 	lineNum += data[i*5]
+	// 	s.log.Println(lineNum, data[i*5:i*5+5])
+	// }
 	return &protocol.SemanticTokens{Data: data}, nil
 }
 
