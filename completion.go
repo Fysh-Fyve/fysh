@@ -4,20 +4,16 @@ import (
 	"strconv"
 	"strings"
 
-	sitter "github.com/smacker/go-tree-sitter"
 	protocol "github.com/tliron/glsp/protocol_3_16"
 )
 
-func tryNumberCompletion(text string, start, end sitter.Point) (protocol.CompletionItem, error) {
+func tryNumberCompletion(text string, rang protocol.Range) (protocol.CompletionItem, error) {
 	v, err := strconv.ParseInt(strings.TrimSpace(text), 10, 64)
 	if err == nil {
 		return protocol.CompletionItem{
 			Label: text,
 			TextEdit: protocol.TextEdit{
-				Range: protocol.Range{
-					Start: toPosition(start),
-					End:   toPosition(end),
-				},
+				Range:   rang,
 				NewText: getFysh(v),
 			},
 		}, nil

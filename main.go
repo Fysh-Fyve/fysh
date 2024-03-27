@@ -193,16 +193,37 @@ func (s *Server) completion(
 			}
 		}
 		start, end := n.StartPoint(), n.EndPoint()
-		if r >= start.Row && r <= end.Row && c >= start.Column && c <= end.Column {
+		rang := protocol.Range{
+			Start: toPosition(start),
+			End:   toPosition(end),
+		}
+		if (r >= start.Row && r <= end.Row) &&
+			(r != start.Row || c >= start.Column) &&
+			(r != end.Row || c <= end.Column) {
 			if n.ChildCount() == 0 {
 				// this is the node
 				// s.log.Println("completion: how did you get here: ", n.Content(s.documents[params.TextDocument.URI]))
 				text := n.Content(s.documents[params.TextDocument.URI])
 				completionList := []protocol.CompletionItem{}
-				item, err := tryNumberCompletion(text, start, end)
-				if err == nil {
+				if text == "@" {
+					completionList = append(completionList, protocol.CompletionItem{
+						Label:    "><(((@>",
+						TextEdit: protocol.TextEdit{Range: rang, NewText: "><(((@>"},
+					})
+				} else if text == "^" {
+					completionList = append(completionList, protocol.CompletionItem{
+						Label:    "><(((^>",
+						TextEdit: protocol.TextEdit{Range: rang, NewText: "><(((^>"},
+					})
+				} else if text == "*" {
+					completionList = append(completionList, protocol.CompletionItem{
+						Label:    "><(((*>",
+						TextEdit: protocol.TextEdit{Range: rang, NewText: "><(((*>"},
+					})
+				} else if item, err := tryNumberCompletion(text, rang); err == nil {
 					completionList = append(completionList, item)
 				}
+
 				return completionList, nil
 			} else {
 				// s.log.Println("completion: new iter: ", n.Content(s.documents[params.TextDocument.URI]))
@@ -242,7 +263,7 @@ func (s *Server) initialize(
 	capabilities.DefinitionProvider = true
 	capabilities.CompletionProvider = &protocol.CompletionOptions{
 		TriggerCharacters: []string{"0", "1", "2", "3", "4", "5", "6", "7", "8",
-			"9", "0", "-"},
+			"9", "0", "-", "@", "^", "*"},
 	}
 
 	tokenTypes, _ := support.GetTokenTypes()
