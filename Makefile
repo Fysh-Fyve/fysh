@@ -4,13 +4,13 @@ rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(su
 SRC := $(call rwildcard,.,*.go)
 
 install:
-	./build.sh
+	go run cmd/install/main.go
 
 test:
 	go test ./...
 
 bin/fyshls: $(SRC) | bin
-	./build.sh $@
+	go run cmd/install/main.go $@
 
 bin:
 	mkdir $@
