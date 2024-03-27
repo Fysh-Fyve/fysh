@@ -1079,11 +1079,6 @@
   ],
   "conflicts": [
     [
-      "loop_statement",
-      "if_statement",
-      "scales"
-    ],
-    [
       "addition"
     ],
     [
@@ -1100,4 +1095,3 @@
   "inline": [],
   "supertypes": []
 }
-

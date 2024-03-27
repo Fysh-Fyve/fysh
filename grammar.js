@@ -48,7 +48,7 @@ module.exports = grammar({
   ],
 
   conflicts: ($) => [
-    [$.loop_statement, $.if_statement, $.scales],
+    // [$.loop_statement, $.if_statement, $.scales],
     [$.addition],
     [$.if_statement],
   ],
