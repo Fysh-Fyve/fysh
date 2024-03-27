@@ -16,7 +16,7 @@ SUBroutines
 
 (source_file
   (subroutine
-    (left_sub)
+    (right_sub)
     (positive_ident)
     (positive_ident)
     (positive_ident)
@@ -39,7 +39,7 @@ SUBroutines
       (positive_literal
         (scales
           (one)))
-      (left_sub)
+      (right_sub)
       (fysh_bowl
         (binary_expression
           (addition
@@ -54,7 +54,7 @@ SUBroutines
           (one)))))
   (expression_statement
     (call_expression
-      (left_sub)
+      (right_sub)
       (positive_literal
         (scales
           (one)))
@@ -87,4 +87,4 @@ SUBroutines
       (positive_literal
         (scales
           (one)))
-      (right_sub))))
+      (left_sub))))

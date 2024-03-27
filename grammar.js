@@ -1,6 +1,6 @@
 /**
  * @file Fysh grammar for tree-sitter
- * @author Charles Ancheta
+ * @author Charles Ancheta, Kyle Prince
  * @license MIT
  */
 
@@ -58,13 +58,13 @@ module.exports = grammar({
 
     subroutine: ($) =>
       seq(
-        $.left_sub,
+        $.right_sub,
         field("params", repeat($.positive_ident)),
         field("body", $.block),
       ),
 
-    left_sub: ($) => seq(">(", field("name", $._name), ")"),
-    right_sub: ($) => seq("(", field("name", $._name), ")<"),
+    right_sub: ($) => seq(">(", field("name", $._name), ")"),
+    left_sub: ($) => seq("(", field("name", $._name), ")<"),
 
     _statement: ($) =>
       choice(
@@ -82,11 +82,14 @@ module.exports = grammar({
           $.expression_statement,
           $.inc_statement,
           $.dec_statement,
+          $.return_statement,
         ),
         "~",
       ),
 
     _statement_list: ($) => seq($._statement, repeat($._statement)),
+
+    return_statement: $ => seq(choice("<~", "🦑"), field("right", $._expression)),
 
     block: ($) => seq("><>", optional($._statement_list), "<><"),
 

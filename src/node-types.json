@@ -414,6 +414,10 @@
         {
           "type": "loop_statement",
           "named": true
+        },
+        {
+          "type": "return_statement",
+          "named": true
         }
       ]
     }
@@ -764,6 +768,50 @@
     }
   },
   {
+    "type": "return_statement",
+    "named": true,
+    "fields": {
+      "right": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "fysh_bowl",
+            "named": true
+          },
+          {
+            "type": "grilled_fysh",
+            "named": true
+          },
+          {
+            "type": "negative_ident",
+            "named": true
+          },
+          {
+            "type": "negative_literal",
+            "named": true
+          },
+          {
+            "type": "positive_ident",
+            "named": true
+          },
+          {
+            "type": "positive_literal",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "right_sub",
     "named": true,
     "fields": {}
@@ -828,6 +876,10 @@
           "named": true
         },
         {
+          "type": "return_statement",
+          "named": true
+        },
+        {
           "type": "subroutine",
           "named": true
         }
@@ -864,7 +916,7 @@
       "required": true,
       "types": [
         {
-          "type": "left_sub",
+          "type": "right_sub",
           "named": true
         }
       ]
@@ -920,6 +972,10 @@
   },
   {
     "type": "<><",
+    "named": false
+  },
+  {
+    "type": "<~",
     "named": false
   },
   {
@@ -1040,6 +1096,10 @@
   },
   {
     "type": "💔",
+    "named": false
+  },
+  {
+    "type": "🦑",
     "named": false
   }
 ]

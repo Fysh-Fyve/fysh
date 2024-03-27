@@ -1,0 +1,72 @@
+=================================================================
+Recursive Fibonacci
+=================================================================
+></*>
+Fysh Fibonacci as a Submarine
+<*/><
+
+>(fib) ><fysh>
+><>
+	><(((^> [ ><fysh> ~o ><})> ]
+	><>
+	    🦑 ><fysh> ~
+	<><
+
+	><(((*>
+	><>
+		><a> = [>(fib) (><fysh> <({><)] ~
+		><b> = [>(fib) (><fysh> <{(><)] ~
+		🦑 ><a> ><b> ~
+	<><
+<><
+----------------------------------
+
+(source_file
+  (multiline_comment)
+  (subroutine
+    (right_sub)
+    (positive_ident)
+    (block
+      (if_statement
+        (happy_fysh)
+        (fysh_tank
+          (binary_expression
+            (positive_ident)
+            (positive_literal
+              (scales
+                (one)
+                (zero)))))
+        (block
+          (return_statement
+            (positive_ident)))
+        (dead_fysh)
+        (block
+          (assignment_statement
+            (positive_ident)
+            (call_expression
+              (right_sub)
+              (fysh_bowl
+                (binary_expression
+                  (addition
+                    (positive_ident)
+                    (negative_literal
+                      (scales
+                        (zero)
+                        (one))))))))
+          (assignment_statement
+            (positive_ident)
+            (call_expression
+              (right_sub)
+              (fysh_bowl
+                (binary_expression
+                  (addition
+                    (positive_ident)
+                    (negative_literal
+                      (scales
+                        (one)
+                        (zero))))))))
+          (return_statement
+            (binary_expression
+              (addition
+                (positive_ident)
+                (positive_ident)))))))))
