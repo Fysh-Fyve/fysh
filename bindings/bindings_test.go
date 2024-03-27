@@ -17,7 +17,7 @@ func TestGrammar(t *testing.T) {
 	assert.Equal(
 		"(source_file "+
 			"(assignment_statement "+
-			"left: (positive_ident (name)) "+
+			"left: (positive_ident) "+
 			"right: (positive_literal (scales (one) (one)))))",
 		n.String(),
 	)
