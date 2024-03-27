@@ -76,7 +76,9 @@ private:
   Emit grilledFysh();
 
   /* Compiling subroutines */
-  Emit subroutine(const fysh::ast::SUBroutine &sub);
+
+  std::optional<fysh::ast::Error> subroutine(const fysh::ast::SUBroutine &sub,
+                                             bool noOpt);
 
   /* Utility methods */
   llvm::GlobalVariable *resolveVariable(const std::string_view &name,

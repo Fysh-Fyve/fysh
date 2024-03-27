@@ -381,8 +381,8 @@ static void print(llvm::Module *m, const std::string &path) {
   }
 }
 
-fysh::Emit fysh::Compyler::subroutine(const fysh::ast::SUBroutine &sub) {
-  llvm::BasicBlock::iterator mainBB{builder->GetInsertPoint()};
+std::optional<fysh::ast::Error>
+fysh::Compyler::subroutine(const fysh::ast::SUBroutine &sub, bool noOpt) {
   Params params;
   for (const auto &_ : sub.parameters) {
     params.push_back(intTy());
@@ -392,38 +392,13 @@ fysh::Emit fysh::Compyler::subroutine(const fysh::ast::SUBroutine &sub) {
       llvm::BasicBlock::Create(*context, "entry", subPrototype)};
   builder->SetInsertPoint(bb);
 
-  builder->SetInsertPoint(mainBB);
-  return nullptr;
-}
-
-void fysh::Compyler::compyle(const fysh::ast::FyshProgram &ast,
-                             fysh::Options opts) {
-  // int main()
-  llvm::Function *prototype{define("main", intTy(), Params{})};
-  llvm::BasicBlock *bb{llvm::BasicBlock::Create(*context, "entry", prototype)};
-  builder->SetInsertPoint(bb);
-
   Emit emit;
-  for (const auto &declarations : ast) {
-    Emit e{std::visit(
-        [this, prototype](auto &&arg) -> Emit {
-          using T = std::decay_t<decltype(arg)>;
-          if constexpr (std::is_same_v<T, ast::Error>) {
-            return arg;
-          } else if constexpr (std::is_same_v<T, ast::FyshStmt>) {
-            return statement(arg);
-          } else if constexpr (std::is_same_v<T, ast::SUBroutine>) {
-            return subroutine(arg);
-          } else {
-            static_assert(always_false_v<T>, "non-exhaustive visitor!");
-          }
-        },
-        declarations)};
+  for (const auto &s : sub.body) {
+    Emit e{statement(s)};
     if (isError(e)) {
-      llvm::errs() << std::get<ast::Error>(e).getraw() << "\n";
       // Something went wrong!
-      prototype->eraseFromParent();
-      return;
+      subPrototype->eraseFromParent();
+      return std::get<ast::Error>(e);
     }
     if (llvm::Value *expr = unwrap(e)) {
       emit = expr;
@@ -439,10 +414,79 @@ void fysh::Compyler::compyle(const fysh::ast::FyshProgram &ast,
   }
 
   // Validate the generated code, checking for consistency.
-  llvm::verifyFunction(*prototype);
+  llvm::verifyFunction(*subPrototype);
 
-  if (!opts.noOpt) {
-    fpm->run(*prototype, *fam);
+  if (!noOpt) {
+    fpm->run(*subPrototype, *fam);
+  }
+
+  return {};
+}
+
+void fysh::Compyler::compyle(const fysh::ast::FyshProgram &ast,
+                             fysh::Options opts) {
+  std::vector<ast::FyshStmt> statements;
+  std::vector<ast::SUBroutine> subs;
+  for (const auto &declarations : ast) {
+    std::optional<ast::Error> error{std::visit(
+        [&](auto &&arg) -> std::optional<ast::Error> {
+          using T = std::decay_t<decltype(arg)>;
+          if constexpr (std::is_same_v<T, ast::Error>) {
+            return arg;
+          } else if constexpr (std::is_same_v<T, ast::FyshStmt>) {
+            statements.push_back(arg);
+            return {};
+          } else if constexpr (std::is_same_v<T, ast::SUBroutine>) {
+            subs.push_back(arg);
+            return {};
+          } else {
+            static_assert(always_false_v<T>, "non-exhaustive visitor!");
+          }
+        },
+        declarations)};
+    if (error.has_value()) {
+      llvm::errs() << error.value().getraw() << "\n";
+      // Something went wrong!
+      return;
+    }
+  }
+
+  for (const auto &s : statements) {
+    auto var{std::visit(
+        [&](auto &&arg) -> std::optional<std::string_view> {
+          using T = std::decay_t<decltype(arg)>;
+          if constexpr (std::is_same_v<T, ast::FyshAssignmentStmt>) {
+            if (auto *ident = std::get_if<ast::FyshIdentifier>(&arg.left)) {
+              return ident->name;
+            }
+          } else if constexpr (std::is_same_v<T, ast::FyshAnchorStmt>) {
+            if (arg.op == ast::FyshBinary::AnchorIn) {
+              if (auto *ident = std::get_if<ast::FyshIdentifier>(&arg.right)) {
+                return ident->name;
+              }
+            }
+          }
+          return {};
+        },
+        s)};
+    if (var) {
+      resolveVariable(var.value(), true);
+    }
+  }
+
+  for (const auto &sub : subs) {
+    auto error{subroutine(sub, opts.noOpt)};
+    if (error.has_value()) {
+      llvm::errs() << error.value().getraw() << "\n";
+      return;
+    }
+  }
+
+  ast::SUBroutine main{"main", {}, statements};
+  auto error{subroutine(main, opts.noOpt)};
+  if (error.has_value()) {
+    llvm::errs() << error.value().getraw() << "\n";
+    return;
   }
 
   print(module.get(), opts.outputFilename);
