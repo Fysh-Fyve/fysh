@@ -179,60 +179,43 @@ func (s *Server) completion(
 	context *glsp.Context,
 	params *protocol.CompletionParams,
 ) (any, error) {
-	n := s.trees[params.TextDocument.URI]
-	it := sitter.NewIterator(n.RootNode(), sitter.BFSMode)
-	r, c := fromPosition(params.Position)
-	for {
-		n, err := it.Next()
-		if err != nil {
-			if err == io.EOF {
-				return []protocol.CompletionItem{}, nil
-			} else {
-				s.log.Println("completion: error iterating", err)
-				return nil, err
-			}
-		}
-		start, end := n.StartPoint(), n.EndPoint()
-		rang := protocol.Range{
-			Start: toPosition(start),
-			End:   toPosition(end),
-		}
-		if (r >= start.Row && r <= end.Row) &&
-			(r != start.Row || c >= start.Column) &&
-			(r != end.Row || c <= end.Column) {
-			if n.ChildCount() == 0 {
-				// this is the node
-				// s.log.Println("completion: how did you get here: ", n.Content(s.documents[params.TextDocument.URI]))
-				text := n.Content(s.documents[params.TextDocument.URI])
-				completionList := []protocol.CompletionItem{}
-				if text == "@" {
-					completionList = append(completionList, protocol.CompletionItem{
-						Label:    "><(((@>",
-						TextEdit: protocol.TextEdit{Range: rang, NewText: "><(((@>"},
-					})
-				} else if text == "^" {
-					completionList = append(completionList, protocol.CompletionItem{
-						Label:    "><(((^>",
-						TextEdit: protocol.TextEdit{Range: rang, NewText: "><(((^>"},
-					})
-				} else if text == "*" {
-					completionList = append(completionList, protocol.CompletionItem{
-						Label:    "><(((*>",
-						TextEdit: protocol.TextEdit{Range: rang, NewText: "><(((*>"},
-					})
-				} else if item, err := tryNumberCompletion(text, rang); err == nil {
-					completionList = append(completionList, item)
-				}
-
-				return completionList, nil
-			} else {
-				// s.log.Println("completion: new iter: ", n.Content(s.documents[params.TextDocument.URI]))
-				it = sitter.NewIterator(n, sitter.BFSMode)
-				// This is the node rn
-				it.Next()
-			}
+	tree := s.trees[params.TextDocument.URI]
+	n, err := getNodeFromPosition(tree.RootNode(), params.Position)
+	if err != nil {
+		if err == io.EOF {
+			return []protocol.CompletionItem{}, nil
+		} else {
+			s.log.Println("completion: error iterating", err)
+			return nil, err
 		}
 	}
+
+	rang := protocol.Range{
+		Start: toPosition(n.StartPoint()),
+		End:   toPosition(n.EndPoint()),
+	}
+	text := n.Content(s.documents[params.TextDocument.URI])
+	// Prepare for at least 1 completion item
+	completionList := make([]protocol.CompletionItem, 0, 1)
+	switch text {
+	case "@":
+		fallthrough
+	case "^":
+		fallthrough
+	case "*":
+		token := fmt.Sprintf("><(((%s>", text)
+		item := protocol.CompletionItem{
+			Label:    token,
+			TextEdit: protocol.TextEdit{Range: rang, NewText: token},
+		}
+		completionList = append(completionList, item)
+	default:
+		if item, err := tryNumberCompletion(text, rang); err == nil {
+			completionList = append(completionList, item)
+		}
+	}
+
+	return completionList, nil
 }
 
 func (s *Server) semanticTokensFull(
