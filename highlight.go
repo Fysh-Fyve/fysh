@@ -12,9 +12,7 @@ import (
 //go:embed tree-sitter-fysh/queries/highlights.scm
 var highlights []byte
 
-func (s *Server) highlight(uri string) []protocol.UInteger {
-	n := s.trees[uri]
-	sourceCode := s.documents[uri]
+func Encode(sourceCode []byte, n *sitter.Tree) []protocol.UInteger {
 	q, err := sitter.NewQuery(highlights, fysh.GetLanguage())
 	if err != nil {
 		panic(err)
@@ -23,9 +21,8 @@ func (s *Server) highlight(uri string) []protocol.UInteger {
 	qc.Exec(q, n.RootNode())
 
 	x := []protocol.UInteger{}
-	var j int
-	var lastLine uint32
-	var lastStart uint32
+	first := true
+	var lastLine, lastStart uint32
 
 	_, mTyp := support.GetTokenTypes()
 	for {
@@ -37,10 +34,11 @@ func (s *Server) highlight(uri string) []protocol.UInteger {
 		m = qc.FilterPredicates(m, sourceCode)
 		for _, c := range m.Captures {
 			curLine, curStart := fromPoint(c.Node.StartPoint())
-			// We can't re-apply highlighting...
-			if curLine == lastLine && curStart == lastStart {
-				continue
-			}
+			// // We can't re-apply highlighting...
+			// if curLine == lastLine && curStart == lastStart {
+			// 	continue
+			// }
+			// JK we can and we will!
 
 			var typ uint32
 			switch q.CaptureNameForId(c.Index) {
@@ -70,11 +68,13 @@ func (s *Server) highlight(uri string) []protocol.UInteger {
 				typ = mTyp[protocol.SemanticTokenTypeOperator]
 			}
 			line, start := curLine, curStart
-			if j != 0 {
+			if !first {
 				line -= lastLine
-			}
-			if j > 0 && line == 0 {
-				start -= lastStart
+				if line == 0 {
+					start -= lastStart
+				}
+			} else {
+				first = !first
 			}
 			tokLen := c.Node.EndByte() - c.Node.StartByte()
 			x = append(x, line, start, tokLen, typ, 0)

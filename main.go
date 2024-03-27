@@ -94,7 +94,7 @@ func (s *Server) logTrace(context *glsp.Context, params *protocol.LogTraceParams
 	return nil
 }
 
-func getTree(content []byte) (*sitter.Tree, error) {
+func GetTree(content []byte) (*sitter.Tree, error) {
 	p := sitter.NewParser()
 	p.SetLanguage(fysh.GetLanguage())
 	tree, err := p.ParseCtx(ctx.Background(), nil, content)
@@ -132,7 +132,7 @@ func (s *Server) updateDoc(uri, text string) error {
 	file := []byte(text)
 	s.documents[uri] = file
 	var err error
-	if s.trees[uri], err = getTree(file); err != nil {
+	if s.trees[uri], err = GetTree(file); err != nil {
 		return fmt.Errorf("failed to get root node: %v", err)
 	}
 	return nil
@@ -218,7 +218,10 @@ func (s *Server) semanticTokensFull(
 	context *glsp.Context,
 	params *protocol.SemanticTokensParams,
 ) (*protocol.SemanticTokens, error) {
-	data := s.highlight(params.TextDocument.URI)
+	data := Encode(
+		s.documents[params.TextDocument.URI],
+		s.trees[params.TextDocument.URI],
+	)
 	// var lineNum uint32 = 0
 	// for i := 0; i < len(data)/5; i++ {
 	// 	lineNum += data[i*5]
