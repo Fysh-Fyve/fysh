@@ -32,3 +32,4 @@ Fysh Fibonacci as a Submarine
 ><//> 1 if everything works right
 ><complete> ~
 
+><//> vim:commentstring=><//>%s

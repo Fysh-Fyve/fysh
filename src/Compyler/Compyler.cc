@@ -448,6 +448,27 @@ void fysh::Compyler::compyle(const fysh::ast::FyshProgram &ast,
   print(module.get(), opts.outputFilename);
 }
 
+fysh::Emit fysh::Compyler::call(const fysh::ast::FyshCallExpr &expr) {
+  std::vector<llvm::Value *> argValues;
+  argValues.reserve(expr.args.size());
+  for (const auto &arg : expr.args) {
+    Emit e{expression(&arg)};
+    if (isError(e)) {
+      return e;
+    }
+    argValues.push_back(unwrap(e));
+  }
+
+  llvm::Function *func{module->getFunction(expr.callee)};
+  if (!func) {
+    return ast::Error{"subroutine does not exist"};
+  }
+
+  llvm::Value *retVal{
+      builder->CreateCall(func->getFunctionType(), func, argValues)};
+  return (expr.negate) ? builder->CreateNeg(retVal) : retVal;
+}
+
 fysh::Emit fysh::Compyler::unary(const fysh::ast::FyshUnaryExpr &expr) {
   Emit emit{expression(&expr.expr)};
   if (isError(emit)) {
@@ -522,6 +543,8 @@ fysh::Emit fysh::Compyler::expression(const fysh::ast::FyshExpr *expr) {
           return binary(arg.getraw());
         } else if constexpr (std::is_same_v<T, Box<ast::FyshUnaryExpr>>) {
           return unary(arg.getraw());
+        } else if constexpr (std::is_same_v<T, Box<ast::FyshCallExpr>>) {
+          return call(arg.getraw());
         } else if constexpr (std::is_same_v<T, ast::FyshIdentifier>) {
           return identifier(arg);
         } else if constexpr (std::is_same_v<T, ast::FyshLiteral>) {

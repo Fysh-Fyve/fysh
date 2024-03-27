@@ -90,6 +90,30 @@ fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
     nextFysh();
     return expr;
   }
+  case Species::FYSH_TANK_OPEN: {
+    nextFysh();
+
+    std::optional<std::string_view> callee;
+    bool negate;
+    std::vector<ast::FyshExpr> args;
+    while (curFysh != Species::FYSH_TANK_CLOSE) {
+      if (curFysh == Species::SUBMARINE) {
+        if (callee.has_value()) {
+          return ast::Error{"ambiguous call"};
+        }
+        callee = curFysh.getBody();
+        negate = curFysh.negate;
+        nextFysh();
+      } else {
+        args.push_back(parseExpression());
+      }
+    }
+    nextFysh();
+    if (!callee.has_value()) {
+      return ast::Error{"subroutine not defined"};
+    }
+    return ast::FyshCallExpr{callee.value(), args};
+  }
   default: {
     std::string s;
     llvm::raw_string_ostream ss{s};
@@ -159,7 +183,8 @@ fysh::ast::FyshExpr fysh::FyshParser::parseAdditive() {
 fysh::ast::FyshExpr fysh::FyshParser::parseComparative() {
   ast::FyshExpr left{parseAdditive()};
   std::optional<FB> op{binaryOp(curFysh)};
-  while (op == FB::LT || op == FB::GT || op == FB::LTE || op == FB::GTE) {
+  while (op == FB::LT || op == FB::GT || op == FB::LTE || op == FB::GTE ||
+         op == FB::Equal || op == FB::NotEqual) {
     nextFysh();
     ast::FyshExpr right{parseComparative()};
     left = ast::FyshBinaryExpr{left, right, op.value()};

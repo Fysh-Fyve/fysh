@@ -62,6 +62,7 @@ enum class FyshUnary {
 
 struct FyshBinaryExpr;
 struct FyshUnaryExpr;
+struct FyshCallExpr;
 
 // This is intentionally empty
 struct GrilledFysh {};
@@ -77,8 +78,9 @@ struct FyshLiteral {
 };
 
 // every single type of expression
-using FyshExpr = std::variant<Error, Box<FyshBinaryExpr>, Box<FyshUnaryExpr>,
-                              FyshIdentifier, FyshLiteral, GrilledFysh>;
+using FyshExpr =
+    std::variant<Error, Box<FyshCallExpr>, Box<FyshBinaryExpr>,
+                 Box<FyshUnaryExpr>, FyshIdentifier, FyshLiteral, GrilledFysh>;
 
 bool operator==(const FyshExpr &expr, const char *str);
 bool operator!=(const FyshExpr &expr, const char *str);
@@ -94,6 +96,12 @@ struct FyshBinaryExpr {
   FyshExpr left;
   FyshExpr right;
   FyshBinary op;
+};
+
+struct FyshCallExpr {
+  std::string_view callee;
+  std::vector<FyshExpr> args;
+  bool negate;
 };
 
 //  >><steven>

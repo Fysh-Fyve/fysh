@@ -75,12 +75,20 @@ llvm::raw_ostream &fysh::ast::operator<<(llvm::raw_ostream &os,
         } else if constexpr (std::is_same_v<T, Box<FyshBinaryExpr>>) {
           os << "(" << arg.t->left << " " << str(arg.t->op) << " "
              << arg.t->right << ")";
+        } else if constexpr (std::is_same_v<T, Box<FyshCallExpr>>) {
+          if (arg.t->negate) {
+            os << "-";
+          }
+          os << arg.t->callee << "(";
+          bool first{true};
+          for (auto const &param : arg.t->args) {
+            os << (first ? first = false, "" : ", ") << param;
+          }
+          os << ")";
         } else if constexpr (std::is_same_v<T, Box<FyshUnaryExpr>>) {
           os << "(" << str(arg.t->op) << " " << arg.t->expr << ")";
-
         } else if constexpr (std::is_same_v<T, FyshIdentifier>) {
           os << arg.name;
-
         } else if constexpr (std::is_same_v<T, FyshLiteral>) {
           os << arg.num;
         } else if constexpr (std::is_same_v<T, GrilledFysh>) {
@@ -158,8 +166,9 @@ llvm::raw_ostream &fysh::ast::operator<<(llvm::raw_ostream &os,
             os << arg;
           } else if constexpr (std::is_same_v<T, SUBroutine>) {
             os << "sub " << arg.name << "(";
-            for (const auto &param : arg.parameters) {
-              os << param << ", ";
+            bool first{true};
+            for (auto const &param : arg.parameters) {
+              os << (first ? first = false, "" : ", ") << param;
             }
             os << ")\n" << arg.body;
           } else {
