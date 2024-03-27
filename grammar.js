@@ -39,7 +39,12 @@ module.exports = grammar({
 
   extras: ($) => [
     $.comment,
+    $.multiline_comment,
     /\s/,
+  ],
+
+  externals: ($) => [
+    $.multiline_comment,
   ],
 
   conflicts: ($) => [
@@ -187,15 +192,7 @@ module.exports = grammar({
 
     _name: (_) => /[_\p{XID_Start}][_\p{XID_Continue}]*/,
 
-    comment: (_) =>
-      choice(
-        token(seq("><//>", /[^\n]*/)),
-        seq(
-          "></*>",
-          repeat(choice(seq(/[^\n]+/, optional("\n")), "\n")),
-          "<*/><",
-        ),
-      ),
+    comment: (_) => token(seq("><//>", /[^\n]*/)),
   },
 });
 

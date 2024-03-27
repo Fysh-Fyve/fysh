@@ -5,13 +5,20 @@ With comments
 Some happy fysh swimming around
 Hope they don't get eaten
 <*/><
-><//> ></*> can i do this tho <*/><
-></*>
-Nope you cannot
-<*/><
+
+><{{> ~
+
+></*> can i do this tho <*/><
+
+><//> Yes you can!
 --------------------------------------------------------------------------------
 
 (source_file
-  (comment)
-  (comment)
+  (multiline_comment)
+  (expression_statement
+    (positive_literal
+      (scales
+        (one)
+        (one))))
+  (multiline_comment)
   (comment))

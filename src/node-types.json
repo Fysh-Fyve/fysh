@@ -470,11 +470,6 @@
     }
   },
   {
-    "type": "comment",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "dead_fysh",
     "named": true,
     "fields": {}
@@ -876,10 +871,6 @@
     }
   },
   {
-    "type": "\n",
-    "named": false
-  },
-  {
     "type": "###",
     "named": false
   },
@@ -913,10 +904,6 @@
   },
   {
     "type": "<",
-    "named": false
-  },
-  {
-    "type": "<*/><",
     "named": false
   },
   {
@@ -956,10 +943,6 @@
     "named": false
   },
   {
-    "type": "></*>",
-    "named": false
-  },
-  {
     "type": "><>",
     "named": false
   },
@@ -982,6 +965,14 @@
   {
     "type": "^",
     "named": false
+  },
+  {
+    "type": "comment",
+    "named": true
+  },
+  {
+    "type": "multiline_comment",
+    "named": true
   },
   {
     "type": "o+)",
