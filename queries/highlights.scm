@@ -1,6 +1,7 @@
 ; TODO: Be more colourful??
 
 (comment) @comment @spell
+(multiline_comment) @comment @spell
 
 (positive_ident) @type
 (negative_ident) @type.definition
