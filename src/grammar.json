@@ -143,6 +143,10 @@
             {
               "type": "SYMBOL",
               "name": "return_statement"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "break_statement"
             }
           ]
         },
@@ -191,6 +195,19 @@
             "type": "SYMBOL",
             "name": "_expression"
           }
+        }
+      ]
+    },
+    "break_statement": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "><\\/>"
+        },
+        {
+          "type": "STRING",
+          "value": "<\\/><"
         }
       ]
     },

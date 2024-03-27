@@ -396,6 +396,10 @@
           "named": true
         },
         {
+          "type": "break_statement",
+          "named": true
+        },
+        {
           "type": "dec_statement",
           "named": true
         },
@@ -421,6 +425,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "break_statement",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "call_expression",
@@ -856,6 +865,10 @@
           "named": true
         },
         {
+          "type": "break_statement",
+          "named": true
+        },
+        {
           "type": "dec_statement",
           "named": true
         },
@@ -975,6 +988,10 @@
     "named": false
   },
   {
+    "type": "<\\/><",
+    "named": false
+  },
+  {
     "type": "<~",
     "named": false
   },
@@ -1000,6 +1017,10 @@
   },
   {
     "type": "><>",
+    "named": false
+  },
+  {
+    "type": "><\\/>",
     "named": false
   },
   {

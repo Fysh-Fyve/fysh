@@ -83,6 +83,7 @@ module.exports = grammar({
           $.inc_statement,
           $.dec_statement,
           $.return_statement,
+          $.break_statement,
         ),
         "~",
       ),
@@ -90,6 +91,8 @@ module.exports = grammar({
     _statement_list: ($) => seq($._statement, repeat($._statement)),
 
     return_statement: $ => seq(choice("<~", "🦑"), field("right", $._expression)),
+
+    break_statement: $ => choice("><\\/>","<\\/><"),
 
     block: ($) => seq("><>", optional($._statement_list), "<><"),
 

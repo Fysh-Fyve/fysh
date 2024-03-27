@@ -1,0 +1,60 @@
+=====================
+Break test
+=====================
+><steven> = ><})})> ~
+><(((@> [><}>]
+><>
+    ><(((^> [><steven> == ><}}>] 
+    ><>
+        ><\/> ~
+    <><
+    ><(((*> ><(((^> [><steven> o~ ><})})>] 
+    ><>
+        <\/>< ~
+    <><
+    <steven><< ~
+<><
+-------------
+
+(source_file
+  (assignment_statement
+    (positive_ident)
+    (positive_literal
+      (scales
+        (one)
+        (zero)
+        (one)
+        (zero))))
+  (loop_statement
+    (loopy_fysh)
+    (fysh_tank
+      (positive_literal
+        (scales
+          (one))))
+    (block
+      (if_statement
+        (happy_fysh)
+        (fysh_tank
+          (binary_expression
+            (positive_ident)
+            (positive_literal
+              (scales
+                (one)
+                (one)))))
+        (block
+          (break_statement))
+        (dead_fysh)
+        (if_statement
+          (happy_fysh)
+          (fysh_tank
+            (binary_expression
+              (positive_ident)
+              (positive_literal
+                (scales
+                  (one)
+                  (zero)
+                  (one)
+                  (zero)))))
+          (block
+            (break_statement))))
+      (dec_statement))))
