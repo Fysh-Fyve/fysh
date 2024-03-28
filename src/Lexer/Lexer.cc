@@ -417,7 +417,7 @@ fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
   switch (periscope()) {
   case ('\\'):
     reel();
-    if (match("/") && match(">") && match("<")) {
+    if (match("/><")) {
       return Species::BROKEN_FYSH;
     } else {
       return cullDeformedFysh();
@@ -471,7 +471,7 @@ fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
     // clang-format off
   case('\\'):
     reel();
-    if (match("/") && match(">")) {
+    if (match("/>")) {
       return Species::BROKEN_FYSH;
     } else {
       return cullDeformedFysh();
