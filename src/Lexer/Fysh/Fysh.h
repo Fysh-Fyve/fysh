@@ -49,6 +49,10 @@ public:
   Fysh(std::uint32_t integer, bool negate) noexcept
       : negate{negate}, species{Species::FYSH_LITERAL}, value{integer} {}
 
+  // fysh bones
+  Fysh(double floating, bool negate) noexcept
+      : negate{negate}, species{Species::FYSH_BONES}, value_float{floating} {}
+
   Fysh(Species inType, const char *start, std::size_t len) noexcept
       : species{inType}, body(start, len) {}
 
@@ -59,6 +63,7 @@ public:
   Fysh(Species inType, const char *start, const char *end, bool negate) noexcept
       : negate{negate}, species{inType},
         body(start, std::distance(start, end)) {}
+  
 
   // -----------------------METHODS-----------------------
 
@@ -74,6 +79,7 @@ public:
   Species getSpecies() const noexcept;
   std::string_view getBody() const noexcept;
   std::optional<std::uint32_t> getValue() const noexcept;
+  std::optional<double> getFloat() const noexcept;
 
   // -----------------------OPERATORS-----------------------
   template <typename T> bool operator!=(const T &other) const noexcept {
@@ -91,6 +97,7 @@ private:
   Species species{};
   std::string_view body{};
   std::optional<std::uint32_t> value{};
+  std::optional<std::uint32_t> value_float{};
 };
 
 // string representation of token type (for testing)

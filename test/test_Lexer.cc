@@ -475,3 +475,9 @@ TEST_CASE("Broken Fysh") {
   T(S::BROKEN_FYSH);
   T(S::END);
 }
+
+TEST_CASE("Floats") {
+  FyshLexer lexer{"><}-}-}>"};
+  T(S::FYSH_BONES);
+  T(S::END);
+}

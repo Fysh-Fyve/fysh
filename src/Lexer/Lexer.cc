@@ -43,7 +43,7 @@ char fysh::FyshLexer::periscope(int line) const noexcept {
 
 // -------------- Utility functions --------------
 static bool isScale(char c) noexcept {
-  return c == '(' || c == ')' || c == '{' || c == '}';
+  return c == '(' || c == ')' || c == '{' || c == '}' || c == '-';
 }
 
 static std::string_view trim(const std::string_view &in) {
@@ -306,18 +306,56 @@ fysh::Fysh fysh::FyshLexer::random() noexcept {
   return cullDeformedFysh();
 }
 
+// combines fysh bone values separated by dashes (floats ><}-}-}>)
+class NumberCombiner {
+private:
+    std::uint32_t firstNumber;
+    std::string digits;
+    bool firstNumberSet = false;
+
+public:
+    void addNumber(std::uint32_t number) {
+        if (!firstNumberSet) {
+            firstNumber = number;
+            firstNumberSet = true;
+        } else {
+            digits += std::to_string(number);
+        }
+    }
+
+    double getResult() {
+        if (!firstNumberSet) return 0.0; // No number received
+        if (digits.empty()) return firstNumber; // Only one number received
+
+        double decimalPart = std::stod("0." + digits);
+        return firstNumber + decimalPart;
+    }
+};
+
 fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
   // gets all the scales and converts them to a binary number
   char c{reel()};
+  bool isFloat = false;
   // stores the first scale as a binary number
   std::uint32_t value{c == '{' || c == '}'};
+  int dashCount{0};
+  NumberCombiner combiner;
+
   int scaleCount{1};
   while (isScale(periscope())) {
     c = reel();
     // shifts the bits to the left and stores the next scale using bitwise OR
+    if (c == '-'){
+      isFloat = true;
+      dashCount++;
+      combiner.addNumber(value);
+      value = 0;
+    }
+    
     value = (value << 1) | (c == '{' || c == '}');
     scaleCount++;
   }
+
   // Special control sequence fysh
   if (scaleCount == 3 && value == 0 && dir == FyshDirection::RIGHT) {
     switch (periscope()) {
@@ -361,6 +399,10 @@ fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
       return cullDeformedFysh();
     }
   }
+  if (isFloat) {
+    combiner.addNumber(value);
+    return {combiner.getResult(), dir == FyshDirection::LEFT};
+    }
 
   return {value, dir == FyshDirection::LEFT};
 }

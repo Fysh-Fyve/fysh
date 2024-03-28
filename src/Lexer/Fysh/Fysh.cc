@@ -26,6 +26,11 @@ std::optional<std::uint32_t> fysh::Fysh::getValue() const noexcept {
   return value;
 }
 
+std::optional<double> fysh::Fysh::getFloat() const noexcept {
+  return value_float;
+}
+
+
 bool fysh::Fysh::isOneOf(fysh::Species species1,
                          fysh::Species species2) const noexcept {
   return species == species1 || species == species2;
@@ -39,6 +44,8 @@ constexpr const char *debugType(const fysh::Species &species) {
   switch (species) {
   case Species::FYSH_LITERAL:
     return "LITERAL";
+  case Species::FYSH_BONES:
+    return "FLOAT";
   case Species::FYSH_IDENTIFIER:
     return "IDENT";
   case Species::ASSIGN:
@@ -129,6 +136,20 @@ llvm::raw_ostream &fysh::operator<<(llvm::raw_ostream &os,
   switch (f.getSpecies()) {
   case Species::FYSH_LITERAL: {
     std::optional<uint32_t> val{f.getValue()};
+    os << "(";
+    if (f.negate) {
+      os << "-";
+    }
+    if (val.has_value()) {
+      os << val.value();
+    } else {
+      os << "None";
+    }
+    os << ")";
+    break;
+  }
+  case Species::FYSH_BONES: {
+    std::optional<double> val{f.getFloat()};
     os << "(";
     if (f.negate) {
       os << "-";

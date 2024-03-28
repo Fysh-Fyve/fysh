@@ -35,6 +35,7 @@ namespace fysh {
 
 enum class Species {
   FYSH_LITERAL,      // binary value
+  FYSH_BONES,        // floating point value ><}-}-}>
   FYSH_IDENTIFIER,   // variable
   HEART_MULTIPLY,    // <3 or ♡
   HEART_DIVIDE,      // </3 or 💔
