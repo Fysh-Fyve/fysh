@@ -8,6 +8,7 @@ using namespace fysh;
 using S = Species;
 
 #define T(x) CHECK(lexer.nextFysh() == (x));
+#define F(x) CHECK(lexer.nextFysh().compareDouble(x));
 #define IDENT_DIR(x, n)                                                        \
   do {                                                                         \
     Fysh fysh{lexer.nextFysh()};                                               \
@@ -477,7 +478,9 @@ TEST_CASE("Broken Fysh") {
 }
 
 TEST_CASE("Floats") {
-  FyshLexer lexer{"><}-}-}>"};
-  T(S::FYSH_BONES);
+  FyshLexer lexer{"><}-}-}> <}-}-}>< ><}}-})-})}o>"};
+  F(1.11);
+  F(-1.11);
+  F(3.25);
   T(S::END);
 }

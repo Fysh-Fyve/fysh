@@ -30,7 +30,6 @@ std::optional<double> fysh::Fysh::getFloat() const noexcept {
   return value_float;
 }
 
-
 bool fysh::Fysh::isOneOf(fysh::Species species1,
                          fysh::Species species2) const noexcept {
   return species == species1 || species == species2;
@@ -208,4 +207,13 @@ bool fysh::Fysh::operator==(const std::uint32_t &other) const noexcept {
   std::uint32_t intValue = value.value();
   return species == Species::FYSH_LITERAL &&
          (negate ? -intValue : intValue) == other;
+}
+
+bool fysh::Fysh::compareDouble(const double &other) const noexcept {
+  if (!value_float.has_value()) {
+    return false;
+  }
+  double floatValue = value_float.value();
+  return species == Species::FYSH_BONES &&
+         (negate ? -floatValue : floatValue) == other;
 }

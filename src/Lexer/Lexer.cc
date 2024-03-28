@@ -306,30 +306,32 @@ fysh::Fysh fysh::FyshLexer::random() noexcept {
   return cullDeformedFysh();
 }
 
-// combines fysh bone values separated by dashes (floats ><}-}-}>)
+// combines fysh bone values separated by dashes (floats ><}-}-}> 1.11)
 class NumberCombiner {
 private:
-    std::uint32_t firstNumber;
-    std::string digits;
-    bool firstNumberSet = false;
+  std::uint32_t firstNumber;
+  std::string digits;
+  bool firstNumberSet = false;
 
 public:
-    void addNumber(std::uint32_t number) {
-        if (!firstNumberSet) {
-            firstNumber = number;
-            firstNumberSet = true;
-        } else {
-            digits += std::to_string(number);
-        }
+  void addNumber(std::uint32_t number) {
+    if (!firstNumberSet) {
+      firstNumber = number;
+      firstNumberSet = true;
+    } else {
+      digits += std::to_string(number);
     }
+  }
 
-    double getResult() {
-        if (!firstNumberSet) return 0.0; // No number received
-        if (digits.empty()) return firstNumber; // Only one number received
+  double getResult() {
+    if (!firstNumberSet)
+      return 0.0; // No number received
+    if (digits.empty())
+      return firstNumber; // Only one number received
 
-        double decimalPart = std::stod("0." + digits);
-        return firstNumber + decimalPart;
-    }
+    double decimalPart = std::stod("0." + digits);
+    return firstNumber + decimalPart;
+  }
 };
 
 fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
@@ -338,20 +340,18 @@ fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
   bool isFloat = false;
   // stores the first scale as a binary number
   std::uint32_t value{c == '{' || c == '}'};
-  int dashCount{0};
   NumberCombiner combiner;
 
   int scaleCount{1};
   while (isScale(periscope())) {
     c = reel();
     // shifts the bits to the left and stores the next scale using bitwise OR
-    if (c == '-'){
+    if (c == '-') {
       isFloat = true;
-      dashCount++;
       combiner.addNumber(value);
       value = 0;
     }
-    
+
     value = (value << 1) | (c == '{' || c == '}');
     scaleCount++;
   }
@@ -402,7 +402,7 @@ fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
   if (isFloat) {
     combiner.addNumber(value);
     return {combiner.getResult(), dir == FyshDirection::LEFT};
-    }
+  }
 
   return {value, dir == FyshDirection::LEFT};
 }

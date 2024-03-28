@@ -63,7 +63,6 @@ public:
   Fysh(Species inType, const char *start, const char *end, bool negate) noexcept
       : negate{negate}, species{inType},
         body(start, std::distance(start, end)) {}
-  
 
   // -----------------------METHODS-----------------------
 
@@ -90,6 +89,7 @@ public:
   bool operator==(const char *other) const noexcept;
   bool operator==(const Fysh &other) const noexcept;
   bool operator==(const std::uint32_t &other) const noexcept;
+  bool compareDouble(const double &other) const noexcept;
 
   bool negate{};
 
@@ -97,7 +97,7 @@ private:
   Species species{};
   std::string_view body{};
   std::optional<std::uint32_t> value{};
-  std::optional<std::uint32_t> value_float{};
+  std::optional<double> value_float{};
 };
 
 // string representation of token type (for testing)
