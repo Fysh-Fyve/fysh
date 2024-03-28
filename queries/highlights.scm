@@ -24,8 +24,6 @@
 
 ; TODO: Finish all operators
 [
-  "<3"
-  "</3"
   "<<"
   ">>"
   "(+o"
@@ -33,4 +31,10 @@
   "o~"
   "~o"
 ] @operator
+
+[
+  "<3"
+  "</3"
+  "♡"
+] @hearts
 
