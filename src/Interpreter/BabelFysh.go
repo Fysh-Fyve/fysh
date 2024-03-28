@@ -1,4 +1,4 @@
-package interpreter
+package BabelFysh
 
 import (
 	"fmt"
