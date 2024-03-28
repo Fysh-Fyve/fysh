@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "embed"
+	"fmt"
 
 	fysh "github.com/Fysh-Fyve/fyshls/bindings"
 	"github.com/Fysh-Fyve/fyshls/support"
@@ -15,7 +16,7 @@ var highlights []byte
 func Encode(sourceCode []byte, n *sitter.Tree) []protocol.UInteger {
 	q, err := sitter.NewQuery(highlights, fysh.GetLanguage())
 	if err != nil {
-		panic(err)
+		panic(fmt.Errorf("highlight.scm: %v", err))
 	}
 	qc := sitter.NewQueryCursor()
 	qc.Exec(q, n.RootNode())
@@ -64,6 +65,8 @@ func Encode(sourceCode []byte, n *sitter.Tree) []protocol.UInteger {
 				typ = mTyp[protocol.SemanticTokenTypeRegexp]
 			case "keyword":
 				typ = mTyp[protocol.SemanticTokenTypeKeyword]
+			case "hearts":
+				typ = mTyp[protocol.SemanticTokenTypeEnumMember] // EnumMember is a placeholder since we can't have custom types
 			case "operators":
 				typ = mTyp[protocol.SemanticTokenTypeOperator]
 			}
