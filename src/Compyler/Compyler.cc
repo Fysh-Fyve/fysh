@@ -21,6 +21,7 @@
 #include "../Parser/AST/AST.h"
 
 #include <llvm/ADT/APInt.h>
+#include <llvm/IR/Argument.h>
 #include <llvm/IR/DerivedTypes.h>
 #include <llvm/IR/GlobalVariable.h>
 #include <llvm/IR/Instructions.h>
@@ -186,14 +187,16 @@ fysh::Emit fysh::Compyler::anchorOut(const fysh::ast::FyshBinaryExpr &expr) {
 fysh::Variable
 fysh::Compyler::resolveVariable(const std::string_view &name,
                                 Definition define = Definition::NONE) {
-  // Try args first
-  if (args.find(name) != args.end()) {
-    return {args[name]};
-  }
-  // Then local scope
+  // Try local scope first
   if (locals.find(name) != locals.end()) {
     return {locals[name]};
   }
+
+  // Try then args
+  if (args.find(name) != args.end()) {
+    return {args[name]};
+  }
+
   // Then global scope
   if (globals.find(name) != globals.end()) {
     return {globals[name]};
@@ -209,6 +212,7 @@ fysh::Compyler::resolveVariable(const std::string_view &name,
     module->getOrInsertGlobal(name, intTy());
     globals[name] = module->getNamedGlobal(name);
     globals[name]->setLinkage(llvm::GlobalValue::PrivateLinkage);
+    globals[name]->setInitializer(builder->getInt32(0));
     return {globals[name]};
   }
   case Definition::NONE: {
@@ -605,7 +609,14 @@ fysh::Emit fysh::Compyler::identifier(const fysh::ast::FyshIdentifier &expr) {
   if (!variable) {
     return ast::Error{"unknown variable"};
   }
-  return builder->CreateLoad(variable.type(), variable.val(), expr.name);
+  // You cannot load the argument because it's a plain value
+  // TODO: Create a new local variable if one attempts to "store" to an argument
+  // This would also apply to the increment/decrement stuff
+  if (std::holds_alternative<llvm::Argument *>(variable)) {
+    return variable.val();
+  } else {
+    return builder->CreateLoad(variable.type(), variable.val(), expr.name);
+  }
 }
 
 fysh::Emit fysh::Compyler::grilledFysh() {
