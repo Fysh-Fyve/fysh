@@ -20,9 +20,9 @@
 #ifndef FYSH_AST_H_
 #define FYSH_AST_H_
 
+#include "../../Stream.h"
 #include "Box.h"
 #include <cstdint>
-#include <llvm/Support/raw_ostream.h>
 #include <optional>
 #include <string_view>
 #include <variant>
@@ -172,9 +172,9 @@ using FyshProgram = std::vector<FyshSurfaceLevel>;
 constexpr const char *toStr(const FyshBinary &op);
 constexpr const char *toStr(const FyshUnary &op);
 
-llvm::raw_ostream &operator<<(llvm::raw_ostream &os, const FyshExpr &f);
-llvm::raw_ostream &operator<<(llvm::raw_ostream &os, const FyshStmt &f);
-llvm::raw_ostream &operator<<(llvm::raw_ostream &os, const FyshProgram &f);
+Stream &operator<<(Stream &os, const FyshExpr &f);
+Stream &operator<<(Stream &os, const FyshStmt &f);
+Stream &operator<<(Stream &os, const FyshProgram &f);
 
 }; // namespace fysh::ast
 

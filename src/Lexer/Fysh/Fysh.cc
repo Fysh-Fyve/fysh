@@ -129,8 +129,7 @@ constexpr const char *debugType(const fysh::Species &species) {
   assert(false);
 }
 
-llvm::raw_ostream &fysh::operator<<(llvm::raw_ostream &os,
-                                    const fysh::Fysh &f) {
+fysh::Stream &fysh::operator<<(fysh::Stream &os, const fysh::Fysh &f) {
   using fysh::Species;
   switch (f.getSpecies()) {
   case Species::FYSH_LITERAL: {

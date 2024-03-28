@@ -19,7 +19,6 @@
  */
 #include "AST.h"
 #include <cassert>
-#include <llvm/Support/raw_ostream.h>
 
 constexpr const char *str(const fysh::ast::FyshBinary &op) {
   using FB = fysh::ast::FyshBinary;
@@ -65,10 +64,10 @@ constexpr const char *fysh::ast::toStr(const fysh::ast::FyshUnary &op) {
   return str(op);
 }
 
-llvm::raw_ostream &fysh::ast::operator<<(llvm::raw_ostream &os,
-                                         const fysh::ast::FyshExpr &f) {
+fysh::Stream &fysh::ast::operator<<(fysh::Stream &os,
+                                    const fysh::ast::FyshExpr &f) {
   return std::visit(
-      [&os](auto &&arg) -> llvm::raw_ostream & {
+      [&os](auto &&arg) -> fysh::Stream & {
         using T = std::decay_t<decltype(arg)>;
         if constexpr (std::is_same_v<T, Error>) {
           os << "ERROR(\"" << *arg.t << "\")";
@@ -101,10 +100,10 @@ llvm::raw_ostream &fysh::ast::operator<<(llvm::raw_ostream &os,
       f);
 }
 
-llvm::raw_ostream &fysh::ast::operator<<(llvm::raw_ostream &os,
-                                         const fysh::ast::FyshStmt &f) {
+fysh::Stream &fysh::ast::operator<<(fysh::Stream &os,
+                                    const fysh::ast::FyshStmt &f) {
   return std::visit(
-      [&os](auto &&arg) -> llvm::raw_ostream & {
+      [&os](auto &&arg) -> fysh::Stream & {
         using T = std::decay_t<decltype(arg)>;
         if constexpr (std::is_same_v<T, Error>)
           os << "ERROR(\"" << *arg.t << "\");";
@@ -145,7 +144,7 @@ llvm::raw_ostream &fysh::ast::operator<<(llvm::raw_ostream &os,
 
 bool fysh::ast::operator==(const fysh::ast::FyshExpr &expr, const char *str) {
   std::string exprString;
-  llvm::raw_string_ostream ss{exprString};
+  fysh::StringStream ss{exprString};
   ss << expr;
   return ss.str() == str;
 }
@@ -154,8 +153,8 @@ bool fysh::ast::operator!=(const fysh::ast::FyshExpr &expr, const char *str) {
   return !(expr == str);
 }
 
-llvm::raw_ostream &fysh::ast::operator<<(llvm::raw_ostream &os,
-                                         const fysh::ast::FyshProgram &f) {
+fysh::Stream &fysh::ast::operator<<(fysh::Stream &os,
+                                    const fysh::ast::FyshProgram &f) {
   for (const auto &stmt : f) {
     std::visit(
         [&os](auto &&arg) {

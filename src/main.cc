@@ -21,6 +21,7 @@
 #include "Lexer/Lexer.h"
 #include "Parser/AST/AST.h"
 #include "Parser/Parser.h"
+#include "Stream.h"
 #include <getopt.h>
 #include <llvm/Support/MemoryBuffer.h>
 #include <llvm/Support/raw_ostream.h>
@@ -32,14 +33,14 @@ void compyle(std::unique_ptr<llvm::MemoryBuffer> &stream, const char *name,
   fysh::ast::FyshProgram program{parser.parseProgram()};
 
   if (opts.output == fysh::Options::Output::AST) {
-    llvm::outs() << program;
+    OUTS << program;
     return;
   }
 
   if (program.size() == 1) {
     if (const fysh::ast::Error *err =
             std::get_if<fysh::ast::Error>(&program[0])) {
-      llvm::errs() << "Error: " << err->getraw() << "\n";
+      ERRS << "Error: " << err->getraw() << "\n";
       return;
     }
   }
@@ -66,7 +67,7 @@ fysh::Options parseOptions(int argc, char *argv[]) {
       break;
     }
     case 'h': {
-      llvm::outs() << "USAGE: " << argv[0] << "[-o OUTPUT] [-an] [INPUT]\n";
+      OUTS << "USAGE: " << argv[0] << "[-o OUTPUT] [-an] [INPUT]\n";
       std::exit(0);
     }
     default:
@@ -83,8 +84,7 @@ int main(int argc, char *argv[]) {
   if (inputFile) {
     compyle(inputFile.get(), argv[optind], opts);
   } else {
-    llvm::errs() << "Error getting input: " << inputFile.getError().message()
-                 << "\n";
+    ERRS << "Error getting input: " << inputFile.getError().message() << "\n";
   }
   return 0;
 }

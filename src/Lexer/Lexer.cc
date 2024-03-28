@@ -19,21 +19,17 @@
  */
 
 #include "Lexer.h"
-
+#include "../Stream.h"
 #include "Fysh/Species.h"
 #include <cctype>
 #include <initializer_list>
 #include <variant>
 
 #ifdef FYSH_DEBUG
-#include <llvm/Support/raw_ostream.h>
-#endif
-
-#ifdef FYSH_DEBUG
 char fysh::FyshLexer::periscope(int line) const noexcept {
   if (line > 0) {
-    llvm::errs() << "Current (line:" << line << "): " << *current << " "
-                 << ((int)(*current)) << "\n";
+    ERRS << "Current (line:" << line << "): " << *current << " "
+         << ((int)(*current)) << "\n";
   }
   return *current;
 }
@@ -629,8 +625,8 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     if (expectFyshChar({
             "☙", "♡", "♥", "❣",
             // "❤",
-            "❥", "❦", "❧", "🎔", "🫀", "🖤", "💙", "🩷", "🩵", "💚",
-            "💛", "💜", "🧡", "🤍", "🤎", "🩶",
+            "❥", "❦", "❧", "🎔", "🫀", "🖤", "💙", "🩷", "🩵", "💚", "💛", "💜",
+            "🧡", "🤍", "🤎", "🩶",
             // "❤️",
             "💓", "💕", "💖", "💗", "💘",
             //"💝",
@@ -672,8 +668,7 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
   }
 }
 
-llvm::raw_ostream &fysh::operator<<(llvm::raw_ostream &os,
-                                    const fysh::FyshChar &f) {
+fysh::Stream &fysh::operator<<(fysh::Stream &os, const fysh::FyshChar &f) {
   if (std::holds_alternative<const char *>(f)) {
     os << *std::get<const char *>(f);
   } else {
