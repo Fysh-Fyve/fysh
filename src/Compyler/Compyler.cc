@@ -411,7 +411,7 @@ static void print(llvm::Module *m, const std::string &path) {
                    << " for writing: " << ec.message() << "\n";
       std::exit(1);
     } else {
-      outputFile << m;
+      outputFile << *m;
     }
   }
 }
