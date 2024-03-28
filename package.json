@@ -51,8 +51,7 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -b",
     "watch": "tsc -b -w",
-    "lint": "eslint ./client/src --ext .ts,.tsx",
-    "postinstall": "cd client && npm install && cd .."
+    "lint": "eslint ./client/src --ext .ts,.tsx"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.6",
