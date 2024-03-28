@@ -19,17 +19,18 @@
  */
 
 #include "Lexer.h"
-#include "../Stream.h"
 #include "Fysh/Species.h"
 #include <cctype>
 #include <initializer_list>
+#include <string>
 #include <variant>
 
 #ifdef FYSH_DEBUG
+#include <iostream>
 char fysh::FyshLexer::periscope(int line) const noexcept {
   if (line > 0) {
-    ERRS << "Current (line:" << line << "): " << *current << " "
-         << ((int)(*current)) << "\n";
+    llvm::errs() << "Current (line:" << line << "): " << *current << " "
+                 << ((int)(*current)) << "\n";
   }
   return *current;
 }
@@ -668,11 +669,10 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
   }
 }
 
-fysh::Stream &fysh::operator<<(fysh::Stream &os, const fysh::FyshChar &f) {
+std::string debugType(const fysh::FyshChar &f) {
   if (std::holds_alternative<const char *>(f)) {
-    os << *std::get<const char *>(f);
+    return {*std::get<const char *>(f)};
   } else {
-    os << std::get<std::string_view>(f);
+    return std::string(std::get<std::string_view>(f));
   }
-  return os;
 }

@@ -31,8 +31,8 @@ Current: the current position in the input string
 #ifndef FYSH_FYSH_H_
 #define FYSH_FYSH_H_
 
-#include "../../Stream.h"
 #include "Species.h"
+#include <cassert>
 #include <cstdint>
 #include <optional>
 #include <string_view>
@@ -101,7 +101,99 @@ private:
 };
 
 // string representation of token type (for testing)
-Stream &operator<<(Stream &os, const Fysh &body);
+std::string debugType(const Fysh &f);
+
+// string representation of token type (for testing)
+constexpr const char *debugType(const fysh::Species &species) {
+  using fysh::Species;
+  switch (species) {
+  case Species::FYSH_LITERAL:
+    return "LITERAL";
+  case Species::FYSH_BONES:
+    return "FLOAT";
+  case Species::FYSH_IDENTIFIER:
+    return "IDENT";
+  case Species::ASSIGN:
+    return "=";
+  case Species::FYSH_LOOP:
+    return "while";
+  case Species::HEART_MULTIPLY:
+    return "*";
+  case Species::HEART_DIVIDE:
+    return "/";
+  case Species::TADPOLE_LT:
+    return "<";
+  case Species::TADPOLE_GT:
+    return ">";
+  case Species::TADPOLE_LTE:
+    return "<=";
+  case Species::TADPOLE_GTE:
+    return ">=";
+  case Species::EQUAL:
+    return "==";
+  case Species::NOT_EQUAL:
+    return "!=";
+  case Species::INCREMENT:
+    return "++";
+  case Species::DECREMENT:
+    return "--";
+  case Species::FYSH_TANK_OPEN:
+    return "[";
+  case Species::FYSH_TANK_CLOSE:
+    return "]";
+  case Species::FYSH_BOWL_OPEN:
+    return "(";
+  case Species::FYSH_BOWL_CLOSE:
+    return ")";
+  case Species::FYSH_OPEN:
+    return "{";
+  case Species::FYSH_CLOSE:
+    return "}";
+  case Species::WTF_OPEN:
+    return "WTF(";
+  case Species::WTF_CLOSE:
+    return ")WTF";
+  case Species::GRILLED_FYSH:
+    return "GRILLED_FYSH";
+  case Species::COMMENT:
+    return "//";
+  case Species::MULTILINE_COMMENT:
+    return "/**/";
+  case Species::INVALID:
+    return "INVALID";
+  case Species::END:
+    return "END";
+  case Species::BITWISE_AND:
+    return "&";
+  case Species::BITWISE_OR:
+    return "|";
+  case Species::CARET:
+    return "^";
+  case Species::FYSH_WATER:
+    return "~";
+  case Species::SHIFT_LEFT:
+    return "<<";
+  case Species::SHIFT_RIGHT:
+    return ">>";
+  case Species::IF:
+    return "if";
+  case Species::ELSE:
+    return "else";
+  case Species::FYSH_FOOD:
+    return "-";
+  case Species::ANCHOR_LEFT:
+    return "(+o";
+  case Species::ANCHOR_RIGHT:
+    return "o+)";
+  case Species::SUBMARINE:
+    return "SUBMARINE";
+  case Species::SQUID:
+    return "return";
+  case Species::BROKEN_FYSH:
+    return "break";
+  }
+  assert(false);
+}
 
 }; // namespace fysh
 

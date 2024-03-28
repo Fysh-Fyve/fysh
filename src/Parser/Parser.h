@@ -63,6 +63,7 @@ private:
   ast::FyshSurfaceLevel parseSUBroutine();
 
   ast::Error expectFysh(Species species);
+  ast::Error parseError();
 
   template <typename T> ast::FyshStmt terminateStatement(T node) {
     if (curFysh != Species::FYSH_WATER) {

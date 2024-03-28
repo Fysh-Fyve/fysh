@@ -11,18 +11,26 @@ ifdef RELEASE
 CMAKE_FLAGS += -DCMAKE_BUILD_TYPE=Release
 endif
 
-.PHONY: all
-all: doctest/doctest.h build/compile_commands.json | build
-	cd build && $(BUILD)
+.PHONY: fysh-sea
+fysh-sea: doctest/doctest.h build/compile_commands.json | build
+	cd build && $(BUILD) fysh-sea
+
+.PHONY: babel-fysh
+babel-fysh: doctest/doctest.h build/compile_commands.json | build
+	cd build && $(BUILD) babel-fysh
+
+.PHONY: tests
+tests: doctest/doctest.h build/compile_commands.json | build
+	cd build && $(BUILD) tests
 
 .PHONY: test
-test: all
+test: tests
 	./build/test/tests
 
 .PHONY: release
 release:
 	rm -rf build
-	RELEASE=1 $(MAKE) all
+	RELEASE=1 $(MAKE) fysh-sea
 
 .PHONY: install
 install:

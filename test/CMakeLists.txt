@@ -10,4 +10,4 @@ add_executable(
 	test_Lexer.cc
 	test_Parser.cc
 )
-target_link_libraries(tests DocTest common ${llvm_libs})
+target_link_libraries(tests DocTest common)

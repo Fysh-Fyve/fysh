@@ -20,8 +20,8 @@
 #ifndef FYSH_AST_H_
 #define FYSH_AST_H_
 
-#include "../../Stream.h"
 #include "Box.h"
+#include <cassert>
 #include <cstdint>
 #include <optional>
 #include <string_view>
@@ -167,14 +167,55 @@ struct SUBroutine {
 
 using FyshSurfaceLevel = std::variant<Error, FyshStmt, SUBroutine>;
 
-using FyshProgram = std::vector<FyshSurfaceLevel>;
+struct FyshProgram : std::vector<FyshSurfaceLevel> {
+  std::optional<Error> getError() {
+    if (this->size() == 1) {
+      if (const Error *err = std::get_if<Error>(&(*this)[0])) {
+        return *err;
+      }
+    }
+    return {};
+  }
+};
 
-constexpr const char *toStr(const FyshBinary &op);
-constexpr const char *toStr(const FyshUnary &op);
+constexpr const char *str(const FyshBinary &op) {
+  using FB = FyshBinary;
+  switch (op) {
+    // clang-format off
+  case FB::Add:        return "+";
+  case FB::Mul:        return "*";
+  case FB::Div:        return "/";
+  case FB::Equal:      return "==";
+  case FB::NotEqual:   return "!=";
+  case FB::GT:         return ">";
+  case FB::LT:         return "<";
+  case FB::GTE:        return ">=";
+  case FB::LTE:        return "<=";
+  case FB::BitwiseAnd: return "&";
+  case FB::BitwiseOr:  return "|";
+  case FB::BitwiseXor: return "^";
+  case FB::ShiftLeft:  return "<<";
+  case FB::ShiftRight: return ">>";
+  case FB::AnchorIn:   return "o+)";
+  case FB::AnchorOut:  return "(+o";
+    // clang-format on
+  }
 
-Stream &operator<<(Stream &os, const FyshExpr &f);
-Stream &operator<<(Stream &os, const FyshStmt &f);
-Stream &operator<<(Stream &os, const FyshProgram &f);
+  assert(false);
+}
+
+constexpr const char *str(const FyshUnary &op) {
+  switch (op) {
+  case FyshUnary::Neg:
+    return "-";
+  }
+
+  assert(false);
+}
+
+std::string debugType(const FyshExpr &f);
+std::string debugType(const FyshStmt &f);
+std::string debugType(const FyshProgram &f);
 
 }; // namespace fysh::ast
 

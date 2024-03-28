@@ -218,6 +218,8 @@ fysh::Compyler::resolveVariable(const std::string_view &name,
   case Definition::NONE: {
     return {fysh::Undefined{}};
   }
+  default:
+    assert(false);
   }
 }
 

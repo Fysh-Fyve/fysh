@@ -15,32 +15,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * \file main.cc
+ * \file fysh-sea.cc
  */
 #include "Compyler/Compyler.h"
-#include "Lexer/Lexer.h"
-#include "Parser/AST/AST.h"
 #include "Parser/Parser.h"
-#include "Stream.h"
 #include <getopt.h>
 #include <llvm/Support/MemoryBuffer.h>
 #include <llvm/Support/raw_ostream.h>
 
-void compyle(std::unique_ptr<llvm::MemoryBuffer> &stream, const char *name,
-             fysh::Options opts) {
-  fysh::FyshLexer lexer{stream->getBufferStart()};
+void compyle(const char *input, const char *name, fysh::Options opts) {
+  fysh::FyshLexer lexer{input};
   fysh::FyshParser parser{lexer};
   fysh::ast::FyshProgram program{parser.parseProgram()};
 
   if (opts.output == fysh::Options::Output::AST) {
-    OUTS << program;
+    llvm::outs() << fysh::ast::debugType(program);
     return;
   }
 
   if (program.size() == 1) {
     if (const fysh::ast::Error *err =
             std::get_if<fysh::ast::Error>(&program[0])) {
-      ERRS << "Error: " << err->getraw() << "\n";
+      llvm::errs() << "Error: " << err->getraw() << "\n";
       return;
     }
   }
@@ -67,7 +63,7 @@ fysh::Options parseOptions(int argc, char *argv[]) {
       break;
     }
     case 'h': {
-      OUTS << "USAGE: " << argv[0] << "[-o OUTPUT] [-an] [INPUT]\n";
+      llvm::outs() << "USAGE: " << argv[0] << "[-o OUTPUT] [-an] [INPUT]\n";
       std::exit(0);
     }
     default:
@@ -82,9 +78,10 @@ int main(int argc, char *argv[]) {
   const char *file{argv[optind] == NULL ? "-" : argv[optind]};
   auto inputFile{llvm::MemoryBuffer::getFileOrSTDIN(file)};
   if (inputFile) {
-    compyle(inputFile.get(), argv[optind], opts);
+    compyle(inputFile.get()->getBufferStart(), argv[optind], opts);
   } else {
-    ERRS << "Error getting input: " << inputFile.getError().message() << "\n";
+    llvm::errs() << "Error getting input: " << inputFile.getError().message()
+                 << "\n";
   }
   return 0;
 }

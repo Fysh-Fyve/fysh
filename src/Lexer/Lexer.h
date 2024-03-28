@@ -33,7 +33,7 @@ struct FyshChar : public std::variant<const char *, std::string_view> {
   bool operator==(const char *x) const;
 };
 
-Stream &operator<<(Stream &os, const fysh::FyshChar &f);
+std::string debugType(const fysh::FyshChar &f);
 
 enum class FyshDirection { RIGHT, LEFT };
 

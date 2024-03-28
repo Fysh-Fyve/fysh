@@ -2,6 +2,7 @@
 
 #include "doctest.h"
 #include <initializer_list>
+#include <iterator>
 #include <sstream>
 
 using namespace fysh;
@@ -67,10 +68,9 @@ TEST_CASE("Zero Width Joiner") {
 
 TEST_CASE("hearts") {
   const std::initializer_list<const char *> vs = {
-      "☙",    "♡",    "♥",    "❣",    "❤", "❥",    "❦",    "❧",
-      "🎔", "🖤", "💙",    "💚",    "💛", "💜",    "🧡", "🤍",
-      "🤎", "🩶", "🩷", "🩵", "💓", "💕",    "💖",    "💗",
-      "💘",    "🫀", "💌",    "💞",    "💟", "🫶", "<3"};
+      "☙",  "♡",  "♥",  "❣",  "❤",  "❥",  "❦",  "❧",  "🎔", "🖤", "💙",
+      "💚", "💛", "💜", "🧡", "🤍", "🤎", "🩶", "🩷", "🩵", "💓", "💕",
+      "💖", "💗", "💘", "🫀", "💌", "💞", "💟", "🫶", "<3"};
   std::string input = join_chars(vs);
   FyshLexer lexer{input.data()};
 
@@ -82,7 +82,7 @@ TEST_CASE("hearts") {
 
 TEST_CASE("operators") {
   const std::initializer_list<const char *> vs = {
-      "💔",  "</3", "&",   "|",   "^",   "~=", "~≈", "==", "≈≈", "=",  "≈", "o~",
+      "💔", "</3", "&",   "|",   "^",   "~=", "~≈", "==", "≈≈", "=",  "≈", "o~",
       "~o", "o~=", "o~≈", "~o=", "~o≈", "=o", "o=", "o≈", "≈o", ">>", "<<"};
   std::string input = join_chars(vs);
   FyshLexer lexer{input.data()};

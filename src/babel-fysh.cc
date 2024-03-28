@@ -15,31 +15,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * \file Stream.h
+ * \file babel-fysh.cc
  */
-#ifndef FYSH_STREAM_H_
-#define FYSH_STREAM_H_
 
-#ifdef __llvm__
-#include <llvm/Support/raw_ostream.h>
-#define OUTS llvm::outs()
-#define ERRS llvm::errs()
-#else
+#include "Lexer/Lexer.h"
+#include "Parser/Parser.h"
 #include <iostream>
-#include <ostream>
-#include <sstream>
-#define OUTS std::cout
-#define ERRS std::cerr
-#endif // __llvm__
 
-namespace fysh {
-#ifdef __llvm__
-using Stream = llvm::raw_ostream;
-using StringStream = llvm::raw_string_ostream;
-#else
-using Stream = std::ostream;
-using StringStream = std::ostringstream;
-#endif // __llvm__
-};     // namespace fysh
-
-#endif // !FYSH_STREAM_H_
+int main(int argc, char *argv[]) {
+  for (std::string line; std::getline(std::cin, line);) {
+    fysh::FyshParser parser{fysh::FyshLexer{line.data()}};
+    auto program{parser.parseProgram()};
+    auto err{program.getError()};
+    if (err) {
+      std::cout << err->getraw() << "\n";
+    } else {
+      // TODO: Eval program here
+      std::cout << fysh::ast::debugType(program);
+    }
+  }
+  std::cout << "\n";
+}

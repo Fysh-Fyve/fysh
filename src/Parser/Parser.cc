@@ -20,9 +20,9 @@
 
 #include "Parser.h"
 #include "../Lexer/Fysh/Species.h"
-#include "../Stream.h"
 #include "AST/AST.h"
 
+#include <string>
 #include <variant>
 #include <vector>
 
@@ -41,20 +41,13 @@ void fysh::FyshParser::nextFysh() {
     if ((peekFysh.isOneOf(Species::COMMENT, Species::MULTILINE_COMMENT)) &&
         peekFysh.getBody() == "fysh bad") {
       // >:(
-      int *p{nullptr};
-      OUTS << *p;
+      volatile int *p{nullptr};
+      *p += 1;
     }
 
     // Skip all comment tokens for now
     // maybe we'll do something with them eventually?
   } while (peekFysh.isOneOf(Species::COMMENT, Species::MULTILINE_COMMENT));
-}
-
-fysh::ast::Error fysh::FyshParser::expectFysh(fysh::Species species) {
-  std::string str;
-  fysh::StringStream ss{str};
-  ss << "Expected " << species << " at line " << lexer.fyshingLine();
-  return ss.str();
 }
 
 fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
@@ -115,10 +108,7 @@ fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
     return ast::FyshCallExpr{callee.value(), args};
   }
   default: {
-    std::string s;
-    fysh::StringStream ss{s};
-    ss << "Parser error at line " << lexer.fyshingLine();
-    return ast::Error{ss.str()};
+    return parseError();
   }
   }
 }
@@ -374,13 +364,13 @@ fysh::ast::FyshProgram fysh::FyshParser::parseProgram() {
     if (curFysh == Species::SUBMARINE) {
       fysh::ast::FyshSurfaceLevel sub{parseSUBroutine()};
       if (std::holds_alternative<ast::Error>(sub)) {
-        return {sub};
+        return {{sub}};
       }
       program.push_back(sub);
     } else {
       fysh::ast::FyshStmt stmt{parseStatement()};
       if (std::holds_alternative<ast::Error>(stmt)) {
-        return {stmt};
+        return {{stmt}};
       }
       program.push_back(stmt);
     }
@@ -400,4 +390,13 @@ std::vector<fysh::ast::FyshStmt> fysh::FyshParser::parseBlock() {
   }
 
   return program;
+}
+
+fysh::ast::Error fysh::FyshParser::expectFysh(fysh::Species species) {
+  return {"Expected " + std::string(debugType(species)) + " at line " +
+          std::to_string(lexer.fyshingLine())};
+}
+
+fysh::ast::Error fysh::FyshParser::parseError() {
+  return {"Parser error at line " + std::to_string(lexer.fyshingLine())};
 }
