@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-//go:embed bindings/add.fysh
+//go:embed add.fysh
 var SOURCE_CODE []byte
 
 func TestHighlight(t *testing.T) {

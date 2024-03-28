@@ -1,1 +1,0 @@
-../tree-sitter-fysh/src/scanner.c

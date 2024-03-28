@@ -11,9 +11,9 @@ import (
 	"strconv"
 	"strings"
 
-	fysh "github.com/Fysh-Fyve/fyshls/bindings"
 	"github.com/Fysh-Fyve/fyshls/support"
 	"github.com/Fysh-Fyve/fyshls/version"
+	fysh "github.com/Fysh-Fyve/tree-sitter-fysh"
 	sitter "github.com/smacker/go-tree-sitter"
 	"github.com/tliron/glsp"
 	protocol "github.com/tliron/glsp/protocol_3_16"
