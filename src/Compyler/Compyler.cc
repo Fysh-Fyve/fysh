@@ -22,6 +22,7 @@
 
 #include <llvm/ADT/APInt.h>
 #include <llvm/IR/DerivedTypes.h>
+#include <llvm/IR/GlobalVariable.h>
 #include <llvm/IR/Instructions.h>
 #include <llvm/IR/Type.h>
 #include <llvm/IR/Verifier.h>
@@ -66,17 +67,26 @@ static constexpr bool isError(const fysh::Emit &emit) {
   return std::holds_alternative<fysh::ast::Error>(emit);
 }
 
-llvm::Function *fysh::Compyler::define(const char *name, llvm::Type *returnType,
+llvm::Function *fysh::Compyler::define(const std::string_view &name,
+                                       llvm::Type *returnType,
                                        std::vector<llvm::Type *> params) {
-  return llvm::Function::Create(
+  llvm::Function *fn{llvm::Function::Create(
       llvm::FunctionType::get(returnType, params, false),
-      llvm::Function::ExternalLinkage, name, module.get());
+      llvm::Function::ExternalLinkage, name, module.get())};
+  subs[name] = fn;
+  return fn;
 };
 
-llvm::Function *fysh::Compyler::getOrDefine(const char *name,
+llvm::Function *fysh::Compyler::getFunction(const std::string_view &name) {
+  if (subs.find(name) == subs.end())
+    return nullptr;
+  return subs[name];
+}
+
+llvm::Function *fysh::Compyler::getOrDefine(const std::string_view &name,
                                             llvm::Type *returnType,
                                             std::vector<llvm::Type *> params) {
-  llvm::Function *func{module->getFunction(name)};
+  llvm::Function *func{getFunction(name)};
   if (!func) {
     func = define(name, returnType, params);
   }
@@ -142,14 +152,14 @@ fysh::Emit fysh::Compyler::anchorIn(const fysh::ast::FyshBinaryExpr &expr) {
   }
   if (const ast::FyshIdentifier *ident =
           std::get_if<ast::FyshIdentifier>(&expr.right)) {
-    llvm::GlobalVariable *variable{resolveVariable(ident->name, true)};
+    fysh::Variable variable{resolveVariable(ident->name, Definition::LOCAL)};
     // int fysh_gpio_read(int pin)
     llvm::Function *func{
         getOrDefine("fysh_gpio_read", intTy(), Params{intTy()})};
     llvm::Value *retVal{
         builder->CreateCall(func->getFunctionType(), func,
                             std::vector<llvm::Value *>{unwrap(pin)})};
-    builder->CreateStore(retVal, variable);
+    builder->CreateStore(retVal, variable.val());
     return retVal;
   } else {
     return ast::Error{"assigning to non-variable"};
@@ -173,19 +183,38 @@ fysh::Emit fysh::Compyler::anchorOut(const fysh::ast::FyshBinaryExpr &expr) {
       std::vector<llvm::Value *>{unwrap(pin), unwrap(value)});
 }
 
-llvm::GlobalVariable *
+fysh::Variable
 fysh::Compyler::resolveVariable(const std::string_view &name,
-                                bool define = false) {
-  if (globals.find(name) == globals.end()) {
-    if (define) {
-      globals[name] = new llvm::GlobalVariable(
-          *module.get(), intTy(), false, llvm::GlobalValue::PrivateLinkage,
-          builder->getInt32(0), name);
-    } else {
-      return nullptr;
-    }
+                                Definition define = Definition::NONE) {
+  // Try args first
+  if (args.find(name) != args.end()) {
+    return {args[name]};
   }
-  return globals[name];
+  // Then local scope
+  if (locals.find(name) != locals.end()) {
+    return {locals[name]};
+  }
+  // Then global scope
+  if (globals.find(name) != globals.end()) {
+    return {globals[name]};
+  }
+
+  // Then try to define it
+  switch (define) {
+  case Definition::LOCAL: {
+    locals[name] = builder->CreateAlloca(intTy(), nullptr, name);
+    return {locals[name]};
+  }
+  case Definition::GLOBAL: {
+    module->getOrInsertGlobal(name, intTy());
+    globals[name] = module->getNamedGlobal(name);
+    globals[name]->setLinkage(llvm::GlobalValue::PrivateLinkage);
+    return {globals[name]};
+  }
+  case Definition::NONE: {
+    return {fysh::Undefined{}};
+  }
+  }
 }
 
 fysh::Emit fysh::Compyler::squidStmt(const fysh::ast::Squid &stmt) {
@@ -203,13 +232,13 @@ fysh::Emit fysh::Compyler::anchorStmt(const fysh::ast::FyshAnchorStmt &stmt) {
     // Only handle assignments to identifiers for now
     if (const ast::FyshIdentifier *ident =
             std::get_if<ast::FyshIdentifier>(&stmt.right)) {
-      llvm::GlobalVariable *variable{resolveVariable(ident->name, true)};
+      fysh::Variable variable{resolveVariable(ident->name, Definition::LOCAL)};
       // int fysh_gpio_read_all()
       llvm::Function *func{
           getOrDefine("fysh_gpio_read_all", intTy(), Params{})};
       llvm::Value *retVal{builder->CreateCall(func->getFunctionType(), func,
                                               std::vector<llvm::Value *>())};
-      builder->CreateStore(retVal, variable);
+      builder->CreateStore(retVal, variable.val());
       return retVal;
     } else {
       return ast::Error{"assigning to non-variable"};
@@ -266,14 +295,14 @@ fysh::Emit fysh::Compyler::loop(const fysh::ast::FyshLoopStmt &stmt) {
 fysh::Emit fysh::Compyler::increment(const fysh::ast::FyshIncrementStmt &stmt) {
   if (const ast::FyshIdentifier *ident =
           std::get_if<ast::FyshIdentifier>(&stmt.expr)) {
-    llvm::GlobalVariable *variable{resolveVariable(ident->name)};
+    Variable variable{resolveVariable(ident->name)};
     if (!variable) {
       return ast::Error{"unknown variable"};
     }
     llvm::Value *load{
-        builder->CreateLoad(variable->getValueType(), variable, ident->name)};
+        builder->CreateLoad(variable.type(), variable.val(), ident->name)};
     llvm::Value *inc{builder->CreateAdd(load, builder->getInt32(1))};
-    builder->CreateStore(inc, variable);
+    builder->CreateStore(inc, variable.val());
     return inc;
   } else {
     return ast::Error{"incrementing non-variable"};
@@ -283,14 +312,14 @@ fysh::Emit fysh::Compyler::increment(const fysh::ast::FyshIncrementStmt &stmt) {
 fysh::Emit fysh::Compyler::decrement(const fysh::ast::FyshDecrementStmt &stmt) {
   if (const ast::FyshIdentifier *ident =
           std::get_if<ast::FyshIdentifier>(&stmt.expr)) {
-    llvm::GlobalVariable *variable{resolveVariable(ident->name)};
+    Variable variable{resolveVariable(ident->name)};
     if (!variable) {
       return ast::Error{"unknown variable"};
     }
     llvm::Value *load{
-        builder->CreateLoad(variable->getValueType(), variable, ident->name)};
+        builder->CreateLoad(variable.type(), variable.val(), ident->name)};
     llvm::Value *dec{builder->CreateSub(load, builder->getInt32(1))};
-    builder->CreateStore(dec, variable);
+    builder->CreateStore(dec, variable.val());
     return dec;
   } else {
     return ast::Error{"decrementing non-variable"};
@@ -302,12 +331,12 @@ fysh::Compyler::assignment(const fysh::ast::FyshAssignmentStmt &stmt) {
   // Only handle assignments to identifiers for now
   if (const ast::FyshIdentifier *ident =
           std::get_if<ast::FyshIdentifier>(&stmt.left)) {
-    llvm::GlobalVariable *variable{resolveVariable(ident->name, true)};
+    Variable variable{resolveVariable(ident->name, Definition::LOCAL)};
     Emit val{expression(&stmt.right)};
     if (isError(val)) {
       return val;
     }
-    builder->CreateStore(unwrap(val), variable);
+    builder->CreateStore(unwrap(val), variable.val());
     return unwrap(val);
   } else {
     return ast::Error{"assigning to non-variable"};
@@ -387,10 +416,18 @@ fysh::Compyler::subroutine(const fysh::ast::SUBroutine &sub, bool noOpt) {
   for (const auto &_ : sub.parameters) {
     params.push_back(intTy());
   }
-  llvm::Function *subPrototype{define(sub.name.data(), intTy(), params)};
+  llvm::Function *subPrototype{define(sub.name, intTy(), params)};
   llvm::BasicBlock *bb{
       llvm::BasicBlock::Create(*context, "entry", subPrototype)};
   builder->SetInsertPoint(bb);
+
+  args.clear();
+  locals.clear();
+  size_t idx = 0;
+  for (auto &arg : subPrototype->args()) {
+    arg.setName(sub.parameters[idx++]);
+    args[arg.getName()] = &arg;
+  }
 
   Emit emit;
   for (const auto &s : sub.body) {
@@ -470,7 +507,7 @@ void fysh::Compyler::compyle(const fysh::ast::FyshProgram &ast,
         },
         s)};
     if (var) {
-      resolveVariable(var.value(), true);
+      resolveVariable(var.value(), Definition::GLOBAL);
     }
   }
 
@@ -503,9 +540,12 @@ fysh::Emit fysh::Compyler::call(const fysh::ast::FyshCallExpr &expr) {
     argValues.push_back(unwrap(e));
   }
 
-  llvm::Function *func{module->getFunction(expr.callee)};
+  llvm::Function *func{getFunction(expr.callee)};
   if (!func) {
-    return ast::Error{"subroutine does not exist"};
+    std::string str;
+    llvm::raw_string_ostream ss{str};
+    ss << "subroutine `" << expr.callee << "` does not exist";
+    return ast::Error{ss.str()};
   }
 
   llvm::Value *retVal{
@@ -561,11 +601,11 @@ fysh::Emit fysh::Compyler::binary(const fysh::ast::FyshBinaryExpr &expr) {
 }
 
 fysh::Emit fysh::Compyler::identifier(const fysh::ast::FyshIdentifier &expr) {
-  llvm::GlobalVariable *variable{resolveVariable(expr.name)};
+  Variable variable{resolveVariable(expr.name)};
   if (!variable) {
     return ast::Error{"unknown variable"};
   }
-  return builder->CreateLoad(variable->getValueType(), variable, expr.name);
+  return builder->CreateLoad(variable.type(), variable.val(), expr.name);
 }
 
 fysh::Emit fysh::Compyler::grilledFysh() {
