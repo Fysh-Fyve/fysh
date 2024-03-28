@@ -61,6 +61,17 @@ fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
     }
     return value;
   }
+
+  case Species::FYSH_BONES: {
+    ast::FyshFloatLiteral value{curFysh.getValue().value()};
+    bool negate{curFysh.negate};
+    nextFysh();
+    if (negate) {
+      return ast::FyshUnaryExpr{ast::FyshUnary::Neg, value};
+    }
+    return value;
+  }
+
   case Species::FYSH_IDENTIFIER: {
     ast::FyshIdentifier ident{curFysh.getBody()};
     bool negate{curFysh.negate};

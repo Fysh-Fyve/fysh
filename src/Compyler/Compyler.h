@@ -133,6 +133,7 @@ private:
   /* Utility methods */
   Variable resolveVariable(const std::string_view &name, Definition define);
   llvm::Type *intTy() { return llvm::Type::getInt32Ty(*context); };
+  llvm::Type *floatTy() { return llvm::Type::getFloatTy(*context); };
   llvm::Type *voidTy() { return llvm::Type::getVoidTy(*context); };
   llvm::Function *define(const std::string_view &name, llvm::Type *returnType,
                          std::vector<llvm::Type *> params);

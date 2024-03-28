@@ -648,6 +648,8 @@ fysh::Emit fysh::Compyler::expression(const fysh::ast::FyshExpr *expr) {
           return identifier(arg);
         } else if constexpr (std::is_same_v<T, ast::FyshLiteral>) {
           return builder->getInt32(arg.num);
+        } else if constexpr (std::is_same_v<T, ast::FyshFloatLiteral>) {
+          return llvm::ConstantFP::get(*context, llvm::APFloat(arg.num));
         } else if constexpr (std::is_same_v<T, ast::GrilledFysh>) {
           return grilledFysh();
         } else {

@@ -76,6 +76,8 @@ std::string fysh::ast::debugType(const fysh::ast::FyshExpr &f) {
           return std::string(arg.name);
         } else if constexpr (std::is_same_v<T, FyshLiteral>) {
           return std::to_string(arg.num);
+        } else if constexpr (std::is_same_v<T, FyshFloatLiteral>) {
+          return std::to_string(arg.num);
         } else if constexpr (std::is_same_v<T, GrilledFysh>) {
           return "><###>";
         } else {

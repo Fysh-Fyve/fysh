@@ -77,10 +77,14 @@ struct FyshLiteral {
   std::uint64_t num;
 };
 
+struct FyshFloatLiteral {
+  double num;
+};
+
 // every single type of expression
 using FyshExpr =
     std::variant<Error, Box<FyshCallExpr>, Box<FyshBinaryExpr>,
-                 Box<FyshUnaryExpr>, FyshIdentifier, FyshLiteral, GrilledFysh>;
+                 Box<FyshUnaryExpr>, FyshIdentifier, FyshLiteral, FyshFloatLiteral,  GrilledFysh>;
 
 bool operator==(const FyshExpr &expr, const char *str);
 bool operator!=(const FyshExpr &expr, const char *str);
