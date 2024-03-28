@@ -67,7 +67,8 @@ static constexpr bool isError(const fysh::Emit &emit) {
   return std::holds_alternative<fysh::ast::Error>(emit);
 }
 
-llvm::Function *fysh::Compyler::define(const char *name, llvm::Type *returnType,
+llvm::Function *fysh::Compyler::define(const std::string_view &name,
+                                       llvm::Type *returnType,
                                        std::vector<llvm::Type *> params) {
   llvm::Function *fn{llvm::Function::Create(
       llvm::FunctionType::get(returnType, params, false),
@@ -82,7 +83,7 @@ llvm::Function *fysh::Compyler::getFunction(const std::string_view &name) {
   return subs[name];
 }
 
-llvm::Function *fysh::Compyler::getOrDefine(const char *name,
+llvm::Function *fysh::Compyler::getOrDefine(const std::string_view &name,
                                             llvm::Type *returnType,
                                             std::vector<llvm::Type *> params) {
   llvm::Function *func{getFunction(name)};
@@ -415,8 +416,7 @@ fysh::Compyler::subroutine(const fysh::ast::SUBroutine &sub, bool noOpt) {
   for (const auto &_ : sub.parameters) {
     params.push_back(intTy());
   }
-  llvm::errs() << sub.name.data() << "\n";
-  llvm::Function *subPrototype{define(sub.name.data(), intTy(), params)};
+  llvm::Function *subPrototype{define(sub.name, intTy(), params)};
   llvm::BasicBlock *bb{
       llvm::BasicBlock::Create(*context, "entry", subPrototype)};
   builder->SetInsertPoint(bb);
@@ -540,7 +540,7 @@ fysh::Emit fysh::Compyler::call(const fysh::ast::FyshCallExpr &expr) {
     argValues.push_back(unwrap(e));
   }
 
-  llvm::Function *func{getFunction(expr.callee.data())};
+  llvm::Function *func{getFunction(expr.callee)};
   if (!func) {
     std::string str;
     llvm::raw_string_ostream ss{str};
@@ -633,6 +633,8 @@ fysh::Emit fysh::Compyler::expression(const fysh::ast::FyshExpr *expr) {
           return identifier(arg);
         } else if constexpr (std::is_same_v<T, ast::FyshLiteral>) {
           return builder->getInt32(arg.num);
+        } else if constexpr (std::is_same_v<T, ast::FyshFloatLiteral>) {
+          return llvm::ConstantFP::get(*context, llvm::APFloat(arg.num));
         } else if constexpr (std::is_same_v<T, ast::GrilledFysh>) {
           return grilledFysh();
         } else {
