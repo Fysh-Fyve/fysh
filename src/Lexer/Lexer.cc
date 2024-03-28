@@ -309,28 +309,23 @@ fysh::Fysh fysh::FyshLexer::random() noexcept {
 // combines fysh bone values separated by dashes (floats ><}-}-}> 1.11)
 class NumberCombiner {
 private:
-  std::uint32_t firstNumber;
+  std::optional<std::uint32_t> firstNumber;
   std::string digits;
-  bool firstNumberSet = false;
 
 public:
   void addNumber(std::uint32_t number) {
-    if (!firstNumberSet) {
+    if (!firstNumber) {
       firstNumber = number;
-      firstNumberSet = true;
     } else {
       digits += std::to_string(number);
     }
   }
 
   double getResult() {
-    if (!firstNumberSet)
+    if (!firstNumber)
       return 0.0; // No number received
-    if (digits.empty())
-      return firstNumber; // Only one number received
-
-    double decimalPart = std::stod("0." + digits);
-    return firstNumber + decimalPart;
+    double decimalPart = (digits.empty() ? 0 : std::stod("0." + digits));
+    return firstNumber.value() + decimalPart;
   }
 };
 
