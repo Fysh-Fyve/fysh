@@ -29,7 +29,7 @@ void compyle(const char *input, const char *name, fysh::Options opts) {
   fysh::ast::FyshProgram program{parser.parseProgram()};
 
   if (opts.output == fysh::Options::Output::AST) {
-    llvm::outs() << fysh::ast::debugType(program);
+    llvm::outs() << std::to_string(program);
     return;
   }
 

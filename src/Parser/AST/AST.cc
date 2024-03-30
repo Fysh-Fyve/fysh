@@ -21,27 +21,28 @@
 #include <string>
 #include <variant>
 
-bool fysh::ast::operator!=(const fysh::ast::FyshExpr &expr, const char *str) {
+bool fysh::ast::operator!=(const FyshExpr &expr, const char *str) {
   return !(expr == str);
 }
 
-std::string fysh::ast::debugType(const fysh::ast::FyshProgram &f) {
+std::string std::to_string(const fysh::ast::FyshProgram &f) {
+  using namespace fysh::ast;
   std::string s;
   for (const auto &stmt : f) {
     std::visit(
         [&s](auto &&arg) {
           using T = std::decay_t<decltype(arg)>;
           if constexpr (std::is_same_v<T, Error>) {
-            s += "ERROR(\"" + debugType(*arg.t) + "\")";
+            s += "ERROR(\"" + std::to_string(*arg.t) + "\")";
           } else if constexpr (std::is_same_v<T, FyshStmt>) {
-            s += debugType(arg);
+            s += std::to_string(arg);
           } else if constexpr (std::is_same_v<T, SUBroutine>) {
             s += "sub " + std::string(arg.name) + "(";
             bool first{true};
             for (auto const &param : arg.parameters) {
               s += (first ? first = false, "" : ", ") + std::string(param);
             }
-            s += ")\n" + debugType(arg.body);
+            s += ")\n" + std::to_string(arg.body);
           } else {
             static_assert(always_false_v<T>, "non-exhaustive visitor!");
           }
@@ -51,27 +52,28 @@ std::string fysh::ast::debugType(const fysh::ast::FyshProgram &f) {
   return s;
 }
 
-std::string fysh::ast::debugType(const fysh::ast::FyshExpr &f) {
+std::string std::to_string(const fysh::ast::FyshExpr &f) {
+  using namespace fysh::ast;
   return std::visit(
       [](auto &&arg) -> std::string {
         using T = std::decay_t<decltype(arg)>;
         if constexpr (std::is_same_v<T, Error>) {
-          return "ERROR(\"" + debugType(*arg.t) + "\")";
+          return "ERROR(\"" + std::to_string(*arg.t) + "\")";
         } else if constexpr (std::is_same_v<T, Box<FyshBinaryExpr>>) {
-          return "(" + debugType(arg.t->left) + " " + str(arg.t->op) + " " +
-                 debugType(arg.t->right) + ")";
+          return "(" + std::to_string(arg.t->left) + " " + str(arg.t->op) +
+                 " " + std::to_string(arg.t->right) + ")";
         } else if constexpr (std::is_same_v<T, Box<FyshCallExpr>>) {
           bool first{true};
           std::string s;
           for (auto const &param : arg.t->args) {
-            s += (first ? first = false, "" : ", ") + debugType(param);
+            s += (first ? first = false, "" : ", ") + std::to_string(param);
           }
           s += ")";
           return (arg.t->negate ? "-" : "") + std::string(arg.t->callee) + "(" +
                  s;
         } else if constexpr (std::is_same_v<T, Box<FyshUnaryExpr>>) {
-          return "(" + std::string(str(arg.t->op)) + " " +
-                 debugType(arg.t->expr) + ")";
+          return "(" + std::to_string(arg.t->op) + " " +
+                 std::to_string(arg.t->expr) + ")";
         } else if constexpr (std::is_same_v<T, FyshIdentifier>) {
           return std::string(arg.name);
         } else if constexpr (std::is_same_v<T, FyshLiteral>) {
@@ -87,39 +89,42 @@ std::string fysh::ast::debugType(const fysh::ast::FyshExpr &f) {
       f);
 }
 
-std::string fysh::ast::debugType(const fysh::ast::FyshStmt &f) {
+std::string std::to_string(const fysh::ast::FyshStmt &f) {
+  using namespace fysh::ast;
   return std::visit(
       [](auto &&arg) -> std::string {
         using T = std::decay_t<decltype(arg)>;
         if constexpr (std::is_same_v<T, Error>)
-          return "ERROR(\"" + debugType(*arg.t) + "\");";
+          return "ERROR(\"" + std::to_string(*arg.t) + "\");";
         else if constexpr (std::is_same_v<T, FyshExpr>)
-          return debugType(arg) + ";\n";
+          return std::to_string(arg) + ";\n";
         else if constexpr (std::is_same_v<T, FyshAssignmentStmt>)
-          return debugType(arg.left) + " = " + debugType(arg.right) + ";\n";
+          return std::to_string(arg.left) + " = " + std::to_string(arg.right) +
+                 ";\n";
         else if constexpr (std::is_same_v<T, FyshBlock>) {
           std::string s = "{\n";
-          for (const ast::FyshStmt &a : arg) {
-            s += debugType(a);
+          for (const FyshStmt &a : arg) {
+            s += std::to_string(a);
           }
           return s + "}\n";
         } else if constexpr (std::is_same_v<T, FyshIncrementStmt>)
-          return debugType(arg.expr) + "++;\n";
+          return std::to_string(arg.expr) + "++;\n";
         else if constexpr (std::is_same_v<T, FyshDecrementStmt>)
-          return debugType(arg.expr) + "--;\n";
+          return std::to_string(arg.expr) + "--;\n";
         else if constexpr (std::is_same_v<T, FyshLoopStmt>)
-          return "while (" + debugType(arg.condition) + ")\n" +
-                 debugType(arg.body);
+          return "while (" + std::to_string(arg.condition) + ")\n" +
+                 std::to_string(arg.body);
         else if constexpr (std::is_same_v<T, FyshIfStmt>) {
-          return "if (" + debugType(arg.condition) + ")\n" +
-                 debugType(arg.consequence) +
+          return "if (" + std::to_string(arg.condition) + ")\n" +
+                 std::to_string(arg.consequence) +
                  (arg.alternative.has_value()
-                      ? ("else\n" + debugType(arg.alternative.value()))
+                      ? ("else\n" + std::to_string(arg.alternative.value()))
                       : "");
         } else if constexpr (std::is_same_v<T, FyshAnchorStmt>) {
-          return std::string(str(arg.op)) + " " + debugType(arg.right) + ";\n";
+          return std::to_string(arg.op) + " " + std::to_string(arg.right) +
+                 ";\n";
         } else if constexpr (std::is_same_v<T, Squid>) {
-          return "return " + debugType(arg.expr) + ";\n";
+          return "return " + std::to_string(arg.expr) + ";\n";
         } else if constexpr (std::is_same_v<T, BrokenFysh>) {
           return "break;\n";
         } else {
@@ -130,5 +135,5 @@ std::string fysh::ast::debugType(const fysh::ast::FyshStmt &f) {
 }
 
 bool fysh::ast::operator==(const fysh::ast::FyshExpr &expr, const char *str) {
-  return debugType(expr) == str;
+  return std::to_string(expr) == str;
 }

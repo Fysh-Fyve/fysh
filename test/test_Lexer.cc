@@ -396,7 +396,7 @@ This is also a comment
 
   fysh = lexer.nextFysh();
   CHECK(fysh.getBody() == "This is also a comment");
-  CHECK(fysh == S::MULTILINE_COMMENT);
+  CHECK(fysh == S::MULTI_COMMENT);
 
   T(Species::END);
 }

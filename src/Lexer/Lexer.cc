@@ -245,7 +245,7 @@ fysh::Fysh fysh::FyshLexer::slashOrComment() noexcept {
         std::string_view comment{std::string_view(
             commentStart, std::distance(commentStart, commentEnd))};
         std::string_view trimmed{trim(comment)};
-        return {Species::MULTILINE_COMMENT, trimmed.data(), trimmed.length()};
+        return {Species::MULTI_COMMENT, trimmed.data(), trimmed.length()};
       }
     }
   }
@@ -502,14 +502,14 @@ fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
 fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
   reel(); // 2nd swim right character '<'
   switch (periscope()) {
-    // clang-format off
-  case('\\'):
+  case ('\\'):
     reel();
     if (match("/>")) {
       return Species::BROKEN_FYSH;
     } else {
       return cullDeformedFysh();
     }
+    // clang-format off
   case ('{'):
   case ('('):
   case ('}'):
@@ -669,7 +669,7 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
   }
 }
 
-std::string debugType(const fysh::FyshChar &f) {
+std::string std::to_string(const fysh::FyshChar &f) {
   if (std::holds_alternative<const char *>(f)) {
     return {*std::get<const char *>(f)};
   } else {

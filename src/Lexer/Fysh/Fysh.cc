@@ -30,8 +30,7 @@ std::optional<double> fysh::Fysh::getFloat() const noexcept {
   return value_float;
 }
 
-bool fysh::Fysh::isOneOf(fysh::Species species1,
-                         fysh::Species species2) const noexcept {
+bool fysh::Fysh::isOneOf(Species species1, Species species2) const noexcept {
   return species == species1 || species == species2;
 }
 
@@ -42,14 +41,15 @@ bool fysh::Fysh::operator==(const Species &in_species) const noexcept {
 }
 
 bool fysh::Fysh::operator==(const char *other) const noexcept {
+  using S = Species;
   switch (species) {
-  case Species::FYSH_IDENTIFIER:
-  case Species::INCREMENT:
-  case Species::DECREMENT:
-  case Species::COMMENT:
-  case Species::MULTILINE_COMMENT:
-  case Species::SUBMARINE:
-  case Species::INVALID:
+  case S::FYSH_IDENTIFIER:
+  case S::INCREMENT:
+  case S::DECREMENT:
+  case S::COMMENT:
+  case S::MULTI_COMMENT:
+  case S::SUBMARINE:
+  case S::INVALID:
     return body == other;
   default:
     return false;
@@ -78,30 +78,30 @@ bool fysh::Fysh::compareDouble(const double &other) const noexcept {
          (negate ? -floatValue : floatValue) == other;
 }
 
-std::string fysh::debugType(const fysh::Fysh &f) {
-  using fysh::Species;
+std::string std::to_string(const fysh::Fysh &f) {
+  using S = fysh::Species;
   switch (f.getSpecies()) {
-  case Species::FYSH_LITERAL: {
+  case S::FYSH_LITERAL: {
     std::optional<uint32_t> val{f.getValue()};
     return {(f.negate ? "-" : "") +
             (val.has_value() ? std::to_string(val.value()) : "None")};
   }
-  case Species::FYSH_BONES: {
+  case S::FYSH_BONES: {
     std::optional<double> val{f.getFloat()};
     return {(f.negate ? "-" : "") +
             (val.has_value() ? std::to_string(val.value()) : "None")};
   }
-  case Species::INCREMENT:
-  case Species::DECREMENT:
-  case Species::FYSH_IDENTIFIER:
-  case Species::COMMENT:
-  case Species::SUBMARINE:
-  case Species::MULTILINE_COMMENT:
-  case Species::INVALID: {
-    return {std::string(fysh::debugType(f.getSpecies())) + "`" +
-            std::string(f.getBody()) + "`"};
+  case S::INCREMENT:
+  case S::DECREMENT:
+  case S::FYSH_IDENTIFIER:
+  case S::COMMENT:
+  case S::SUBMARINE:
+  case S::MULTI_COMMENT:
+  case S::INVALID: {
+    return {std::to_string(f.getSpecies()) + "`" + std::string(f.getBody()) +
+            "`"};
   }
   default:
-    return {"'" + std::string(fysh::debugType(f.getSpecies())) + "'"};
+    return {"'" + std::to_string(f.getSpecies()) + "'"};
   }
 }

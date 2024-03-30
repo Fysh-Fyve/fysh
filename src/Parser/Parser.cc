@@ -28,7 +28,7 @@
 
 using FB = fysh::ast::FyshBinary;
 
-fysh::FyshParser::FyshParser(fysh::FyshLexer lexer) : lexer(lexer) {
+fysh::FyshParser::FyshParser(FyshLexer lexer) : lexer(lexer) {
   nextFysh(); // curFysh
   nextFysh(); // peekFysh
 }
@@ -38,7 +38,7 @@ void fysh::FyshParser::nextFysh() {
   do {
     peekFysh = lexer.nextFysh();
 
-    if ((peekFysh.isOneOf(Species::COMMENT, Species::MULTILINE_COMMENT)) &&
+    if ((peekFysh.isOneOf(Species::COMMENT, Species::MULTI_COMMENT)) &&
         peekFysh.getBody() == "fysh bad") {
       // >:(
       volatile int *p{nullptr};
@@ -47,7 +47,7 @@ void fysh::FyshParser::nextFysh() {
 
     // Skip all comment tokens for now
     // maybe we'll do something with them eventually?
-  } while (peekFysh.isOneOf(Species::COMMENT, Species::MULTILINE_COMMENT));
+  } while (peekFysh.isOneOf(Species::COMMENT, Species::MULTI_COMMENT));
 }
 
 fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
@@ -165,12 +165,10 @@ fysh::ast::FyshExpr fysh::FyshParser::parseMultiplicative() {
 fysh::ast::FyshExpr fysh::FyshParser::parseAdditive() {
   ast::FyshExpr left{parseMultiplicative()};
   std::optional<FB> op{binaryOp(curFysh)};
-  while (
-      op == FB::BitwiseOr || op == FB::BitwiseXor ||
-      // TODO: This might break when it comes to parsing unaries, not sure yet
-      (!op.has_value() &&
-       !curFysh.isOneOf(Species::FYSH_WATER, Species::FYSH_BOWL_CLOSE,
-                        Species::FYSH_TANK_CLOSE))) {
+  while (op == FB::BitwiseOr || op == FB::BitwiseXor ||
+         (!op.has_value() &&
+          !curFysh.isOneOf(Species::FYSH_WATER, Species::FYSH_BOWL_CLOSE,
+                           Species::FYSH_TANK_CLOSE))) {
     if (op.has_value()) {
       nextFysh();
     }
@@ -390,7 +388,7 @@ fysh::ast::FyshProgram fysh::FyshParser::parseProgram() {
 }
 
 std::vector<fysh::ast::FyshStmt> fysh::FyshParser::parseBlock() {
-  std::vector<fysh::ast::FyshStmt> program;
+  std::vector<ast::FyshStmt> program;
 
   while ((curFysh != Species::END) && (curFysh != Species::FYSH_CLOSE)) {
     fysh::ast::FyshStmt stmt{parseStatement()};
@@ -404,7 +402,7 @@ std::vector<fysh::ast::FyshStmt> fysh::FyshParser::parseBlock() {
 }
 
 fysh::ast::Error fysh::FyshParser::expectFysh(fysh::Species species) {
-  return {"Expected " + std::string(debugType(species)) + " at line " +
+  return {"Expected " + std::to_string(species) + " at line " +
           std::to_string(lexer.fyshingLine())};
 }
 

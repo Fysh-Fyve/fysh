@@ -24,6 +24,7 @@
 #include <cassert>
 #include <cstdint>
 #include <optional>
+#include <string>
 #include <string_view>
 #include <variant>
 #include <vector>
@@ -82,9 +83,9 @@ struct FyshFloatLiteral {
 };
 
 // every single type of expression
-using FyshExpr =
-    std::variant<Error, Box<FyshCallExpr>, Box<FyshBinaryExpr>,
-                 Box<FyshUnaryExpr>, FyshIdentifier, FyshLiteral, FyshFloatLiteral,  GrilledFysh>;
+using FyshExpr = std::variant<Error, Box<FyshCallExpr>, Box<FyshBinaryExpr>,
+                              Box<FyshUnaryExpr>, FyshIdentifier, FyshLiteral,
+                              FyshFloatLiteral, GrilledFysh>;
 
 bool operator==(const FyshExpr &expr, const char *str);
 bool operator!=(const FyshExpr &expr, const char *str);
@@ -182,7 +183,7 @@ struct FyshProgram : std::vector<FyshSurfaceLevel> {
   }
 };
 
-constexpr const char *str(const FyshBinary &op) {
+constexpr const char *str(const FyshBinary op) {
   using FB = FyshBinary;
   switch (op) {
     // clang-format off
@@ -210,7 +211,7 @@ constexpr const char *str(const FyshBinary &op) {
   return nullptr;
 }
 
-constexpr const char *str(const FyshUnary &op) {
+constexpr const char *str(const FyshUnary op) {
   switch (op) {
   case FyshUnary::Neg:
     return "-";
@@ -220,11 +221,18 @@ constexpr const char *str(const FyshUnary &op) {
   // should never be here
   return nullptr;
 }
-
-std::string debugType(const FyshExpr &f);
-std::string debugType(const FyshStmt &f);
-std::string debugType(const FyshProgram &f);
-
 }; // namespace fysh::ast
+
+namespace std {
+string to_string(const fysh::ast::FyshExpr &f);
+string to_string(const fysh::ast::FyshStmt &f);
+string to_string(const fysh::ast::FyshProgram &f);
+inline string to_string(const fysh::ast::FyshUnary &f) {
+  return string(str(f));
+}
+inline string to_string(const fysh::ast::FyshBinary &f) {
+  return string(str(f));
+}
+} // namespace std
 
 #endif // !FYSH_AST_H_

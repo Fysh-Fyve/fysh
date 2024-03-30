@@ -33,8 +33,6 @@ struct FyshChar : public std::variant<const char *, std::string_view> {
   bool operator==(const char *x) const;
 };
 
-std::string debugType(const fysh::FyshChar &f);
-
 enum class FyshDirection { RIGHT, LEFT };
 
 // code is based off of this:
@@ -82,5 +80,9 @@ private:
 };
 
 }; // namespace fysh
+
+namespace std {
+string to_string(const fysh::FyshChar &f);
+}
 
 #endif // !FYSH_LEXER_H_

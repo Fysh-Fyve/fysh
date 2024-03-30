@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
       std::cout << err->getraw() << "\n";
     } else {
       // TODO: Eval program here
-      std::cout << fysh::ast::debugType(program);
+      std::cout << std::to_string(program);
     }
   }
   std::cout << "\n";
