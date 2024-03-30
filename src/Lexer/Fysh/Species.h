@@ -36,51 +36,95 @@ Current: the current position in the input string
 namespace fysh {
 
 enum class Species {
-  FYSH_LITERAL,    // binary value
-  FYSH_BONES,      // floating point value ><}-}-}>
-  FYSH_IDENTIFIER, // variable
-  HEART_MULTIPLY,  // <3 or ♡
-  HEART_DIVIDE,    // </3 or 💔
-  TADPOLE_LT,      // ~o (less than    '<' )
-  TADPOLE_GT,      // o~ (greater than '>' )
-  TADPOLE_LTE,     // ~o≈ (less than equal to    '<=' )
-  TADPOLE_GTE,     // o~≈ (greater than equal to '>=' )
-  ASSIGN,          // ≈
-  EQUAL,           // ≈≈  (Equal to '==')
-  NOT_EQUAL,       // ~≈  (Not equal to '!=')
-  INCREMENT,       // >><fysh> (add 1 'fysh++')
-  DECREMENT,       // <fysh><< (sub 1 'fysh--')
-  FYSH_TANK_OPEN,  // [ (used for Arrays, loops, and conditionals)
-  FYSH_TANK_CLOSE, // ]
-  FYSH_BOWL_OPEN,  // ( (Used for FISHS (BEDMAS))
-  FYSH_BOWL_CLOSE, // )
-  FYSH_OPEN,       // ><> (same as open curly bracket '{' )
-  FYSH_CLOSE,      // <>< (same as closing curly bracket '}' )
-  WTF_OPEN,        // WHAT THE FYSH (Throw error opening) ><!@#$>
-  WTF_CLOSE,       // WHAT THE FYSH (Throw error closing) <!@#$><
-  GRILLED_FYSH,    // Random fysh ><###>
-  FYSH_LOOP,       // ><(((@>
-  COMMENT,         // ><//> Comment
-  MULTI_COMMENT,   // ></*> Comment <*/><
-  INVALID,         // Invalid token!
-  END,             // End of the input
-  BITWISE_AND,     // &
-  BITWISE_OR,      // |
-  CARET,           // ^
-  FYSH_WATER,      // ~
-  SHIFT_LEFT,      // <<
-  SHIFT_RIGHT,     // >>
-  IF,              // ><(((^>
-  ELSE,            // ><(((*>
-  FYSH_FOOD,       // -
-  ANCHOR_LEFT,     // (+o
-  ANCHOR_RIGHT,    // o+)
-  SUBMARINE,       // (submarine)<
-  SQUID,           // <~ return operator
-  BROKEN_FYSH,     // ><\/> or <\/>< (break)
+  /*! binary value */
+  FYSH_LITERAL,
+  /*! floating point value ><}-}-}> */
+  FYSH_BONES,
+  /*! variable */
+  FYSH_IDENTIFIER,
+  /*! <3 or ♡ */
+  HEART_MULTIPLY,
+  /*! </3 or 💔 */
+  HEART_DIVIDE,
+  /*! ~o (less than    '<' ) */
+  TADPOLE_LT,
+  /*! o~ (greater than '>' ) */
+  TADPOLE_GT,
+  /*! ~o≈ (less than equal to    '<=' ) */
+  TADPOLE_LTE,
+  /*! o~≈ (greater than equal to '>=' ) */
+  TADPOLE_GTE,
+  /*! ≈ */
+  ASSIGN,
+  /*! ≈≈  (Equal to '==') */
+  EQUAL,
+  /*! ~≈  (Not equal to '!=') */
+  NOT_EQUAL,
+  /*! >><fysh> (add 1 'fysh++') */
+  INCREMENT,
+  /*! <fysh><< (sub 1 'fysh--') */
+  DECREMENT,
+  /*! [ (used for Arrays, loops, and conditionals) */
+  FYSH_TANK_OPEN,
+  /*! ] */
+  FYSH_TANK_CLOSE,
+  /*! ( (Used for FISHS (BEDMAS)) */
+  FYSH_BOWL_OPEN,
+  /*! ) */
+  FYSH_BOWL_CLOSE,
+  /*! ><> (same as open curly bracket '{' ) */
+  FYSH_OPEN,
+  /*! <>< (same as closing curly bracket '}' ) */
+  FYSH_CLOSE,
+  /*! WHAT THE FYSH (Throw error opening) ><!@#$> */
+  WTF_OPEN,
+  /*! WHAT THE FYSH (Throw error closing) <!@#$>< */
+  WTF_CLOSE,
+  /*! Random fysh ><###> */
+  GRILLED_FYSH,
+  /*! ><(((@> */
+  FYSH_LOOP,
+  /*! ><//> Comment */
+  COMMENT,
+  /*! Multiline Comment */
+  MULTI_COMMENT,
+  /*! Invalid token! */
+  INVALID,
+  /*! End of the input */
+  END,
+  /*! & */
+  BITWISE_AND,
+  /*! | */
+  BITWISE_OR,
+  /*! ^ */
+  CARET,
+  /*! ~ */
+  FYSH_WATER,
+  /*! << */
+  SHIFT_LEFT,
+  /*! \>\> */
+  SHIFT_RIGHT,
+  /*! ><(((^> */
+  IF,
+  /*! ><(((*> */
+  ELSE,
+  /*! \- */
+  FYSH_FOOD,
+  /*! (+o */
+  ANCHOR_LEFT,
+  /*! o+) */
+  ANCHOR_RIGHT,
+  /*! (submarine)< */
+  SUBMARINE,
+  /*! <~ return operator */
+  SQUID,
+  /*! ><\/> or <\/>< (break) */
+  BROKEN_FYSH,
 };
 
-// string representation of token type (for testing)
+/**
+ * String representation of token type (for testing)
+ */
 constexpr const char *str(const fysh::Species &species) {
   using S = fysh::Species;
   switch (species) {

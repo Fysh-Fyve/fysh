@@ -35,8 +35,10 @@ namespace fysh::ast {
 // TODO: Maybe make this more sophisticated?
 using Error = Box<std::string>;
 
-// all operators that take two arguments and return one (add, sub, greater than,
-// less than, bit shift, etc.)
+/**
+ * all operators that take two arguments and return one (add, sub, greater than,
+ * less than, bit shift, etc.)
+ */
 enum class FyshBinary {
   Add,
   Mul,
@@ -56,8 +58,8 @@ enum class FyshBinary {
   AnchorOut,
 };
 
-// !True
 enum class FyshUnary {
+  /*! \!True */
   Neg,
 };
 

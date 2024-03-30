@@ -21,24 +21,13 @@
 #define FYSH_COMPYLER_H_
 
 #include "../Parser/AST/AST.h"
+#include "Variable.h"
 
-#include <llvm/IR/Argument.h>
-#include <llvm/IR/Function.h>
+#include <llvm/Analysis/CGSCCPassManager.h>
+#include <llvm/Analysis/LoopAnalysisManager.h>
 #include <llvm/IR/IRBuilder.h>
-#include <llvm/IR/Instructions.h>
-#include <llvm/IR/LLVMContext.h>
-#include <llvm/IR/Module.h>
 #include <llvm/IR/PassManager.h>
-#include <llvm/IR/Type.h>
-#include <llvm/IR/Verifier.h>
-#include <llvm/Passes/PassBuilder.h>
 #include <llvm/Passes/StandardInstrumentations.h>
-#include <llvm/Target/TargetMachine.h>
-#include <llvm/Transforms/InstCombine/InstCombine.h>
-#include <llvm/Transforms/Scalar.h>
-#include <llvm/Transforms/Scalar/GVN.h>
-#include <llvm/Transforms/Scalar/Reassociate.h>
-#include <llvm/Transforms/Scalar/SimplifyCFG.h>
 #include <variant>
 
 namespace fysh {
@@ -49,51 +38,6 @@ struct Options {
   enum class Output { AST, IR } output;
   bool noOpt = false;
   std::string outputFilename = "-";
-};
-
-struct Undefined {};
-
-struct Variable : std::variant<llvm::GlobalVariable *, llvm::AllocaInst *,
-                               llvm::Argument *, Undefined> {
-  bool operator!() { return std::holds_alternative<Undefined>(*this); }
-
-  llvm::Type *type() {
-    return std::visit(
-        [](auto &&arg) -> llvm::Type * {
-          using T = std::decay_t<decltype(arg)>;
-          if constexpr (std::is_same_v<T, llvm::GlobalVariable *>) {
-            return arg->getValueType();
-          } else if constexpr (std::is_same_v<T, llvm::AllocaInst *>) {
-            return arg->getAllocatedType();
-          } else if constexpr (std::is_same_v<T, llvm::Argument *>) {
-            return arg->getType();
-          } else if constexpr (std::is_same_v<T, fysh::Undefined>) {
-            return nullptr;
-          } else {
-            static_assert(always_false_v<T>, "non-exhaustive visitor!");
-          }
-        },
-        *this);
-  }
-
-  constexpr llvm::Value *val() {
-    return std::visit(
-        [](auto &&arg) -> llvm::Value * {
-          using T = std::decay_t<decltype(arg)>;
-          if constexpr (std::is_same_v<T, llvm::GlobalVariable *>) {
-            return arg;
-          } else if constexpr (std::is_same_v<T, llvm::AllocaInst *>) {
-            return arg;
-          } else if constexpr (std::is_same_v<T, llvm::Argument *>) {
-            return arg;
-          } else if constexpr (std::is_same_v<T, fysh::Undefined>) {
-            return nullptr;
-          } else {
-            static_assert(always_false_v<T>, "non-exhaustive visitor!");
-          }
-        },
-        *this);
-  }
 };
 
 enum class Definition { LOCAL, GLOBAL, NONE };

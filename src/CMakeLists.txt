@@ -2,6 +2,7 @@ add_library (
 	compyle
 	Compyler/Compyler.cc
 	Compyler/Compyler.h
+	Compyler/Variable.h
 )
 
 add_library (
