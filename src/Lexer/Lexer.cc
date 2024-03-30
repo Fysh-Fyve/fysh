@@ -634,9 +634,12 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
             //"❣️",
             "💌", "💞", "💟", "🫶",
             //"🫶🏻",
+            //"🫶🏼",
             //"🫶🏽",
             //"🫶🏾",
             //"🫶🏿",
+            //"🏩",
+
         })) {
       return Species::HEART_MULTIPLY;
 
