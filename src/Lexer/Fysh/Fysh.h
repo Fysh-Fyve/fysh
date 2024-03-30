@@ -193,6 +193,8 @@ constexpr const char *debugType(const fysh::Species &species) {
     return "break";
   }
   assert(false);
+  // should never be here
+  return nullptr;
 }
 
 }; // namespace fysh

@@ -202,6 +202,8 @@ constexpr const char *str(const FyshBinary &op) {
   }
 
   assert(false);
+  // should never be here
+  return nullptr;
 }
 
 constexpr const char *str(const FyshUnary &op) {
@@ -211,6 +213,8 @@ constexpr const char *str(const FyshUnary &op) {
   }
 
   assert(false);
+  // should never be here
+  return nullptr;
 }
 
 std::string debugType(const FyshExpr &f);

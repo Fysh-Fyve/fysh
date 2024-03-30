@@ -220,6 +220,8 @@ fysh::Compyler::resolveVariable(const std::string_view &name,
   }
   default:
     assert(false);
+    // should never be here
+    return {fysh::Undefined{}};
   }
 }
 
