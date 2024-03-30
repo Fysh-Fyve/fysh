@@ -12,14 +12,14 @@ Binary Expressions
   (assignment_statement
     (positive_ident)
     (binary_expression
-      (positive_literal
+      (positive_scales
         (scales
           (one)
           (one)
           (zero)
           (zero)
           (one)))
-      (positive_literal
+      (positive_scales
         (scales
           (one)
           (zero)
@@ -27,14 +27,14 @@ Binary Expressions
   (assignment_statement
     (positive_ident)
     (binary_expression
-      (positive_literal
+      (positive_scales
         (scales
           (one)
           (one)
           (zero)
           (zero)
           (one)))
-      (positive_literal
+      (positive_scales
         (scales
           (one)
           (zero)
@@ -45,7 +45,7 @@ Binary Expressions
       (addition
         (binary_expression
           (addition
-            (positive_literal
+            (positive_scales
               (scales
                 (one)
                 (one)
@@ -53,12 +53,12 @@ Binary Expressions
                 (zero)
                 (one)))
             (binary_expression
-              (positive_literal
+              (positive_scales
                 (scales
                   (one)
                   (one)
                   (zero)))
-              (positive_literal
+              (positive_scales
                 (scales
                   (one)
                   (one)
@@ -66,7 +66,7 @@ Binary Expressions
                   (zero)
                   (one))))))
         (binary_expression
-          (negative_literal
+          (negative_scales
             (scales
               (one)
               (one)
@@ -74,12 +74,12 @@ Binary Expressions
           (fysh_bowl
             (binary_expression
               (addition
-                (positive_literal
+                (positive_scales
                   (scales
                     (one)
                     (one)
                     (zero)))
-                (positive_literal
+                (positive_scales
                   (scales
                     (one)
                     (one)

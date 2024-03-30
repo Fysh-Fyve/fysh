@@ -19,7 +19,7 @@ Break test
 (source_file
   (assignment_statement
     (positive_ident)
-    (positive_literal
+    (positive_scales
       (scales
         (one)
         (zero)
@@ -28,7 +28,7 @@ Break test
   (loop_statement
     (loopy_fysh)
     (fysh_tank
-      (positive_literal
+      (positive_scales
         (scales
           (one))))
     (block
@@ -37,7 +37,7 @@ Break test
         (fysh_tank
           (binary_expression
             (positive_ident)
-            (positive_literal
+            (positive_scales
               (scales
                 (one)
                 (one)))))
@@ -49,7 +49,7 @@ Break test
           (fysh_tank
             (binary_expression
               (positive_ident)
-              (positive_literal
+              (positive_scales
                 (scales
                   (one)
                   (zero)

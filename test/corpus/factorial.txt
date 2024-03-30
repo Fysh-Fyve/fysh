@@ -25,7 +25,7 @@ Factorial Example
   (comment)
   (assignment_statement
     (positive_ident)
-    (positive_literal
+    (positive_scales
       (scales
         (one)
         (zero)
@@ -33,7 +33,7 @@ Factorial Example
   (comment)
   (assignment_statement
     (positive_ident)
-    (positive_literal
+    (positive_scales
       (scales
         (zero)
         (zero)
@@ -45,7 +45,7 @@ Factorial Example
     (fysh_tank
       (binary_expression
         (positive_ident)
-        (positive_literal
+        (positive_scales
           (scales
             (zero)
             (zero)

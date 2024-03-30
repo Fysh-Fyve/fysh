@@ -3,25 +3,20 @@
   "word": "_name",
   "rules": {
     "source_file": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "REPEAT",
-          "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "_statement"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "subroutine"
-              }
-            ]
+      "type": "REPEAT",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "_statement"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "subroutine"
           }
-        }
-      ]
+        ]
+      }
     },
     "subroutine": {
       "type": "SEQ",
@@ -553,7 +548,11 @@
         },
         {
           "type": "SYMBOL",
-          "name": "positive_literal"
+          "name": "positive_scales"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "positive_bones"
         },
         {
           "type": "SYMBOL",
@@ -561,7 +560,11 @@
         },
         {
           "type": "SYMBOL",
-          "name": "negative_literal"
+          "name": "negative_scales"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "negative_bones"
         },
         {
           "type": "SYMBOL",
@@ -628,7 +631,7 @@
         }
       ]
     },
-    "positive_literal": {
+    "positive_scales": {
       "type": "SEQ",
       "members": [
         {
@@ -638,6 +641,42 @@
         {
           "type": "SYMBOL",
           "name": "scales"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "IMMEDIATE_TOKEN",
+            "content": {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "o"
+                },
+                {
+                  "type": "STRING",
+                  "value": "°"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "STRING",
+          "value": ">"
+        }
+      ]
+    },
+    "positive_bones": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "><"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "bones"
         },
         {
           "type": "REPEAT",
@@ -685,7 +724,7 @@
         }
       ]
     },
-    "negative_literal": {
+    "negative_scales": {
       "type": "SEQ",
       "members": [
         {
@@ -714,6 +753,42 @@
         {
           "type": "SYMBOL",
           "name": "scales"
+        },
+        {
+          "type": "STRING",
+          "value": "><"
+        }
+      ]
+    },
+    "negative_bones": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "<"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "IMMEDIATE_TOKEN",
+            "content": {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "o"
+                },
+                {
+                  "type": "STRING",
+                  "value": "°"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "bones"
         },
         {
           "type": "STRING",
@@ -755,6 +830,64 @@
         }
       ]
     },
+    "bones": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "one"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "zero"
+            }
+          ]
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "one"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "zero"
+              }
+            ]
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "spine"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "one"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "zero"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "spine"
+              }
+            ]
+          }
+        }
+      ]
+    },
     "one": {
       "type": "TOKEN",
       "content": {
@@ -787,6 +920,13 @@
         ]
       }
     },
+    "spine": {
+      "type": "TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "-"
+      }
+    },
     "binary_expression": {
       "type": "CHOICE",
       "members": [
@@ -812,6 +952,18 @@
                   "members": [
                     {
                       "type": "STRING",
+                      "value": "<<"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": ">>"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "&"
+                    },
+                    {
+                      "type": "STRING",
                       "value": "<3"
                     },
                     {
@@ -828,15 +980,7 @@
                     },
                     {
                       "type": "STRING",
-                      "value": "<<"
-                    },
-                    {
-                      "type": "STRING",
-                      "value": ">>"
-                    },
-                    {
-                      "type": "STRING",
-                      "value": "&"
+                      "value": "❤️‍🩹"
                     }
                   ]
                 }
@@ -953,6 +1097,22 @@
                     {
                       "type": "STRING",
                       "value": "~o≈"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "o≈"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "≈o"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "o="
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "=o"
                     }
                   ]
                 }

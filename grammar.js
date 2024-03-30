@@ -16,7 +16,8 @@ const PREC = {
     anchor: 2,
     composite_literal: -1,
   },
-  multiplicative_operators = ["<3", "♡", "</3", "💔", "<<", ">>", "&"],
+  hearts = ["<3", "♡", "</3", "💔","❤️‍🩹"],
+  multiplicative_operators = [ "<<", ">>", "&"].concat(hearts),
   additive_operators = ["|", "^"],
   comparative_operators = [
     "==",
@@ -29,6 +30,10 @@ const PREC = {
     "o~≈",
     "~o=",
     "~o≈",
+    "o≈",
+    "≈o",
+    "o=",
+    "=o",
   ],
   anchor = choice("(+o", "o+)");
 
@@ -54,7 +59,7 @@ module.exports = grammar({
   ],
 
   rules: {
-    source_file: ($) => seq(repeat(choice($._statement, $.subroutine))),
+    source_file: ($) => repeat(choice($._statement, $.subroutine)),
 
     subroutine: ($) =>
       seq(
@@ -136,12 +141,14 @@ module.exports = grammar({
     _expression: ($) =>
       choice(
         $.binary_expression,
-        $.fysh_bowl,
-        $.positive_ident,
-        $.positive_literal,
-        $.negative_ident,
-        $.negative_literal,
-        $.grilled_fysh,
+        $.fysh_bowl, // brackets
+        $.positive_ident, // identifier
+        $.positive_scales, // int
+        $.positive_bones, // float
+        $.negative_ident, // identifier
+        $.negative_scales, // int
+        $.negative_bones, // float
+        $.grilled_fysh, // random number
         $.call_expression,
       ),
 
@@ -149,15 +156,20 @@ module.exports = grammar({
     fysh_bowl: ($) => seq("(", $._expression, ")"),
 
     positive_ident: ($) => rightFysh(field("name", $._name)),
-    positive_literal: ($) =>
+    positive_scales: ($) =>
       rightFysh($.scales, repeat(token.immediate(choice("o", "°")))),
+    positive_bones: ($) => // TODO: float
+      rightFysh($.bones, repeat(token.immediate(choice("o", "°")))),
     negative_ident: ($) => leftFysh(field("name", $._name)),
-    negative_literal: ($) =>
+    negative_scales: ($) =>
       leftFysh(repeat(token.immediate(choice("o", "°"))), $.scales),
-
+    negative_bones: ($) => // TODO: float
+      leftFysh(repeat(token.immediate(choice("o", "°"))), $.bones),
     scales: ($) => seq(choice($.one, $.zero), repeat(choice($.one, $.zero))),
+    bones: ($) => seq(choice($.one, $.zero), repeat(choice($.one, $.zero)), $.spine, repeat(choice($.one, $.zero, $.spine))),
     one: (_) => token(choice("{", "}")),
     zero: (_) => token(choice("(", ")")),
+    spine: (_) => token('-'),
 
     binary_expression: ($) => {
       const table = [

@@ -25,7 +25,7 @@ If/Else
     (fysh_tank
       (binary_expression
         (positive_ident)
-        (positive_literal
+        (positive_scales
           (scales
             (one)
             (zero)
@@ -38,7 +38,7 @@ If/Else
       (fysh_tank
         (binary_expression
           (positive_ident)
-          (positive_literal
+          (positive_scales
             (scales
               (one)
               (zero)
@@ -49,7 +49,7 @@ If/Else
       (block
         (assignment_statement
           (positive_ident)
-          (positive_literal
+          (positive_scales
             (scales
               (zero)
               (zero)

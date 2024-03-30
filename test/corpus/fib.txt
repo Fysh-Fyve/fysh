@@ -32,7 +32,7 @@ Fysh Fibonacci as a Submarine
         (fysh_tank
           (binary_expression
             (positive_ident)
-            (positive_literal
+            (positive_scales
               (scales
                 (one)
                 (zero)))))
@@ -49,7 +49,7 @@ Fysh Fibonacci as a Submarine
                 (binary_expression
                   (addition
                     (positive_ident)
-                    (negative_literal
+                    (negative_scales
                       (scales
                         (zero)
                         (one))))))))
@@ -61,7 +61,7 @@ Fysh Fibonacci as a Submarine
                 (binary_expression
                   (addition
                     (positive_ident)
-                    (negative_literal
+                    (negative_scales
                       (scales
                         (one)
                         (zero))))))))

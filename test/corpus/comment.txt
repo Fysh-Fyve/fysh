@@ -16,7 +16,7 @@ Hope they don't get eaten
 (source_file
   (multiline_comment)
   (expression_statement
-    (positive_literal
+    (positive_scales
       (scales
         (one)
         (one))))

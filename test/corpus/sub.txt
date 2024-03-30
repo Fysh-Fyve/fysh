@@ -36,55 +36,55 @@ SUBroutines
             (negative_ident))))))
   (expression_statement
     (call_expression
-      (positive_literal
+      (positive_scales
         (scales
           (one)))
       (right_sub)
       (fysh_bowl
         (binary_expression
           (addition
-            (positive_literal
+            (positive_scales
               (scales
                 (one)))
-            (positive_literal
+            (positive_scales
               (scales
                 (one))))))
-      (positive_literal
+      (positive_scales
         (scales
           (one)))))
   (expression_statement
     (call_expression
       (right_sub)
-      (positive_literal
+      (positive_scales
         (scales
           (one)))
       (fysh_bowl
         (binary_expression
           (addition
-            (positive_literal
+            (positive_scales
               (scales
                 (one)))
-            (positive_literal
+            (positive_scales
               (scales
                 (one))))))
-      (positive_literal
+      (positive_scales
         (scales
           (one)))))
   (expression_statement
     (call_expression
-      (positive_literal
+      (positive_scales
         (scales
           (one)))
       (fysh_bowl
         (binary_expression
           (addition
-            (positive_literal
+            (positive_scales
               (scales
                 (one)))
-            (positive_literal
+            (positive_scales
               (scales
                 (one))))))
-      (positive_literal
+      (positive_scales
         (scales
           (one)))
       (left_sub))))
