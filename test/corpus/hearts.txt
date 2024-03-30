@@ -1,59 +1,227 @@
 ================================================================================
 Hearts
 ================================================================================
-><})> <3 ><{(o> ~
-><})> ♡  ><{(o> ~
-><})> </3 ><{(o> ~
-><})> 💔 ><{(o> ~
-><})> ❤️‍🩹 ><{(o> ~
-><}}-}}> ~
+><a> <3 ><a> ~
+><a> ♡  ><a> ~
+><a> </3 ><a> ~
+><a> 💔 ><a> ~
+><a> ❤️‍🩹 ><a> ~
+><a> ☙ ><a> ~
+><a> ♡ ><a> ~
+><a> ♥ ><a> ~
+><a> ❣ ><a> ~
+><a> ❤ ><a> ~
+><a> ❥ ><a> ~
+><a> ❦ ><a> ~
+><a> ❧ ><a> ~
+><a> 🎔 ><a> ~
+><a> 🫀 ><a> ~
+><a> 🖤 ><a> ~
+><a> 💙 ><a> ~
+><a> 🩷 ><a> ~
+><a> 🩵 ><a> ~
+><a> 💚 ><a> ~
+><a> 💛 ><a> ~
+><a> 💜 ><a> ~
+><a> 🧡 ><a> ~
+><a> 🤍 ><a> ~
+><a> 🤎 ><a> ~
+><a> 🩶 ><a> ~
+><a> ❤️ ><a> ~
+><a> 💓 ><a> ~
+><a> 💕 ><a> ~
+><a> 💖 ><a> ~
+><a> 💗 ><a> ~
+><a> 💘 ><a> ~
+><a> 💝 ><a> ~
+><a> ❣️ ><a> ~
+><a> 💌 ><a> ~
+><a> 💞 ><a> ~
+><a> 💟 ><a> ~
+><a> 🫶 ><a> ~
+><a> 🫶🏻 ><a> ~
+><a> 🫶🏼 ><a> ~
+><a> 🫶🏽 ><a> ~
+><a> 🫶🏾 ><a> ~
+><a> 🫶🏿 ><a> ~
+><a> 🏩 ><a> ~
+
 --------------------------------------------------------------------------------
 
 (source_file
   (expression_statement
     (binary_expression
-      (positive_scales
-        (one)
-        (zero))
-      (positive_scales
-        (one)
-        (zero))))
+      (positive_ident)
+      (positive_ident)))
   (expression_statement
     (binary_expression
-      (positive_scales
-        (one)
-        (zero))
-      (positive_scales
-        (one)
-        (zero))))
+      (positive_ident)
+      (positive_ident)))
   (expression_statement
     (binary_expression
-      (positive_scales
-        (one)
-        (zero))
-      (positive_scales
-        (one)
-        (zero))))
+      (positive_ident)
+      (positive_ident)))
   (expression_statement
     (binary_expression
-      (positive_scales
-        (one)
-        (zero))
-      (positive_scales
-        (one)
-        (zero))))
+      (positive_ident)
+      (positive_ident)))
   (expression_statement
     (binary_expression
-      (positive_scales
-        (one)
-        (zero))
-      (positive_scales
-        (one)
-        (zero))))
+      (positive_ident)
+      (positive_ident)))
   (expression_statement
-    (positive_bones
-      (one)
-      (one)
-      (spine)
-      (one)
-      (one))))
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident)))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_ident))))

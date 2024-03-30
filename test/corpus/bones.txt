@@ -1,0 +1,56 @@
+=================
+bones
+=================
+><}------}> ~
+><}-})-)> ~
+<}----}>< ~
+<({-{}}()(-((}})))->< ~
+-----------------------
+
+(source_file
+  (expression_statement
+    (positive_bones
+      (one)
+      (spine)
+      (spine)
+      (spine)
+      (spine)
+      (spine)
+      (spine)
+      (one)))
+  (expression_statement
+    (positive_bones
+      (one)
+      (spine)
+      (one)
+      (zero)
+      (spine)
+      (zero)))
+  (expression_statement
+    (negative_bones
+      (one)
+      (spine)
+      (spine)
+      (spine)
+      (spine)
+      (one)))
+  (expression_statement
+    (negative_bones
+      (zero)
+      (one)
+      (spine)
+      (one)
+      (one)
+      (one)
+      (zero)
+      (zero)
+      (zero)
+      (spine)
+      (zero)
+      (zero)
+      (one)
+      (one)
+      (zero)
+      (zero)
+      (zero)
+      (spine))))
