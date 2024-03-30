@@ -329,10 +329,14 @@ public:
 fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
   // gets all the scales and converts them to a binary number
   char c{reel()};
-  bool isFloat = false;
+  bool isFloat{c == '-'};
   // stores the first scale as a binary number
   std::uint32_t value{c == '{' || c == '}'};
   NumberCombiner combiner;
+
+  if (isFloat) {
+    combiner.addNumber(0);
+  }
 
   int scaleCount{1};
   while (isScale(periscope())) {
@@ -460,6 +464,7 @@ fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
   case ('('):
   case ('}'):
   case (')'):
+  case ('-'):
     return scales(FyshDirection::LEFT); // eyeless negative fysh literal <)})}><
   case ('>'):
     return fyshClose(); // close curly bracket
@@ -475,6 +480,7 @@ fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
     case ('('):
     case ('}'):
     case (')'):
+    case ('-'):
       // negative fysh literal with eye(s) <o)})}><
       return scales(FyshDirection::LEFT);
     default:
@@ -513,7 +519,8 @@ fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
   case ('{'):
   case ('('):
   case ('}'):
-  case (')'): return scales(FyshDirection::RIGHT); // fysh literal ><{{({(°>
+  case (')'):
+  case ('-'): return scales(FyshDirection::RIGHT); // fysh literal ><{{({(°>
   case ('>'): return goFysh(Species::FYSH_OPEN);
   case ('!'): return openWTF(); // error handling
   case ('/'): return slashOrComment(); // comment
@@ -626,8 +633,8 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     if (expectFyshChar({
             "☙", "♡", "♥", "❣",
             // "❤",
-            "❥", "❦", "❧", "🎔", "🫀", "🖤", "💙", "🩷", "🩵", "💚", "💛", "💜",
-            "🧡", "🤍", "🤎", "🩶",
+            "❥", "❦", "❧", "🎔", "🫀", "🖤", "💙", "🩷", "🩵", "💚",
+            "💛", "💜", "🧡", "🤍", "🤎", "🩶",
             // "❤️",
             "💓", "💕", "💖", "💗", "💘",
             //"💝",
