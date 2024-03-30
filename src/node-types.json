@@ -8,6 +8,10 @@
         "required": true,
         "types": [
           {
+            "type": "aquarium",
+            "named": true
+          },
+          {
             "type": "binary_expression",
             "named": true
           },
@@ -53,6 +57,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "aquarium",
+            "named": true
+          },
           {
             "type": "binary_expression",
             "named": true
@@ -120,6 +128,10 @@
         "required": true,
         "types": [
           {
+            "type": "aquarium",
+            "named": true
+          },
+          {
             "type": "binary_expression",
             "named": true
           },
@@ -164,6 +176,61 @@
     }
   },
   {
+    "type": "aquarium",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "aquarium",
+          "named": true
+        },
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "fysh_bowl",
+          "named": true
+        },
+        {
+          "type": "grilled_fysh",
+          "named": true
+        },
+        {
+          "type": "negative_bones",
+          "named": true
+        },
+        {
+          "type": "negative_ident",
+          "named": true
+        },
+        {
+          "type": "negative_scales",
+          "named": true
+        },
+        {
+          "type": "positive_bones",
+          "named": true
+        },
+        {
+          "type": "positive_ident",
+          "named": true
+        },
+        {
+          "type": "positive_scales",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "assignment_statement",
     "named": true,
     "fields": {
@@ -181,6 +248,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "aquarium",
+            "named": true
+          },
           {
             "type": "binary_expression",
             "named": true
@@ -233,6 +304,10 @@
         "multiple": false,
         "required": false,
         "types": [
+          {
+            "type": "aquarium",
+            "named": true
+          },
           {
             "type": "binary_expression",
             "named": true
@@ -390,6 +465,10 @@
         "required": false,
         "types": [
           {
+            "type": "aquarium",
+            "named": true
+          },
+          {
             "type": "binary_expression",
             "named": true
           },
@@ -531,6 +610,10 @@
       "required": true,
       "types": [
         {
+          "type": "aquarium",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
@@ -600,6 +683,10 @@
       "required": true,
       "types": [
         {
+          "type": "aquarium",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
@@ -651,6 +738,10 @@
       "required": true,
       "types": [
         {
+          "type": "aquarium",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
@@ -701,6 +792,10 @@
       "multiple": false,
       "required": true,
       "types": [
+        {
+          "type": "aquarium",
+          "named": true
+        },
         {
           "type": "binary_expression",
           "named": true
@@ -938,6 +1033,10 @@
         "required": true,
         "types": [
           {
+            "type": "aquarium",
+            "named": true
+          },
+          {
             "type": "binary_expression",
             "named": true
           },
@@ -1061,6 +1160,11 @@
     }
   },
   {
+    "type": "spine",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "subroutine",
     "named": true,
     "fields": {
@@ -1126,6 +1230,10 @@
   },
   {
     "type": "*",
+    "named": false
+  },
+  {
+    "type": "-",
     "named": false
   },
   {
@@ -1243,10 +1351,6 @@
   {
     "type": "o≈",
     "named": false
-  },
-  {
-    "type": "spine",
-    "named": true
   },
   {
     "type": "zero",

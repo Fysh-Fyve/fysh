@@ -1,0 +1,20 @@
+=================
+Aquarium
+=================
+
+[ ><{> - ><{> ] ~
+[] ~
+
+-----------------------
+
+(source_file
+  (expression_statement
+    (aquarium
+      (positive_scales
+        (scales
+          (one)))
+      (positive_scales
+        (scales
+          (one)))))
+  (expression_statement
+    (aquarium)))

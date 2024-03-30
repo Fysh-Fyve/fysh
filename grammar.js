@@ -142,6 +142,7 @@ module.exports = grammar({
       choice(
         $.binary_expression,
         $.fysh_bowl, // brackets
+        $.aquarium, // square brackets (arrays)
         $.positive_ident, // identifier
         $.positive_scales, // int
         $.positive_bones, // float
@@ -152,6 +153,7 @@ module.exports = grammar({
         $.call_expression,
       ),
 
+    aquarium: ($) => seq("[", dashSep($._expression), "]"),
     fysh_tank: ($) => seq("[", $._expression, "]"),
     fysh_bowl: ($) => seq("(", $._expression, ")"),
 
@@ -245,4 +247,22 @@ function leftFysh(...body) {
  */
 function controlFysh(eye) {
   return rightFysh("(((", eye);
+}
+
+/**
+ * Creates a rule to match one or more of the rules separated by a dash
+ * @param {Rule} rule
+ * @return {SeqRule}
+ */
+function dashSep1(rule) {
+  return seq(rule, repeat(seq('-', rule)));
+}
+
+/**
+ * Creates a rule to optionally match one or more of the rules separated by a dash
+ * @param {Rule} rule
+ * @return {ChoiceRule}
+ */
+function dashSep(rule) {
+  return optional(dashSep1(rule))
 }
