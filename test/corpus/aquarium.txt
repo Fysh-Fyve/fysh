@@ -11,10 +11,8 @@ Aquarium
   (expression_statement
     (aquarium
       (positive_scales
-        (scales
-          (one)))
+        (one))
       (positive_scales
-        (scales
-          (one)))))
+        (one))))
   (expression_statement
     (aquarium)))

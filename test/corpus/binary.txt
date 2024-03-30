@@ -13,32 +13,28 @@ Binary Expressions
     (positive_ident)
     (binary_expression
       (positive_scales
-        (scales
-          (one)
-          (one)
-          (zero)
-          (zero)
-          (one)))
+        (one)
+        (one)
+        (zero)
+        (zero)
+        (one))
       (positive_scales
-        (scales
-          (one)
-          (zero)
-          (one)))))
+        (one)
+        (zero)
+        (one))))
   (assignment_statement
     (positive_ident)
     (binary_expression
       (positive_scales
-        (scales
-          (one)
-          (one)
-          (zero)
-          (zero)
-          (one)))
+        (one)
+        (one)
+        (zero)
+        (zero)
+        (one))
       (positive_scales
-        (scales
-          (one)
-          (zero)
-          (one)))))
+        (one)
+        (zero)
+        (one))))
   (assignment_statement
     (positive_ident)
     (binary_expression
@@ -46,41 +42,35 @@ Binary Expressions
         (binary_expression
           (addition
             (positive_scales
-              (scales
-                (one)
-                (one)
-                (zero)
-                (zero)
-                (one)))
+              (one)
+              (one)
+              (zero)
+              (zero)
+              (one))
             (binary_expression
               (positive_scales
-                (scales
-                  (one)
-                  (one)
-                  (zero)))
+                (one)
+                (one)
+                (zero))
               (positive_scales
-                (scales
-                  (one)
-                  (one)
-                  (zero)
-                  (zero)
-                  (one))))))
+                (one)
+                (one)
+                (zero)
+                (zero)
+                (one)))))
         (binary_expression
           (negative_scales
-            (scales
-              (one)
-              (one)
-              (zero)))
+            (one)
+            (one)
+            (zero))
           (fysh_bowl
             (binary_expression
               (addition
                 (positive_scales
-                  (scales
-                    (one)
-                    (one)
-                    (zero)))
+                  (one)
+                  (one)
+                  (zero))
                 (positive_scales
-                  (scales
-                    (one)
-                    (one)
-                    (zero)))))))))))
+                  (one)
+                  (one)
+                  (zero))))))))))

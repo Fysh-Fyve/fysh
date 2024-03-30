@@ -26,18 +26,16 @@ Factorial Example
   (assignment_statement
     (positive_ident)
     (positive_scales
-      (scales
-        (one)
-        (zero)
-        (one))))
+      (one)
+      (zero)
+      (one)))
   (comment)
   (assignment_statement
     (positive_ident)
     (positive_scales
-      (scales
-        (zero)
-        (zero)
-        (one))))
+      (zero)
+      (zero)
+      (one)))
   (comment)
   (comment)
   (loop_statement
@@ -46,10 +44,9 @@ Factorial Example
       (binary_expression
         (positive_ident)
         (positive_scales
-          (scales
-            (zero)
-            (zero)
-            (one)))))
+          (zero)
+          (zero)
+          (one))))
     (block
       (comment)
       (assignment_statement

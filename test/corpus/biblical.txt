@@ -7,6 +7,5 @@ Biblically accurate fysh
 (source_file
   (expression_statement
     (positive_scales
-      (scales
-        (one)
-        (zero)))))
+      (one)
+      (zero))))

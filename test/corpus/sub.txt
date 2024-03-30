@@ -37,54 +37,42 @@ SUBroutines
   (expression_statement
     (call_expression
       (positive_scales
-        (scales
-          (one)))
+        (one))
       (right_sub)
       (fysh_bowl
         (binary_expression
           (addition
             (positive_scales
-              (scales
-                (one)))
+              (one))
             (positive_scales
-              (scales
-                (one))))))
+              (one)))))
       (positive_scales
-        (scales
-          (one)))))
+        (one))))
   (expression_statement
     (call_expression
       (right_sub)
       (positive_scales
-        (scales
-          (one)))
+        (one))
       (fysh_bowl
         (binary_expression
           (addition
             (positive_scales
-              (scales
-                (one)))
+              (one))
             (positive_scales
-              (scales
-                (one))))))
+              (one)))))
       (positive_scales
-        (scales
-          (one)))))
+        (one))))
   (expression_statement
     (call_expression
       (positive_scales
-        (scales
-          (one)))
+        (one))
       (fysh_bowl
         (binary_expression
           (addition
             (positive_scales
-              (scales
-                (one)))
+              (one))
             (positive_scales
-              (scales
-                (one))))))
+              (one)))))
       (positive_scales
-        (scales
-          (one)))
+        (one))
       (left_sub))))

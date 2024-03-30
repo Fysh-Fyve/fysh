@@ -13,58 +13,47 @@ Hearts
   (expression_statement
     (binary_expression
       (positive_scales
-        (scales
-          (one)
-          (zero)))
+        (one)
+        (zero))
       (positive_scales
-        (scales
-          (one)
-          (zero)))))
+        (one)
+        (zero))))
   (expression_statement
     (binary_expression
       (positive_scales
-        (scales
-          (one)
-          (zero)))
+        (one)
+        (zero))
       (positive_scales
-        (scales
-          (one)
-          (zero)))))
+        (one)
+        (zero))))
   (expression_statement
     (binary_expression
       (positive_scales
-        (scales
-          (one)
-          (zero)))
+        (one)
+        (zero))
       (positive_scales
-        (scales
-          (one)
-          (zero)))))
+        (one)
+        (zero))))
   (expression_statement
     (binary_expression
       (positive_scales
-        (scales
-          (one)
-          (zero)))
+        (one)
+        (zero))
       (positive_scales
-        (scales
-          (one)
-          (zero)))))
+        (one)
+        (zero))))
   (expression_statement
     (binary_expression
       (positive_scales
-        (scales
-          (one)
-          (zero)))
+        (one)
+        (zero))
       (positive_scales
-        (scales
-          (one)
-          (zero)))))
+        (one)
+        (zero))))
   (expression_statement
     (positive_bones
-      (bones
-        (one)
-        (one)
-        (spine)
-        (one)
-        (one)))))
+      (one)
+      (one)
+      (spine)
+      (one)
+      (one))))

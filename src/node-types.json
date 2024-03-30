@@ -574,29 +574,6 @@
     }
   },
   {
-    "type": "bones",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "one",
-          "named": true
-        },
-        {
-          "type": "spine",
-          "named": true
-        },
-        {
-          "type": "zero",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "break_statement",
     "named": true,
     "fields": {}
@@ -957,16 +934,25 @@
   {
     "type": "negative_bones",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "bones",
-          "named": true
-        }
-      ]
+    "fields": {
+      "bones": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "one",
+            "named": true
+          },
+          {
+            "type": "spine",
+            "named": true
+          },
+          {
+            "type": "zero",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -977,31 +963,45 @@
   {
     "type": "negative_scales",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "scales",
-          "named": true
-        }
-      ]
+    "fields": {
+      "scales": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "one",
+            "named": true
+          },
+          {
+            "type": "zero",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
     "type": "positive_bones",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "bones",
-          "named": true
-        }
-      ]
+    "fields": {
+      "bones": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "one",
+            "named": true
+          },
+          {
+            "type": "spine",
+            "named": true
+          },
+          {
+            "type": "zero",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1012,16 +1012,21 @@
   {
     "type": "positive_scales",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "scales",
-          "named": true
-        }
-      ]
+    "fields": {
+      "scales": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "one",
+            "named": true
+          },
+          {
+            "type": "zero",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1084,25 +1089,6 @@
     "type": "right_sub",
     "named": true,
     "fields": {}
-  },
-  {
-    "type": "scales",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "one",
-          "named": true
-        },
-        {
-          "type": "zero",
-          "named": true
-        }
-      ]
-    }
   },
   {
     "type": "source_file",

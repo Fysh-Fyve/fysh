@@ -20,17 +20,15 @@ Break test
   (assignment_statement
     (positive_ident)
     (positive_scales
-      (scales
-        (one)
-        (zero)
-        (one)
-        (zero))))
+      (one)
+      (zero)
+      (one)
+      (zero)))
   (loop_statement
     (loopy_fysh)
     (fysh_tank
       (positive_scales
-        (scales
-          (one))))
+        (one)))
     (block
       (if_statement
         (happy_fysh)
@@ -38,9 +36,8 @@ Break test
           (binary_expression
             (positive_ident)
             (positive_scales
-              (scales
-                (one)
-                (one)))))
+              (one)
+              (one))))
         (block
           (break_statement))
         (dead_fysh)
@@ -50,11 +47,10 @@ Break test
             (binary_expression
               (positive_ident)
               (positive_scales
-                (scales
-                  (one)
-                  (zero)
-                  (one)
-                  (zero)))))
+                (one)
+                (zero)
+                (one)
+                (zero))))
           (block
             (break_statement))))
       (dec_statement))))

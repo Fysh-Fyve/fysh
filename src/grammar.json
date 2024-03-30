@@ -689,8 +689,12 @@
           "value": "><"
         },
         {
-          "type": "SYMBOL",
-          "name": "scales"
+          "type": "FIELD",
+          "name": "scales",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_scales"
+          }
         },
         {
           "type": "REPEAT",
@@ -725,8 +729,12 @@
           "value": "><"
         },
         {
-          "type": "SYMBOL",
-          "name": "bones"
+          "type": "FIELD",
+          "name": "bones",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_bones"
+          }
         },
         {
           "type": "REPEAT",
@@ -801,8 +809,12 @@
           }
         },
         {
-          "type": "SYMBOL",
-          "name": "scales"
+          "type": "FIELD",
+          "name": "scales",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_scales"
+          }
         },
         {
           "type": "STRING",
@@ -837,8 +849,12 @@
           }
         },
         {
-          "type": "SYMBOL",
-          "name": "bones"
+          "type": "FIELD",
+          "name": "bones",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_bones"
+          }
         },
         {
           "type": "STRING",
@@ -846,7 +862,7 @@
         }
       ]
     },
-    "scales": {
+    "_scales": {
       "type": "SEQ",
       "members": [
         {
@@ -880,37 +896,12 @@
         }
       ]
     },
-    "bones": {
+    "_bones": {
       "type": "SEQ",
       "members": [
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "one"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "zero"
-            }
-          ]
-        },
-        {
-          "type": "REPEAT",
-          "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "one"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "zero"
-              }
-            ]
-          }
+          "type": "SYMBOL",
+          "name": "_scales"
         },
         {
           "type": "SYMBOL",

@@ -24,97 +24,83 @@ Operators
     (binary_expression
       (positive_ident)
       (positive_scales
-        (scales
-          (one)
-          (one)))))
+        (one)
+        (one))))
   (expression_statement
     (binary_expression
       (positive_ident)
       (positive_scales
-        (scales
-          (one)
-          (one)))))
+        (one)
+        (one))))
   (expression_statement
     (binary_expression
       (positive_ident)
       (positive_scales
-        (scales
-          (one)
-          (one)))))
+        (one)
+        (one))))
   (expression_statement
     (binary_expression
       (positive_ident)
       (positive_scales
-        (scales
-          (one)
-          (one)))))
+        (one)
+        (one))))
   (expression_statement
     (binary_expression
       (positive_ident)
       (positive_scales
-        (scales
-          (one)
-          (one)))))
+        (one)
+        (one))))
   (expression_statement
     (binary_expression
       (positive_ident)
       (positive_scales
-        (scales
-          (one)
-          (one)))))
+        (one)
+        (one))))
   (expression_statement
     (binary_expression
       (positive_ident)
       (positive_scales
-        (scales
-          (one)
-          (one)))))
+        (one)
+        (one))))
   (expression_statement
     (binary_expression
       (positive_ident)
       (positive_scales
-        (scales
-          (one)
-          (one)))))
+        (one)
+        (one))))
   (expression_statement
     (binary_expression
       (positive_ident)
       (positive_scales
-        (scales
-          (one)
-          (one)))))
+        (one)
+        (one))))
   (expression_statement
     (binary_expression
       (positive_ident)
       (positive_scales
-        (scales
-          (one)
-          (one)))))
+        (one)
+        (one))))
   (expression_statement
     (binary_expression
       (positive_ident)
       (positive_scales
-        (scales
-          (one)
-          (one)))))
+        (one)
+        (one))))
   (expression_statement
     (binary_expression
       (positive_ident)
       (positive_scales
-        (scales
-          (one)
-          (one)))))
+        (one)
+        (one))))
   (expression_statement
     (binary_expression
       (positive_ident)
       (positive_scales
-        (scales
-          (one)
-          (one)))))
+        (one)
+        (one))))
   (expression_statement
     (binary_expression
       (positive_ident)
       (positive_scales
-        (scales
-          (one)
-          (one))))))
+        (one)
+        (one)))))

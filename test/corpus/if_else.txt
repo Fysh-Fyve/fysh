@@ -26,10 +26,9 @@ If/Else
       (binary_expression
         (positive_ident)
         (positive_scales
-          (scales
-            (one)
-            (zero)
-            (zero)))))
+          (one)
+          (zero)
+          (zero))))
     (block
       (dec_statement))
     (dead_fysh)
@@ -39,10 +38,9 @@ If/Else
         (binary_expression
           (positive_ident)
           (positive_scales
-            (scales
-              (one)
-              (zero)
-              (zero)))))
+            (one)
+            (zero)
+            (zero))))
       (block
         (inc_statement))
       (dead_fysh)
@@ -50,7 +48,6 @@ If/Else
         (assignment_statement
           (positive_ident)
           (positive_scales
-            (scales
-              (zero)
-              (zero)
-              (zero))))))))
+            (zero)
+            (zero)
+            (zero)))))))
