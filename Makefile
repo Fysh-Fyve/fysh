@@ -110,6 +110,7 @@ _MEM := mem \
 _MEMORY := $(_MEM) \
 	   phy_map \
 	   gpio_pins \
+	   counter \
 	   mbr_sx \
 	   register_file \
 	   grilled_fysh

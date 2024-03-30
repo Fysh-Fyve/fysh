@@ -1,5 +1,6 @@
 #include <stdint.h>
 
+uint32_t *counter_address = (uint32_t *)0xDEADBEE4;
 uint32_t *gpio_address = (uint32_t *)0xDEADBEEF;
 
 uint32_t fysh_gpio_read(const uint32_t pin) {
@@ -16,3 +17,5 @@ void fysh_gpio_write(const uint32_t pin, const uint32_t value) {
   const uint32_t bit = (1 << pin);
   *gpio_address = !value ? curr_val & ~bit : curr_val | bit;
 }
+
+uint32_t counter_read() { return *counter_address; }

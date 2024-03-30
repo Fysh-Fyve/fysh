@@ -11,6 +11,7 @@ use work.rom.rom_arr;
 --! Creates physical maps to memory\n
 --! 0x00000000 - 0x0000FFFF (ROM)\n
 --! 0x00010000 - 0x0003FFFF (RAM)\n
+--! 0xDEADBEE4 - 0xDEADBEE7 32-bit Counter?\n
 --! 0xDEADBEE8 - 0xDEADBEEB (GPIO Pin mode)\n
 --! 0xDEADBEEC - 0xDEADBEEF (GPIO)\n
 entity phy_map is
@@ -43,6 +44,7 @@ architecture rtl of phy_map is
   signal dram_out : std_ulogic_vector (31 downto 0);
   signal drom_out : std_ulogic_vector (31 downto 0);
   signal irom_out : std_ulogic_vector (31 downto 0);
+  signal kent_out : std_ulogic_vector (31 downto 0);
 
   signal rom_data_in : std_ulogic_vector (31 downto 0);
 
@@ -52,7 +54,7 @@ architecture rtl of phy_map is
   signal le_idata_out : std_ulogic_vector (31 downto 0);
   signal le_ddata_out : std_ulogic_vector (31 downto 0);
 
-  type mem_sel_t is (gpio_sel, gpio_mode_sel, rom_sel, ram_sel);
+  type mem_sel_t is (gpio_sel, gpio_mode_sel, counter_sel, rom_sel, ram_sel);
   signal imem_sel, dmem_sel, wmem_sel    : mem_sel_t;
   signal wgpio_sel, dgpio_sel, igpio_sel : mem_sel_t;
 
@@ -61,6 +63,7 @@ architecture rtl of phy_map is
   begin
     case sel is
       when gpio_sel      => write(l, string'("gpio"));
+      when counter_sel   => write(l, string'("c*nt"));
       when gpio_mode_sel => write(l, string'("mode"));
       when rom_sel       => write(l, string'("rom "));
       when ram_sel       => write(l, string'("ram "));
@@ -104,12 +107,14 @@ begin
     gpio_out when gpio_sel,
     dram_out when ram_sel,
     irom_out when rom_sel,
+    kent_out when counter_sel, -- SHOULD NOT HAPPEN
     mode_out when gpio_mode_sel;
 
   with dmem_sel select le_ddata_out <=
     gpio_out when gpio_sel,
     dram_out when ram_sel,
     drom_out when rom_sel,
+    kent_out when counter_sel,
     mode_out when gpio_mode_sel;
 
   with waddr_i(31 downto 16) select wmem_sel <=
@@ -132,7 +137,9 @@ begin
   with waddr_i(15 downto 0) select wgpio_sel <=
     gpio_mode_sel when x"BEE8", gpio_sel when others;
   with draddr_i(15 downto 0) select dgpio_sel <=
-    gpio_mode_sel when x"BEE8", gpio_sel when others;
+    counter_sel   when x"BEE7",
+    gpio_mode_sel when x"BEE8",
+    gpio_sel      when others;
   with iraddr_i(15 downto 0) select igpio_sel <=
     gpio_mode_sel when x"BEE8", gpio_sel when others;
 
@@ -147,6 +154,11 @@ begin
       pin_write_i     => le_data_in,
       pin_read_o      => gpio_out,
       mode_o          => mode_out);
+
+  counter_inst : entity work.counter(rtl)
+    port map (
+      clk_i   => clk_i,
+      count_o => kent_out);
 
   rom_inst : entity work.brom(rtl)
     generic map (
