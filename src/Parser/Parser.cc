@@ -63,7 +63,7 @@ fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
   }
 
   case Species::FYSH_BONES: {
-    ast::FyshFloatLiteral value{curFysh.getValue().value()};
+    ast::FyshFloatLiteral value{curFysh.getFloat().value()};
     bool negate{curFysh.negate};
     nextFysh();
     if (negate) {
