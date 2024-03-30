@@ -478,9 +478,11 @@ TEST_CASE("Broken Fysh") {
 }
 
 TEST_CASE("Floats") {
-  FyshLexer lexer{"><}-}-}> <}-}-}>< ><}}-})-})}o>"};
+  FyshLexer lexer{"><}-}-}> <}-}-}>< ><}}-})-})}o> ><}--}> <}--}><"};
   F(1.11);
   F(-1.11);
   F(3.25);
+  F(1.01);
+  F(-1.01);
   T(S::END);
 }
