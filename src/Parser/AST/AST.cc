@@ -21,28 +21,84 @@
 #include <string>
 #include <variant>
 
+using namespace fysh::ast;
+
+// #region TO_STRING[[[
+template <typename T> static inline std::string ss(const T &arg) {
+  return std::to_string(arg);
+}
+
+static inline std::string error(const Error &arg) {
+  return "ERROR(\"" + ss(*arg.t) + "\")";
+}
+
+static inline std::string binary(const Box<FyshBinaryExpr> &arg) {
+  return "(" + ss(arg.t->left) + " " + str(arg.t->op) + " " + ss(arg.t->right) +
+         ")";
+}
+
+static inline std::string call(const Box<FyshCallExpr> &arg) {
+  bool first{true};
+  std::string s;
+  for (auto const &param : arg.t->args) {
+    s += (first ? first = false, "" : ", ") + ss(param);
+  }
+  s += ")";
+  return (arg.t->negate ? "-" : "") + std::string(arg.t->callee) + "(" + s;
+}
+
+static inline std::string unary(const Box<FyshUnaryExpr> &arg) {
+  return "(" + ss(arg.t->op) + " " + ss(arg.t->expr) + ")";
+}
+
+static inline std::string block(const FyshBlock &arg) {
+  std::string s = "{\n";
+  for (const FyshStmt &a : arg) {
+    s += ss(a);
+  }
+  return s + "}\n";
+}
+
+static inline std::string ifStmt(const FyshIfStmt &arg) {
+  return "if (" + ss(arg.condition) + ")\n" + ss(arg.consequence) +
+         (arg.alternative.has_value() ? ("else\n" + ss(arg.alternative.value()))
+                                      : "");
+}
+
+static inline std::string loop(const FyshLoopStmt &arg) {
+  return "while (" + ss(arg.condition) + ")\n" + ss(arg.body);
+}
+
+static inline std::string anchor(const FyshAnchorStmt &arg) {
+  return ss(arg.op) + " " + ss(arg.right) + ";\n";
+}
+// #endregion ]]]TO_STRING
+
+bool fysh::ast::operator==(const FyshExpr &expr, const char *str) {
+  return ss(expr) == str;
+}
+
 bool fysh::ast::operator!=(const FyshExpr &expr, const char *str) {
   return !(expr == str);
 }
 
-std::string std::to_string(const fysh::ast::FyshProgram &f) {
-  using namespace fysh::ast;
+std::string std::to_string(const FyshProgram &f) {
   std::string s;
   for (const auto &stmt : f) {
     std::visit(
         [&s](auto &&arg) {
           using T = std::decay_t<decltype(arg)>;
           if constexpr (std::is_same_v<T, Error>) {
-            s += "ERROR(\"" + std::to_string(*arg.t) + "\")";
+            s += error(*arg.t);
           } else if constexpr (std::is_same_v<T, FyshStmt>) {
-            s += std::to_string(arg);
+            s += ss(arg);
           } else if constexpr (std::is_same_v<T, SUBroutine>) {
             s += "sub " + std::string(arg.name) + "(";
             bool first{true};
             for (auto const &param : arg.parameters) {
               s += (first ? first = false, "" : ", ") + std::string(param);
             }
-            s += ")\n" + std::to_string(arg.body);
+            s += ")\n" + ss(arg.body);
           } else {
             static_assert(always_false_v<T>, "non-exhaustive visitor!");
           }
@@ -52,88 +108,51 @@ std::string std::to_string(const fysh::ast::FyshProgram &f) {
   return s;
 }
 
-std::string std::to_string(const fysh::ast::FyshExpr &f) {
-  using namespace fysh::ast;
+std::string std::to_string(const FyshExpr &f) {
   return std::visit(
       [](auto &&arg) -> std::string {
         using T = std::decay_t<decltype(arg)>;
-        if constexpr (std::is_same_v<T, Error>) {
-          return "ERROR(\"" + std::to_string(*arg.t) + "\")";
-        } else if constexpr (std::is_same_v<T, Box<FyshBinaryExpr>>) {
-          return "(" + std::to_string(arg.t->left) + " " + str(arg.t->op) +
-                 " " + std::to_string(arg.t->right) + ")";
-        } else if constexpr (std::is_same_v<T, Box<FyshCallExpr>>) {
-          bool first{true};
-          std::string s;
-          for (auto const &param : arg.t->args) {
-            s += (first ? first = false, "" : ", ") + std::to_string(param);
-          }
-          s += ")";
-          return (arg.t->negate ? "-" : "") + std::string(arg.t->callee) + "(" +
-                 s;
-        } else if constexpr (std::is_same_v<T, Box<FyshUnaryExpr>>) {
-          return "(" + std::to_string(arg.t->op) + " " +
-                 std::to_string(arg.t->expr) + ")";
-        } else if constexpr (std::is_same_v<T, FyshIdentifier>) {
-          return std::string(arg.name);
-        } else if constexpr (std::is_same_v<T, FyshLiteral>) {
-          return std::to_string(arg.num);
-        } else if constexpr (std::is_same_v<T, FyshFloatLiteral>) {
-          return std::to_string(arg.num);
-        } else if constexpr (std::is_same_v<T, GrilledFysh>) {
-          return "><###>";
-        } else {
-          static_assert(always_false_v<T>, "non-exhaustive visitor!");
-        }
+#define MATCH(TYPE, RESULT)                                                    \
+  if constexpr (std::is_same_v<T, TYPE>)                                       \
+    return RESULT;                                                             \
+  else
+        MATCH(Error, error(arg))
+        MATCH(Box<FyshBinaryExpr>, binary(arg))
+        MATCH(Box<FyshCallExpr>, call(arg))
+        MATCH(Box<FyshUnaryExpr>, unary(arg))
+        MATCH(FyshIdentifier, std::string(arg.name))
+        MATCH(FyshLiteral, ss(arg.num))
+        MATCH(FyshFloatLiteral, ss(arg.num))
+        MATCH(GrilledFysh, "><###>")
+        static_assert(always_false_v<T>, "non-exhaustive visitor!");
+#undef MATCH
       },
       f);
 }
 
-std::string std::to_string(const fysh::ast::FyshStmt &f) {
-  using namespace fysh::ast;
+std::string std::to_string(const FyshStmt &f) {
   return std::visit(
       [](auto &&arg) -> std::string {
         using T = std::decay_t<decltype(arg)>;
-        if constexpr (std::is_same_v<T, Error>)
-          return "ERROR(\"" + std::to_string(*arg.t) + "\");";
-        else if constexpr (std::is_same_v<T, FyshExpr>)
-          return std::to_string(arg) + ";\n";
-        else if constexpr (std::is_same_v<T, FyshAssignmentStmt>)
-          return std::to_string(arg.left) + " = " + std::to_string(arg.right) +
-                 ";\n";
-        else if constexpr (std::is_same_v<T, FyshBlock>) {
-          std::string s = "{\n";
-          for (const FyshStmt &a : arg) {
-            s += std::to_string(a);
-          }
-          return s + "}\n";
-        } else if constexpr (std::is_same_v<T, FyshIncrementStmt>)
-          return std::to_string(arg.expr) + "++;\n";
-        else if constexpr (std::is_same_v<T, FyshDecrementStmt>)
-          return std::to_string(arg.expr) + "--;\n";
-        else if constexpr (std::is_same_v<T, FyshLoopStmt>)
-          return "while (" + std::to_string(arg.condition) + ")\n" +
-                 std::to_string(arg.body);
-        else if constexpr (std::is_same_v<T, FyshIfStmt>) {
-          return "if (" + std::to_string(arg.condition) + ")\n" +
-                 std::to_string(arg.consequence) +
-                 (arg.alternative.has_value()
-                      ? ("else\n" + std::to_string(arg.alternative.value()))
-                      : "");
-        } else if constexpr (std::is_same_v<T, FyshAnchorStmt>) {
-          return std::to_string(arg.op) + " " + std::to_string(arg.right) +
-                 ";\n";
-        } else if constexpr (std::is_same_v<T, Squid>) {
-          return "return " + std::to_string(arg.expr) + ";\n";
-        } else if constexpr (std::is_same_v<T, BrokenFysh>) {
-          return "break;\n";
-        } else {
-          static_assert(always_false_v<T>, "non-exhaustive visitor!");
-        }
+#define MATCH(TYPE, RESULT)                                                    \
+  if constexpr (std::is_same_v<T, TYPE>)                                       \
+    return RESULT;                                                             \
+  else
+        MATCH(Error, error(*arg.t))
+        MATCH(FyshExpr, ss(arg) + ";\n")
+        MATCH(FyshAssignmentStmt, ss(arg.left) + " = " + ss(arg.right) + ";\n")
+        MATCH(FyshBlock, block(arg))
+        MATCH(FyshIncrementStmt, ss(arg.expr) + "++;\n")
+        MATCH(FyshDecrementStmt, ss(arg.expr) + "--;\n")
+        MATCH(FyshLoopStmt, loop(arg))
+        MATCH(FyshIfStmt, ifStmt(arg))
+        MATCH(FyshAnchorStmt, anchor(arg))
+        MATCH(Squid, "return " + ss(arg.expr) + ";\n")
+        MATCH(BrokenFysh, "break;\n")
+        static_assert(always_false_v<T>, "non-exhaustive visitor!");
+#undef MATCH
       },
       f);
 }
 
-bool fysh::ast::operator==(const fysh::ast::FyshExpr &expr, const char *str) {
-  return std::to_string(expr) == str;
-}
+// vim:foldmethod=marker foldmarker=[[[,]]]
