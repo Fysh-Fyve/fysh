@@ -372,31 +372,23 @@ fysh::Emit fysh::Compyler::statement(const ast::FyshStmt &stmt) {
   return std::visit(
       [this](auto &&arg) -> fysh::Emit {
         using T = std::decay_t<decltype(arg)>;
-        if constexpr (std::is_same_v<T, ast::Error>) {
-          return arg;
-        } else if constexpr (std::is_same_v<T, ast::FyshExpr>) {
-          return expression(&arg);
-        } else if constexpr (std::is_same_v<T, ast::FyshBlock>) {
-          return block(arg);
-        } else if constexpr (std::is_same_v<T, ast::FyshLoopStmt>) {
-          return loop(arg);
-        } else if constexpr (std::is_same_v<T, ast::FyshIfStmt>) {
-          return ifStmt(arg);
-        } else if constexpr (std::is_same_v<T, ast::FyshIncrementStmt>) {
-          return increment(arg);
-        } else if constexpr (std::is_same_v<T, ast::FyshDecrementStmt>) {
-          return decrement(arg);
-        } else if constexpr (std::is_same_v<T, ast::FyshAssignmentStmt>) {
-          return assignment(arg);
-        } else if constexpr (std::is_same_v<T, ast::FyshAnchorStmt>) {
-          return anchorStmt(arg);
-        } else if constexpr (std::is_same_v<T, ast::Squid>) {
-          return squidStmt(arg);
-        } else if constexpr (std::is_same_v<T, ast::BrokenFysh>) {
-          return nullptr;
-        } else {
-          static_assert(always_false_v<T>, "non-exhaustive visitor!");
-        }
+#define MATCH(TYPE, RESULT)                                                    \
+  if constexpr (std::is_same_v<T, TYPE>)                                       \
+    return RESULT;                                                             \
+  else
+        MATCH(ast::Error, arg)
+        MATCH(ast::FyshExpr, expression(&arg))
+        MATCH(ast::FyshBlock, block(arg))
+        MATCH(ast::FyshLoopStmt, loop(arg))
+        MATCH(ast::FyshIfStmt, ifStmt(arg))
+        MATCH(ast::FyshIncrementStmt, increment(arg))
+        MATCH(ast::FyshDecrementStmt, decrement(arg))
+        MATCH(ast::FyshAssignmentStmt, assignment(arg))
+        MATCH(ast::FyshAnchorStmt, anchorStmt(arg))
+        MATCH(ast::Squid, squidStmt(arg))
+        MATCH(ast::BrokenFysh, nullptr)
+        static_assert(always_false_v<T>, "non-exhaustive visitor!");
+#undef MATCH
       },
       stmt);
 }
@@ -653,25 +645,21 @@ fysh::Emit fysh::Compyler::expression(const fysh::ast::FyshExpr *expr) {
   return std::visit(
       [this](auto &&arg) -> fysh::Emit {
         using T = std::decay_t<decltype(arg)>;
-        if constexpr (std::is_same_v<T, ast::Error>) {
-          return arg;
-        } else if constexpr (std::is_same_v<T, Box<ast::FyshBinaryExpr>>) {
-          return binary(arg.getraw());
-        } else if constexpr (std::is_same_v<T, Box<ast::FyshUnaryExpr>>) {
-          return unary(arg.getraw());
-        } else if constexpr (std::is_same_v<T, Box<ast::FyshCallExpr>>) {
-          return call(arg.getraw());
-        } else if constexpr (std::is_same_v<T, ast::FyshIdentifier>) {
-          return identifier(arg);
-        } else if constexpr (std::is_same_v<T, ast::FyshLiteral>) {
-          return builder->getInt32(arg.num);
-        } else if constexpr (std::is_same_v<T, ast::FyshFloatLiteral>) {
-          return llvm::ConstantFP::get(*context, llvm::APFloat(arg.num));
-        } else if constexpr (std::is_same_v<T, ast::GrilledFysh>) {
-          return grilledFysh();
-        } else {
-          static_assert(always_false_v<T>, "non-exhaustive visitor!");
-        }
+#define MATCH(TYPE, RESULT)                                                    \
+  if constexpr (std::is_same_v<T, TYPE>)                                       \
+    return RESULT;                                                             \
+  else
+        MATCH(ast::Error, arg)
+        MATCH(Box<ast::FyshBinaryExpr>, binary(arg.getraw()))
+        MATCH(Box<ast::FyshUnaryExpr>, unary(arg.getraw()))
+        MATCH(Box<ast::FyshCallExpr>, call(arg.getraw()))
+        MATCH(ast::FyshIdentifier, identifier(arg))
+        MATCH(ast::FyshLiteral, builder->getInt32(arg.num))
+        MATCH(ast::FyshFloatLiteral,
+              llvm::ConstantFP::get(*context, llvm::APFloat(arg.num)))
+        MATCH(ast::GrilledFysh, grilledFysh())
+        static_assert(always_false_v<T>, "non-exhaustive visitor!");
       },
       *expr);
+#undef MATCH
 }
