@@ -48,9 +48,9 @@ void compyle(const char *input, const char *name, fysh::Options opts) {
 fysh::Options parseOptions(int argc, char *argv[]) {
   fysh::Options opts;
   char c;
-  while ((c = getopt(argc, argv, "o:nah")) != -1) {
+  while ((c = getopt(argc, argv, "o:nph")) != -1) {
     switch (c) {
-    case 'a': {
+    case 'p': {
       opts.output = fysh::Options::Output::AST;
       break;
     }
