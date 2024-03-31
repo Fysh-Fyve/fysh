@@ -23,7 +23,7 @@
 #include <llvm/Support/MemoryBuffer.h>
 #include <llvm/Support/raw_ostream.h>
 
-void compyle(const char *input, const char *name, fysh::Options opts) {
+inline void compyle(const char *input, const char *name, fysh::Options opts) {
   fysh::FyshLexer lexer{input};
   fysh::FyshParser parser{lexer};
   fysh::ast::FyshProgram program{parser.parseProgram()};
@@ -45,7 +45,7 @@ void compyle(const char *input, const char *name, fysh::Options opts) {
   cumpyler.compyle(program, opts);
 }
 
-fysh::Options parseOptions(int argc, char *argv[]) {
+inline fysh::Options parseOptions(int argc, char *argv[]) {
   fysh::Options opts;
   char c;
   while ((c = getopt(argc, argv, "o:nph")) != -1) {

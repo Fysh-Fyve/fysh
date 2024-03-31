@@ -39,8 +39,37 @@ char fysh::FyshLexer::periscope(int line) const noexcept {
 #endif
 
 // -------------- Utility functions --------------
+
+// Peeks at the next character without consuming it, supporting multi-byte
+// characters
+static fysh::FyshChar peekFyshChar(const char *current) noexcept {
+  const char *start{current};
+  size_t bytesToRead{1};
+  // Determine the number of bytes to read based on the first byte
+  if ((*start & 0xE0) == 0xC0) {
+    bytesToRead = 2;
+  } else if ((*start & 0xF0) == 0xE0) {
+    bytesToRead = 3;
+  } else if ((*start & 0xF8) == 0xF0) {
+    bytesToRead = 4;
+  } else {
+    // Single-byte char
+    return fysh::FyshChar{start};
+  }
+  return fysh::FyshChar{std::string_view{start, bytesToRead}};
+}
+
 static bool isScale(char c) noexcept {
-  return c == '(' || c == ')' || c == '{' || c == '}' || c == '-';
+  switch (c) {
+  case '(':
+  case ')':
+  case '{':
+  case '}':
+  case '-':
+    return true;
+  default:
+    return false;
+  }
 }
 
 static std::string_view trim(const std::string_view &in) {
@@ -57,19 +86,9 @@ static std::string_view trim(const std::string_view &in) {
   return {left, static_cast<size_t>(right - left + 1)};
 }
 
-bool fysh::FyshChar::operator==(const char &x) const {
-  return std::holds_alternative<const char *>(*this) &&
-         *std::get<const char *>(*this) == x;
-}
-
-bool fysh::FyshChar::operator==(const char *x) const {
-  return std::holds_alternative<std::string_view>(*this) &&
-         std::get<std::string_view>(*this) == x;
-}
-
 // Checks if the current character is a Unicode character
-bool fysh::FyshLexer::isUnicode() const noexcept {
-  unsigned char c{static_cast<unsigned char>(*current)};
+static bool isUnicode(char current) {
+  unsigned char c{static_cast<unsigned char>(current)};
   if ((c & 0x80) == 0x00)
     return false; // ASCII (first byte is 0xxxxxxx)
 
@@ -106,11 +125,11 @@ fysh::FyshChar fysh::FyshLexer::eatFyshChar() noexcept {
         }
         return {arg};
       },
-      peekFyshChar());
+      peekFyshChar(current));
 }
 
 bool fysh::FyshLexer::expectFyshChar(const char *c) noexcept {
-  if (peekFyshChar() == c) {
+  if (peekFyshChar(current) == c) {
     eatFyshChar();
     return true;
   }
@@ -125,25 +144,6 @@ bool fysh::FyshLexer::expectFyshChar(
     }
   }
   return false;
-}
-
-// Peeks at the next character without consuming it, supporting multi-byte
-// characters
-fysh::FyshChar fysh::FyshLexer::peekFyshChar() noexcept {
-  const char *start{current};
-  size_t bytesToRead{1};
-  // Determine the number of bytes to read based on the first byte
-  if ((*start & 0xE0) == 0xC0) {
-    bytesToRead = 2;
-  } else if ((*start & 0xF0) == 0xE0) {
-    bytesToRead = 3;
-  } else if ((*start & 0xF8) == 0xF0) {
-    bytesToRead = 4;
-  } else {
-    // Single-byte char
-    return FyshChar{start};
-  }
-  return FyshChar{std::string_view{start, bytesToRead}};
 }
 
 // -------------- Token functions --------------
@@ -261,13 +261,13 @@ fysh::Fysh fysh::FyshLexer::namedFysh(FyshDirection dir,
     reel();
   }
   const char *identStart{current};
-  if (isUnicode()) {
+  if (isUnicode(periscope())) {
     eatFyshChar();
   } else {
     reel();
   }
-  while (std::isalnum(periscope()) || isUnicode()) {
-    if (isUnicode()) {
+  while (std::isalnum(periscope()) || isUnicode(periscope())) {
+    if (isUnicode(periscope())) {
       eatFyshChar();
     } else {
       reel();
@@ -303,6 +303,7 @@ fysh::Fysh fysh::FyshLexer::random() noexcept {
   return cullDeformedFysh();
 }
 
+namespace {
 // combines fysh bone values separated by dashes (floats ><}-}-}> 1.11)
 class NumberCombiner {
 private:
@@ -325,8 +326,9 @@ public:
     return firstNumber.value() + decimalPart;
   }
 };
+}; // namespace
 
-fysh::Fysh fysh::FyshLexer::scales(fysh::FyshDirection dir) noexcept {
+fysh::Fysh fysh::FyshLexer::scales(FyshDirection dir) noexcept {
   // gets all the scales and converts them to a binary number
   char c{reel()};
   bool isFloat{c == '-'};
@@ -496,7 +498,7 @@ fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
       while (expectFyshChar("°") || match('o'))
         ;
       return scales(FyshDirection::LEFT);
-    } else if (std::isalpha(periscope()) || isUnicode()) {
+    } else if (std::isalpha(periscope()) || isUnicode(periscope())) {
       return namedFysh(FyshDirection::LEFT, Species::FYSH_IDENTIFIER);
     } else {
       return cullDeformedFysh();
@@ -527,7 +529,7 @@ fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
   case ('#'): return random(); // random number
     // clang-format on
   default:
-    if (std::isalpha(periscope()) || isUnicode()) {
+    if (std::isalpha(periscope()) || isUnicode(periscope())) {
       return namedFysh(FyshDirection::RIGHT, Species::FYSH_IDENTIFIER);
     }
     return cullDeformedFysh();
@@ -585,7 +587,7 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
       } else {
         return cullDeformedFysh();
       }
-    } else if (isUnicode() || std::isalpha(periscope())) {
+    } else if (isUnicode(periscope()) || std::isalpha(periscope())) {
       return namedFysh(FyshDirection::LEFT, Species::SUBMARINE);
     } else {
       // We already reeled in (, do not go fysh.
@@ -633,8 +635,8 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     if (expectFyshChar({
             "☙", "♡", "♥", "❣",
             // "❤",
-            "❥", "❦", "❧", "🎔", "🫀", "🖤", "💙", "🩷", "🩵", "💚",
-            "💛", "💜", "🧡", "🤍", "🤎", "🩶",
+            "❥", "❦", "❧", "🎔", "🫀", "🖤", "💙", "🩷", "🩵", "💚", "💛", "💜",
+            "🧡", "🤍", "🤎", "🩶",
             // "❤️",
             "💓", "💕", "💖", "💗", "💘",
             //"💝",
@@ -676,13 +678,5 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     } else {
       return cullDeformedFysh();
     }
-  }
-}
-
-std::string std::to_string(const fysh::FyshChar &f) {
-  if (std::holds_alternative<const char *>(f)) {
-    return {*std::get<const char *>(f)};
-  } else {
-    return std::string(std::get<std::string_view>(f));
   }
 }

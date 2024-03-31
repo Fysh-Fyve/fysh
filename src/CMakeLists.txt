@@ -10,6 +10,7 @@ add_library (
 	Lexer/Fysh/Fysh.cc
 	Lexer/Fysh/Fysh.h
 	Lexer/Fysh/Species.h
+	Lexer/FyshChar.h
 	Lexer/Lexer.cc
 	Lexer/Lexer.h
 	Parser/AST/AST.cc

@@ -32,7 +32,6 @@
 
 namespace fysh {
 using Emit = std::variant<llvm::Value *, ast::Error>;
-llvm::Value *unwrap(const Emit &v);
 
 struct Options {
   enum class Output { AST, IR } output = Output::IR;
@@ -62,17 +61,15 @@ private:
   /* Compiling expressions */
   Emit expression(const ast::FyshExpr *expr);
   Emit identifier(const ast::FyshIdentifier &expr);
-  Emit binary(const fysh::ast::FyshBinaryExpr &expr);
-  Emit anchorIn(const fysh::ast::FyshBinaryExpr &expr);
-  Emit anchorOut(const fysh::ast::FyshBinaryExpr &expr);
-  Emit unary(const fysh::ast::FyshUnaryExpr &expr);
-  Emit call(const fysh::ast::FyshCallExpr &expr);
+  Emit binary(const ast::FyshBinaryExpr &expr);
+  Emit anchorIn(const ast::FyshBinaryExpr &expr);
+  Emit anchorOut(const ast::FyshBinaryExpr &expr);
+  Emit unary(const ast::FyshUnaryExpr &expr);
+  Emit call(const ast::FyshCallExpr &expr);
   Emit grilledFysh();
 
   /* Compiling subroutines */
-
-  std::optional<fysh::ast::Error> subroutine(const fysh::ast::SUBroutine &sub,
-                                             bool noOpt);
+  std::optional<ast::Error> subroutine(const ast::SUBroutine &sub, bool noOpt);
 
   /* Utility methods */
   Variable resolveVariable(const std::string_view &name, Definition define);

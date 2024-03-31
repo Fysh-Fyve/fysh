@@ -48,6 +48,13 @@
 
 using Params = std::vector<llvm::Type *>;
 
+inline constexpr llvm::Value *unwrap(const fysh::Emit &v) {
+  return std::get<llvm::Value *>(v);
+}
+inline constexpr bool isError(const fysh::Emit &emit) {
+  return std::holds_alternative<fysh::ast::Error>(emit);
+}
+
 fysh::Compyler::Compyler(std::string filename)
     : context{std::make_unique<llvm::LLVMContext>()},
       module{std::make_unique<llvm::Module>("fysh", *context)},
@@ -76,10 +83,6 @@ fysh::Compyler::Compyler(std::string filename)
   pb.registerModuleAnalyses(*mam);
   pb.registerFunctionAnalyses(*fam);
   pb.crossRegisterProxies(*lam, *fam, *cgam, *mam);
-}
-
-static constexpr bool isError(const fysh::Emit &emit) {
-  return std::holds_alternative<fysh::ast::Error>(emit);
 }
 
 llvm::Function *fysh::Compyler::define(const std::string_view &name,
@@ -416,7 +419,7 @@ fysh::Compyler::block(const std::vector<fysh::ast::FyshStmt> &block) {
   return retVal;
 }
 
-static void print(llvm::Module *m, const std::string &path) {
+inline void print(llvm::Module *m, const std::string &path) {
   if (path == "-") {
     llvm::outs() << *m;
   } else {
@@ -672,5 +675,3 @@ fysh::Emit fysh::Compyler::expression(const fysh::ast::FyshExpr *expr) {
       },
       *expr);
 }
-
-llvm::Value *fysh::unwrap(const Emit &v) { return std::get<llvm::Value *>(v); }

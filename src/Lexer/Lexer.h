@@ -21,17 +21,12 @@
 #define FYSH_LEXER_H_
 
 #include "Fysh/Fysh.h"
-#include <variant>
+#include "FyshChar.h"
 
 // Uncomment to print the current line where periscope is called
 // #define FYSH_DEBUG
 
 namespace fysh {
-
-struct FyshChar : public std::variant<const char *, std::string_view> {
-  bool operator==(const char &x) const;
-  bool operator==(const char *x) const;
-};
 
 enum class FyshDirection { RIGHT, LEFT };
 
@@ -52,7 +47,6 @@ private:
   unsigned int line = 1;
 
   char reel() noexcept;
-  bool isUnicode() const noexcept;
   bool match(char x) noexcept;
   bool match(const char *x) noexcept;
 #ifdef FYSH_DEBUG
@@ -74,15 +68,10 @@ private:
   Fysh cullDeformedFysh() noexcept;
   Fysh tilde() noexcept;
   FyshChar eatFyshChar() noexcept;
-  FyshChar peekFyshChar() noexcept;
   bool expectFyshChar(const char *c) noexcept;
   bool expectFyshChar(std::initializer_list<const char *> c) noexcept;
 };
 
 }; // namespace fysh
-
-namespace std {
-string to_string(const fysh::FyshChar &f);
-}
 
 #endif // !FYSH_LEXER_H_
