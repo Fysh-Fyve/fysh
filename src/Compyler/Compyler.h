@@ -35,7 +35,7 @@ using Emit = std::variant<llvm::Value *, ast::Error>;
 llvm::Value *unwrap(const Emit &v);
 
 struct Options {
-  enum class Output { AST, IR } output;
+  enum class Output { AST, IR } output = Output::IR;
   bool noOpt = false;
   std::string outputFilename = "-";
 };
