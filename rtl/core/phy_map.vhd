@@ -135,13 +135,17 @@ begin
   -- This only works for aligned access
   -- TODO: Support unaligned access
   with waddr_i(15 downto 0) select wgpio_sel <=
-    gpio_mode_sel when x"BEE8", gpio_sel when others;
+    counter_sel   when x"BEE4",
+    gpio_mode_sel when x"BEE8",
+    gpio_sel when others;
   with draddr_i(15 downto 0) select dgpio_sel <=
-    counter_sel   when x"BEE7",
+    counter_sel   when x"BEE4",
     gpio_mode_sel when x"BEE8",
     gpio_sel      when others;
   with iraddr_i(15 downto 0) select igpio_sel <=
-    gpio_mode_sel when x"BEE8", gpio_sel when others;
+    counter_sel   when x"BEE4",
+    gpio_mode_sel when x"BEE8",
+    gpio_sel when others;
 
   gpio_inst : entity work.gpio_pins(rtl)
     generic map(VERBOSE => VERBOSE)
