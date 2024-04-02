@@ -224,7 +224,14 @@ void fysh::Compyler::defineGlobals(
                 return ident->name;
               }
             }
+          } else if constexpr (std::is_same_v<T, ast::FyshExpr>) {
+            // If it's a single fysh variable it's the same as setting it to
+            // zero
+            if (auto *ident = std::get_if<ast::FyshIdentifier>(&arg)) {
+              return ident->name;
+            }
           }
+
           return {};
         },
         s)};
