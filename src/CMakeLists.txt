@@ -4,6 +4,7 @@ add_library (
 	Compyler/CompyleStatements.cc
 	Compyler/Compyler.cc
 	Compyler/Compyler.h
+	Compyler/Symbols.cc
 	Compyler/Variable.h
 )
 
@@ -18,6 +19,7 @@ add_library (
 	Parser/AST/AST.cc
 	Parser/AST/AST.h
 	Parser/AST/Box.h
+	Parser/AST/Operators.h
 	Parser/ParseExpressions.cc
 	Parser/ParseStatements.cc
 	Parser/Parser.cc

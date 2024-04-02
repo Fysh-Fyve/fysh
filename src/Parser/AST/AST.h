@@ -21,7 +21,7 @@
 #define FYSH_AST_H_
 
 #include "Box.h"
-#include <cassert>
+#include "Operators.h"
 #include <cstdint>
 #include <optional>
 #include <string>
@@ -34,34 +34,6 @@ template <class> inline constexpr bool always_false_v = false;
 namespace fysh::ast {
 // TODO: Maybe make this more sophisticated?
 using Error = Box<std::string>;
-
-/**
- * all operators that take two arguments and return one (add, sub, greater than,
- * less than, bit shift, etc.)
- */
-enum class FyshBinary {
-  Add,
-  Mul,
-  Div,
-  Equal,
-  NotEqual,
-  GT,
-  LT,
-  GTE,
-  LTE,
-  BitwiseAnd,
-  BitwiseOr,
-  BitwiseXor,
-  ShiftLeft,
-  ShiftRight,
-  AnchorIn,
-  AnchorOut,
-};
-
-enum class FyshUnary {
-  /*! \!True */
-  Neg,
-};
 
 struct FyshBinaryExpr;
 struct FyshUnaryExpr;
@@ -184,57 +156,12 @@ struct FyshProgram : std::vector<FyshSurfaceLevel> {
     return {};
   }
 };
-
-constexpr const char *str(const FyshBinary op) {
-  using FB = FyshBinary;
-  switch (op) {
-    // clang-format off
-  case FB::Add:        return "+";
-  case FB::Mul:        return "*";
-  case FB::Div:        return "/";
-  case FB::Equal:      return "==";
-  case FB::NotEqual:   return "!=";
-  case FB::GT:         return ">";
-  case FB::LT:         return "<";
-  case FB::GTE:        return ">=";
-  case FB::LTE:        return "<=";
-  case FB::BitwiseAnd: return "&";
-  case FB::BitwiseOr:  return "|";
-  case FB::BitwiseXor: return "^";
-  case FB::ShiftLeft:  return "<<";
-  case FB::ShiftRight: return ">>";
-  case FB::AnchorIn:   return "o+)";
-  case FB::AnchorOut:  return "(+o";
-    // clang-format on
-  }
-
-  assert(false);
-  // should never be here
-  return nullptr;
-}
-
-constexpr const char *str(const FyshUnary op) {
-  switch (op) {
-  case FyshUnary::Neg:
-    return "-";
-  }
-
-  assert(false);
-  // should never be here
-  return nullptr;
-}
 }; // namespace fysh::ast
 
 namespace std {
 string to_string(const fysh::ast::FyshExpr &f);
 string to_string(const fysh::ast::FyshStmt &f);
 string to_string(const fysh::ast::FyshProgram &f);
-inline string to_string(const fysh::ast::FyshUnary &f) {
-  return string(str(f));
-}
-inline string to_string(const fysh::ast::FyshBinary &f) {
-  return string(str(f));
-}
 } // namespace std
 
 #endif // !FYSH_AST_H_
