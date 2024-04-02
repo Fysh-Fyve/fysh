@@ -2,6 +2,8 @@ add_library (
 	compyle
 	Compyler/Compyler.cc
 	Compyler/Compyler.h
+	Compyler/Expressions.cc
+	Compyler/Statements.cc
 	Compyler/Variable.h
 )
 

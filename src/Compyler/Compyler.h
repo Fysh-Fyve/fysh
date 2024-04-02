@@ -32,6 +32,7 @@
 
 namespace fysh {
 using Emit = std::variant<llvm::Value *, ast::Error>;
+using Params = std::vector<llvm::Type *>;
 
 struct Options {
   enum class Output { AST, IR } output = Output::IR;
@@ -72,7 +73,8 @@ private:
   std::optional<ast::Error> subroutine(const ast::SUBroutine &sub, bool noOpt);
 
   /* Utility methods */
-  Variable resolveVariable(const std::string_view &name, Definition define);
+  Variable resolveVariable(const std::string_view &name,
+                           Definition define = Definition::NONE);
   llvm::Type *intTy() { return llvm::Type::getInt32Ty(*context); };
   llvm::Type *floatTy() { return llvm::Type::getFloatTy(*context); };
   llvm::Type *voidTy() { return llvm::Type::getVoidTy(*context); };
@@ -83,6 +85,7 @@ private:
                               std::vector<llvm::Type *> params);
 
   llvm::Function *getFunction(const std::string_view &name);
+  void defineGlobals(const std::vector<ast::FyshStmt> &statements);
 
   /* Current program's global variables */
   std::unordered_map<std::string_view, llvm::GlobalVariable *> globals;
@@ -105,6 +108,14 @@ private:
   std::unique_ptr<llvm::PassInstrumentationCallbacks> pic;
   std::unique_ptr<llvm::StandardInstrumentations> si;
 };
+
+inline constexpr llvm::Value *unwrap(const fysh::Emit &v) {
+  return std::get<llvm::Value *>(v);
+}
+
+inline constexpr bool isError(const fysh::Emit &emit) {
+  return std::holds_alternative<fysh::ast::Error>(emit);
+}
 
 }; // namespace fysh
 
