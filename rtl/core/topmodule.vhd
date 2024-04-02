@@ -69,11 +69,11 @@ architecture rtl of topmodule is
 begin
   verbose_print :
   if VERBOSE generate
-    print : process(pc_clk)
+    print : process(pc_clk, done)
       use std.textio.all;
       variable l : line;
     begin
-      if rising_edge(pc_clk) then
+      if rising_edge(pc_clk) or rising_edge(done) then
         write(l, string'("rd_clk: "));
         write(l, rd_clk);
         write(l, string'(" pc: "));
@@ -99,7 +99,10 @@ begin
         write(l, to_hstring(alu));
         write(l, string'(" rd_sel: "));
         write(l, rd_sel);
-        writeline(output, l);
+        write(l, string'(" done: "));
+        write(l, done);
+        write(l, string'(" imm_ex: "));
+        write(l, to_hstring(imm_ex));
         writeline(output, l);
       end if;
     end process print;
@@ -117,6 +120,8 @@ begin
         write(l, to_hstring(imem_out));
         write(l, string'(" iraddr: "));
         write(l, to_hstring(iraddr));
+        write(l, string'(" done: "));
+        write(l, done);
         writeline(output, l);
       end if;
     end process print_reg;
@@ -132,7 +137,7 @@ begin
 
   -- Hacky way to make rs1_val hardwire to 0
   with insn(6 downto 2) select rs1_or_zero <=
-    (others => '0') when "01101",
+    (others => '0') when OPCODE_LUI,
     rs1_val         when others;
 
   program_counter_inst : entity work.program_counter(rtl)
@@ -262,7 +267,8 @@ begin
   -- Branch/Jump to the same instruction (infinite loop) to signal being "done"
   with insn(6 downto 2) select done <=
     nor(imm_ex & pc_alu_sel & pc_next_sel) when OPCODE_BRANCH,
-    nor(imm_ex)                            when OPCODE_JAL,
+    nor(insn(31 downto 12))                when OPCODE_JAL,
+    nor(insn(31 downto 20) & rs1_val)      when OPCODE_JALR,
     '0'                                    when others;
 
   grilled_fysh_inst : entity work.grilled_fysh(rtl) port map (
