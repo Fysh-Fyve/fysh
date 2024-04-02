@@ -68,10 +68,9 @@ TEST_CASE("Zero Width Joiner") {
 
 TEST_CASE("hearts") {
   const std::initializer_list<const char *> vs = {
-      "☙",    "♡",    "♥",    "❣",    "❤", "❥",    "❦",    "❧",
-      "🎔", "🖤", "💙",    "💚",    "💛", "💜",    "🧡", "🤍",
-      "🤎", "🩶", "🩷", "🩵", "💓", "💕",    "💖",    "💗",
-      "💘",    "🫀", "💌",    "💞",    "💟", "🫶", "<3"};
+      "☙",  "♡",  "♥",  "❣",  "❤",  "❥",  "❦",  "❧",  "🎔", "🖤", "💙",
+      "💚", "💛", "💜", "🧡", "🤍", "🤎", "🩶", "🩷", "🩵", "💓", "💕",
+      "💖", "💗", "💘", "🫀", "💌", "💞", "💟", "🫶", "<3"};
   std::string input = join_chars(vs);
   FyshLexer lexer{input.data()};
 
@@ -83,7 +82,7 @@ TEST_CASE("hearts") {
 
 TEST_CASE("operators") {
   const std::initializer_list<const char *> vs = {
-      "💔",  "</3", "&",   "|",   "^",   "~=", "~≈", "==", "≈≈", "=",  "≈", "o~",
+      "💔", "</3", "&",   "|",   "^",   "~=", "~≈", "==", "≈≈", "=",  "≈", "o~",
       "~o", "o~=", "o~≈", "~o=", "~o≈", "=o", "o=", "o≈", "≈o", ">>", "<<"};
   std::string input = join_chars(vs);
   FyshLexer lexer{input.data()};
@@ -225,7 +224,9 @@ TEST_CASE("identifiers") {
   FyshLexer lexer{
       "><pos> <neg>< ><ostart> <ostart>< ><鱼> ><とと> <魚>< "
       "<سمكة>< ><ᜁᜐ᜔ᜇ> ><ᠨᡳᠮᠠᡥᠠ> ><𒐫> "
-      "><🐠🐟🐡🦈🐬🐳🐋🦐🦑🦞🦀🐙>"
+      "><🐠🐟🐡🦈🐬🐳🐋🦐🦑🦞🦀🐙> "
+      "><𒈙>"
+      "><𓀐𓂸>"
       // "<°isthisallowed>< ><whataboutthis°>"
   };
 
@@ -241,6 +242,8 @@ TEST_CASE("identifiers") {
   IDENT_DIR("ᠨᡳᠮᠠᡥᠠ", false);
   IDENT_DIR("𒐫", false);
   IDENT_DIR("🐠🐟🐡🦈🐬🐳🐋🦐🦑🦞🦀🐙", false);
+  IDENT_DIR("𒈙", false);
+  IDENT_DIR("𓀐𓂸", false);
 
   // Comment out until we decide what to do with it
   // IDENT_DIR("°isthisallowed", true);
