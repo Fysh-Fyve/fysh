@@ -77,6 +77,8 @@ private:
   Fysh curFysh;
   Fysh peekFysh;
 };
+
+std::optional<ast::FyshBinary> binaryOp(const Fysh &fysh);
 }; // namespace fysh
 
 #endif // !FYSH_PARSER_H_

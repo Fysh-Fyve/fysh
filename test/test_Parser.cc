@@ -8,16 +8,7 @@
 
 using namespace fysh::ast;
 
-void check_program(fysh::ast::FyshProgram program, std::size_t size) {
-  if (program.size() == 1) {
-    if (std::holds_alternative<Error>(program[0])) {
-      FAIL(std::get<Error>(program[0]).getraw());
-    }
-  }
-  REQUIRE(program.size() == size);
-}
-
-void check_block(std::vector<fysh::ast::FyshStmt> program, std::size_t size) {
+template <typename T> static void check_program(T program, std::size_t size) {
   if (program.size() == 1) {
     if (std::holds_alternative<Error>(program[0])) {
       FAIL(std::get<Error>(program[0]).getraw());
@@ -40,7 +31,7 @@ template <typename T> T unwrap(FyshSurfaceLevel decl) {
   return get_stmt<T>(stmt);
 }
 
-std::vector<FyshStmt> unwrap_block(FyshStmt stmt) {
+inline std::vector<FyshStmt> unwrap_block(FyshStmt stmt) {
   FyshBlock block{std::get<FyshBlock>(stmt)};
   FyshStmt s{stmt};
   while (std::holds_alternative<FyshBlock>(s) &&
@@ -66,7 +57,7 @@ template <typename T> void check_ident(T expr, const char *name) {
   CHECK(get_expr<FyshIdentifier>(expr).name == name);
 }
 
-FyshExpr expr(const char *input) {
+inline FyshExpr expr(const char *input) {
   fysh::FyshParser p{fysh::FyshLexer{input}};
   fysh::ast::FyshProgram program{p.parseProgram()};
   check_program(program, 1);
@@ -84,7 +75,7 @@ TEST_CASE("Loop Statement") {
   check_program(program, 1);
   FyshLoopStmt stmt{unwrap<FyshLoopStmt>(program[0])};
   check_ident(stmt.condition, "fysh");
-  check_block(stmt.body, 1);
+  check_program(stmt.body, 1);
   CHECK(get_expr<FyshLiteral>(unwrap<FyshExpr>(stmt.body[0])).num == 1);
 }
 
@@ -158,7 +149,7 @@ TEST_CASE("Subroutines") {
   REQUIRE(func.parameters.size() == 1);
   CHECK(func.parameters[0] == "arg1");
   std::vector<FyshStmt> block = unwrap_block(func.body);
-  check_block(block, 2);
+  check_program(block, 2);
 
   FyshAnchorStmt stmt{unwrap<FyshAnchorStmt>(block[0])};
   CHECK(stmt.op == FyshBinary::AnchorIn);

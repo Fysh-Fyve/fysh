@@ -50,226 +50,6 @@ void fysh::FyshParser::nextFysh() {
   } while (peekFysh.isOneOf(Species::COMMENT, Species::MULTI_COMMENT));
 }
 
-fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
-  switch (curFysh.getSpecies()) {
-  case Species::FYSH_LITERAL: {
-    ast::FyshLiteral value{curFysh.getValue().value()};
-    bool negate{curFysh.negate};
-    nextFysh();
-    if (negate) {
-      return ast::FyshUnaryExpr{ast::FyshUnary::Neg, value};
-    }
-    return value;
-  }
-
-  case Species::FYSH_BONES: {
-    ast::FyshFloatLiteral value{curFysh.getFloat().value()};
-    bool negate{curFysh.negate};
-    nextFysh();
-    if (negate) {
-      return ast::FyshUnaryExpr{ast::FyshUnary::Neg, value};
-    }
-    return value;
-  }
-
-  case Species::FYSH_IDENTIFIER: {
-    ast::FyshIdentifier ident{curFysh.getBody()};
-    bool negate{curFysh.negate};
-    nextFysh();
-    if (negate) {
-      return ast::FyshUnaryExpr{ast::FyshUnary::Neg, ident};
-    }
-    return ident;
-  }
-  case Species::GRILLED_FYSH: {
-    nextFysh();
-    return ast::GrilledFysh{};
-  }
-  case Species::FYSH_BOWL_OPEN: {
-    nextFysh();
-    ast::FyshExpr expr{parseExpression()};
-    if (curFysh != Species::FYSH_BOWL_CLOSE) {
-      return expectFysh(Species::FYSH_BOWL_CLOSE);
-    }
-    nextFysh();
-    return expr;
-  }
-  case Species::FYSH_TANK_OPEN: {
-    nextFysh();
-
-    std::optional<std::string_view> callee;
-    bool negate;
-    std::vector<ast::FyshExpr> args;
-    while (curFysh != Species::FYSH_TANK_CLOSE) {
-      if (curFysh == Species::SUBMARINE) {
-        if (callee.has_value()) {
-          return ast::Error{"ambiguous call"};
-        }
-        callee = curFysh.getBody();
-        negate = curFysh.negate;
-        nextFysh();
-      } else {
-        args.push_back(parseExpression());
-      }
-    }
-    nextFysh();
-    if (!callee.has_value()) {
-      return ast::Error{"subroutine not defined"};
-    }
-    return ast::FyshCallExpr{callee.value(), args};
-  }
-  default: {
-    return parseError();
-  }
-  }
-}
-
-static std::optional<FB> binaryOp(fysh::Fysh fysh) {
-  using S = fysh::Species;
-  switch (fysh.getSpecies()) {
-    // clang-format off
-  case S::HEART_MULTIPLY: return FB::Mul;
-  case S::HEART_DIVIDE:   return FB::Div;
-  case S::TADPOLE_LT:     return FB::LT;
-  case S::TADPOLE_GT:     return FB::GT;
-  case S::TADPOLE_LTE:    return FB::LTE;
-  case S::TADPOLE_GTE:    return FB::GTE;
-  case S::EQUAL:          return FB::Equal;
-  case S::NOT_EQUAL:      return FB::NotEqual;
-  case S::BITWISE_AND:    return FB::BitwiseAnd;
-  case S::BITWISE_OR:     return FB::BitwiseOr;
-  case S::CARET:          return FB::BitwiseXor;
-  case S::SHIFT_LEFT:     return FB::ShiftLeft;
-  case S::SHIFT_RIGHT:    return FB::ShiftRight;
-  case S::ANCHOR_LEFT:    return FB::AnchorOut;
-  case S::ANCHOR_RIGHT:   return FB::AnchorIn;
-    // clang-format on
-  default:
-    return {};
-  }
-}
-
-fysh::ast::FyshExpr fysh::FyshParser::parseMultiplicative() {
-  ast::FyshExpr left{parsePrimary()};
-  std::optional<FB> op{binaryOp(curFysh)};
-  while (op == FB::Mul || op == FB::Div || op == FB::ShiftLeft ||
-         op == FB::ShiftRight || op == FB::BitwiseAnd) {
-    nextFysh();
-    ast::FyshExpr right{parseMultiplicative()};
-    left = ast::FyshBinaryExpr{left, right, op.value()};
-    op = binaryOp(curFysh);
-  }
-  return left;
-}
-
-fysh::ast::FyshExpr fysh::FyshParser::parseAdditive() {
-  ast::FyshExpr left{parseMultiplicative()};
-  std::optional<FB> op{binaryOp(curFysh)};
-  while (op == FB::BitwiseOr || op == FB::BitwiseXor ||
-         (!op.has_value() &&
-          !curFysh.isOneOf(Species::FYSH_WATER, Species::FYSH_BOWL_CLOSE,
-                           Species::FYSH_TANK_CLOSE))) {
-    if (op.has_value()) {
-      nextFysh();
-    }
-    ast::FyshExpr right{parseAdditive()};
-    left = ast::FyshBinaryExpr{left, right, op.value_or(FB::Add)};
-    op = binaryOp(curFysh);
-  }
-  return left;
-}
-
-fysh::ast::FyshExpr fysh::FyshParser::parseComparative() {
-  ast::FyshExpr left{parseAdditive()};
-  std::optional<FB> op{binaryOp(curFysh)};
-  while (op == FB::LT || op == FB::GT || op == FB::LTE || op == FB::GTE ||
-         op == FB::Equal || op == FB::NotEqual) {
-    nextFysh();
-    ast::FyshExpr right{parseComparative()};
-    left = ast::FyshBinaryExpr{left, right, op.value()};
-    op = binaryOp(curFysh);
-  }
-  return left;
-}
-
-fysh::ast::FyshExpr fysh::FyshParser::parseAnchor() {
-  ast::FyshExpr left{parseComparative()};
-  std::optional<FB> op{binaryOp(curFysh)};
-  while (op == FB::AnchorIn || op == FB::AnchorOut) {
-    nextFysh();
-    ast::FyshExpr right{parseAnchor()};
-    left = ast::FyshBinaryExpr{left, right, op.value()};
-    op = binaryOp(curFysh);
-  }
-  return left;
-}
-
-fysh::ast::FyshExpr fysh::FyshParser::parseExpression() {
-  return parseAnchor();
-}
-
-fysh::ast::FyshStmt fysh::FyshParser::parseAssignment() {
-  ast::FyshIdentifier ident{curFysh.getBody()};
-  nextFysh();
-  nextFysh();
-  ast::FyshExpr expr{parseExpression()};
-  if (std::holds_alternative<ast::Error>(expr)) {
-    return std::get<ast::Error>(expr);
-  }
-  return terminateStatement(ast::FyshAssignmentStmt{ident, expr});
-}
-
-fysh::ast::FyshStmt fysh::FyshParser::parseIfElse() {
-  nextFysh();
-  if (curFysh != Species::FYSH_TANK_OPEN) {
-    return expectFysh(Species::FYSH_TANK_OPEN);
-  }
-  nextFysh();
-  ast::FyshExpr condition{parseExpression()};
-  if (curFysh != Species::FYSH_TANK_CLOSE) {
-    return expectFysh(Species::FYSH_TANK_CLOSE);
-  }
-  nextFysh();
-  if (curFysh != Species::FYSH_OPEN) {
-    return expectFysh(Species::FYSH_OPEN);
-  }
-  nextFysh();
-  std::vector<ast::FyshStmt> consequence{parseBlock()};
-  if (consequence.size() == 1 &&
-      std::holds_alternative<ast::Error>(consequence[0])) {
-    return consequence[0];
-  }
-  if (curFysh != Species::FYSH_CLOSE) {
-    return expectFysh(Species::FYSH_CLOSE);
-  }
-  nextFysh();
-  // No else statement
-  if (curFysh != Species::ELSE) {
-    return ast::FyshIfStmt{condition, consequence};
-  }
-  nextFysh();
-  // Else if
-  if (curFysh == Species::IF) {
-    return ast::FyshIfStmt{condition, consequence,
-                           ast::FyshBlock{parseIfElse()}};
-  }
-  // Else
-  if (curFysh != Species::FYSH_OPEN) {
-    return expectFysh(Species::FYSH_OPEN);
-  }
-  nextFysh();
-  std::vector<ast::FyshStmt> alternative{parseBlock()};
-  if (alternative.size() == 1 &&
-      std::holds_alternative<ast::Error>(alternative[0])) {
-    return alternative[0];
-  }
-  if (curFysh != Species::FYSH_CLOSE) {
-    return expectFysh(Species::FYSH_CLOSE);
-  }
-  nextFysh();
-  return ast::FyshIfStmt{condition, consequence, alternative};
-}
-
 fysh::ast::FyshSurfaceLevel fysh::FyshParser::parseSUBroutine() {
   std::string_view name{curFysh.getBody()}; // Name of the subroutine
   std::vector<std::string_view> parameters;
@@ -298,73 +78,6 @@ fysh::ast::FyshSurfaceLevel fysh::FyshParser::parseSUBroutine() {
   }
 }
 
-fysh::ast::FyshStmt fysh::FyshParser::parseLoop() {
-  nextFysh();
-  if (curFysh != Species::FYSH_TANK_OPEN) {
-    return expectFysh(Species::FYSH_TANK_OPEN);
-  }
-  nextFysh();
-  ast::FyshExpr condition{parseExpression()};
-  if (curFysh != Species::FYSH_TANK_CLOSE) {
-    return expectFysh(Species::FYSH_TANK_CLOSE);
-  }
-  nextFysh();
-  if (curFysh != Species::FYSH_OPEN) {
-    return expectFysh(Species::FYSH_OPEN);
-  }
-  nextFysh();
-  std::vector<ast::FyshStmt> block{parseBlock()};
-  if (block.size() == 1 && std::holds_alternative<ast::Error>(block[0])) {
-    return block[0];
-  }
-  if (curFysh != Species::FYSH_CLOSE) {
-    return expectFysh(Species::FYSH_CLOSE);
-  }
-  nextFysh();
-  return ast::FyshLoopStmt{condition, block};
-}
-
-fysh::ast::FyshStmt fysh::FyshParser::parseStatement() {
-  switch (curFysh.getSpecies()) {
-  case Species::INCREMENT: {
-    ast::FyshIdentifier ident{curFysh.getBody()};
-    nextFysh();
-    return terminateStatement(ast::FyshIncrementStmt{ident});
-  }
-  case Species::DECREMENT: {
-    ast::FyshIdentifier ident{curFysh.getBody()};
-    nextFysh();
-    return terminateStatement(ast::FyshDecrementStmt{ident});
-  }
-  case Species::BROKEN_FYSH:
-    nextFysh();
-    return terminateStatement(ast::BrokenFysh{}); // Break statement
-
-  case Species::FYSH_LOOP:
-    return parseLoop();
-  case Species::IF:
-    return parseIfElse();
-  case Species::ANCHOR_LEFT:
-  case Species::ANCHOR_RIGHT: {
-    // We know it's one of these two
-    FB op{binaryOp(curFysh).value()};
-    nextFysh();
-    return terminateStatement(ast::FyshAnchorStmt{op, parseExpression()});
-  }
-  case Species::SQUID: {
-    nextFysh();
-    return terminateStatement(ast::Squid{parseExpression()});
-  }
-  default: {
-    if (curFysh == Species::FYSH_IDENTIFIER && peekFysh == Species::ASSIGN) {
-      return parseAssignment();
-    } else {
-      return terminateStatement(parseExpression());
-    }
-  }
-  }
-}
-
 // Parse entire program
 fysh::ast::FyshProgram fysh::FyshParser::parseProgram() {
   fysh::ast::FyshProgram program;
@@ -387,20 +100,6 @@ fysh::ast::FyshProgram fysh::FyshParser::parseProgram() {
   return program;
 }
 
-std::vector<fysh::ast::FyshStmt> fysh::FyshParser::parseBlock() {
-  std::vector<ast::FyshStmt> program;
-
-  while ((curFysh != Species::END) && (curFysh != Species::FYSH_CLOSE)) {
-    fysh::ast::FyshStmt stmt{parseStatement()};
-    if (std::holds_alternative<ast::Error>(stmt)) {
-      return {stmt};
-    }
-    program.push_back(stmt);
-  }
-
-  return program;
-}
-
 fysh::ast::Error fysh::FyshParser::expectFysh(fysh::Species species) {
   return {"Expected " + std::to_string(species) + " at line " +
           std::to_string(lexer.fyshingLine())};
@@ -408,4 +107,30 @@ fysh::ast::Error fysh::FyshParser::expectFysh(fysh::Species species) {
 
 fysh::ast::Error fysh::FyshParser::parseError() {
   return {"Parser error at line " + std::to_string(lexer.fyshingLine())};
+}
+
+std::optional<fysh::ast::FyshBinary> fysh::binaryOp(const fysh::Fysh &fysh) {
+  using S = fysh::Species;
+  using FB = ast::FyshBinary;
+  switch (fysh.getSpecies()) {
+    // clang-format off
+  case S::HEART_MULTIPLY: return FB::Mul;
+  case S::HEART_DIVIDE:   return FB::Div;
+  case S::TADPOLE_LT:     return FB::LT;
+  case S::TADPOLE_GT:     return FB::GT;
+  case S::TADPOLE_LTE:    return FB::LTE;
+  case S::TADPOLE_GTE:    return FB::GTE;
+  case S::EQUAL:          return FB::Equal;
+  case S::NOT_EQUAL:      return FB::NotEqual;
+  case S::BITWISE_AND:    return FB::BitwiseAnd;
+  case S::BITWISE_OR:     return FB::BitwiseOr;
+  case S::CARET:          return FB::BitwiseXor;
+  case S::SHIFT_LEFT:     return FB::ShiftLeft;
+  case S::SHIFT_RIGHT:    return FB::ShiftRight;
+  case S::ANCHOR_LEFT:    return FB::AnchorOut;
+  case S::ANCHOR_RIGHT:   return FB::AnchorIn;
+    // clang-format on
+  default:
+    return {};
+  }
 }

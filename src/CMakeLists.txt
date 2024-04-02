@@ -1,9 +1,9 @@
 add_library (
 	compyle
+	Compyler/CompyleExpressions.cc
+	Compyler/CompyleStatements.cc
 	Compyler/Compyler.cc
 	Compyler/Compyler.h
-	Compyler/Expressions.cc
-	Compyler/Statements.cc
 	Compyler/Variable.h
 )
 
@@ -18,6 +18,8 @@ add_library (
 	Parser/AST/AST.cc
 	Parser/AST/AST.h
 	Parser/AST/Box.h
+	Parser/ParseExpressions.cc
+	Parser/ParseStatements.cc
 	Parser/Parser.cc
 	Parser/Parser.h
 )
