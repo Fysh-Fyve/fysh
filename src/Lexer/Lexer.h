@@ -67,6 +67,10 @@ private:
   Fysh namedFysh(FyshDirection dir, Species species) noexcept;
   Fysh cullDeformedFysh() noexcept;
   Fysh tilde() noexcept;
+  Fysh fyshBowlOpen() noexcept;
+  Fysh equal() noexcept;
+  Fysh o() noexcept;
+  Fysh handleOther() noexcept;
   FyshChar eatFyshChar() noexcept;
   bool expectFyshChar(const char *c) noexcept;
   bool expectFyshChar(std::initializer_list<const char *> c) noexcept;

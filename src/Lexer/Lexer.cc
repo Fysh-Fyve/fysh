@@ -97,6 +97,16 @@ static bool isUnicode(char current) {
   return (c & 0xE0) == 0xC0 || (c & 0xF0) == 0xE0 || (c & 0xF8) == 0xF0;
 }
 
+// Checks if the character can be the start of an identifier
+static inline bool isIdentStart(char c) {
+  // We can literally start with numbers
+  return std::isalnum(c) || c == '_' || isUnicode(c);
+}
+
+static inline bool isIdentBody(char c) {
+  return std::isalnum(c) || c == '_' || isUnicode(c);
+}
+
 char fysh::FyshLexer::reel() noexcept {
   char c{*current++};
   if (c == '\n')
@@ -266,7 +276,7 @@ fysh::Fysh fysh::FyshLexer::namedFysh(FyshDirection dir,
   } else {
     reel();
   }
-  while (std::isalnum(periscope()) || isUnicode(periscope())) {
+  while (isIdentBody(periscope())) {
     if (isUnicode(periscope())) {
       eatFyshChar();
     } else {
@@ -498,7 +508,7 @@ fysh::Fysh fysh::FyshLexer::swimLeft() noexcept {
       while (expectFyshChar("°") || match('o'))
         ;
       return scales(FyshDirection::LEFT);
-    } else if (std::isalpha(periscope()) || isUnicode(periscope())) {
+    } else if (isIdentStart(periscope())) {
       return namedFysh(FyshDirection::LEFT, Species::FYSH_IDENTIFIER);
     } else {
       return cullDeformedFysh();
@@ -529,7 +539,7 @@ fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
   case ('#'): return random(); // random number
     // clang-format on
   default:
-    if (std::isalpha(periscope()) || isUnicode(periscope())) {
+    if (isIdentStart(periscope())) {
       return namedFysh(FyshDirection::RIGHT, Species::FYSH_IDENTIFIER);
     }
     return cullDeformedFysh();
@@ -558,6 +568,112 @@ fysh::Fysh fysh::FyshLexer::tilde() noexcept {
   }
 }
 
+// Starts with o
+fysh::Fysh fysh::FyshLexer::o() noexcept {
+  // Tadpoles and Right Anchors
+  reel();
+  if (match('~')) {
+    if (match('=')) {
+      return Species::TADPOLE_GTE;
+    } else if (expectFyshChar("≈")) {
+      return Species::TADPOLE_GTE;
+    } else {
+      // We already reeled in ~, do not go fysh.
+      return Species::TADPOLE_GT;
+    }
+  } else if (match('+')) {
+    if (match(')')) {
+      return Species::ANCHOR_RIGHT;
+    } else {
+      return cullDeformedFysh();
+    }
+  } else if (match('=') || expectFyshChar("≈")) {
+    return Species::TADPOLE_GTE;
+  } else {
+    // must be o~ or o+
+    return cullDeformedFysh();
+  }
+}
+
+fysh::Fysh fysh::FyshLexer::handleOther() noexcept {
+  if (expectFyshChar({
+          "☙", "♡", "♥", "❣",
+          // "❤",
+          "❥", "❦", "❧", "🎔", "🫀", "🖤", "💙", "🩷", "🩵", "💚", "💛", "💜",
+          "🧡", "🤍", "🤎", "🩶",
+          // "❤️",
+          "💓", "💕", "💖", "💗", "💘",
+          //"💝",
+          //"❣️",
+          "💌", "💞", "💟", "🫶",
+          //"🫶🏻",
+          //"🫶🏼",
+          //"🫶🏽",
+          //"🫶🏾",
+          //"🫶🏿",
+          //"🏩",
+
+      })) {
+    return Species::HEART_MULTIPLY;
+
+  } else if (expectFyshChar("❤")) {
+    expectFyshChar("\ufe0f");
+    // Zero width joiner for ❤️‍🔥 and ❤️‍🩹
+    if (expectFyshChar("\u200d")) {
+      if (expectFyshChar({"🔥", "🩹"})) {
+        return Species::HEART_MULTIPLY;
+      } else {
+        // invalid ZWJ heart
+        return cullDeformedFysh();
+      }
+    }
+    return Species::HEART_MULTIPLY;
+  } else if (expectFyshChar("💔")) {
+    return Species::HEART_DIVIDE;
+  } else if (expectFyshChar("≈")) {
+    if (expectFyshChar("≈")) {
+      return Species::EQUAL;
+    } else if (match("o")) {
+      return Species::TADPOLE_LTE;
+    }
+    return Species::ASSIGN;
+  } else if (expectFyshChar("🦑")) {
+    return Species::SQUID;
+  } else {
+    return cullDeformedFysh();
+  }
+}
+
+// Starts with =
+fysh::Fysh fysh::FyshLexer::equal() noexcept {
+  reel();
+  if (match('=')) {
+    return Species::EQUAL;
+  } else if (match('o')) {
+    return Species::TADPOLE_LTE;
+  } else {
+    // We already reeled in =, do not go fysh.
+    return Species::ASSIGN;
+  }
+}
+
+// Starts with (
+fysh::Fysh fysh::FyshLexer::fyshBowlOpen() noexcept {
+  reel();
+  if (match('+')) {
+    if (match('o')) {
+      return Species::ANCHOR_LEFT;
+    } else {
+      return cullDeformedFysh();
+    }
+  } else if (isIdentStart(periscope())) {
+    return namedFysh(FyshDirection::LEFT, Species::SUBMARINE);
+  } else {
+    // We already reeled in (, do not go fysh.
+    return Species::FYSH_BOWL_OPEN;
+  }
+}
+
 // Where the magic happens
 fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
   while (std::isspace(periscope())) {
@@ -567,7 +683,6 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
   fyshStart = current;
   switch (periscope()) {
     // clang-format off
-  case '\0': return Species::END;
   case '<':
   case '>': return fyshOutline();
   case '&': return goFysh(Species::BITWISE_AND);
@@ -578,105 +693,11 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
   case ']': return goFysh(Species::FYSH_TANK_CLOSE);
   case ')': return goFysh(Species::FYSH_BOWL_CLOSE);
   case '-': return goFysh(Species::FYSH_FOOD);
+  case '(': return fyshBowlOpen();
+  case '=': return equal();
+  case 'o': return o();
+  case 0:   return Species::END;
+  default:  return handleOther();
     // clang-format on
-  case '(': {
-    reel();
-    if (match('+')) {
-      if (match('o')) {
-        return Species::ANCHOR_LEFT;
-      } else {
-        return cullDeformedFysh();
-      }
-    } else if (isUnicode(periscope()) || std::isalpha(periscope())) {
-      return namedFysh(FyshDirection::LEFT, Species::SUBMARINE);
-    } else {
-      // We already reeled in (, do not go fysh.
-      return Species::FYSH_BOWL_OPEN;
-    }
-  }
-  case '=': {
-    reel();
-    if (match('=')) {
-      return Species::EQUAL;
-    } else if (match('o')) {
-      return Species::TADPOLE_LTE;
-    } else {
-      // We already reeled in =, do not go fysh.
-      return Species::ASSIGN;
-    }
-  }
-  case 'o': {
-    // Tadpoles and Right Anchors
-    reel();
-    if (match('~')) {
-      if (match('=')) {
-        return Species::TADPOLE_GTE;
-      } else if (expectFyshChar("≈")) {
-        return Species::TADPOLE_GTE;
-      } else {
-        // We already reeled in ~, do not go fysh.
-        return Species::TADPOLE_GT;
-      }
-    } else if (match('+')) {
-      if (match(')')) {
-        return Species::ANCHOR_RIGHT;
-      } else {
-        return cullDeformedFysh();
-      }
-    } else if (match('=') || expectFyshChar("≈")) {
-      return Species::TADPOLE_GTE;
-    } else {
-      // must be o~ or o+
-      return cullDeformedFysh();
-    }
-  }
-  default:
-    // Ascii characters
-    if (expectFyshChar({
-            "☙", "♡", "♥", "❣",
-            // "❤",
-            "❥", "❦", "❧", "🎔", "🫀", "🖤", "💙", "🩷", "🩵", "💚", "💛", "💜",
-            "🧡", "🤍", "🤎", "🩶",
-            // "❤️",
-            "💓", "💕", "💖", "💗", "💘",
-            //"💝",
-            //"❣️",
-            "💌", "💞", "💟", "🫶",
-            //"🫶🏻",
-            //"🫶🏼",
-            //"🫶🏽",
-            //"🫶🏾",
-            //"🫶🏿",
-            //"🏩",
-
-        })) {
-      return Species::HEART_MULTIPLY;
-
-    } else if (expectFyshChar("❤")) {
-      expectFyshChar("\ufe0f");
-      // Zero width joiner for ❤️‍🔥 and ❤️‍🩹
-      if (expectFyshChar("\u200d")) {
-        if (expectFyshChar({"🔥", "🩹"})) {
-          return Species::HEART_MULTIPLY;
-        } else {
-          // invalid ZWJ heart
-          return cullDeformedFysh();
-        }
-      }
-      return Species::HEART_MULTIPLY;
-    } else if (expectFyshChar("💔")) {
-      return Species::HEART_DIVIDE;
-    } else if (expectFyshChar("≈")) {
-      if (expectFyshChar("≈")) {
-        return Species::EQUAL;
-      } else if (match("o")) {
-        return Species::TADPOLE_LTE;
-      }
-      return Species::ASSIGN;
-    } else if (expectFyshChar("🦑")) {
-      return Species::SQUID;
-    } else {
-      return cullDeformedFysh();
-    }
   }
 }

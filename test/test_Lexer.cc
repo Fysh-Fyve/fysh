@@ -105,6 +105,8 @@ TEST_CASE("identifiers") {
       "><🐠🐟🐡🦈🐬🐳🐋🦐🦑🦞🦀🐙> "
       "><𒈙>"
       "><𓀐𓂸>"
+      "><under_scored>"
+      "><_under_scored>"
       // "<°isthisallowed>< ><whataboutthis°>"
   };
 
@@ -122,6 +124,8 @@ TEST_CASE("identifiers") {
   IDENT_DIR("🐠🐟🐡🦈🐬🐳🐋🦐🦑🦞🦀🐙", false);
   IDENT_DIR("𒈙", false);
   IDENT_DIR("𓀐𓂸", false);
+  IDENT_DIR("under_scored", false);
+  IDENT_DIR("_under_scored", false);
 
   // Comment out until we decide what to do with it
   // IDENT_DIR("°isthisallowed", true);
