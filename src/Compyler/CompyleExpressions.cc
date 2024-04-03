@@ -61,7 +61,16 @@ fysh::Emit fysh::Compyler::call(const fysh::ast::FyshCallExpr &expr) {
     argValues.push_back(unwrap(e));
   }
 
-  llvm::Function *func{getFunction(expr.callee)};
+  llvm::Function *func;
+  // Add some builtins
+  // TODO: Maybe do a cleaner way?
+  if (expr.callee == "get_seg") {
+    func = getOrDefine(expr.callee, intTy(), Params{intTy()});
+  } else if (expr.callee == "counter_read") {
+    func = getOrDefine(expr.callee, intTy(), Params{});
+  } else {
+    func = getFunction(expr.callee);
+  }
   if (!func) {
     std::string str;
     llvm::raw_string_ostream ss{str};
