@@ -1,11 +1,11 @@
-package main_test
+package server_test
 
 import (
 	_ "embed"
 	"fmt"
 	"testing"
 
-	"github.com/Fysh-Fyve/fyshls"
+	"github.com/Fysh-Fyve/fyshls/server"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -15,9 +15,9 @@ var SOURCE_CODE []byte
 func TestHighlight(t *testing.T) {
 	assert := assert.New(t)
 
-	n, err := main.GetTree(SOURCE_CODE)
+	n, err := server.GetTree(SOURCE_CODE)
 	assert.NoError(err)
-	x := main.Encode(SOURCE_CODE, n)
+	x := server.Encode(SOURCE_CODE, n)
 	expected := 25
 	if len(x)/5 != expected {
 		var lineNum uint32 = 0
