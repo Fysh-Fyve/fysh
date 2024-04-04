@@ -249,14 +249,16 @@ func (s *Server) initialize(
 			"9", "0", "-", "@", "^", "*"},
 	}
 
-	tokenTypes, _ := support.GetTokenTypes()
-	tokenModifiers, _ := support.GetTokenModifiers()
-	capabilities.SemanticTokensProvider = &protocol.SemanticTokensOptions{
-		Full: true,
-		Legend: protocol.SemanticTokensLegend{
-			TokenTypes:     tokenTypes,
-			TokenModifiers: tokenModifiers,
-		},
+	if params.Capabilities.TextDocument.SemanticTokens != nil {
+		tokenTypes, _ := support.GetTokenTypes()
+		tokenModifiers, _ := support.GetTokenModifiers()
+		capabilities.SemanticTokensProvider = &protocol.SemanticTokensOptions{
+			Full: true,
+			Legend: protocol.SemanticTokensLegend{
+				TokenTypes:     tokenTypes,
+				TokenModifiers: tokenModifiers,
+			},
+		}
 	}
 
 	n, err := json.MarshalIndent(params, "", " ")
