@@ -1,5 +1,5 @@
-github.com/Fysh-Fyve/tree-sitter-fysh v0.0.0-20240328123143-e2eb903dfad2 h1:sHDNl4ttpb1Zikk8FeEeNQNsLQ8rodnbFbX4Z3b6PkY=
-github.com/Fysh-Fyve/tree-sitter-fysh v0.0.0-20240328123143-e2eb903dfad2/go.mod h1:eM+3uNKZrAorGGhEKRZeHkghfXqz1aOUob1i5GJuIKo=
+github.com/Fysh-Fyve/tree-sitter-fysh v0.0.0-20240404142455-df477e6e0c69 h1:xMp02jZXYPUHNDPvtgstZFKN5P1gmNdGbIr7GtrNATg=
+github.com/Fysh-Fyve/tree-sitter-fysh v0.0.0-20240404142455-df477e6e0c69/go.mod h1:eM+3uNKZrAorGGhEKRZeHkghfXqz1aOUob1i5GJuIKo=
 github.com/aymanbagabas/go-osc52/v2 v2.0.1 h1:HwpRHbFMcZLEVr42D4p7XBqjyuxQH5SMiErDT4WkJ2k=
 github.com/aymanbagabas/go-osc52/v2 v2.0.1/go.mod h1:uYgXzlJ7ZpABp8OJ+exZzJJhRNQ2ASbcXHWsFqH8hp8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
