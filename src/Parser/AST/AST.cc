@@ -71,6 +71,14 @@ std::string std::to_string(const fysh::ast::FyshExpr &f) {
           s += ")";
           return (arg.t->negate ? "-" : "") + std::string(arg.t->callee) + "(" +
                  s;
+        } else if constexpr (std::is_same_v<T, Aquarium>) {
+          bool first{true};
+          std::string s = "[";
+          for (auto const &f : arg) {
+            s += (first ? first = false, "" : ", ") + std::to_string(f);
+          }
+          s += "]";
+          return s;
         } else if constexpr (std::is_same_v<T, Box<FyshUnaryExpr>>) {
           return "(" + std::to_string(arg.t->op) + " " +
                  std::to_string(arg.t->expr) + ")";

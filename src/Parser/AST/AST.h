@@ -38,6 +38,7 @@ using Error = Box<std::string>;
 struct FyshBinaryExpr;
 struct FyshUnaryExpr;
 struct FyshCallExpr;
+struct Aquarium;
 
 // This is intentionally empty
 struct GrilledFysh {};
@@ -59,10 +60,15 @@ struct FyshFloatLiteral {
 // every single type of expression
 using FyshExpr = std::variant<Error, Box<FyshCallExpr>, Box<FyshBinaryExpr>,
                               Box<FyshUnaryExpr>, FyshIdentifier, FyshLiteral,
-                              FyshFloatLiteral, GrilledFysh>;
+                              FyshFloatLiteral, GrilledFysh, Aquarium>;
 
 bool operator==(const FyshExpr &expr, const char *str);
 bool operator!=(const FyshExpr &expr, const char *str);
+
+struct Aquarium : public std::vector<FyshExpr> {
+  using std::vector<FyshExpr>::vector;
+  Aquarium(const std::vector<FyshExpr> &vec) : std::vector<FyshExpr>(vec) {}
+};
 
 // !Steven
 struct FyshUnaryExpr {

@@ -43,6 +43,10 @@ fysh::Emit fysh::Compyler::expression(const fysh::ast::FyshExpr *expr) {
           return llvm::ConstantFP::get(*context, llvm::APFloat(arg.num));
         } else if constexpr (std::is_same_v<T, ast::GrilledFysh>) {
           return grilledFysh();
+        } else if constexpr (std::is_same_v<T, ast::Aquarium>) {
+          // TODO: Finish
+          llvm::errs() << "Aquarium not implemented\n";
+          std::exit(1);
         } else {
           static_assert(always_false_v<T>, "non-exhaustive visitor!");
         }

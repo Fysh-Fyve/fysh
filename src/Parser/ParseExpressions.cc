@@ -86,11 +86,14 @@ fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
         nextFysh();
       } else {
         args.push_back(parseExpression());
+        if (curFysh == Species::FYSH_FOOD) {
+          nextFysh();
+        }
       }
     }
     nextFysh();
     if (!callee.has_value()) {
-      return ast::Error{"subroutine not defined"};
+      return args;
     }
     return ast::FyshCallExpr{callee.value(), args};
   }
@@ -116,10 +119,11 @@ fysh::ast::FyshExpr fysh::FyshParser::parseMultiplicative() {
 fysh::ast::FyshExpr fysh::FyshParser::parseAdditive() {
   ast::FyshExpr left{parseMultiplicative()};
   std::optional<FB> op{binaryOp(curFysh)};
+  using S = Species;
   while (op == FB::BitwiseOr || op == FB::BitwiseXor ||
          (!op.has_value() &&
-          !curFysh.isOneOf(Species::FYSH_WATER, Species::FYSH_BOWL_CLOSE,
-                           Species::FYSH_TANK_CLOSE))) {
+          !curFysh.isOneOf(S::FYSH_WATER, S::FYSH_BOWL_CLOSE,
+                           S::FYSH_TANK_CLOSE, S::SUBMARINE, S::FYSH_FOOD))) {
     if (op.has_value()) {
       nextFysh();
     }
