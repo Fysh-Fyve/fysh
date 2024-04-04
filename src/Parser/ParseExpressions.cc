@@ -84,6 +84,9 @@ fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
         callee = curFysh.getBody();
         negate = curFysh.negate;
         nextFysh();
+        if (curFysh == Species::FYSH_FOOD) {
+          nextFysh();
+        }
       } else {
         args.push_back(parseExpression());
         if (curFysh == Species::FYSH_FOOD) {
