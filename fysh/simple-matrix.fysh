@@ -1,0 +1,70 @@
+></*>
+Simple 8x8 matrix!
+C1 - JE1 - gpio[24]
+C2 - JE2 - gpio[25]
+C3 - JE3 - gpio[26]
+R1 - JE4 - gpio[27]
+R2 - JE5 - gpio[28]
+R3 - JE6 - gpio[29]
+EN - JE7 - gpio[30]
+
+Buttons:
+H - gpio[0]
+J - gpio[1]
+K - gpio[2]
+L - gpio[3]
+
+o x o o x x x x
+x o x x o x x x
+o x o o x x x x
+x x x x x x x x
+o x o o x x x x
+x o x x o x x x
+o x o o x x x x
+x x x x x x x x
+
+0,0
+0,2
+0,3
+1,1
+1,4
+2,0
+2,2
+2,3
+<*/><
+
+>(pixel) ><row> ><col>
+><>
+   o+) ><gpio> ~
+   (+o (><gpio> &
+         (<°}>< << ><{{{°>) ></*> keep everything in GPIO
+                                  the same but the first 7 bits <*/><
+        ) |
+        (><{°> << ><{{{°>) | ><//> Output enable
+        (><row> << ><{{°>) | ><//> Row is next higher 3 bits
+        ><col> ~ ><//> Col is first 3 bits
+<><
+
+><//> It's little endian somehow so we gotta start at 24
+><//> Set buttons as input
+[><{{(((°> >(pin_mode) ><(°>] ~
+[><{{(({°> >(pin_mode) ><(°>] ~
+[><{{({(°> >(pin_mode) ><(°>] ~
+[><{{({{°> >(pin_mode) ><(°>] ~
+
+><//> TODO: Buttons
+
+><(((@> [><{°>]
+><>
+   [><(°>  >(pixel)  ><(°>  ] ~
+   [><(°>  >(pixel)  ><{(°> ] ~
+   [><(°>  >(pixel)  ><{{°> ] ~
+   [><{°>  >(pixel)  ><{°>  ] ~
+   [><{°>  >(pixel)  ><{((°>] ~
+   [><{(°> >(pixel)  ><(°>  ] ~
+   [><{(°> >(pixel)  ><{(°> ] ~
+   [><{(°> >(pixel)  ><{{°> ] ~
+<><
+
+><//> we're just being nice to LLVM
+><(°> ~
