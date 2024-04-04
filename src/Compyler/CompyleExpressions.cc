@@ -72,9 +72,12 @@ fysh::Emit fysh::Compyler::call(const fysh::ast::FyshCallExpr &expr) {
     func = getOrDefine(expr.callee, intTy(), Params{intTy()});
   } else if (expr.callee == "counter_read") {
     func = getOrDefine(expr.callee, intTy(), Params{});
+  } else if (expr.callee == "pin_mode") {
+    func = getOrDefine(expr.callee, voidTy(), Params{intTy(), intTy()});
   } else {
     func = getFunction(expr.callee);
   }
+
   if (!func) {
     std::string str;
     llvm::raw_string_ostream ss{str};
