@@ -17,7 +17,7 @@ architecture test_bench of counter_tb is
 
 begin
   counter_inst : entity work.counter(rtl)
-    generic map (START => 2**31 -1)
+    generic map (START => 2**30 -1)
     port map (clk_i    => clk, count_o => kent);
 
   process

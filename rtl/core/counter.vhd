@@ -21,13 +21,13 @@ begin
   process(clk_i)
   begin
     if rising_edge(clk_i) then
-      if c = 2**31-1 then
+      if c = 2**30-1 then
         c <= 0;
       else
-        c <= to_integer(to_unsigned(c + 1, 32));
+        c <= to_integer(to_unsigned(c + 1, 31));
       end if;
     end if;
   end process;
 
-  count_o <= std_ulogic_vector(to_unsigned(c, 32));
+  count_o <= '0' & std_ulogic_vector(to_unsigned(c, 31));
 end rtl;
