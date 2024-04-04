@@ -1,6 +1,7 @@
 #include <stdint.h>
 
 uint32_t *counter_address = (uint32_t *)0xDEADBEE4;
+uint32_t *mode_address = (uint32_t *)0xDEADBEE8;
 uint32_t *gpio_address = (uint32_t *)0xDEADBEEF;
 
 uint32_t fysh_gpio_read(const uint32_t pin) {
@@ -11,6 +12,12 @@ uint32_t fysh_gpio_read_all() { return *gpio_address; }
 
 void fysh_gpio_write_all(const uint32_t value) { *gpio_address = value; }
 
+void pin_mode(const uint32_t pin, const uint32_t value) {
+  const uint32_t curr_val = *mode_address;
+  const uint32_t bit = (1 << pin);
+  *mode_address = !value ? curr_val & ~bit : curr_val | bit;
+}
+
 void fysh_gpio_write(const uint32_t pin, const uint32_t value) {
   // Will there be a timing issue for this
   const uint32_t curr_val = *gpio_address;
@@ -20,7 +27,7 @@ void fysh_gpio_write(const uint32_t pin, const uint32_t value) {
 
 uint32_t counter_read() { return *counter_address; }
 
-uint32_t get_seg(uint32_t val) {
+uint32_t get_seg(const uint32_t val) {
   switch (val) {
     // clang-format off
     case 0x0: return 0b0111111;
