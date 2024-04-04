@@ -94,6 +94,8 @@ module.exports = grammar({
   ],
 
   externals: $ => [
+    // We might not even need an external scanner
+    // https://github.com/tree-sitter-grammars/tree-sitter-markdown/blob/7fe453beacecf02c86f7736439f238f5bb8b5c9b/tree-sitter-markdown-inline/grammar.js#L263
     $.multiline_comment,
   ],
 
