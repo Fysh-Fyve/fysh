@@ -63,6 +63,8 @@ package fysh_fyve is
   constant DIV_50_HZ    : integer := 312500;
   constant DIV_100_HZ   : integer := 625000;
   constant DIV_1_KHZ    : integer := 62500;
+  constant DIV_10_KHZ   : integer := 6250;
+  constant DIV_100_KHZ  : integer := 625;
   constant DIV_62_5_MHZ : integer := 2;
 
   procedure write_opcode (l : inout std.textio.line; oc : in opcode_t);

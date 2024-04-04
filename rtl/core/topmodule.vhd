@@ -11,7 +11,7 @@ entity topmodule is
   generic (
     VERBOSE      : boolean := false;
     GPIO_VERBOSE : boolean := false;
-    DIV_CLK      : integer := DIV_1_KHZ);
+    DIV_CLK      : integer := DIV_100_KHZ);
   port (
     clk   : in    std_ulogic;
     reset : in    std_ulogic;
