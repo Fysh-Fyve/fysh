@@ -9,9 +9,9 @@ ENTRY(_start)
 
 MEMORY
 {
-  INST (rx) : ORIGIN = 0x0, LENGTH = 0x200
+  INST (rx) : ORIGIN = 0x0, LENGTH = 0x300
   /* Technically should be rwx but we're raw-dogging data into the ROM */
-  DATA (rx) : ORIGIN = 0x200, LENGTH = 0x80
+  DATA (rx) : ORIGIN = 0x300, LENGTH = 0x80
 }
 
 SECTIONS

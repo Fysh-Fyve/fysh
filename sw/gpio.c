@@ -8,6 +8,10 @@ uint32_t fysh_gpio_read(const uint32_t pin) {
   return (*gpio_address >> pin) & 1;
 }
 
+uint32_t t = 0;
+uint32_t rand() { return (t = 69069 * t + 69069); }
+void rand_init(uint32_t seed) { t = seed; }
+
 uint32_t fysh_gpio_read_all() { return *gpio_address; }
 
 void fysh_gpio_write_all(const uint32_t value) { *gpio_address = value; }

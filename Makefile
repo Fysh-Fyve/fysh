@@ -64,7 +64,7 @@ rtl/core/rom_pkg.vhd: asm/example.hex \
 %.hex: %.elf
 	llvm-objcopy -O binary $< $@
 
-%.elf: sw/fysh-fyve.ld sw/boot.o sw/gpio.o %.o
+%.elf: sw/fysh-fyve.ld sw/boot.o sw/gpio.o sw/mulsi3.o %.o
 	clang --target=riscv32 -march=rv32i -nostdlib -T $^ -o $@
 
 %.o: %.c
