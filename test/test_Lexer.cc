@@ -71,10 +71,9 @@ TEST_CASE("weird fysh") {
 }
 
 TEST_CASE("Bad fysh") {
-  FyshLexer lexer{"><{{({(o><DQHUD ><{{({(o>< ><{{((>< ><{{{< ><o{{}}>< "
+  FyshLexer lexer{"><{{({(o>><{{({(o>< ><{{((>< ><{{{< ><o{{}}>< "
                   "><{{({(o <o{{}}o ><>"};
   T(0b11010);
-  INVALID("<DQHUD");
   T(0b11010);
   INVALID("<");
   T(0b1100);
@@ -360,6 +359,22 @@ TEST_CASE("Broken Fysh") {
 
   T(S::BROKEN_FYSH);
   T(S::BROKEN_FYSH);
+  T(S::END);
+}
+
+TEST_CASE("Contributors") {
+  FyshLexer lexer{"><Contributors> ≈ [ ><Kyle Prince> - ><Charles Ancheta> - "
+                  "><Yahya Al-Shamali>] ~"};
+  IDENT("Contributors");
+  T(S::ASSIGN);
+  T(S::FYSH_TANK_OPEN);
+  IDENT("Kyle Prince");
+  T(S::FYSH_FOOD);
+  IDENT("Charles Ancheta");
+  T(S::FYSH_FOOD);
+  IDENT("Yahya Al-Shamali");
+  T(S::FYSH_TANK_CLOSE);
+  T(S::FYSH_WATER);
   T(S::END);
 }
 

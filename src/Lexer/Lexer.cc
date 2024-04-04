@@ -104,7 +104,7 @@ static inline bool isIdentStart(char c) {
 }
 
 static inline bool isIdentBody(char c) {
-  return std::isalnum(c) || c == '_' || isUnicode(c);
+  return std::isalnum(c) || c == '_' || c == ' ' || c == '-' || isUnicode(c);
 }
 
 char fysh::FyshLexer::reel() noexcept {
