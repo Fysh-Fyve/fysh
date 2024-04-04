@@ -80,7 +80,8 @@ const PREC = {
     "o=",
     "=o",
   ],
-  anchor = choice("(+o", "o+)");
+  anchor = choice("(+o", "o+)"),
+  eyes = repeat(token.immediate(choice("o", "°")));
 
 module.exports = grammar({
   name: "fysh",
@@ -201,17 +202,16 @@ module.exports = grammar({
     fysh_bowl: $ => seq("(", $._expression, ")"),
 
     positive_ident: $ => rightFysh(field("name", $._name)),
-    positive_scales: $ => rightFysh(field("scales", $._scales), repeat(token.immediate(choice("o", "°")))),
-    positive_bones: $ =>
-      // TODO: float
-      rightFysh(field("bones", $._bones), repeat(token.immediate(choice("o", "°")))),
+    positive_scales: $ => rightFysh(field("scales", $._scales), eyes),
+    positive_bones: $ => rightFysh(field("bones", $._bones), eyes),
+
     negative_ident: $ => leftFysh(field("name", $._name)),
-    negative_scales: $ => leftFysh(repeat(token.immediate(choice("o", "°"))), field("scales", $._scales)),
-    negative_bones: $ =>
-      // TODO: float
-      leftFysh(repeat(token.immediate(choice("o", "°"))), field("bones", $._bones)),
+    negative_scales: $ => leftFysh(eyes, field("scales", $._scales)),
+    negative_bones: $ => leftFysh(eyes, field("bones", $._bones)),
+
     _scales: $ => seq(choice($.one, $.zero), repeat(choice($.one, $.zero))),
     _bones: $ => seq($._scales, $.spine, repeat(choice($.one, $.zero, $.spine))),
+
     one: _ => token(choice("{", "}")),
     zero: _ => token(choice("(", ")")),
     spine: _ => token("-"),

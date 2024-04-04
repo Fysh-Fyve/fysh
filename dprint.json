@@ -4,6 +4,7 @@
     "textWrap": "always"
   },
   "typescript": {
+    "lineWidth": 100,
     "arrowFunction.useParentheses": "preferNone"
   },
   "plugins": [
