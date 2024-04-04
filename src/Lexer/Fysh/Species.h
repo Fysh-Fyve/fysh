@@ -96,8 +96,16 @@ enum class Species {
   BITWISE_AND,
   /*! | */
   BITWISE_OR,
+  /*! ! */
+  BITWISE_NOT,
   /*! ^ */
   CARET,
+  /*! && */
+  LOGICAL_AND,
+  /*! || */
+  LOGICAL_OR,
+  /* !! */
+  LOGICAL_NOT,
   /*! ~ */
   FYSH_WATER,
   /*! << */
@@ -159,7 +167,11 @@ constexpr const char *str(const fysh::Species &species) {
   case S::END:             return "END";
   case S::BITWISE_AND:     return "&";
   case S::BITWISE_OR:      return "|";
+  case S::BITWISE_NOT:     return "!";
   case S::CARET:           return "^";
+  case S::LOGICAL_AND:     return "&&";
+  case S::LOGICAL_OR:      return "||";
+  case S::LOGICAL_NOT:     return "!!";
   case S::FYSH_WATER:      return "~";
   case S::SHIFT_LEFT:      return "<<";
   case S::SHIFT_RIGHT:     return ">>";

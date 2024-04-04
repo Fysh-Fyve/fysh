@@ -599,8 +599,8 @@ fysh::Fysh fysh::FyshLexer::handleOther() noexcept {
   if (expectFyshChar({
           "☙", "♡", "♥", "❣",
           // "❤",
-          "❥", "❦", "❧", "🎔", "🫀", "🖤", "💙", "🩷", "🩵", "💚", "💛", "💜",
-          "🧡", "🤍", "🤎", "🩶",
+          "❥", "❦", "❧", "🎔", "🫀", "🖤", "💙", "🩷", "🩵", "💚", "💛",
+          "💜", "🧡", "🤍", "🤎", "🩶",
           // "❤️",
           "💓", "💕", "💖", "💗", "💘",
           //"💝",
@@ -685,8 +685,18 @@ fysh::Fysh fysh::FyshLexer::nextFysh() noexcept {
     // clang-format off
   case '<':
   case '>': return fyshOutline();
-  case '&': return goFysh(Species::BITWISE_AND);
-  case '|': return goFysh(Species::BITWISE_OR);
+  case '&': 
+    reel(); 
+    if (match('&')) return Species::LOGICAL_AND;
+    else return Species::BITWISE_AND;
+  case '|': 
+    reel(); 
+    if (match('|')) return Species::LOGICAL_OR;
+    else return Species::BITWISE_OR;
+  case '!': 
+    reel(); 
+    if (match('!')) return Species::LOGICAL_NOT;
+    else return Species::BITWISE_NOT;
   case '^': return goFysh(Species::CARET);
   case '~': return tilde();
   case '[': return goFysh(Species::FYSH_TANK_OPEN);

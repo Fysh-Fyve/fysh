@@ -48,8 +48,8 @@
 template <typename T> constexpr auto make = std::make_unique<T>;
 
 fysh::Compyler::Compyler(std::string filename)
-    : context{make<llvm::LLVMContext>()},
-      module{std::make_unique<llvm::Module>("fysh", *context)},
+    : context{make<llvm::LLVMContext>()}, module{std::make_unique<llvm::Module>(
+                                              "fysh", *context)},
       builder{std::make_unique<llvm::IRBuilder<>>(*context)},
       fpm{make<llvm::FunctionPassManager>()},
       lam{make<llvm::LoopAnalysisManager>()},
