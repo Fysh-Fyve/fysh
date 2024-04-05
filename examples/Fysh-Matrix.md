@@ -26,25 +26,25 @@ do...
 | GND     | Ground         | GND           |
 | OE      | Output enable  | gpio[8]       |
 | CLK     | Clock input    | gpio[9]       |
-| LAT/STB | Latch pin      | gpio[10]       |
+| LAT/STB | Latch pin      | gpio[10]      |
 
 ## Colour Pins
 
 | PIN | Description       | Fysh-Fyve Pin |
 | --- | ----------------- | ------------- |
-| R1  | R higher bit data | gpio[11]       |
-| R2  | R lower bit data  | gpio[12]       |
-| G1  | G higher bit data | gpio[13]       |
-| G2  | G lower bit data  | gpio[14]       |
-| B1  | B higher bit data | gpio[15]       |
-| B2  | B lower bit data  | gpio[16]       |
+| R1  | R higher bit data | gpio[11]      |
+| R2  | R lower bit data  | gpio[12]      |
+| G1  | G higher bit data | gpio[13]      |
+| G2  | G lower bit data  | gpio[14]      |
+| B1  | B higher bit data | gpio[15]      |
+| B2  | B lower bit data  | gpio[16]      |
 
 ## Pixel Pins?? Not sure what these do yet
 
 | PIN | Description      | Fysh-Fyve Pin |
 | --- | ---------------- | ------------- |
-| A   | A line selection | gpio[17]       |
-| B   | B line selection | gpio[18]       |
-| C   | C line selection | gpio[19]       |
-| D   | D line selection | gpio[20]       |
+| A   | A line selection | gpio[17]      |
+| B   | B line selection | gpio[18]      |
+| C   | C line selection | gpio[19]      |
+| D   | D line selection | gpio[20]      |
 | E   | E line selection | gpio[21]      |
