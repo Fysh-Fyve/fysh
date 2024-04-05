@@ -91,14 +91,19 @@ fysh::Emit fysh::Compyler::call(const fysh::ast::FyshCallExpr &expr) {
 }
 
 fysh::Emit fysh::Compyler::unary(const fysh::ast::FyshUnaryExpr &expr) {
+  using FU = ast::FyshUnary;
   Emit emit{expression(&expr.expr)};
   if (isError(emit)) {
     return emit;
   }
-  if (expr.op == ast::FyshUnary::Neg) {
-    return builder->CreateNeg(unwrap(emit));
+  switch (expr.op) {
+    // clang-format off
+  case FU::Neg:        return builder->CreateNeg(unwrap(emit));
+  case FU::BitwiseNot: return builder->CreateNot(unwrap(emit));
+  case FU::LogicalNot: return nullptr; // not implemented!!
+  default:             return nullptr; // should never happen
+    // clang-format oon
   }
-  return nullptr;
 }
 
 fysh::Emit fysh::Compyler::binary(const fysh::ast::FyshBinaryExpr &expr) {
