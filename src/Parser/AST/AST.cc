@@ -80,7 +80,7 @@ std::string std::to_string(const fysh::ast::FyshExpr &f) {
           s += "]";
           return s;
         } else if constexpr (std::is_same_v<T, Box<FyshUnaryExpr>>) {
-          return "(" + std::to_string(arg.t->op) + " " +
+          return "(" + std::to_string(arg.t->op) + "" +
                  std::to_string(arg.t->expr) + ")";
         } else if constexpr (std::is_same_v<T, FyshIdentifier>) {
           return std::string(arg.name);

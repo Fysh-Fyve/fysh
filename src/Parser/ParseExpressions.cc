@@ -108,7 +108,7 @@ fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
 }
 
 fysh::ast::FyshExpr fysh::FyshParser::parseUnary() {
- // ast::FyshExpr left{parsePrimary()};
+  // ast::FyshExpr left{parsePrimary()};
   std::optional<ast::FyshUnary> op{unaryOp(curFysh)};
   std::vector<FU> unaryOperators;
   while (op == FU::BitwiseNot || op == FU::LogicalNot) {
@@ -118,8 +118,8 @@ fysh::ast::FyshExpr fysh::FyshParser::parseUnary() {
   }
   ast::FyshExpr right{parsePrimary()};
   while (!unaryOperators.empty()) {
-right = ast::FyshUnaryExpr{unaryOperators.back(), right};
-unaryOperators.pop_back();
+    right = ast::FyshUnaryExpr{unaryOperators.back(), right};
+    unaryOperators.pop_back();
   }
 
   return right;
@@ -137,8 +137,6 @@ fysh::ast::FyshExpr fysh::FyshParser::parseMultiplicative() {
   }
   return left;
 }
-
-
 
 fysh::ast::FyshExpr fysh::FyshParser::parseAdditive() {
   ast::FyshExpr left{parseMultiplicative()};
