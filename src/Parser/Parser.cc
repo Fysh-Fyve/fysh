@@ -28,6 +28,12 @@
 
 using FB = fysh::ast::FyshBinary;
 
+// #define PARSER_WACK
+
+#ifdef PARSER_WACK
+#include <iostream>
+#endif // PARSER_WACK
+
 fysh::FyshParser::FyshParser(FyshLexer lexer) : lexer(lexer) {
   nextFysh(); // curFysh
   nextFysh(); // peekFysh
@@ -37,6 +43,10 @@ void fysh::FyshParser::nextFysh() {
   curFysh = peekFysh;
   do {
     peekFysh = lexer.nextFysh();
+#ifdef PARSER_WACK
+    std::cout << lexer.rest() << std::endl;
+#undef PARSER_WACK
+#endif // PARSER_WACK
 
     if ((peekFysh.isOneOf(Species::COMMENT, Species::MULTI_COMMENT)) &&
         peekFysh.getBody() == "fysh bad") {
@@ -141,9 +151,10 @@ std::optional<fysh::ast::FyshUnary> fysh::unaryOp(const fysh::Fysh &fysh) {
   using S = fysh::Species;
   using FU = ast::FyshUnary;
   switch (fysh.getSpecies()) {
-  // clang-format off
+    // clang-format off
     case S::BITWISE_NOT: return FU::BitwiseNot;
     case S::LOGICAL_NOT: return FU::LogicalNot;
+    default:             return {};
     // clang-format on
   }
 }

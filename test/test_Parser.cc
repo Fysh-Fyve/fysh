@@ -57,10 +57,20 @@ template <typename T> void check_ident(T expr, const char *name) {
   CHECK(get_expr<FyshIdentifier>(expr).name == name);
 }
 
+// #define EXPR_WACK
+
+#ifdef EXPR_WACK
+#include <iostream>
+#endif
+
 inline FyshExpr expr(const char *input) {
   fysh::FyshParser p{fysh::FyshLexer{input}};
   fysh::ast::FyshProgram program{p.parseProgram()};
   check_program(program, 1);
+#ifdef EXPR_WACK
+  std::cout << std::to_string(unwrap<FyshExpr>(program[0]));
+#undef EXPR_WACK
+#endif
   return unwrap<FyshExpr>(program[0]);
 }
 
@@ -106,12 +116,12 @@ TEST_CASE("Expression Statements") {
       {"[>(sub) ><{({{{{({{>] ~", "sub(379)"},
       {"[><{({{{{({{>] ~", "[379]"},
       {"[><{({{{{({{> - ><{({{{{({{>] ~", "[379, 379]"},
-      {"<{{{>< ~", "-7"}, 
-      {"!!><}> ~", "!1"},
-      {"!><}> ~", "~1"},
-      {"!!!><}> ~", "!~1"},
-      {"!(!!><}>)", "(~(!1))"},
-      
+      {"<{{{>< ~", "(-7)"},
+      {"!!><}> ~", "(!1)"},
+      {"!><}> ~", "(~1)"},
+      {"!!!><}> ~", "(!(~1))"},
+      {"!(!!><}>) ~", "(~(!1))"},
+
   };
   for (const auto &[input, expected] : cases) {
     CHECK_EQ(expr(input), expected);
@@ -166,7 +176,4 @@ TEST_CASE("Subroutines") {
   stmt = unwrap<FyshAnchorStmt>(block[1]);
   CHECK(stmt.op == FyshBinary::AnchorOut);
   CHECK(stmt.right == "(local + arg1)");
-}
-TEST_CASE("Unary Operators") {
-
 }
