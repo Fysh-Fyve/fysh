@@ -125,6 +125,8 @@ std::optional<fysh::ast::FyshBinary> fysh::binaryOp(const fysh::Fysh &fysh) {
   case S::BITWISE_AND:    return FB::BitwiseAnd;
   case S::BITWISE_OR:     return FB::BitwiseOr;
   case S::CARET:          return FB::BitwiseXor;
+  case S::LOGICAL_AND:    return FB::LogicalAnd;
+  case S::LOGICAL_OR:     return FB::LogicalOr;
   case S::SHIFT_LEFT:     return FB::ShiftLeft;
   case S::SHIFT_RIGHT:    return FB::ShiftRight;
   case S::ANCHOR_LEFT:    return FB::AnchorOut;
@@ -134,3 +136,15 @@ std::optional<fysh::ast::FyshBinary> fysh::binaryOp(const fysh::Fysh &fysh) {
     return {};
   }
 }
+
+std::optional<fysh::ast::FyshUnary> fysh::unaryOp(const fysh::Fysh &fysh) {
+  using S = fysh::Species;
+  using FU = ast::FyshUnary;
+  switch(fysh.getSpecies()) {
+    // clang-format off
+    case S::BITWISE_NOT: return FU::BitwiseNot;
+    case S::LOGICAL_NOT: return FU::LogicalNot; 
+    // clang-format on
+  }
+}
+

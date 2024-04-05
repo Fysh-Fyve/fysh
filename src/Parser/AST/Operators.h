@@ -40,6 +40,8 @@ enum class FyshBinary {
   BitwiseAnd,
   BitwiseOr,
   BitwiseXor,
+  LogicalAnd,
+  LogicalOr,
   ShiftLeft,
   ShiftRight,
   AnchorIn,
@@ -49,6 +51,8 @@ enum class FyshBinary {
 enum class FyshUnary {
   /*! \!True */
   Neg,
+  BitwiseNot,
+  LogicalNot,
 };
 
 constexpr const char *str(const FyshBinary op) {
@@ -67,13 +71,15 @@ constexpr const char *str(const FyshBinary op) {
   case FB::BitwiseAnd: return "&";
   case FB::BitwiseOr:  return "|";
   case FB::BitwiseXor: return "^";
+  case FB::LogicalAnd: return "&&";
+  case FB::LogicalOr:  return "||";
   case FB::ShiftLeft:  return "<<";
   case FB::ShiftRight: return ">>";
   case FB::AnchorIn:   return "o+)";
   case FB::AnchorOut:  return "(+o";
     // clang-format on
   }
-
+;
   assert(false);
   // should never be here
   return nullptr;
@@ -81,8 +87,11 @@ constexpr const char *str(const FyshBinary op) {
 
 constexpr const char *str(const FyshUnary op) {
   switch (op) {
-  case FyshUnary::Neg:
-    return "-";
+    //clang-format off
+  case FyshUnary::Neg:        return "-";
+  case FyshUnary::BitwiseNot: return "~";
+  case FyshUnary::LogicalNot: return "!";
+    // clang-format on
   }
 
   assert(false);

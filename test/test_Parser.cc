@@ -106,6 +106,11 @@ TEST_CASE("Expression Statements") {
       {"[>(sub) ><{({{{{({{>] ~", "sub(379)"},
       {"[><{({{{{({{>] ~", "[379]"},
       {"[><{({{{{({{> - ><{({{{{({{>] ~", "[379, 379]"},
+      {"<{{{>< ~", "-7"}, 
+      {"!!><}> ~", "!1"},
+      {"!><}> ~", "~1"},
+      {"!!!><}> ~", "!~1"},
+      
   };
   for (const auto &[input, expected] : cases) {
     CHECK_EQ(expr(input), expected);
@@ -160,4 +165,7 @@ TEST_CASE("Subroutines") {
   stmt = unwrap<FyshAnchorStmt>(block[1]);
   CHECK(stmt.op == FyshBinary::AnchorOut);
   CHECK(stmt.right == "(local + arg1)");
+}
+TEST_CASE("Unary Operators") {
+
 }

@@ -25,6 +25,7 @@
 #include <vector>
 
 using FB = fysh::ast::FyshBinary;
+using FU = fysh::ast::FyshUnary;
 
 fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
   switch (curFysh.getSpecies()) {
@@ -106,8 +107,26 @@ fysh::ast::FyshExpr fysh::FyshParser::parsePrimary() {
   }
 }
 
+fysh::ast::FyshExpr fysh::FyshParser::parseUnary() {
+ // ast::FyshExpr left{parsePrimary()};
+  std::optional<ast::FyshUnary> op{unaryOp(curFysh)};
+  std::vector<FU> unaryOperators;
+  while (op == FU::BitwiseNot || op == FU::LogicalNot) {
+    unaryOperators.push_back(op.value());
+    nextFysh();
+    op = unaryOp(curFysh);
+  }
+  ast::FyshExpr right{parsePrimary()};
+  while (!unaryOperators.empty()) {
+right = ast::FyshUnaryExpr{unaryOperators.back(), right};
+unaryOperators.pop_back();
+  }
+
+  return right;
+}
+
 fysh::ast::FyshExpr fysh::FyshParser::parseMultiplicative() {
-  ast::FyshExpr left{parsePrimary()};
+  ast::FyshExpr left{parseUnary()};
   std::optional<FB> op{binaryOp(curFysh)};
   while (op == FB::Mul || op == FB::Div || op == FB::ShiftLeft ||
          op == FB::ShiftRight || op == FB::BitwiseAnd) {
@@ -118,6 +137,8 @@ fysh::ast::FyshExpr fysh::FyshParser::parseMultiplicative() {
   }
   return left;
 }
+
+
 
 fysh::ast::FyshExpr fysh::FyshParser::parseAdditive() {
   ast::FyshExpr left{parseMultiplicative()};

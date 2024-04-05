@@ -79,6 +79,7 @@ private:
 };
 
 std::optional<ast::FyshBinary> binaryOp(const Fysh &fysh);
+std::optional<ast::FyshUnary> unaryOp(const Fysh &fysh);
 }; // namespace fysh
 
 #endif // !FYSH_PARSER_H_
