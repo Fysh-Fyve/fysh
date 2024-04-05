@@ -110,6 +110,7 @@ TEST_CASE("Expression Statements") {
       {"!!><}> ~", "!1"},
       {"!><}> ~", "~1"},
       {"!!!><}> ~", "!~1"},
+      {"!(!!><}>)", "(~(!1))"},
       
   };
   for (const auto &[input, expected] : cases) {
