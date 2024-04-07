@@ -151,7 +151,7 @@ std::optional<fysh::ast::FyshUnary> fysh::unaryOp(const fysh::Fysh &fysh) {
   using S = fysh::Species;
   using FU = ast::FyshUnary;
   switch (fysh.getSpecies()) {
-    // clang-format off
+  // clang-format off
     case S::BITWISE_NOT: return FU::BitwiseNot;
     case S::LOGICAL_NOT: return FU::LogicalNot;
     default:             return {};

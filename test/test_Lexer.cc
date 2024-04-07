@@ -7,12 +7,13 @@ using namespace fysh;
 using S = Species;
 
 TEST_CASE("biblically accurate fysh") {
-  FyshLexer lexer{"><{{oooo> <ooooooooo}}>< ><oolong> <oomph><"};
+  FyshLexer lexer{"><{{oooo> <ooooooooo}}>< ><oolong> <oomph>< ><(°o°>"};
 
   T(0b011);
   T(-0b011);
   IDENT_DIR("oolong", false);
   IDENT_DIR("oomph", true);
+  T(0);
 
   T(S::END);
 }
