@@ -1,6 +1,6 @@
 {
   "name": "vscode-fysh",
-  "displayName": "VSCodeFysh",
+  "displayName": "Fysh",
   "preview": true,
   "description": "VSCode Language Support for Fysh",
   "author": {
@@ -8,7 +8,7 @@
   },
   "license": "MIT",
   "icon": "media/icon.png",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/Fysh-Fyve/vscode-fysh"
