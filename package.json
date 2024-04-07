@@ -1,16 +1,25 @@
 {
   "name": "vscode-fysh",
+  "displayName": "VSCodeFysh",
+  "preview": true,
   "description": "VSCode Language Support for Fysh",
-  "author": "Microsoft Corporation",
+  "author": {
+    "name": "Fysh-Fyve Team"
+  },
   "license": "MIT",
-  "version": "1.0.0",
+  "icon": "media/icon.png",
+  "version": "1.0.0-dev",
   "repository": {
     "type": "git",
     "url": "https://github.com/Fysh-Fyve/vscode-fysh"
   },
   "publisher": "CharlesAncheta",
-  "categories": [],
+  "categories": [
+    "Programming Language"
+  ],
   "keywords": [
+    "fysh",
+    "fyshls",
     "multi-root ready"
   ],
   "engines": {
