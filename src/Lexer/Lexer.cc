@@ -100,11 +100,12 @@ static bool isUnicode(char current) {
 // Checks if the character can be the start of an identifier
 static inline bool isIdentStart(char c) {
   // We can literally start with numbers
-  return std::isalnum(c) || c == '_' || isUnicode(c);
+  return std::isalnum(c) || c == '_' || c == '^' || isUnicode(c);
 }
 
 static inline bool isIdentBody(char c) {
-  return std::isalnum(c) || c == '_' || c == ' ' || c == '-' || isUnicode(c);
+  return std::isalnum(c) || c == '_' || c == ' ' || c == '-' || c == '^' ||
+         isUnicode(c);
 }
 
 char fysh::FyshLexer::reel() noexcept {
@@ -599,8 +600,8 @@ fysh::Fysh fysh::FyshLexer::handleOther() noexcept {
   if (expectFyshChar({
           "☙", "♡", "♥", "❣",
           // "❤",
-          "❥", "❦", "❧", "🎔", "🫀", "🖤", "💙", "🩷", "🩵", "💚", "💛",
-          "💜", "🧡", "🤍", "🤎", "🩶",
+          "❥", "❦", "❧", "🎔", "🫀", "🖤", "💙", "🩷", "🩵", "💚", "💛", "💜",
+          "🧡", "🤍", "🤎", "🩶",
           // "❤️",
           "💓", "💕", "💖", "💗", "💘",
           //"💝",
