@@ -35,14 +35,9 @@ x x x x x x x x
 
 >(pixel) ><row> ><col>
 ><>
-   o+) ><gpio> ~
-   (+o (><gpio> &
-         (<°}>< << ><{{{°>) ></*> keep everything in GPIO
-                                  the same but the first 7 bits <*/><
-        ) |
-        (><{°> << ><{{{°>) | ><//> Output enable
-        (><row> << ><{{°>) | ><//> Row is next higher 3 bits
-        ><col> ~ ><//> Col is first 3 bits
+   (+o  (><{°> << ><{{{°>) | ><//> Output enable
+        ((><row> & ><{{{°>) << ><{{°>) | ><//> Row is next higher 3 bits
+        (><col> & ><{{{°>) ~ ><//> Col is first 3 bits
 <><
 
 ><//> It's little endian somehow so we gotta start at 24
