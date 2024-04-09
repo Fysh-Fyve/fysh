@@ -12,7 +12,10 @@ CMAKE_FLAGS += -DCMAKE_BUILD_TYPE=Release
 endif
 
 .PHONY: fysh-sea
-fysh-sea: doctest/doctest.h build/compile_commands.json | build
+fysh-sea: build/fysh-sea
+
+.PHONY: build/fysh-sea
+build/fysh-sea: doctest/doctest.h build/compile_commands.json | build
 	cd build && $(BUILD) fysh-sea
 
 .PHONY: babel-fysh
@@ -33,8 +36,8 @@ release:
 	RELEASE=1 $(MAKE) fysh-sea
 
 .PHONY: install
-install:
-	cp ./build/fysh-sea /usr/local/bin/fysh-sea
+install: build/fysh-sea
+	cp $< /usr/local/bin/fysh-sea
 
 .PHONY: clean
 clean: build
