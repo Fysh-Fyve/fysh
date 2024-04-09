@@ -71,6 +71,10 @@ rtl/core/rom_pkg.vhd: asm/example.hex \
 	clang -c $< -O3 --target=riscv32 -march=rv32i -nostdlib -o $@
 
 %.s: %.fysh
+ifndef FYSH
+	$(error '`fysh-sea` not installed. Please run `sudo make install` in the `fysh` git repository.')
+endif
+
 	$(FYSH) $< | llc -O3 -march=riscv32 -o $@
 
 %.s: %.c
