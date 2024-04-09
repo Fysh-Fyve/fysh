@@ -164,9 +164,13 @@ func (s *Server) openDocument(
 }
 
 func getFysh(v int64) string {
-	format, zero, one := "><%s°>", "(", "{"
+	// const RIGHT = "><%s°>"
+	// const LEFT = "<°%s><"
+	const RIGHT = "><%s>"
+	const LEFT = "<%s><"
+	format, zero, one := RIGHT, "(", "{"
 	if v < 0 {
-		v, format, zero, one = -v, "<°%s><", ")", "}"
+		v, format, zero, one = -v, LEFT, ")", "}"
 	}
 	binary := strconv.FormatInt(v, 2)
 	return fmt.Sprintf(
