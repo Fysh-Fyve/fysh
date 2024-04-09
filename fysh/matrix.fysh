@@ -1,0 +1,26 @@
+></*>
+Simple 8x8 matrix
+C1 - pin 0
+C2 - pin 1
+C3 - pin 2
+R1 - pin 3
+R2 - pin 4
+R3 - pin 5
+EN - pin 6
+
+    0 1 2 3 4 5 6 7 - c
+| 0 o x o o x x x x
+| 1 x o x x o x x x
+| 2 o x o o x x x x
+| 3 x x x x x x x x
+| 4 x x x x o o x o
+| 5 x x x o x x o x
+| 6 x x x x o o x o
+| 7 x x x x x x x x
+  |
+  r
+<*/><
+
+></*>
+syntax match led /o/ | highlight led ctermfg=red guibg=red
+<*/><
