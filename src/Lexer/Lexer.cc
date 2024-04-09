@@ -99,13 +99,26 @@ static bool isUnicode(char current) {
 
 // Checks if the character can be the start of an identifier
 static inline bool isIdentStart(char c) {
-  // We can literally start with numbers
-  return std::isalnum(c) || c == '_' || c == '^' || isUnicode(c);
+  switch (c) {
+  case '_':
+  case '^':
+    return true;
+  default:
+    // We can literally start with numbers
+    return std::isalnum(c) || isUnicode(c);
+  }
 }
 
 static inline bool isIdentBody(char c) {
-  return std::isalnum(c) || c == '_' || c == ' ' || c == '-' || c == '^' ||
-         isUnicode(c);
+  switch (c) {
+  case '_':
+  case ' ':
+  case '^':
+  case '-':
+    return true;
+  default:
+    return std::isalnum(c) || isUnicode(c);
+  }
 }
 
 char fysh::FyshLexer::reel() noexcept {
