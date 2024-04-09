@@ -15,7 +15,8 @@
   },
   "publisher": "Fysh-Fyve",
   "categories": [
-    "Programming Languages"
+    "Programming Languages",
+    "Snippets"
   ],
   "keywords": [
     "fysh",
@@ -25,10 +26,8 @@
   "engines": {
     "vscode": "^1.75.0"
   },
-  "activationEvents": [
-    "onLanguage:plaintext"
-  ],
-  "main": "./client/out/extension",
+  "activationEvents": [],
+  "main": "./out/extension",
   "contributes": {
     "languages": [
       {
@@ -42,37 +41,25 @@
         "configuration": "./language-configuration.json"
       }
     ],
-    "configuration": {
-      "type": "object",
-      "title": "Example configuration",
-      "properties": {
-        "languageServerExample.maxNumberOfProblems": {
-          "scope": "resource",
-          "type": "number",
-          "default": 100,
-          "description": "Controls the maximum number of problems produced by the server."
-        },
-        "languageServerExample.trace.server": {
-          "scope": "window",
-          "type": "string",
-          "enum": [
-            "off",
-            "messages",
-            "verbose"
-          ],
-          "default": "off",
-          "description": "Traces the communication between VS Code and the language server."
-        }
+    "snippets": [
+      {
+        "language": "fysh",
+        "path": "./snippets.json"
       }
-    }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -b",
     "watch": "tsc -b -w",
-    "lint": "eslint ./client/src --ext .ts,.tsx"
+    "lint": "eslint ./src --ext .ts,.tsx"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
   },
   "devDependencies": {
+    "@types/vscode": "^1.75.1",
+    "@vscode/test-electron": "^2.3.9",
     "@types/mocha": "^10.0.6",
     "@types/node": "^18.14.6",
     "@typescript-eslint/eslint-plugin": "^7.1.0",

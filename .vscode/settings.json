@@ -10,15 +10,13 @@
   },
   "editor.tokenColorCustomizations": {
     "textMateRules": [
-        {
-            "scope": "entity.name.type.enum",
-            "settings": {
-                "foreground": "#FF69B4",
-                "fontStyle": ""
-            }
+      {
+        "scope": "entity.name.type.enum",
+        "settings": {
+          "foreground": "#FF69B4",
+          "fontStyle": ""
         }
+      }
     ]
+  }
 }
-
-}
-

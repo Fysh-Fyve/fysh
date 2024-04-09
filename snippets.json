@@ -1,0 +1,22 @@
+{
+  "Submarine": {
+    "prefix": ["sub"],
+    "body": [">(${1:name}) ${2:params}", "><>", "\t$0", "<><"],
+    "description": "A Submarine."
+  },
+  "Loopy Fysh": {
+    "prefix": ["loop", "@"],
+    "body": ["><(((@> [${1:condition}]", "><>", "\t$0", "<><"],
+    "description": "A Loopy Fysh."
+  },
+  "Call Statement": {
+    "prefix": ["cc"],
+    "body": ["[$1] ~$0"],
+    "description": "A single call statement."
+  },
+  "Identifier": {
+    "prefix": ["id"],
+    "body": ["><${1:name}> $0"],
+    "description": "A Fysh Identifier."
+  }
+}
