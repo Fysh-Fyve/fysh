@@ -6,6 +6,9 @@
 (positive_ident) @type
 (negative_ident) @type.definition
 
+(right_sub) @function
+(left_sub) @function
+
 (one) @punctuation.special
 (zero) @constant
 
