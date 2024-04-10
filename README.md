@@ -16,6 +16,31 @@ Current schematic is sourced from
 - Open Vivado
 - Go to Tools > Run Tcl Script... and select `fysh-fyve.tcl`
 
+### Doing the demo
+
+Launch Vivado in TCL mode.
+
+```bash
+# If project is not created yet
+$ vivado -mode tcl
+Vivado% source fysh-fyve.tcl
+Vivado% open_project proj/fysh-fyve.xpr
+# If the project has already been created
+$ vivado -mode tcl proj/fysh-fyve.xpr
+```
+
+Generate the bitstream file.
+
+```tcl
+Vivado% source write-bitstream.tcl
+```
+
+Plug in the board and program.
+
+```tcl
+Vivado% source program-board.tcl
+```
+
 ## GHDL
 
 ### Prerequisites
