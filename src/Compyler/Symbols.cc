@@ -20,12 +20,17 @@
 #include "Compyler.h"
 #include "Variable.h"
 
+#include <algorithm>
+#include <string>
+
 llvm::Function *fysh::Compyler::define(const std::string_view &name,
                                        llvm::Type *returnType,
                                        std::vector<llvm::Type *> params) {
-  llvm::Function *fn{llvm::Function::Create(
-      llvm::FunctionType::get(returnType, params, false),
-      llvm::Function::ExternalLinkage, name, module.get())};
+  std::string s{name};
+  std::replace(s.begin(), s.end(), ' ', '_');
+  llvm::Function *fn{
+      llvm::Function::Create(llvm::FunctionType::get(returnType, params, false),
+                             llvm::Function::ExternalLinkage, s, module.get())};
   subs[name] = fn;
   return fn;
 };
