@@ -54,10 +54,10 @@ rtl/core/rom_pkg.vhd: asm/example.hex \
 %.dump: fysh/%.elf
 	llvm-objdump -D --section=.text --section=.sdata --arch-name=riscv32 $<
 
-%.rom: asm/%.hex
+%.rom: asm/%.hex build/fyve-rom
 	./scripts/make_rom.sh $<
 
-%.rom: fysh/%.hex
+%.rom: fysh/%.hex build/fyve-rom
 	./scripts/make_rom.sh $<
 
 .PRECIOUS: %.hex
