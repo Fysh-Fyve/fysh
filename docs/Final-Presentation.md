@@ -2,7 +2,11 @@
 
 ## First minute
 
+<!-- 1 minute intro showing the poster -->
+
 - Team intro & sponsors
+
+<!-- Mention teammates and client (2) -->
 
 $1: Hello everyone, we are Fysh-Fyve, although only consisting of three members.
 I'm $1.
@@ -18,12 +22,16 @@ Source Software Capstone Project.
 
 - What is the project? and how did it turn out
 
+<!-- Define project (5 subjective) -->
+
 $2: While this project is not a typical product, it serves as a amalgamation of
 Computer Engineering concepts that we have learned throughout the program such
 as computer architecture, compiler design, and development tooling. It also aims
 to expand these concepts to use industry-standard frameworks such as the the
 RISC-V instruction set architecture, the LLVM compiler infrastructure, and the
 Language Server Protocol (LSP).
+
+<!-- Describe project expectations & outcome (10 subjective) -->
 
 It can also serve as a reminder to future Computer Engineering students that
 maybe there is such a thing as too much fun.
@@ -49,6 +57,20 @@ machine.
 <!-- \<Pan to Raspberry Pi driving the 64x64 LED Matrix\> -->
 <!---->
 <!-- It's driven by a Raspberry Pi using an existing library. -->
+
+<!-- 1 minute intro showing the poster -->
+<!-- Mention teammates and client (2) -->
+<!-- Define project (5 subjective) -->
+<!-- Describe project expectations & outcome (10 subjective) -->
+<!---->
+<!-- 9-14 minute demonstration and presentation -->
+<!-- Effective demo (20 subjective) -->
+<!-- Mention what worked and didn’t work (4) -->
+<!-- Mention future work (5 subjective) -->
+<!-- Conclusion (4 subjective) -->
+<!-- Each team member must speak -->
+<!---->
+<!-- Total marks available : 50 -->
 
 ### Coding in Fysh
 
