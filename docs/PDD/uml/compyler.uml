@@ -3,7 +3,7 @@ node "Dev Machine" {
   frame "Front end" as FE {
     [FyshLexer]
     [FyshParser]
-    [Semantic Analyzer] as SA
+    ' [Semantic Analyzer] as SA
   }
 
   frame "LLVM Compiler Infrastructure" as ME {
@@ -14,8 +14,9 @@ node "Dev Machine" {
 }
 
 FyshLexer -right-> FyshParser
-FyshParser -right-> SA
-SA -down-> (IR)
-IR -right-> (OP)
-OP -right-> (CG)
+FyshParser --> IR
+' FyshParser -right-> SA
+' SA -down-> (IR)
+IR --> (OP)
+OP --> (CG)
 @enduml
