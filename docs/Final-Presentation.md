@@ -18,15 +18,15 @@ $2: I'm $2.
 $3: I'm $3.
 
 $2: We would like to thank our sponsor, Steven Knudsen, for his support and
-guidance throughout the project.
+guidance throughout the project, alongside the myriad of fish puns.
 
-$1: We started as a compiler project for eleven engineering, but there was no
+$1: We started as a compiler project for Eleven Engineering, but there was no
 operating system to run the compiled code. So we decided to privot. Meet
 Fysh-Fyve!
 
-- What does Fysh-Fyve really mean?
-
 <!-- Define project (5 subjective) -->
+
+- What does Fysh-Fyve really mean?
 
 $2: Fysh-Fyve is two projects swimming side by side. The first of which is a
 fish themed programming language called Fysh. The second is an FPGA RISC-V CPU
@@ -42,6 +42,10 @@ able to run Fysh programs. It can be used as a learning tool for students and
 has a custom instruction for random number generation we call Grilled Fysh. It
 uses the voltage noise from the FPGA to generate a random number.
 
+<!-- Describe project expectations & outcome (10 subjective) -->
+
+<!-- Expectations -->
+
 $2: While this project is not a typical product, it serves as a amalgamation of
 Computer Engineering concepts that we have learned throughout the program such
 as computer architecture, FPGA design, development tooling, and being thrown
@@ -52,14 +56,13 @@ Fysh-Fyve aims to expand these concepts by using industry-standard frameworks
 such as the RISC-V instruction set architecture, LLVM compiler infrastructure,
 Language Server Protocol (LSP).
 
-<!-- Describe project expectations & outcome (10 subjective) -->
+<!-- Outcome -->
+
+The outcome of this project is 
 
 It can also serve as a reminder to future Computer Engineering students that
 maybe there is such a thing as too much fun.
 
-Before we start with the demonstration, we would like to thank our sponsor
-Steven Knudsen, for even greenlighting this project, and for the myriad of Fysh
-puns.
 
 ## Prototype Demonstration
 
