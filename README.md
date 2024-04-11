@@ -4,7 +4,7 @@ This is fysh.
 ><>
 ```
 
-Every fysh has to be terminated `~`.
+Fysh have to be terminated `~`.
 
 ```fysh
 ><> ~
