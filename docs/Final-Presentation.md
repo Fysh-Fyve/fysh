@@ -8,8 +8,7 @@
 
 <!-- Mention teammates and client (2) -->
 
-$1: Hello everyone, we are Fysh-Fyve, although only consisting of three members.
-I'm $1.
+$1: Hello everyone, we are Fysh-Fyve, I'm $1.
 
 $2: I'm $2.
 
