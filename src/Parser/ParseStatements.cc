@@ -26,13 +26,21 @@
 
 fysh::ast::FyshStmt fysh::FyshParser::parseLoop() {
   nextFysh();
-  if (curFysh != Species::FYSH_TANK_OPEN) {
+  Fysh delim;
+  if (curFysh == Species::FYSH_TANK_OPEN) {
+    delim = Species::FYSH_TANK_OPEN;
+  } else if (curFysh == Species::FYSH_BOWL_OPEN) {
+    delim = Species::FYSH_BOWL_OPEN;
+  } else {
     return expectFysh(Species::FYSH_TANK_OPEN);
   }
   nextFysh();
   ast::FyshExpr condition{parseExpression()};
-  if (curFysh != Species::FYSH_TANK_CLOSE) {
+  if (delim == Species::FYSH_TANK_OPEN && curFysh != Species::FYSH_TANK_CLOSE) {
     return expectFysh(Species::FYSH_TANK_CLOSE);
+  }
+  if (delim == Species::FYSH_BOWL_OPEN && curFysh != Species::FYSH_BOWL_CLOSE) {
+    return expectFysh(Species::FYSH_BOWL_CLOSE);
   }
   nextFysh();
   if (curFysh != Species::FYSH_OPEN) {
@@ -107,13 +115,21 @@ std::vector<fysh::ast::FyshStmt> fysh::FyshParser::parseBlock() {
 
 fysh::ast::FyshStmt fysh::FyshParser::parseIfElse() {
   nextFysh();
-  if (curFysh != Species::FYSH_TANK_OPEN) {
+  Fysh delim;
+  if (curFysh == Species::FYSH_TANK_OPEN) {
+    delim = Species::FYSH_TANK_OPEN;
+  } else if (curFysh == Species::FYSH_BOWL_OPEN) {
+    delim = Species::FYSH_BOWL_OPEN;
+  } else {
     return expectFysh(Species::FYSH_TANK_OPEN);
   }
   nextFysh();
   ast::FyshExpr condition{parseExpression()};
-  if (curFysh != Species::FYSH_TANK_CLOSE) {
+  if (delim == Species::FYSH_TANK_OPEN && curFysh != Species::FYSH_TANK_CLOSE) {
     return expectFysh(Species::FYSH_TANK_CLOSE);
+  }
+  if (delim == Species::FYSH_BOWL_OPEN && curFysh != Species::FYSH_BOWL_CLOSE) {
+    return expectFysh(Species::FYSH_BOWL_CLOSE);
   }
   nextFysh();
   if (curFysh != Species::FYSH_OPEN) {
