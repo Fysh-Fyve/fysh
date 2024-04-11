@@ -6,28 +6,37 @@
 
 - Team intro & sponsors
 
+Hello we are "RISC-V FPGA-Based CPU and Programming Language" (team 11) or Fysh-Fyve for short
+
 <!-- Mention teammates and client (2) -->
 
-$1: Hello everyone, we are Fysh-Fyve, I'm $1.
+$1: I'm $1.
 
 $2: I'm $2.
 
 $3: I'm $3.
 
-$1: Our project, titled "RISC-V FPGA-Based CPU and Programming Language",
-started as a simple compiler project that has since evolved to become what one
-would call a Full-stack Hyperpolyglot Gigachad Alpha Organism Free and Open
-Source Software Capstone Project.
+$2: We would like to thank our sponsor, Steven Knudsen, for his support and guidance throughout the project.
 
-- What is the project? and how did it turn out
+$1: We started as a compiler project for eleven engineering, but there was no operating system to run the compiled code. So we decided to privot. Meet Fysh-Fyve!
+
+- What does Fysh-Fyve really mean?
 
 <!-- Define project (5 subjective) -->
 
+$2: Fysh-Fyve is two projects swimming side by side. The first of which is a fish themed programming language called Fysh. The second is an FPGA RISC-V CPU that runs Fysh programs.
+
+Fysh is esoteric at its core. It's goal is to create a fun, educational, and simple to use programming language. Every compontent of the language symbolizes a real world concept. Like fysh scales representing their value, and tadpoles swimming towards bigger fysh.
+
+The second is an FPGA RISC-V CPU. It's designed to be simple and just barely able to run Fysh programs. It can be used as a learning tool for students and has a custom instruction for random number generation we call Grilled Fysh. It uses the voltage noise from the FPGA to generate a random number.
+
 $2: While this project is not a typical product, it serves as a amalgamation of
 Computer Engineering concepts that we have learned throughout the program such
-as computer architecture, compiler design, and development tooling. It also aims
-to expand these concepts to use industry-standard frameworks such as the the
-RISC-V instruction set architecture, the LLVM compiler infrastructure, and the
+as computer architecture, FPGA design, development tooling, and being thrown into an ocean (of work) and expected to swim. 
+These skills were essenctial in developing the Fysh-Fyve project.
+
+Fysh-Fyve aims to expand these concepts by using industry-standard frameworks such as the
+RISC-V instruction set architecture, LLVM compiler infrastructure,
 Language Server Protocol (LSP).
 
 <!-- Describe project expectations & outcome (10 subjective) -->
