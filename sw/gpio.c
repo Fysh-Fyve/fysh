@@ -56,9 +56,19 @@ void fysh_gpio_write(const uint32_t pin, const uint32_t value) {
 // }
 
 void draw_fysh(uint32_t dy, uint32_t dx);
+void set_pixel(uint32_t row, uint32_t col);
 
 void draw_frame(uint32_t dy, uint32_t dx) {
   for (int i = 0; i < 100; i++) {
     draw_fysh(dy, dx);
+    // Are you telling me even sub does not work well??
+    set_pixel(dy + 4, 4 - dx);
+    set_pixel(dy + 4, 5 - dx);
+    set_pixel(dy + 4, 7 - dx);
+    set_pixel(dy + 5, 3 - dx);
+    set_pixel(dy + 5, 6 - dx);
+    set_pixel(dy + 6, 4 - dx);
+    set_pixel(dy + 6, 5 - dx);
+    set_pixel(dy + 6, 7 - dx);
   }
 }
