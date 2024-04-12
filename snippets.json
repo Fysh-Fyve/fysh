@@ -1,6 +1,6 @@
 {
   "Submarine": {
-    "prefix": ["sub"],
+    "prefix": ["sub", "func"],
     "body": [">(${1:name}) ${2:params}", "><>", "\t$0", "<><"],
     "description": "A Submarine."
   },
