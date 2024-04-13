@@ -16,7 +16,7 @@
   },
   "Dead Fysh": {
     "prefix": ["else"],
-    "body": ["><(((*> [${1:condition}]", "><>", "\t$0", "<><"],
+    "body": ["><(((*>", "><>", "\t$0", "<><"],
     "description": "A Happy Fysh."
   },
   "Elif Fysh": {
