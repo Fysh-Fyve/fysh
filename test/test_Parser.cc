@@ -89,6 +89,21 @@ TEST_CASE("Loop Statement") {
   CHECK(get_expr<FyshLiteral>(unwrap<FyshExpr>(stmt.body[0])).num == 1);
 }
 
+TEST_CASE("Loop Statement (with Fysh Bowl)") {
+  fysh::FyshParser p{fysh::FyshLexer{R"(
+><(((@> ( ><fysh> )
+><>
+    ><((({o> ~
+<><
+  )"}};
+  fysh::ast::FyshProgram program{p.parseProgram()};
+  check_program(program, 1);
+  FyshLoopStmt stmt{unwrap<FyshLoopStmt>(program[0])};
+  check_ident(stmt.condition, "fysh");
+  check_program(stmt.body, 1);
+  CHECK(get_expr<FyshLiteral>(unwrap<FyshExpr>(stmt.body[0])).num == 1);
+}
+
 TEST_CASE("Assignment Statement") {
   fysh::FyshParser p{fysh::FyshLexer{"><fysh> = ><(({o> ~"}};
   fysh::ast::FyshProgram program{p.parseProgram()};

@@ -74,6 +74,8 @@ fysh::Emit fysh::Compyler::call(const fysh::ast::FyshCallExpr &expr) {
     func = getOrDefine(expr.callee, intTy(), Params{});
   } else if (expr.callee == "pin_mode") {
     func = getOrDefine(expr.callee, voidTy(), Params{intTy(), intTy()});
+  } else if (expr.callee == "draw_frame") {
+    func = getOrDefine(expr.callee, voidTy(), Params{intTy(), intTy()});
   } else {
     func = getFunction(expr.callee);
   }
