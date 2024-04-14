@@ -551,6 +551,13 @@ fysh::Fysh fysh::FyshLexer::swimRight() noexcept {
   case ('!'): return openWTF(); // error handling
   case ('/'): return slashOrComment(); // comment
   case ('#'): return random(); // random number
+  case ('@'): 
+  reel();
+    if (match(">")) {
+      return Species::FYSH_LOOP;
+    } else {
+      return cullDeformedFysh();
+    }
     // clang-format on
   default:
     if (isIdentStart(periscope())) {

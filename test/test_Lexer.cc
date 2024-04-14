@@ -236,7 +236,7 @@ TEST_CASE("Fysh Factorial") {
 ><fysh>   = ><{({o> ~
 ><result> = ><(({o> ~
 
-><(((@> [ ><fysh> o~ ><(({o> ]
+><(((@> ><@> [ ><fysh> o~ ><(({o> ]
 ><>
 	><result> = ><result> ♡ ><fysh> ~
 	<fysh><< ~
@@ -248,6 +248,7 @@ TEST_CASE("Fysh Factorial") {
 
   IDENT("result"); T(S::ASSIGN); T(1); T(S::FYSH_WATER);
 
+  T(S::FYSH_LOOP);
   T(S::FYSH_LOOP);
 
   T(S::FYSH_TANK_OPEN);
