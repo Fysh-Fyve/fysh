@@ -227,12 +227,17 @@ adventurous, they might even consider the `logical shift left (<<)` or
 ><steven> >> ><{((°> ~
 ```
 
-In the whirlpool of fysh logic, the while loop, symbolized by `><(((@>`,
+In the whirlpool of fysh logic, the while loop, symbolized by `><(((@>` or `><@>`,
 ensnaring conditions within a fysh tank`[ ]`, with `><>` and `<><` encapsulating the
 iterative heart.
 
 ```fysh
 ><(((@> [ ><steven> o~ ><{((°> ]
+><>
+	<steven><< ~
+<><
+
+><@> [ ><steven> o~ ><{((°> ]
 ><>
 	<steven><< ~
 <><
