@@ -4,6 +4,27 @@
     "body": [">(${1:name}) ${2:params}", "><>", "\t$0", "<><"],
     "description": "A Submarine."
   },
+  "Greater than tadpole": {
+    "prefix": [">"],
+    "body": ["o~"],
+    "description": "Greater than tadpole."
+  },
+  "Greater than or equal tadpole": {
+    "prefix": [">="],
+    "body": ["o≈"],
+    "description": "Greater than or equal tadpole."
+  },
+  "Less than tadpole": {
+    "prefix": ["<"],
+    "body": ["~o"],
+    "description": "Less than tadpole."
+  },
+  "Less than or equal tadpole": {
+    "prefix": ["<="],
+    "body": ["≈o"],
+    "description": "Less than or equal tadpole."
+  },
+  "Assign": { "prefix": ["="], "body": ["≈"], "description": "Assign." },
   "Loopy Fysh": {
     "prefix": ["loop", "@"],
     "body": ["><(((@> [${1:condition}]", "><>", "\t$0", "<><"],
