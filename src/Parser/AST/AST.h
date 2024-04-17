@@ -128,26 +128,25 @@ using FyshStmt =
                  FyshAssignmentStmt, FyshBlock, FyshLoopStmt, FyshIfStmt,
                  FyshAnchorStmt, Squid, BrokenFysh>;
 
-struct FyshBlock : public std::vector<FyshStmt> {
-  using std::vector<FyshStmt>::vector;
-  FyshBlock(const std::vector<FyshStmt> &vec) : std::vector<FyshStmt>(vec) {}
+struct FyshBlock {
+  std::vector<FyshStmt> statements;
 };
 
 struct FyshLoopStmt {
   FyshExpr condition;
-  FyshBlock body;
+  std::vector<FyshStmt> body;
 };
 
 struct FyshIfStmt {
   FyshExpr condition;
-  FyshBlock consequence;
-  std::optional<FyshBlock> alternative;
+  std::vector<FyshStmt> consequence;
+  std::optional<std::vector<FyshStmt>> alternative;
 };
 
 struct SUBroutine {
   std::string_view name;
   std::vector<std::string_view> parameters;
-  FyshBlock body;
+  std::vector<FyshStmt> body;
 };
 
 using FyshSurfaceLevel = std::variant<Error, FyshStmt, SUBroutine>;
@@ -168,6 +167,7 @@ namespace std {
 string to_string(const fysh::ast::FyshExpr &f);
 string to_string(const fysh::ast::FyshStmt &f);
 string to_string(const fysh::ast::FyshProgram &f);
+string to_string(const vector<fysh::ast::FyshStmt> &f);
 } // namespace std
 
 #endif // !FYSH_AST_H_

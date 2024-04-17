@@ -26,7 +26,7 @@ template <typename T> T get_stmt(FyshSurfaceLevel decl) {
 template <typename T> T unwrap(FyshSurfaceLevel decl) {
   FyshStmt stmt{std::get<FyshStmt>(decl)};
   while (std::holds_alternative<FyshBlock>(stmt)) {
-    stmt = std::get<FyshBlock>(stmt)[0];
+    stmt = std::get<FyshBlock>(stmt).statements[0];
   }
   return get_stmt<T>(stmt);
 }
@@ -34,11 +34,12 @@ template <typename T> T unwrap(FyshSurfaceLevel decl) {
 inline std::vector<FyshStmt> unwrap_block(FyshStmt stmt) {
   FyshBlock block{std::get<FyshBlock>(stmt)};
   FyshStmt s{stmt};
-  while (std::holds_alternative<FyshBlock>(s) &&
-         std::holds_alternative<FyshBlock>(std::get<FyshBlock>(s)[0])) {
-    s = std::get<FyshBlock>(s)[0];
+  while (
+      std::holds_alternative<FyshBlock>(s) &&
+      std::holds_alternative<FyshBlock>(std::get<FyshBlock>(s).statements[0])) {
+    s = std::get<FyshBlock>(s).statements[0];
   }
-  return std::get<FyshBlock>(s);
+  return std::get<FyshBlock>(s).statements;
 }
 
 template <typename T> T get_expr(FyshSurfaceLevel decl) {
@@ -181,7 +182,7 @@ TEST_CASE("Subroutines") {
   CHECK(func.name == "foo");
   REQUIRE(func.parameters.size() == 1);
   CHECK(func.parameters[0] == "arg1");
-  std::vector<FyshStmt> block = unwrap_block(func.body);
+  std::vector<FyshStmt> block = func.body;
   check_program(block, 2);
 
   FyshAnchorStmt stmt{unwrap<FyshAnchorStmt>(block[0])};

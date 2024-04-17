@@ -97,6 +97,15 @@ std::string std::to_string(const fysh::ast::FyshExpr &f) {
       f);
 }
 
+std::string std::to_string(const std::vector<fysh::ast::FyshStmt> &f) {
+  using namespace fysh::ast;
+  std::string s = "{\n";
+  for (const FyshStmt &a : f) {
+    s += std::to_string(a);
+  }
+  return s + "}\n";
+}
+
 std::string std::to_string(const fysh::ast::FyshStmt &f) {
   using namespace fysh::ast;
   return std::visit(
@@ -111,7 +120,7 @@ std::string std::to_string(const fysh::ast::FyshStmt &f) {
                  ";\n";
         else if constexpr (std::is_same_v<T, FyshBlock>) {
           std::string s = "{\n";
-          for (const FyshStmt &a : arg) {
+          for (const FyshStmt &a : arg.statements) {
             s += std::to_string(a);
           }
           return s + "}\n";

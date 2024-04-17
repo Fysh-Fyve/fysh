@@ -154,7 +154,7 @@ fysh::Emit fysh::Compyler::statement(const ast::FyshStmt &stmt) {
         } else if constexpr (std::is_same_v<T, ast::FyshExpr>) {
           return expression(&arg);
         } else if constexpr (std::is_same_v<T, ast::FyshBlock>) {
-          return block(arg);
+          return block(arg.statements);
         } else if constexpr (std::is_same_v<T, ast::FyshLoopStmt>) {
           return loop(arg);
         } else if constexpr (std::is_same_v<T, ast::FyshIfStmt>) {

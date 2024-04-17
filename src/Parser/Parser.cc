@@ -75,8 +75,9 @@ fysh::ast::FyshSurfaceLevel fysh::FyshParser::parseSUBroutine() {
   // Parse body
   nextFysh();
   ast::FyshBlock body{parseBlock()};
-  if (body.size() == 1 && std::holds_alternative<ast::Error>(body[0])) {
-    return body[0];
+  if (body.statements.size() == 1 &&
+      std::holds_alternative<ast::Error>(body.statements[0])) {
+    return body.statements[0];
   }
 
   // Return the subroutine
@@ -84,7 +85,7 @@ fysh::ast::FyshSurfaceLevel fysh::FyshParser::parseSUBroutine() {
     return expectFysh(Species::FYSH_CLOSE);
   } else {
     nextFysh();
-    return ast::SUBroutine{name, parameters, body};
+    return ast::SUBroutine{name, parameters, body.statements};
   }
 }
 
@@ -151,7 +152,7 @@ std::optional<fysh::ast::FyshUnary> fysh::unaryOp(const fysh::Fysh &fysh) {
   using S = fysh::Species;
   using FU = ast::FyshUnary;
   switch (fysh.getSpecies()) {
-  // clang-format off
+    // clang-format off
     case S::BITWISE_NOT: return FU::BitwiseNot;
     case S::LOGICAL_NOT: return FU::LogicalNot;
     default:             return {};

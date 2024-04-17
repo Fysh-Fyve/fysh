@@ -153,7 +153,7 @@ fysh::ast::FyshStmt fysh::FyshParser::parseIfElse() {
   // Else if
   if (curFysh == Species::IF) {
     return ast::FyshIfStmt{condition, consequence,
-                           ast::FyshBlock{parseIfElse()}};
+                           std::vector<ast::FyshStmt>{parseIfElse()}};
   }
   // Else
   if (curFysh != Species::FYSH_OPEN) {

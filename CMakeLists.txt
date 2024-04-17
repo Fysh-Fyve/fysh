@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.21)
 
 project(Fysh)
 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # Add LLVM to the project
 find_package(LLVM REQUIRED CONFIG)
 
