@@ -2,6 +2,8 @@
 **/*.ts
 **/*.map
 .gitignore
+.gitmodules
+.eslintignore
 **/tsconfig.json
 **/tsconfig.base.json
 contributing.md

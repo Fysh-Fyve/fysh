@@ -27,7 +27,7 @@
     "vscode": "^1.75.0"
   },
   "activationEvents": [],
-  "main": "./out/extension",
+  "main": "./out/main",
   "contributes": {
     "languages": [
       {
