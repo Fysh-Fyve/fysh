@@ -38,32 +38,36 @@
         "aliases": [
           "Fysh"
         ],
-        "configuration": "./language-configuration.json"
+        "configuration": "./src/language-configuration.json"
       }
     ],
     "snippets": [
       {
         "language": "fysh",
-        "path": "./snippets.json"
+        "path": "./src/snippets.json"
       }
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -b",
+    "vscode:prepublish": "npm run esbuild-base -- --minify",
+    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
     "watch": "tsc -b -w",
-    "lint": "eslint ./src --ext .ts,.tsx"
+    "lint": "eslint ./src --ext .ts,.tsx",
+    "package": "pnpm vsce package --no-dependencies",
+    "publish": "pnpm vsce publish --no-dependencies"
   },
   "dependencies": {
     "vscode-languageclient": "^9.0.1"
   },
   "devDependencies": {
-    "@types/vscode": "^1.75.1",
-    "@vscode/test-electron": "^2.3.9",
     "@types/mocha": "^10.0.6",
     "@types/node": "^18.14.6",
+    "@types/vscode": "^1.75.1",
     "@typescript-eslint/eslint-plugin": "^7.1.0",
     "@typescript-eslint/parser": "^7.1.0",
+    "@vscode/test-electron": "^2.3.9",
+    "@vscode/vsce": "^2.26.0",
+    "esbuild": "^0.20.2",
     "eslint": "^8.57.0",
     "mocha": "^10.3.0",
     "typescript": "^5.3.3"
