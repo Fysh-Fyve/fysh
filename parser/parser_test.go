@@ -7,9 +7,7 @@ import (
 	"github.com/Fysh-Fyve/go-fysh/scanner"
 )
 
-type Test struct {
-	statement string
-}
+type Test struct{ statement string }
 
 func testProgram(t testing.TB, input string, tests []Test) {
 	t.Helper()

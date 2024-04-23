@@ -8,9 +8,7 @@ import (
 	"github.com/Fysh-Fyve/go-fysh/fysh"
 )
 
-type ExpressionStatement struct {
-	Expr Expression
-}
+type ExpressionStatement struct{ Expr Expression }
 
 func (e *ExpressionStatement) top()            {}
 func (e *ExpressionStatement) statement()      {}
@@ -19,9 +17,7 @@ func (e *ExpressionStatement) String() string {
 	return fmt.Sprintf("%s%s", e.Expr, fysh.Water)
 }
 
-type IncrementStatement struct {
-	Expr Expression
-}
+type IncrementStatement struct{ Expr Expression }
 
 func (i *IncrementStatement) top()            {}
 func (i *IncrementStatement) statement()      {}
@@ -30,9 +26,7 @@ func (i *IncrementStatement) String() string {
 	return fmt.Sprintf("%s%s%s", i.Expr, fysh.Inc, fysh.Water)
 }
 
-type DecrementStatement struct {
-	Expr Expression
-}
+type DecrementStatement struct{ Expr Expression }
 
 func (d *DecrementStatement) top()            {}
 func (d *DecrementStatement) statement()      {}
@@ -53,9 +47,7 @@ func (a *AssignmentStatement) String() string {
 	return fmt.Sprintf("%s %s %s%s", a.Left, fysh.Assign, a.Right, fysh.Water)
 }
 
-type BlockStatement struct {
-	Statements []Statement
-}
+type BlockStatement struct{ Statements []Statement }
 
 func (b *BlockStatement) top()            {}
 func (b *BlockStatement) statement()      {}
@@ -74,9 +66,7 @@ func (b *BlockStatement) String() string {
 	return out.String()
 }
 
-type ReturnStatement struct {
-	Expr Expression
-}
+type ReturnStatement struct{ Expr Expression }
 
 func (r *ReturnStatement) top()            {}
 func (r *ReturnStatement) statement()      {}

@@ -9,9 +9,7 @@ import (
 	"github.com/Fysh-Fyve/go-fysh/fysh"
 )
 
-type Identifier struct {
-	Name string
-}
+type Identifier struct{ Name string }
 
 func (i *Identifier) top()            {}
 func (i *Identifier) expression()     {}
@@ -26,9 +24,7 @@ func (s *Grilled) expression()     {}
 func (s *Grilled) Literal() string { return fysh.Grilled.String() }
 func (s *Grilled) String() string  { return fysh.Grilled.String() }
 
-type Scales struct {
-	Value int64
-}
+type Scales struct{ Value int64 }
 
 func (s *Scales) top()            {}
 func (s *Scales) expression()     {}
@@ -81,9 +77,7 @@ func (b *Binary) String() string {
 	return fmt.Sprintf("(%s %s %s)", b.Left, b.Op, b.Right)
 }
 
-type Aquarium struct {
-	Elems []Expression
-}
+type Aquarium struct{ Elems []Expression }
 
 func (c *Aquarium) top()            {}
 func (c *Aquarium) expression()     {}
