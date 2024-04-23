@@ -63,13 +63,14 @@ func TestFactorial(t *testing.T) {
 ><//> Comment
 
 ><number>    = ><{({o> ~  ><//> b101 = 5
-><factorial> = ><(({o> ~  ><//> b001 = 1
+><factorial> = ><(((o> ~  ><//> b000 = 0
+>><factorial> ~ ><//> set to 1
 
 ><//> while number > 1
 ><(((@> [><number> o~ ><(({o>]
 ><>
 	><//> factorial = factorial * number
-	><factorial> = ><factorial> <3 ><number> ~
+	><factorial> = (><factorial> <3 ><number>) ~
 
 	><//> number -= 1
 	<number><< ~
@@ -87,9 +88,12 @@ func TestFactorial(t *testing.T) {
 		{fysh.Comment, "><//> b101 = 5\n"},
 		{fysh.Ident, "><factorial>"},
 		lit(fysh.Assign),
-		{fysh.Scales, "><(({o>"},
+		{fysh.Scales, "><(((o>"},
 		lit(fysh.Water),
-		{fysh.Comment, "><//> b001 = 1\n"},
+		{fysh.Comment, "><//> b000 = 0\n"},
+		{fysh.Inc, ">><factorial>"},
+		lit(fysh.Water),
+		{fysh.Comment, "><//> set to 1\n"},
 		{fysh.Comment, "><//> while number > 1\n"},
 		lit(fysh.Loop),
 		lit(fysh.LTank),
@@ -101,9 +105,11 @@ func TestFactorial(t *testing.T) {
 		{fysh.Comment, "><//> factorial = factorial * number\n"},
 		{fysh.Ident, "><factorial>"},
 		lit(fysh.Assign),
+		lit(fysh.LBowl),
 		{fysh.Ident, "><factorial>"},
 		lit(fysh.Mul),
 		{fysh.Ident, "><number>"},
+		lit(fysh.RBowl),
 		lit(fysh.Water),
 		{fysh.Comment, "><//> number -= 1\n"},
 		{fysh.Dec, "<number><<"},
@@ -121,11 +127,18 @@ func TestBiblicallyAccurateFysh(t *testing.T) {
 	input := `
 ><{{{oo> ~
 ><{{{°o°> ~
+><{{oooo> <ooooooooo}}>< ><oolong> <oomph>< ><(°o°> ~
 `
 	tests := []tt{
 		{fysh.Scales, "><{{{oo>"},
 		lit(fysh.Water),
 		{fysh.Scales, "><{{{°o°>"},
+		lit(fysh.Water),
+		{fysh.Scales, "><{{oooo>"},
+		{fysh.Scales, "<ooooooooo}}><"},
+		{fysh.Ident, "><oolong>"},
+		{fysh.Ident, "<oomph><"},
+		{fysh.Scales, "><(°o°>"},
 		lit(fysh.Water),
 		{fysh.End, ""},
 	}
@@ -177,9 +190,21 @@ func TestOperators(t *testing.T) {
 
 func TestHearts(t *testing.T) {
 	hearts := [...]string{
-		"💝", "☙", "♡", "♥", "❣", "❤", "❥", "❦", "❧", "🎔", "🖤", "💙",
+		"💝", "☙", "♡", "♥", "❥", "❦", "❧", "🎔", "🖤", "💙",
 		"💚", "💛", "💜", "🧡", "🤍", "🤎", "🩶", "🩷", "🩵", "💓", "💕",
-		"💖", "💗", "💘", "🫀", "💌", "💞", "💟", "🫶", "<3",
+		"💖", "💗", "💘", "🫀", "💌", "💞", "💟", "<3",
+
+		// variation selector
+		"❣", "❣️ ",
+		"❤", "❤️ ",
+
+		// ZWJ (zero width joiner)
+		"❤️‍🔥 ",
+		"❤️‍🩹 ",
+
+		"🫶",
+		// skin tone modifier
+		"🫶🏻", "🫶🏼", "🫶🏽", "🫶🏾", "🫶🏿",
 	}
 	tests := make([]tt, 0, len(hearts))
 	for i := 0; i < len(hearts); i++ {
@@ -250,38 +275,78 @@ o+) ><steven> ~
 	testScanner(t, input, tests)
 }
 
-func testScanner(t testing.TB, input string, tests []tt) {
-	t.Helper()
-	s := scanner.New(input)
-
-	for i, tt := range tests {
-		tok := s.NextFysh()
-
-		if tok.Type != tt.expectedType {
-			t.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q",
-				i, tt.expectedType, tok.Type)
-		}
-
-		if tok.Value != tt.expectedValue {
-			t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q",
-				i, tt.expectedValue, tok)
-		}
+func TestTouching(t *testing.T) {
+	input := `
+><>♡(><fysh>♡<{{{(())}}}><<{{{(())}}}><><)))>♡><)))><FYSH><><)))>♡)<><
+`
+	tests := []tt{
+		lit(fysh.LFysh),
+		lit(fysh.Mul),
+		lit(fysh.LBowl),
+		{fysh.Ident, "><fysh>"},
+		lit(fysh.Mul),
+		{fysh.Scales, "<{{{(())}}}><"},
+		{fysh.Scales, "<{{{(())}}}><"},
+		{fysh.Scales, "><)))>"},
+		lit(fysh.Mul),
+		{fysh.Scales, "><)))>"},
+		{fysh.Ident, "<FYSH><"},
+		{fysh.Scales, "><)))>"},
+		lit(fysh.Mul),
+		lit(fysh.RBowl),
+		lit(fysh.RFysh),
+		{fysh.End, ""},
 	}
+
+	testScanner(t, input, tests)
+}
+
+func TestRandomFysh(t *testing.T) {
+	t.Skip()
+	input := "><##> ><###> ><####> <###><"
+	tests := []tt{
+		{fysh.Invalid, "><##>"},
+		lit(fysh.Grilled),
+		{fysh.Invalid, "><####>"},
+		{fysh.Invalid, "<###><"},
+		{fysh.End, ""},
+	}
+
+	testScanner(t, input, tests)
+}
+
+func TestIdentifiers(t *testing.T) {
+	idents := []string{
+		"><pos>", "<neg><", "><ostart>", "<ostart><", "><鱼>", "><とと>", "<魚><",
+		"<سمكة><", "><ᜁᜐ᜔ᜇ>", "><ᠨᡳᠮᠠᡥᠠ>", "><𒐫>",
+		"><🐠🐟🐡🦈🐬🐳🐋🦐🦑🦞🦀🐙>",
+		"><𒈙>",
+		"><𓀐𓂸>",
+		"><under_scored>",
+		"><_under_scored>",
+		"><^-^>",
+		"<°isthisallowed><", "><whataboutthis°>",
+	}
+	tests := make([]tt, 0, len(idents))
+	for _, name := range idents {
+		tests = append(tests, tt{fysh.Ident, name})
+	}
+	input := strings.Join(idents[:], " ")
+	testScanner(t, input, tests)
+}
+
+func TestWeirdFysh(t *testing.T) {
+	scales := []string{"><{{({(>", "><{)()}{)()}>", "<o{}{()}><", "<{}{()}><",
+		"><{}o>"}
+	tests := make([]tt, 0, len(scales))
+	for _, name := range scales {
+		tests = append(tests, tt{fysh.Scales, name})
+	}
+	input := strings.Join(scales[:], " ")
+	testScanner(t, input, tests)
 }
 
 // TODO: Pass original test cases
-
-// TEST_CASE("biblically accurate fysh") {
-//   FyshLexer lexer{"><{{oooo> <ooooooooo}}>< ><oolong> <oomph>< ><(°o°>"};
-//
-//   T(0b011);
-//   T(-0b011);
-//   IDENT_DIR("oolong", false);
-//   IDENT_DIR("oomph", true);
-//   T(0);
-//
-//   T(S::END);
-// }
 //
 // TEST_CASE("fysh open & wtf open") {
 //   FyshLexer lexer{"><> <3 ><{{({(o> ><!@#$> ><> ><!@#$>"};
@@ -292,47 +357,6 @@ func testScanner(t testing.TB, input string, tests []tt) {
 //   T(S::WTF_OPEN);
 //   T(S::FYSH_OPEN);
 //   T(S::WTF_OPEN);
-//   T(S::END);
-// }
-//
-// TEST_CASE("random fysh") {
-//   FyshLexer lexer{"><##> ><###> ><####> <###><"};
-//
-//   INVALID("><##>");
-//   T(S::GRILLED_FYSH);
-//   INVALID("><####>");
-//   INVALID("<###><");
-//   T(S::END);
-// }
-//
-// TEST_CASE("fysh eye") {
-//   FyshLexer lexer{"><{{({(°> <3 <°})}>< <°})}><"};
-//
-//   T(0b011010);
-//   T(S::HEART_MULTIPLY);
-//   T(-0b0101);
-//   T(-0b0101);
-//   T(S::END);
-// }
-//
-// TEST_CASE("negative fysh") {
-//   FyshLexer lexer{"><{{({(o> <3 <o})}>< <o})}><"};
-//
-//   T(0b011010);
-//   T(S::HEART_MULTIPLY);
-//   T(-0b0101);
-//   T(-0b0101);
-//   T(S::END);
-// }
-//
-// TEST_CASE("weird fysh") {
-//   FyshLexer lexer{"><{{({(> ><{)()}{)()}> <o{}{()}>< <{}{()}>< ><{}o>"};
-//
-//   T(0b011010);
-//   T(0b01000110001);
-//   T(-0b0111001);
-//   T(-0b0111001);
-//   T(0b011);
 //   T(S::END);
 // }
 //
@@ -363,104 +387,6 @@ func testScanner(t testing.TB, input string, tests []tt) {
 //   T(S::END);
 // }
 //
-// TEST_CASE("identifiers") {
-//   FyshLexer lexer{
-//       "><pos> <neg>< ><ostart> <ostart>< ><鱼> ><とと> <魚>< "
-//       "<سمكة>< ><ᜁᜐ᜔ᜇ> ><ᠨᡳᠮᠠᡥᠠ> ><𒐫> "
-//       "><🐠🐟🐡🦈🐬🐳🐋🦐🦑🦞🦀🐙> "
-//       "><𒈙>"
-//       "><𓀐𓂸>"
-//       "><under_scored>"
-//       "><_under_scored>"
-//       "><^-^>"
-//       // "<°isthisallowed>< ><whataboutthis°>"
-//   };
-//
-//   IDENT_DIR("pos", false);
-//   IDENT_DIR("neg", true);
-//   IDENT_DIR("ostart", false);
-//   IDENT_DIR("ostart", true);
-//   IDENT_DIR("鱼", false);
-//   IDENT_DIR("とと", false);
-//   IDENT_DIR("魚", true);
-//   IDENT_DIR("سمكة", true);
-//   IDENT_DIR("ᜁᜐ᜔ᜇ", false);
-//   IDENT_DIR("ᠨᡳᠮᠠᡥᠠ", false);
-//   IDENT_DIR("𒐫", false);
-//   IDENT_DIR("🐠🐟🐡🦈🐬🐳🐋🦐🦑🦞🦀🐙", false);
-//   IDENT_DIR("𒈙", false);
-//   IDENT_DIR("𓀐𓂸", false);
-//   IDENT_DIR("under_scored", false);
-//   IDENT_DIR("_under_scored", false);
-//   IDENT_DIR("^-^", false);
-//
-//   // Comment out until we decide what to do with it
-//   // IDENT_DIR("°isthisallowed", true);
-//   // IDENT_DIR("whataboutthis°", false);
-//
-//   T(S::END);
-// }
-//
-// TEST_CASE("increment & decrement") {
-//   FyshLexer lexer{">><inc> <dec><<"};
-//
-//   Fysh fysh{lexer.nextFysh()};
-//   CHECK(fysh == "inc");
-//   CHECK(fysh == S::INCREMENT);
-//
-//   fysh = lexer.nextFysh();
-//   CHECK(fysh == "dec");
-//   CHECK(fysh == S::DECREMENT);
-//
-//   T(S::END);
-// }
-//
-// TEST_CASE("Terminate") {
-//   FyshLexer lexer{"~ ~~"};
-//
-//   T(S::FYSH_WATER);
-//   T(S::FYSH_WATER);
-//   T(S::FYSH_WATER);
-//   T(S::END);
-// }
-//
-// TEST_CASE("Fysh Tank") {
-//   FyshLexer lexer{"[]"};
-//
-//   T(S::FYSH_TANK_OPEN);
-//   T(S::FYSH_TANK_CLOSE);
-//   T(S::END);
-// }
-//
-// TEST_CASE("Fysh If Else") {
-//   FyshLexer lexer{R"(
-// ><(((^> [ ><fysh> ] ><> <><
-// ><(((*> ><(((^> [ ><result> ] ><> <><
-// ><(((*> ><> <><
-// )"};
-//
-//   T(S::IF);
-//   T(S::FYSH_TANK_OPEN);
-//   IDENT("fysh");
-//   T(S::FYSH_TANK_CLOSE);
-//   T(S::FYSH_OPEN);
-//   T(S::FYSH_CLOSE);
-//
-//   T(S::ELSE);
-//   T(S::IF);
-//   T(S::FYSH_TANK_OPEN);
-//   IDENT("result");
-//   T(S::FYSH_TANK_CLOSE);
-//   T(S::FYSH_OPEN);
-//   T(S::FYSH_CLOSE);
-//
-//   T(S::ELSE);
-//   T(S::FYSH_OPEN);
-//   T(S::FYSH_CLOSE);
-//
-//   T(S::END);
-// }
-//
 // TEST_CASE("Arrays") {
 //   FyshLexer lexer{"><fysh> = [ ><{}o> - ><{}o> ] ~"};
 //
@@ -472,125 +398,6 @@ func testScanner(t testing.TB, input string, tests []tt) {
 //   T(3);
 //   T(S::FYSH_TANK_CLOSE);
 //   T(S::FYSH_WATER);
-//   T(S::END);
-// }
-//
-// TEST_CASE("Anchors") {
-//   FyshLexer lexer{R"(
-//   (+o ><fysh> ~
-//   o+) ><fysh> ~
-//   ><{{> (+o ><fysh> ~
-//   ><{{> o+) ><fysh> ~
-//   )"};
-//
-//   // clang-format off
-//   T(S::ANCHOR_LEFT); IDENT("fysh"); T(S::FYSH_WATER);
-//
-//   T(S::ANCHOR_RIGHT); IDENT("fysh"); T(S::FYSH_WATER);
-//
-//   T(3); T(S::ANCHOR_LEFT); IDENT("fysh"); T(S::FYSH_WATER);
-//
-//   T(3); T(S::ANCHOR_RIGHT); IDENT("fysh"); T(S::FYSH_WATER);
-//   // clang-format on
-//
-//   T(S::END);
-// }
-//
-// TEST_CASE("Fysh Factorial") {
-//   FyshLexer lexer{R"(
-// ><fysh>   = ><{({o> ~
-// ><result> = ><(({o> ~
-//
-// ><(((@> ><@> [ ><fysh> o~ ><(({o> ]
-// ><>
-// 	><result> = ><result> ♡ ><fysh> ~
-// 	<fysh><< ~
-// <><
-// )"};
-//
-//   // clang-format off
-//   IDENT("fysh"); T(S::ASSIGN); T(5); T(S::FYSH_WATER);
-//
-//   IDENT("result"); T(S::ASSIGN); T(1); T(S::FYSH_WATER);
-//
-//   T(S::FYSH_LOOP);
-//   T(S::FYSH_LOOP);
-//
-//   T(S::FYSH_TANK_OPEN);
-//     IDENT("fysh"); T(S::TADPOLE_GT); T(1);
-//   T(S::FYSH_TANK_CLOSE);
-//
-//   T(S::FYSH_OPEN);
-//
-//     IDENT("result"); T(S::ASSIGN);
-//       IDENT("result"); T(S::HEART_MULTIPLY); IDENT("fysh"); T(S::FYSH_WATER);
-//
-//     Fysh fysh{lexer.nextFysh()};
-//     CHECK(fysh == "fysh");
-//     CHECK(fysh == S::DECREMENT);
-//     T(S::FYSH_WATER);
-//
-//   T(S::FYSH_CLOSE);
-//
-//   T(S::END);
-//   // clang-format on
-// }
-//
-// TEST_CASE("Comments") {
-//   FyshLexer lexer{R"(
-// ><//> This is a comment
-// ></*>
-// This is also a comment
-// <*/><
-// )"};
-//
-//   Fysh fysh{lexer.nextFysh()};
-//   CHECK(fysh == "This is a comment");
-//   CHECK(fysh == S::COMMENT);
-//
-//   fysh = lexer.nextFysh();
-//   CHECK(fysh.getBody() == "This is also a comment");
-//   CHECK(fysh == S::MULTI_COMMENT);
-//
-//   T(Species::END);
-// }
-//
-// TEST_CASE("Fysh Bowl") {
-//   FyshLexer lexer{"><> ♡ ( ><fysh> ♡ <{{{(())}}}>< ♡ ><fysh> ) <><"};
-//
-//   T(S::FYSH_OPEN);
-//   T(S::HEART_MULTIPLY);
-//   T(S::FYSH_BOWL_OPEN);
-//   IDENT("fysh");
-//   T(S::HEART_MULTIPLY);
-//   T(-0b1110000111);
-//   T(S::HEART_MULTIPLY);
-//   IDENT("fysh");
-//   T(S::FYSH_BOWL_CLOSE);
-//   T(S::FYSH_CLOSE);
-//   T(S::END);
-// }
-//
-// TEST_CASE("TOUCHING") {
-//   FyshLexer lexer{
-//       "><>♡(><fysh>♡<{{{(())}}}><<{{{(())}}}><><)))>♡><)))><FYSH><><)))>♡)<><"};
-//   // ><> ♡ ( ><fysh> ♡ <{{{(())}}}>< <{{{(())}}}>< ><)))> ♡ ><)))> <FYSH><
-//   // ><)))> ♡ ) <><
-//   T(S::FYSH_OPEN);
-//   T(S::HEART_MULTIPLY);
-//   T(S::FYSH_BOWL_OPEN);
-//   IDENT_DIR("fysh", false);
-//   T(S::HEART_MULTIPLY);
-//   T(-0b1110000111);
-//   T(-0b1110000111);
-//   T(0b000);
-//   T(S::HEART_MULTIPLY);
-//   T(0b000);
-//   IDENT_DIR("FYSH", true);
-//   T(0b000);
-//   T(S::HEART_MULTIPLY);
-//   T(S::FYSH_BOWL_CLOSE);
-//   T(S::FYSH_CLOSE);
 //   T(S::END);
 // }
 //
@@ -673,25 +480,21 @@ func testScanner(t testing.TB, input string, tests []tt) {
 //   T(S::END);
 // }
 
-// // TODO: Do the other characters
-// TEST_CASE("Zero Width Joiner") {
-//   FyshLexer lexer{
-//       "❤️ "
-//       "❤️‍🔥 "
-//       "❤️‍🩹 "
-//       // "💝 "
-//       // "❣️ "
-//       // "🫶🏻 "
-//       // "🫶🏽 "
-//       // "🫶🏾 "
-//       // "🫶🏿 "
-//   };
-//
-//   T(S::HEART_MULTIPLY);
-//   T(S::HEART_MULTIPLY);
-//   T(S::HEART_MULTIPLY);
-//   // T(S::HEART_MULTIPLY);
-//   // T(S::HEART_MULTIPLY);
-//
-//   T(S::END);
-// }
+func testScanner(t testing.TB, input string, tests []tt) {
+	t.Helper()
+	s := scanner.New(input)
+
+	for i, tt := range tests {
+		tok := s.NextFysh()
+
+		if tok.Type != tt.expectedType {
+			t.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q",
+				i, tt.expectedType, tok.Type)
+		}
+
+		if tok.Value != tt.expectedValue {
+			t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q",
+				i, tt.expectedValue, tok)
+		}
+	}
+}

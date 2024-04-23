@@ -347,7 +347,20 @@ func (s *Scanner) ascii() fysh.Fysh {
 	return f
 }
 
+const (
+	// variation selector
+	EMOJIFY = 0xFE0F
+	// zero width joiner
+	ZWJ = 0x200D
+
+	// Emoji skin tone modifier
+	// https://en.wikipedia.org/wiki/Fitzpatrick_scale
+	SKIN_MIN = 0x1F3FB // type 1-2
+	SKIN_MAX = 0x1F3FF // type 6
+)
+
 func (s *Scanner) unicode() fysh.Fysh {
+	start := s.current
 	var f fysh.Fysh
 	switch s.ch {
 	case '🦑':
@@ -359,8 +372,9 @@ func (s *Scanner) unicode() fysh.Fysh {
 	case '♥':
 		fallthrough
 	case '❣':
-		fallthrough
-	case '❤':
+		// emojify ❣️
+		if s.expect(EMOJIFY) {
+		}
 		fallthrough
 	case '❥':
 		fallthrough
@@ -411,9 +425,33 @@ func (s *Scanner) unicode() fysh.Fysh {
 	case '💟':
 		fallthrough
 	case '🫶':
+		// skin tone hearts 🫶🫶🫶🫶
+		if ch := s.periscope(); ch >= SKIN_MIN && ch <= SKIN_MAX {
+			s.reel()
+		}
 		fallthrough
 	case '♡':
 		f = newFysh(fysh.Mul)
+	// special heart
+	case '❤':
+		if s.expect(EMOJIFY) {
+			// ZWJ
+			if s.expect(ZWJ) {
+				if s.expect('🔥') || s.expect('🩹') {
+					f = newFysh(fysh.Mul)
+				} else {
+					// unexpected ZWJ pair
+					f.Type = fysh.Invalid
+					f.Value = string(s.input[start:s.peek])
+				}
+			} else {
+				// red heart emoji
+				f = newFysh(fysh.Mul)
+			}
+		} else {
+			// normal heart
+			f = newFysh(fysh.Mul)
+		}
 	case '💔':
 		f = newFysh(fysh.Div)
 	case '≈':
