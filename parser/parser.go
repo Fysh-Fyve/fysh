@@ -100,6 +100,9 @@ func (p *Parser) list() ast.Expression {
 
 func (p *Parser) primary() ast.Expression {
 	switch p.cur.Type {
+	case fysh.Grilled:
+		p.next()
+		return &ast.Grilled{}
 	case fysh.Scales:
 		bin, neg := p.cur.Unfysh()
 		if i, err := strconv.ParseInt(bin, 2, 64); err != nil {
@@ -281,6 +284,11 @@ func (p *Parser) squid() ast.Statement {
 	return p.water(ret)
 }
 
+func (p *Parser) breakStmt() ast.Statement {
+	p.next()
+	return p.water(&ast.BreakStatement{})
+}
+
 func (p *Parser) anchorStmt() ast.Statement {
 	op := binary.FromFysh(p.cur.Type)
 	p.next()
@@ -366,6 +374,8 @@ func (p *Parser) ifStmt() ast.Statement {
 
 func (p *Parser) statement() ast.Statement {
 	switch p.cur.Type {
+	case fysh.BrFysh:
+		return p.breakStmt()
 	case fysh.LFysh:
 		return p.block()
 	case fysh.Loop:

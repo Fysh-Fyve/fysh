@@ -185,6 +185,7 @@ func TestOperators(t *testing.T) {
 		tests[i] = lit(v.species)
 		input += v.op + " "
 	}
+	tests = append(tests, tt{fysh.End, ""})
 	testScanner(t, input, tests)
 }
 
@@ -210,6 +211,7 @@ func TestHearts(t *testing.T) {
 	for i := 0; i < len(hearts); i++ {
 		tests = append(tests, lit(fysh.Mul))
 	}
+	tests = append(tests, tt{fysh.End, ""})
 	input := strings.Join(hearts[:], " ")
 	testScanner(t, input, tests)
 }
@@ -302,13 +304,9 @@ func TestTouching(t *testing.T) {
 }
 
 func TestRandomFysh(t *testing.T) {
-	t.Skip()
-	input := "><##> ><###> ><####> <###><"
+	input := "><###>"
 	tests := []tt{
-		{fysh.Invalid, "><##>"},
 		lit(fysh.Grilled),
-		{fysh.Invalid, "><####>"},
-		{fysh.Invalid, "<###><"},
 		{fysh.End, ""},
 	}
 
@@ -331,6 +329,7 @@ func TestIdentifiers(t *testing.T) {
 	for _, name := range idents {
 		tests = append(tests, tt{fysh.Ident, name})
 	}
+	tests = append(tests, tt{fysh.End, ""})
 	input := strings.Join(idents[:], " ")
 	testScanner(t, input, tests)
 }
@@ -342,7 +341,14 @@ func TestWeirdFysh(t *testing.T) {
 	for _, name := range scales {
 		tests = append(tests, tt{fysh.Scales, name})
 	}
+	tests = append(tests, tt{fysh.End, ""})
 	input := strings.Join(scales[:], " ")
+	testScanner(t, input, tests)
+}
+
+func TestBrokenFysh(t *testing.T) {
+	input := "><\\/> <\\/><"
+	tests := []tt{lit(fysh.BrFysh), lit(fysh.BrFysh), {fysh.End, ""}}
 	testScanner(t, input, tests)
 }
 
@@ -428,14 +434,6 @@ func TestWeirdFysh(t *testing.T) {
 //   T(S::FYSH_CLOSE);
 //   T(S::END);
 //   // clang-format on
-// }
-//
-// TEST_CASE("Broken Fysh") {
-//   FyshLexer lexer{R"(><\/> <\/><)"};
-//
-//   T(S::BROKEN_FYSH);
-//   T(S::BROKEN_FYSH);
-//   T(S::END);
 // }
 //
 // TEST_CASE("Contributors") {
