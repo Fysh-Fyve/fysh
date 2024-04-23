@@ -15,9 +15,7 @@ func (g globalRng) Num() uint32 {
 	return rand.Uint32()
 }
 
-type localRng struct {
-	r *rand.Rand
-}
+type localRng struct{ r *rand.Rand }
 
 func (l *localRng) Num() uint32 {
 	return l.r.Uint32()

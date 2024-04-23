@@ -27,9 +27,7 @@ type Expression interface {
 	expression()
 }
 
-type Program struct {
-	TopLevels []SurfaceLevel
-}
+type Program struct{ TopLevels []SurfaceLevel }
 
 func (p *Program) top()            {}
 func (p *Program) statement()      {}

@@ -27,6 +27,8 @@ const (
 
 	ARR = "ARRAY"
 	MAP = "HASH"
+
+	BRK = "BREAK"
 )
 
 type HashKey struct {
@@ -43,9 +45,7 @@ type Object interface {
 	Inspect() string
 }
 
-type Integer struct {
-	Value int64
-}
+type Integer struct{ Value int64 }
 
 func (i *Integer) Type() ObjectType { return INT }
 func (i *Integer) Inspect() string  { return fmt.Sprintf("%d", i.Value) }
@@ -58,16 +58,17 @@ type Null struct{}
 func (n *Null) Type() ObjectType { return NUL }
 func (n *Null) Inspect() string  { return "null" }
 
-type ReturnValue struct {
-	Value Object
-}
+type Break struct{}
+
+func (b *Break) Type() ObjectType { return BRK }
+func (b *Break) Inspect() string  { return "break" }
+
+type ReturnValue struct{ Value Object }
 
 func (rv *ReturnValue) Type() ObjectType { return RET }
 func (rv *ReturnValue) Inspect() string  { return rv.Value.Inspect() }
 
-type Error struct {
-	Message string
-}
+type Error struct{ Message string }
 
 func (e *Error) Type() ObjectType { return ERR }
 func (e *Error) Inspect() string  { return "ERROR: " + e.Message }
@@ -97,9 +98,7 @@ func (f *Function) Inspect() string {
 	return out.String()
 }
 
-type String struct {
-	Value string
-}
+type String struct{ Value string }
 
 func (s *String) Type() ObjectType { return STR }
 func (s *String) Inspect() string  { return s.Value }
@@ -110,16 +109,12 @@ func (s *String) HashKey() HashKey {
 	return HashKey{Type: s.Type(), Value: h.Sum64()}
 }
 
-type Builtin struct {
-	Fn BuiltinFunction
-}
+type Builtin struct{ Fn BuiltinFunction }
 
 func (b *Builtin) Type() ObjectType { return STD }
 func (b *Builtin) Inspect() string  { return "builtin function" }
 
-type Array struct {
-	Elements []Object
-}
+type Array struct{ Elements []Object }
 
 func (ao *Array) Type() ObjectType { return ARR }
 func (ao *Array) Inspect() string {
@@ -142,9 +137,7 @@ type HashPair struct {
 	Value Object
 }
 
-type Hash struct {
-	Pairs map[HashKey]HashPair
-}
+type Hash struct{ Pairs map[HashKey]HashPair }
 
 func (h *Hash) Type() ObjectType { return MAP }
 func (h *Hash) Inspect() string {
