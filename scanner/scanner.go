@@ -87,6 +87,14 @@ func (s *Scanner) lt(start int) fysh.Fysh {
 	case '~':
 		s.reel()
 		f = newFysh(fysh.Squid)
+	case '\\':
+		s.reel()
+		if s.match("/><") {
+			f = newFysh(fysh.BrFysh)
+		} else {
+			f.Type = fysh.Invalid
+			f.Value = string(s.input[start:s.peek])
+		}
 	case '/':
 		s.reel()
 		if s.expect('3') {
@@ -176,6 +184,20 @@ func (s *Scanner) rightFysh(start int) fysh.Fysh {
 	ch := s.periscope()
 	closeFysh, noValue := false, false
 	switch ch {
+	case '#':
+		s.reel()
+		closeFysh = true
+		if s.match("##") {
+			f.Type = fysh.Grilled
+			noValue = true
+		}
+	case '\\':
+		s.reel()
+		closeFysh = true
+		if s.expect('/') {
+			f.Type = fysh.BrFysh
+			noValue = true
+		}
 	case '/':
 		f = s.comment()
 	case '>':

@@ -18,6 +18,14 @@ func (i *Identifier) expression()     {}
 func (i *Identifier) Literal() string { return fysh.Ident.String() }
 func (i *Identifier) String() string  { return i.Name }
 
+type Grilled struct {
+}
+
+func (s *Grilled) top()            {}
+func (s *Grilled) expression()     {}
+func (s *Grilled) Literal() string { return fysh.Grilled.String() }
+func (s *Grilled) String() string  { return fysh.Grilled.String() }
+
 type Scales struct {
 	Value int64
 }

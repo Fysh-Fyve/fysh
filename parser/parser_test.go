@@ -103,11 +103,9 @@ func TestAssignment(t *testing.T) {
 	testProgram(t, input, tests)
 }
 
-func TestIncrement(t *testing.T) {
-	input := `>><fysh> ~`
-	tests := []Test{
-		{"fysh++;"},
-	}
+func TestIncrementDecrement(t *testing.T) {
+	input := `>><fysh> ~ <fysh><< ~`
+	tests := []Test{{"fysh++;"}, {"fysh--;"}}
 	testProgram(t, input, tests)
 }
 
@@ -130,6 +128,7 @@ func TestBlink(t *testing.T) {
 ><{{(((> (+o ><{> ~
 
 o+) ><steven> ~
+(+o ><###> ~
 
 ><(((^> [><steven> o~ ><}}>]
 ><>
@@ -141,133 +140,21 @@ o+) ><steven> ~
         ><{{(((o> (+o ><{> ~
         ><{{(((o> (+o ><(> ~
 <><
+
+><//> With Fysh Bowl
+><(((@> (><{>)
+><>
+	><\/> ~
+	<\/>< ~
+<><
 `
 	tests := []Test{
 		{"(24 (+o 1);"},
 		{"o+) steven;"},
+		{"(+o ><###>;"},
 		{"if ((steven > 3)) {\nreturn steven;\n}"},
 		{"while (1) {\n(24 (+o 1);\n(24 (+o 0);\n}"},
+		{"while (1) {\nbreak;\nbreak;\n}"},
 	}
 	testProgram(t, input, tests)
 }
-
-// TODO: Pass original test cases
-
-// TEST_CASE("Loop Statement") {
-//   fysh::FyshParser p{fysh::FyshLexer{R"(
-// ><(((@> [ ><fysh> ]
-// ><>
-//     ><((({o> ~
-// <><
-//   )"}};
-//   fysh::ast::FyshProgram program{p.parseProgram()};
-//   check_program(program, 1);
-//   FyshLoopStmt stmt{unwrap<FyshLoopStmt>(program[0])};
-//   check_ident(stmt.condition, "fysh");
-//   check_program(stmt.body, 1);
-//   CHECK(get_expr<FyshLiteral>(unwrap<FyshExpr>(stmt.body[0])).num == 1);
-// }
-//
-// TEST_CASE("Loop Statement (with Fysh Bowl)") {
-//   fysh::FyshParser p{fysh::FyshLexer{R"(
-// ><(((@> ( ><fysh> )
-// ><>
-//     ><((({o> ~
-// <><
-//   )"}};
-//   fysh::ast::FyshProgram program{p.parseProgram()};
-//   check_program(program, 1);
-//   FyshLoopStmt stmt{unwrap<FyshLoopStmt>(program[0])};
-//   check_ident(stmt.condition, "fysh");
-//   check_program(stmt.body, 1);
-//   CHECK(get_expr<FyshLiteral>(unwrap<FyshExpr>(stmt.body[0])).num == 1);
-// }
-//
-// TEST_CASE("Assignment Statement") {
-//   fysh::FyshParser p{fysh::FyshLexer{"><fysh> = ><(({o> ~"}};
-//   fysh::ast::FyshProgram program{p.parseProgram()};
-//   check_program(program, 1);
-//   FyshAssignmentStmt stmt{unwrap<FyshAssignmentStmt>(program[0])};
-//   check_ident(stmt.left, "fysh");
-//   CHECK(get_expr<FyshLiteral>(stmt.right).num == 1);
-// }
-//
-// TEST_CASE("Expression Statements") {
-//   struct TestCase {
-//     const char *input;
-//     const char *expected;
-//   };
-//   static const TestCase cases[] = {
-//       {"><(({o> ~", "1"},
-//       {"><fysh> ~", "fysh"},
-//       {"><fysh> <3 ><{({o> ~", "(fysh * 5)"},
-//       {"><fysh> ><{({o> <3 ><(({o> ~", "(fysh + (5 * 1))"},
-//       {"><fyshy> | ><{({o> ^ ><(({o> ~", "(fyshy | (5 ^ 1))"},
-//       {"><fysh1> ><fysh2> ><fysh3> ~", "(fysh1 + (fysh2 + fysh3))"},
-//       {"><{{> <3 ><{(({({> <3 ><{({{{{({{> ~", "(3 * (37 * 379))"},
-//       {"( ><{{> <3 ><{(({({> ) <3 ><{({{{{({{> ~", "((3 * 37) * 379)"},
-//       {"><fysh> o~ ><{({{{{({{> ~", "(fysh > 379)"},
-//       {"[>(sub) ><{({{{{({{>] ~", "sub(379)"},
-//       {"[><{({{{{({{>] ~", "[379]"},
-//       {"[><{({{{{({{> - ><{({{{{({{>] ~", "[379, 379]"},
-//       {"<{{{>< ~", "(-7)"},
-//       {"!!><}> ~", "(!1)"},
-//       {"!><}> ~", "(~1)"},
-//       {"!!!><}> ~", "(!(~1))"},
-//       {"!(!!><}>) ~", "(~(!1))"},
-//
-//   };
-//   for (const auto &[input, expected] : cases) {
-//     CHECK_EQ(expr(input), expected);
-//   }
-// }
-//
-// TEST_CASE("Increment Statement") {
-//   fysh::FyshParser p{fysh::FyshLexer{">><fysh> ~"}};
-//   fysh::ast::FyshProgram program{p.parseProgram()};
-//   check_program(program, 1);
-//   FyshIncrementStmt stmt{unwrap<FyshIncrementStmt>(program[0])};
-//   check_ident(stmt.expr, "fysh");
-// }
-//
-// TEST_CASE("Decrement Statement") {
-//   fysh::FyshParser p{fysh::FyshLexer{"<fysh><< ~"}};
-//   fysh::ast::FyshProgram program{p.parseProgram()};
-//   check_program(program, 1);
-//   FyshDecrementStmt stmt{unwrap<FyshDecrementStmt>(program[0])};
-//   check_ident(stmt.expr, "fysh");
-// }
-//
-// TEST_CASE("Break") {
-//   fysh::FyshParser p{fysh::FyshLexer{R"(><\/> ~)"}};
-//   fysh::ast::FyshProgram program{p.parseProgram()};
-//   check_program(program, 1);
-//   BrokenFysh stmt{unwrap<BrokenFysh>(program[0])};
-// }
-//
-// TEST_CASE("Subroutines") {
-//   fysh::FyshParser p{fysh::FyshLexer{R"(
-// >(foo) ><arg1>
-// ><>
-//     o+) ><local> ~
-//     (+o ><local> ><arg1> ~
-// <><
-//   )"}};
-//   fysh::ast::FyshProgram program{p.parseProgram()};
-//   check_program(program, 1);
-//   REQUIRE(std::holds_alternative<SUBroutine>(program[0]));
-//   SUBroutine func{std::get<SUBroutine>(program[0])};
-//   CHECK(func.name == "foo");
-//   REQUIRE(func.parameters.size() == 1);
-//   CHECK(func.parameters[0] == "arg1");
-//   std::vector<FyshStmt> block = func.body;
-//   check_program(block, 2);
-//
-//   FyshAnchorStmt stmt{unwrap<FyshAnchorStmt>(block[0])};
-//   CHECK(stmt.op == FyshBinary::AnchorIn);
-//   check_ident(stmt.right, "local");
-//
-//   stmt = unwrap<FyshAnchorStmt>(block[1]);
-//   CHECK(stmt.op == FyshBinary::AnchorOut);
-//   CHECK(stmt.right == "(local + arg1)");
-// }

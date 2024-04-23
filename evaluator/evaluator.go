@@ -74,6 +74,9 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 
 		return evalBinary(node.Op, left, right)
 
+	case *ast.Grilled:
+		return &object.Integer{Value: int64(env.RNG.Num())}
+
 	case *ast.IfStatement:
 		return evalIf(node, env)
 

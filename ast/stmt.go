@@ -85,6 +85,15 @@ func (r *ReturnStatement) String() string {
 	return fmt.Sprintf("%s %s%s", fysh.Squid, r.Expr, fysh.Water)
 }
 
+type BreakStatement struct{}
+
+func (r *BreakStatement) top()            {}
+func (r *BreakStatement) statement()      {}
+func (r *BreakStatement) Literal() string { return fysh.BrFysh.String() }
+func (r *BreakStatement) String() string {
+	return fmt.Sprintf("%s%s", fysh.BrFysh, fysh.Water)
+}
+
 type IfStatement struct {
 	Cond Expression
 	Then *BlockStatement

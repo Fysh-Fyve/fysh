@@ -13,6 +13,8 @@ func TestEvalIntegerExpression(t *testing.T) {
 		input    string
 		expected int64
 	}{
+		// we have a fixed seed for the test environment
+		{"><###> </3 ><{({{{{((({{{{(({(> ~", 42069},
 		{"><{({> ~", 5},
 		{"><{({(> ~", 10},
 		{"<})}>< ~", -5},
@@ -562,7 +564,7 @@ func testEval(input string) object.Object {
 	if err != nil {
 
 	}
-	env := object.NewEnvironment()
+	env := object.NewEnvironmentWithSeed(0)
 
 	return Eval(program, env)
 }

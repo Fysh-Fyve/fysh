@@ -81,7 +81,7 @@ var tokens = [...]string{
 	RFysh:   "}",
 	LWTF:    "WTF(",
 	RWTF:    ")WTF",
-	Grilled: "GRILLED_FYSH",
+	Grilled: "><###>",
 	Loop:    "while",
 	Comment: "//",
 	BlockC:  "/**/",
