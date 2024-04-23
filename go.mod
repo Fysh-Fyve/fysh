@@ -1,4 +1,4 @@
-module github.com/cbebe/go-fysh
+module github.com/Fysh-Fyve/go-fysh
 
 go 1.22.0
 

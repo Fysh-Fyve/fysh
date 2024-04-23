@@ -6,8 +6,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/cbebe/go-fysh/parser"
-	"github.com/cbebe/go-fysh/scanner"
+	"github.com/Fysh-Fyve/go-fysh/parser"
+	"github.com/Fysh-Fyve/go-fysh/scanner"
 )
 
 func main() {

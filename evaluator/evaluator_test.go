@@ -3,9 +3,9 @@ package evaluator
 import (
 	"testing"
 
-	"github.com/cbebe/go-fysh/object"
-	"github.com/cbebe/go-fysh/parser"
-	"github.com/cbebe/go-fysh/scanner"
+	"github.com/Fysh-Fyve/go-fysh/object"
+	"github.com/Fysh-Fyve/go-fysh/parser"
+	"github.com/Fysh-Fyve/go-fysh/scanner"
 )
 
 func TestEvalIntegerExpression(t *testing.T) {

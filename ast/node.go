@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 
-	"github.com/cbebe/go-fysh/fysh"
+	"github.com/Fysh-Fyve/go-fysh/fysh"
 )
 
 type Node interface {

@@ -3,8 +3,8 @@ package parser_test
 import (
 	"testing"
 
-	"github.com/cbebe/go-fysh/parser"
-	"github.com/cbebe/go-fysh/scanner"
+	"github.com/Fysh-Fyve/go-fysh/parser"
+	"github.com/Fysh-Fyve/go-fysh/scanner"
 )
 
 type Test struct {

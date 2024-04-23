@@ -9,11 +9,11 @@ import (
 
 	"golang.org/x/term"
 
-	"github.com/cbebe/go-fysh/evaluator"
-	"github.com/cbebe/go-fysh/object"
-	"github.com/cbebe/go-fysh/parser"
-	"github.com/cbebe/go-fysh/repl"
-	"github.com/cbebe/go-fysh/scanner"
+	"github.com/Fysh-Fyve/go-fysh/evaluator"
+	"github.com/Fysh-Fyve/go-fysh/object"
+	"github.com/Fysh-Fyve/go-fysh/parser"
+	"github.com/Fysh-Fyve/go-fysh/repl"
+	"github.com/Fysh-Fyve/go-fysh/scanner"
 )
 
 func main() {
