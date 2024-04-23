@@ -3,10 +3,10 @@ package evaluator
 import (
 	"fmt"
 
-	"github.com/cbebe/go-fysh/ast"
-	"github.com/cbebe/go-fysh/ast/binary"
-	"github.com/cbebe/go-fysh/ast/unary"
-	"github.com/cbebe/go-fysh/object"
+	"github.com/Fysh-Fyve/go-fysh/ast"
+	"github.com/Fysh-Fyve/go-fysh/ast/binary"
+	"github.com/Fysh-Fyve/go-fysh/ast/unary"
+	"github.com/Fysh-Fyve/go-fysh/object"
 )
 
 var (

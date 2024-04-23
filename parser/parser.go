@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/cbebe/go-fysh/ast"
-	"github.com/cbebe/go-fysh/ast/binary"
-	"github.com/cbebe/go-fysh/ast/unary"
-	"github.com/cbebe/go-fysh/fysh"
-	"github.com/cbebe/go-fysh/scanner"
+	"github.com/Fysh-Fyve/go-fysh/ast"
+	"github.com/Fysh-Fyve/go-fysh/ast/binary"
+	"github.com/Fysh-Fyve/go-fysh/ast/unary"
+	"github.com/Fysh-Fyve/go-fysh/fysh"
+	"github.com/Fysh-Fyve/go-fysh/scanner"
 )
 
 type ParserErrors []error

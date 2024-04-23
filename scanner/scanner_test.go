@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/cbebe/go-fysh/fysh"
-	"github.com/cbebe/go-fysh/scanner"
+	"github.com/Fysh-Fyve/go-fysh/fysh"
+	"github.com/Fysh-Fyve/go-fysh/scanner"
 )
 
 type tt struct {
