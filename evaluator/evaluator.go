@@ -13,6 +13,7 @@ var (
 	NULL  = &object.Null{}
 	TRUE  = &object.Integer{Value: 1}
 	FALSE = &object.Integer{Value: 0}
+	BREAK = &object.Break{}
 )
 
 func Eval(node ast.Node, env *object.Environment) object.Object {
@@ -29,6 +30,9 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 
 	case *ast.ExpressionStatement:
 		return Eval(node.Expr, env)
+
+	case *ast.BreakStatement:
+		return BREAK
 
 	case *ast.ReturnStatement:
 		val := Eval(node.Expr, env)
@@ -196,7 +200,7 @@ func evalBlockStatement(
 
 		if result != nil {
 			rt := result.Type()
-			if rt == object.RET || rt == object.ERR {
+			if rt == object.RET || rt == object.ERR || rt == object.BRK {
 				return result
 			}
 		}
@@ -338,6 +342,9 @@ func evalLoop(ie *ast.LoopStatement, env *object.Environment) object.Object {
 	for isTruthy(condition) {
 		value = Eval(ie.Body, env)
 		if object.IsError(value) {
+			return value
+		}
+		if value == BREAK {
 			return value
 		}
 		condition = Eval(ie.Cond, env)
