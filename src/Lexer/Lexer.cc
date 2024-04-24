@@ -618,25 +618,25 @@ fysh::Fysh fysh::FyshLexer::o() noexcept {
 
 fysh::Fysh fysh::FyshLexer::handleOther() noexcept {
   if (expectFyshChar({
-          "☙", "♡", "♥", "❣",
+          "☙", "♡", "♥",
           // "❤",
           "❥", "❦", "❧", "🎔", "🫀", "🖤", "💙", "🩷", "🩵", "💚", "💛", "💜",
           "🧡", "🤍", "🤎", "🩶",
           // "❤️",
-          "💓", "💕", "💖", "💗", "💘",
-          //"💝",
+          "💓", "💕", "💖", "💗", "💘", "💝",
           //"❣️",
-          "💌", "💞", "💟", "🫶",
-          //"🫶🏻",
-          //"🫶🏼",
-          //"🫶🏽",
-          //"🫶🏾",
-          //"🫶🏿",
+          "💌", "💞", "💟",
           //"🏩",
-
       })) {
     return Species::HEART_MULTIPLY;
-
+  } else if (expectFyshChar("🫶")) {
+    // Make sure to only get one
+    expectFyshChar("🏻") || expectFyshChar("🏼") || expectFyshChar("🏽") ||
+        expectFyshChar("🏾") || expectFyshChar("🏿");
+    return Species::HEART_MULTIPLY;
+  } else if (expectFyshChar("❣")) {
+    expectFyshChar("\ufe0f");
+    return Species::HEART_MULTIPLY;
   } else if (expectFyshChar("❤")) {
     expectFyshChar("\ufe0f");
     // Zero width joiner for ❤️‍🔥 and ❤️‍🩹
