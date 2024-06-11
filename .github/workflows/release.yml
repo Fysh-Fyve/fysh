@@ -30,6 +30,5 @@ jobs:
         goos: ${{ matrix.goos }}
         goarch: ${{ matrix.goarch }}
         goversion: 1.22
-        project_path: "./cmd/interpreter"
         binary_name: "go-fysh"
         extra_files: LICENSE README.md
