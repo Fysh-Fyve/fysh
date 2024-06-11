@@ -8,9 +8,7 @@
       "name": "Launch Client",
       "runtimeExecutable": "${execPath}",
       "args": ["--extensionDevelopmentPath=${workspaceRoot}"],
-      "outFiles": [
-        "${workspaceRoot}/out/**/*.js"
-      ],
+      "outFiles": ["${workspaceRoot}/out/**/*.js"],
       "autoAttachChildProcesses": true,
       "preLaunchTask": {
         "type": "npm",

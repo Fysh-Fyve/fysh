@@ -1,5 +1,5 @@
 {
-  "name": "vscode-fysh",
+  "name": "fysh",
   "displayName": "Fysh",
   "preview": true,
   "description": "VSCode Language Support for Fysh",
@@ -8,7 +8,7 @@
   },
   "license": "MIT",
   "icon": "media/icon.png",
-  "version": "1.0.8",
+  "version": "1.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Fysh-Fyve/vscode-fysh"
@@ -27,8 +27,53 @@
     "vscode": "^1.75.0"
   },
   "activationEvents": [],
-  "main": "./out/main",
+  "main": "./out/extension",
   "contributes": {
+    "commands": [
+      {
+        "category": "Fysh",
+        "command": "fysh.execInTerminal",
+        "icon": "$(play)",
+        "title": "Run Fysh File in Terminal"
+      },
+      {
+        "category": "Fysh",
+        "command": "fysh.installGoFysh",
+        "title": "Install Go-Fysh"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "fysh.run",
+          "group": "Fysh",
+          "when": "editorLangId == fysh"
+        }
+      ],
+      "fysh.run": [
+        {
+          "command": "fysh.execInTerminal",
+          "group": "Fysh",
+          "icon": "$(play)",
+          "when": "editorLangId == fysh"
+        }
+      ],
+      "editor/title/run": [
+        {
+          "command": "fysh.execInTerminal",
+          "group": "navigation@0",
+          "title": "Run Fysh in Terminal",
+          "when": "resourceLangId == fysh && !isInDiffEditor && !virtualWorkspace && shellExecutionSupported"
+        }
+      ]
+    },
+    "submenus": [
+      {
+        "id": "fysh.run",
+        "label": "Run Fysh",
+        "icon": "$(play)"
+      }
+    ],
     "languages": [
       {
         "id": "fysh",
@@ -46,20 +91,59 @@
         "language": "fysh",
         "path": "./src/snippets.json"
       }
+    ],
+    "walkthroughs": [
+      {
+        "id": "sample",
+        "title": "Sample",
+        "description": "A sample walkthrough",
+        "steps": [
+          {
+            "id": "runcommand",
+            "title": "Run Command",
+            "description": "This step will run a command and check off once it has been run.\n[Run Command](command:getting-started-sample.runCommand)",
+            "media": {
+              "image": "media/image.png",
+              "altText": "Empty image"
+            },
+            "completionEvents": [
+              "onCommand:getting-started-sample.runCommand"
+            ]
+          },
+          {
+            "id": "changesetting",
+            "title": "Change Setting",
+            "description": "This step will change a setting and check off when the setting has changed\n[Change Setting](command:getting-started-sample.changeSetting)",
+            "media": {
+              "markdown": "media/markdown.md"
+            },
+            "completionEvents": [
+              "onSettingChanged:getting-started-sample.sampleSetting"
+            ]
+          }
+        ]
+      }
     ]
   },
   "scripts": {
     "vscode:prepublish": "npm run esbuild-base -- --minify",
-    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
+    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
     "watch": "tsc -b -w",
     "lint": "eslint ./src --ext .ts,.tsx",
     "package": "pnpm vsce package --no-dependencies",
     "publish": "pnpm vsce publish --no-dependencies"
   },
+  "enabledApiProposals": [
+    "terminalDataWriteEvent",
+    "terminalExecuteCommandEvent",
+    "terminalShellIntegration"
+  ],
   "dependencies": {
+    "adm-zip": "^0.5.14",
     "vscode-languageclient": "^9.0.1"
   },
   "devDependencies": {
+    "@types/adm-zip": "^0.5.5",
     "@types/mocha": "^10.0.6",
     "@types/node": "^18.14.6",
     "@types/vscode": "^1.75.1",
