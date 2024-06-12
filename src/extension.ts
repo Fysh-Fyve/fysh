@@ -32,7 +32,6 @@ type ExtensionState = {
 
 function installGoFysh(state: ExtensionState) {
   async function commandHandler() {
-    console.log(state.binPath);
     if (await findExecutable(exe, state.binPath)) {
       window.showInformationMessage(`${exe} is installed!`);
       return;
@@ -51,13 +50,18 @@ async function promptInstall(context: ExtensionContext, state: ExtensionState) {
     "Do not show again"
   );
   if (res === "Do not show again") {
-    // TODO: Make sure that this does not show again!
     window.showInformationMessage(
       `If you change your mind, ${exe} can be installed from the command prompt.`
     );
     return context.globalState.update("promptInstall", false);
   } else if (res === "Install") {
     return commands.executeCommand(FyshCommands.InstallGoFysh, state);
+  }
+}
+
+function q(s:string): string {
+  if (s.includes(' ')) {
+    return `"${s}"`
   }
 }
 
@@ -71,6 +75,7 @@ function execInterminal(context: ExtensionContext, state: ExtensionState) {
       return promptInstall(context, state);
     }
 
+    // TODO: Make sending commands more robust. See vscode-python for example.
     if (!state.terminal || state.terminal?.exitStatus) {
       if (state.terminal?.exitStatus) {
         state.terminal.dispose();
@@ -78,7 +83,7 @@ function execInterminal(context: ExtensionContext, state: ExtensionState) {
       state.terminal = window.createTerminal({ name: "Fysh" });
     }
     state.terminal.show();
-    state.terminal.sendText(`"${executable}" "${file.fsPath}"`);
+    state.terminal.sendText(`${q(executable)} ${q(file.fsPath)}`);
   }
 
   return commands.registerCommand(FyshCommands.ExecInTerminal, commandHandler);
