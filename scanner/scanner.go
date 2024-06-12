@@ -119,7 +119,7 @@ func (s *Scanner) lt(start int) fysh.Fysh {
 		}
 	default:
 		// left fysh
-		for ch := s.periscope(); ch == 'o' || ch == '°'; ch = s.reel() {
+		for ch := s.periscope(); ch == 'o' || ch == 'O' || ch == '0' || ch == '°' ; ch = s.reel() {
 		}
 		ch := s.periscope()
 		if isScale(rune(ch)) {
@@ -220,7 +220,7 @@ func (s *Scanner) rightFysh(start int) fysh.Fysh {
 				f.Type = fysh.Else
 				noValue = true
 			}
-			for ch := s.periscope(); ch == 'o' || ch == '°'; ch = s.reel() {
+			for ch := s.periscope(); ch == 'o' || ch == 'O' || ch == '0' ||  ch == '°'; ch = s.reel() {
 			}
 		} else {
 			closeFysh = true
