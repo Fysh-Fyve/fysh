@@ -59,9 +59,11 @@ async function promptInstall(context: ExtensionContext, state: ExtensionState) {
   }
 }
 
-function q(s:string): string {
-  if (s.includes(' ')) {
-    return `"${s}"`
+function q(s: string): string {
+  if (s.includes(" ")) {
+    return `"${s}"`;
+  } else {
+    return s;
   }
 }
 
