@@ -96,7 +96,7 @@ type OSArch = `${typeof process.platform}-${typeof process.arch}`;
 function findExecutableOSArch(): string {
   const valid = {
     "darwin-arm64": "darwin-arm64",
-    "darwin-x64": "darwin-arm64",
+    "darwin-x64": "darwin-amd64",
     "linux-ia32": "linux-386",
     "linux-x64": "linux-amd64",
     "win32-ia32": "windows-386",
