@@ -3,6 +3,7 @@ package main
 // https://belief-driven-design.com/build-time-variables-in-go-51439b26ef9/
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"os/exec"
@@ -23,6 +24,8 @@ func run(args ...string) string {
 }
 
 func main() {
+	outputFile := flag.String("o", "", "Output path of the executable")
+	flag.Parse()
 	version := run("git", "describe", "--tags", "--always", "--abbrev=0", "--match=v[0-9]*.[0-9]*.[0-9]*")
 	commitHash := run("git", "rev-parse", "--short", "HEAD")
 	buildTimeStamp := time.Now().Format("2006-01-02T15:04:05")
@@ -41,10 +44,15 @@ func main() {
 	args := os.Args[1:]
 
 	var cmd *exec.Cmd
-	if len(args) > 0 {
+	if *outputFile != "" {
+		cmd = exec.Command("go", "build", "-o", *outputFile, "-ldflags", ldflags)
+	} else if len(args) == 1 {
 		cmd = exec.Command("go", "build", "-o", args[0], "-ldflags", ldflags)
-	} else {
+	} else if len(args) == 0 {
 		cmd = exec.Command("go", "install", "-ldflags", ldflags)
+	} else {
+		fmt.Printf("USAGE:\n  %s [PATH]\n  %s -o PATH\n", os.Args[0], os.Args[0])
+		os.Exit(1)
 	}
 
 	cmd.Stdout = os.Stdout
