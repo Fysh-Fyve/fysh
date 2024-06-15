@@ -5,7 +5,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/Fysh-Fyve/go-fysh/fysh"
+	"github.com/Fysh-Fyve/fysh/fysh"
 )
 
 type Scanner struct {

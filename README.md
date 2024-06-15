@@ -16,5 +16,5 @@ Also, native UTF-8 support makes this super easy
 Currently, we can only build from source:
 
 ```bash
-go install github.com/Fysh-Fyve/go-fysh@latest
+go install github.com/Fysh-Fyve/fysh@latest
 ```
