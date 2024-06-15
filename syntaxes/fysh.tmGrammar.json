@@ -1,48 +1,65 @@
 {
   "scopeName": "source.fysh",
+  "fileTypes": [ "fysh" ],
+  "name": "Fysh",
   "patterns": [
-    { "include": "#block-comment" },
-    { "include": "#line-comment" },
-    { "include": "#left-identifier" },
-    { "include": "#right-identifier" },
-    { "include": "#sub" },
-    { "include": "#control-fysh" }
+  {"include": "#terminator"},
+  {"include": "#comment.line.fysh"},
+  {"include": "#block-comment"},
+  {"include": "#left-identifier"},
+  {"include": "#decrement"},
+  {"include": "#right-identifier"},
+  {"include": "#increment"},
+  {"include": "#control-fysh"},
+  {"include": "#assignment.operator.fysh"},
+  {"include": "#multiply.operator.fysh"},
+  {"include": "#anchor.fysh"},
+  {
+      "match": "~",
+      "name": "terminator"
+  },
+  { 
+    "match": "><//>.*\n",
+    "name": "comment.line.fysh"
+  },
+  {
+    "match": "[≈=]",
+    "name": "assignment.operator.fysh"
+  },
+  {
+    "match": "[♡♥❤🎔❥❣❦❧☙]",
+    "name": "multiply.operator.fysh"
+  },
+  {
+    "match": "(?:\\(\\+o|o\\+\\))",
+    "name": "anchor.fysh"
+  }
   ],
   "repository": {
-    "scales": {
-      "name": "constant.numeric.integer",
-      "patterns": [{ "match": "\\{\\}" }]
-    },
-    "control-fysh": {
-      "name": "keyword.control.fysh",
-      "begin": "><\\(\\(\\(",
-      "end": ">",
-      "patterns": [{ "match": "[*^@]" }]
-    },
-    "sub": {
-      "name": "entity.name.function.fysh",
-      "begin": ">\\([^)]*",
-      "end": "\\)"
-    },
     "left-identifier": {
-      "name": "variable.fysh.left",
-      "begin": "<[^\\{\\}()->][^\\{\\}()>]*",
-      "end": "><"
+      "match": "<[^[*^@]\\{\\}()->][^\\{\\}()>]*><(?!<)",
+      "name": "variable.fysh.left"
+    },
+    "decrement": {
+      "match": "<[^[*^@]\\{\\}()->][^\\{\\}()>]*><<",
+      "name": "variable.fysh.decrement"
     },
     "right-identifier": {
-      "name": "variable.fysh.right",
-      "begin": "><[^\\{\\}()->][^\\{\\}()>]*",
-      "end": ">"
+      "match": "><[^[*^@]\\{\\}()->][^\\{\\}()>]*>",
+      "name": "variable.fysh.right"
     },
-    "line-comment": {
-      "begin": "><//>",
-      "end": "$",
-      "name": "comment.line.fysh"
+    "increment": {
+      "match": ">><[^[*^@]\\{\\}()->][^\\{\\}()>]*>",
+      "name": "variable.fysh.increment"
     },
     "block-comment": {
       "begin": "></\\*>",
       "end": "<\\*/><",
       "name": "comment.block.fysh"
+    },
+    "control-fysh": {
+      "name": "keyword.control.fysh",
+      "match": "><\\(*[*^@]>"
     }
   }
 }
