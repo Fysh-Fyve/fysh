@@ -29,5 +29,5 @@ jobs:
         goversion: 1.22
         project_path: "."
         binary_name: "fyshls"
-        build_command: "go run cmd/install/main.go fyshls"
+        build_command: "make release"
         extra_files: LICENSE README.md
