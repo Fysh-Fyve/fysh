@@ -282,7 +282,7 @@ function addPynkHeart() {
   };
 
   config.update(
-    "editor.semanticTokenColorCustomizations",
+    "editor.tokenColorCustomizations",
     updatedTokenSettings,
     ConfigurationTarget.Global
   );
