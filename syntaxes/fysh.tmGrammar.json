@@ -1,0 +1,48 @@
+{
+  "scopeName": "source.fysh",
+  "patterns": [
+    { "include": "#block-comment" },
+    { "include": "#line-comment" },
+    { "include": "#left-identifier" },
+    { "include": "#right-identifier" },
+    { "include": "#sub" },
+    { "include": "#control-fysh" }
+  ],
+  "repository": {
+    "scales": {
+      "name": "constant.numeric.integer",
+      "patterns": [{ "match": "\\{\\}" }]
+    },
+    "control-fysh": {
+      "name": "keyword.control.fysh",
+      "begin": "><\\(\\(\\(",
+      "end": ">",
+      "patterns": [{ "match": "[*^@]" }]
+    },
+    "sub": {
+      "name": "entity.name.function.fysh",
+      "begin": ">\\([^)]*",
+      "end": "\\)"
+    },
+    "left-identifier": {
+      "name": "variable.fysh.left",
+      "begin": "<[^\\{\\}()->][^\\{\\}()>]*",
+      "end": "><"
+    },
+    "right-identifier": {
+      "name": "variable.fysh.right",
+      "begin": "><[^\\{\\}()->][^\\{\\}()>]*",
+      "end": ">"
+    },
+    "line-comment": {
+      "begin": "><//>",
+      "end": "$",
+      "name": "comment.line.fysh"
+    },
+    "block-comment": {
+      "begin": "></\\*>",
+      "end": "<\\*/><",
+      "name": "comment.block.fysh"
+    }
+  }
+}

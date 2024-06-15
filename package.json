@@ -86,6 +86,13 @@
         "configuration": "./src/language-configuration.json"
       }
     ],
+    "grammars": [
+      {
+        "language": "fysh",
+        "scopeName": "source.fysh",
+        "path": "./syntaxes/fysh.tmGrammar.json"
+      }
+    ],
     "snippets": [
       {
         "language": "fysh",

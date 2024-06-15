@@ -134,7 +134,7 @@ async function install(binPath: string) {
   await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: "Nice",
+      title: "Installing Fysh",
       cancellable: false,
     },
     (progress) => installWithProgress(progress, binPath)
@@ -266,17 +266,36 @@ enum FyshCommands {
   InstallFysh = "fysh.installFysh",
 }
 
+import colours from "./fysh.colours.json";
+
 function addPynkHeart() {
   const config = workspace.getConfiguration();
-  const editorConfig: { rules?: object } = config.get(
+  const tokenRules: { textMateRules?: object[] } = config.get(
+    "editor.tokenColorCustomizations"
+  );
+
+  const updatedTokenSettings: { textMateRules?: object } = {
+    ...tokenRules,
+    textMateRules: (tokenRules.textMateRules || []).concat(
+      colours["editor.tokenColorCustomizations"].textMateRules
+    ),
+  };
+
+  config.update(
+    "editor.semanticTokenColorCustomizations",
+    updatedTokenSettings,
+    ConfigurationTarget.Global
+  );
+
+  const semanticRules: { rules?: object } = config.get(
     "editor.semanticTokenColorCustomizations"
   );
 
   const updatedSettings = {
-    ...editorConfig,
+    ...semanticRules,
     // Add or modify settings
     rules: {
-      ...editorConfig.rules,
+      ...semanticRules.rules,
       "enumMember:fysh": { foreground: "#e83d96", bold: true },
     },
   };
