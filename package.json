@@ -8,7 +8,7 @@
   },
   "license": "MIT",
   "icon": "media/icon.png",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/Fysh-Fyve/vscode-fysh"
@@ -38,8 +38,8 @@
       },
       {
         "category": "Fysh",
-        "command": "fysh.installGoFysh",
-        "title": "Install Go-Fysh"
+        "command": "fysh.installFysh",
+        "title": "Install Fysh"
       }
     ],
     "menus": {

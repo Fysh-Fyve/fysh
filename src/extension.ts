@@ -22,7 +22,7 @@ import {
   TransportKind,
 } from "vscode-languageclient/node";
 
-const exe = "go-fysh";
+const exe = "fysh";
 
 type ExtensionState = {
   terminal?: Terminal;
@@ -30,7 +30,7 @@ type ExtensionState = {
   binPath: string;
 };
 
-function installGoFysh(state: ExtensionState) {
+function installFysh(state: ExtensionState) {
   async function commandHandler() {
     if (await findExecutable(exe, state.binPath)) {
       window.showInformationMessage(`${exe} is installed!`);
@@ -40,7 +40,7 @@ function installGoFysh(state: ExtensionState) {
     await install(state.binPath);
   }
 
-  return commands.registerCommand(FyshCommands.InstallGoFysh, commandHandler);
+  return commands.registerCommand(FyshCommands.InstallFysh, commandHandler);
 }
 
 async function promptInstall(context: ExtensionContext, state: ExtensionState) {
@@ -55,7 +55,7 @@ async function promptInstall(context: ExtensionContext, state: ExtensionState) {
     );
     return context.globalState.update("promptInstall", false);
   } else if (res === "Install") {
-    return commands.executeCommand(FyshCommands.InstallGoFysh, state);
+    return commands.executeCommand(FyshCommands.InstallFysh, state);
   }
 }
 
@@ -148,7 +148,7 @@ async function installWithProgress(progress: Progress, binPath: string) {
   const osArch = findExecutableOSArch();
   progress.report({ increment: 10, message: "Fetching latest release..." });
   const assets = await fetch(
-    "https://api.github.com/repos/Fysh-Fyve/go-fysh/releases/latest"
+    "https://api.github.com/repos/Fysh-Fyve/fysh/releases/latest"
   )
     .then((res) => res.json())
     .then((res) => {
@@ -263,7 +263,7 @@ async function createLSPClient() {
 
 enum FyshCommands {
   ExecInTerminal = "fysh.execInTerminal",
-  InstallGoFysh = "fysh.installGoFysh",
+  InstallFysh = "fysh.installFysh",
 }
 
 function addPynkHeart() {
@@ -334,7 +334,7 @@ export async function activate(context: ExtensionContext) {
   state.client?.start();
   context.subscriptions.push(
     execInterminal(context, state),
-    installGoFysh(state)
+    installFysh(state)
   );
   addPynkHeart();
 }
