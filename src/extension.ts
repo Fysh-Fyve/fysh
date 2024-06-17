@@ -47,11 +47,11 @@ async function promptInstall(context: ExtensionContext, state: ExtensionState) {
   const res = await window.showWarningMessage(
     `${exe}, the Fysh interpreter, was not found, would you like to install it from GitHub?`,
     "Install",
-    "Do not show again"
+    "Do not show again",
   );
   if (res === "Do not show again") {
     window.showInformationMessage(
-      `If you change your mind, ${exe} can be installed from the command prompt.`
+      `If you change your mind, ${exe} can be installed from the command prompt.`,
     );
     return context.globalState.update("promptInstall", false);
   } else if (res === "Install") {
@@ -105,7 +105,7 @@ function findExecutableOSArch(): string {
   const platform = `${process.platform}-${process.arch}` as const;
   if (!(platform in valid)) {
     throw new Error(
-      `Unsupported platform '${platform}'. Must compile interpreter with Go.`
+      `Unsupported platform '${platform}'. Must compile interpreter with Go.`,
     );
   }
   return valid[platform];
@@ -137,7 +137,7 @@ async function install(binPath: string) {
       title: "Installing Fysh",
       cancellable: false,
     },
-    (progress) => installWithProgress(progress, binPath)
+    (progress) => installWithProgress(progress, binPath),
   );
   window.showInformationMessage(`${exe} was installed!`);
 }
@@ -148,7 +148,7 @@ async function installWithProgress(progress: Progress, binPath: string) {
   const osArch = findExecutableOSArch();
   progress.report({ increment: 10, message: "Fetching latest release..." });
   const assets = await fetch(
-    "https://api.github.com/repos/Fysh-Fyve/fysh/releases/latest"
+    "https://api.github.com/repos/Fysh-Fyve/fysh/releases/latest",
   )
     .then((res) => res.json())
     .then((res) => {
@@ -165,13 +165,13 @@ async function installWithProgress(progress: Progress, binPath: string) {
     .then((assets) => assets.filter((a) => a.name.includes(osArch)));
 
   const md5Hash = await fetch(
-    assets.filter((a) => a.name.includes("md5"))[0].browser_download_url
+    assets.filter((a) => a.name.includes("md5"))[0].browser_download_url,
   )
     .then((res) => res.text())
     .then((hash) => hash.trim());
 
   const archive: { name: string; browser_download_url: string } = assets.filter(
-    (a) => !a.name.includes("md5")
+    (a) => !a.name.includes("md5"),
   )[0];
   progress.report({ increment: 10, message: "Fetching executable archive..." });
 
@@ -183,7 +183,7 @@ async function installWithProgress(progress: Progress, binPath: string) {
   const archivePath = join(binPath, archive.name);
   progress.report({ increment: 50, message: "Saving executable archive..." });
   const fileHash = await writeFile(archivePath, buffer).then(() =>
-    calculateMD5Hash(archivePath)
+    calculateMD5Hash(archivePath),
   );
 
   progress.report({ increment: 55, message: "Checking archive integrity..." });
@@ -255,7 +255,7 @@ async function createLSPClient() {
     "fyshls",
     "Fysh Language Server",
     serverOptions,
-    clientOptions
+    clientOptions,
   );
 
   return client;
@@ -266,29 +266,32 @@ enum FyshCommands {
   InstallFysh = "fysh.installFysh",
 }
 
-import colours from "./fysh.colours.json";
+import settings from "../.vscode/settings.json";
 
 function addPynkHeart() {
   const config = workspace.getConfiguration();
-  const tokenRules: { textMateRules?: object[] } = config.get(
-    "editor.tokenColorCustomizations"
+  const tokenRules: { textMateRules?: { scope?: string }[] } = config.get(
+    "editor.tokenColorCustomizations",
   );
+
+  const newRules = settings["editor.tokenColorCustomizations"].textMateRules;
+  const scopesToReplace = new Set(newRules.map((rule) => rule.scope));
 
   const updatedTokenSettings: { textMateRules?: object } = {
     ...tokenRules,
-    textMateRules: (tokenRules.textMateRules || []).concat(
-      colours["editor.tokenColorCustomizations"].textMateRules
-    ),
+    textMateRules: (tokenRules.textMateRules || [])
+      .filter((c) => !scopesToReplace.has(c?.scope))
+      .concat(newRules),
   };
 
   config.update(
     "editor.tokenColorCustomizations",
     updatedTokenSettings,
-    ConfigurationTarget.Global
+    ConfigurationTarget.Global,
   );
 
   const semanticRules: { rules?: object } = config.get(
-    "editor.semanticTokenColorCustomizations"
+    "editor.semanticTokenColorCustomizations",
   );
 
   const updatedSettings = {
@@ -303,7 +306,7 @@ function addPynkHeart() {
   config.update(
     "editor.semanticTokenColorCustomizations",
     updatedSettings,
-    ConfigurationTarget.Global
+    ConfigurationTarget.Global,
   );
 }
 
@@ -330,7 +333,7 @@ async function findExecutable(
     .concat(paths);
   const extensions = envExt.split(";");
   const candidates = pathDirs.flatMap((d) =>
-    extensions.map((ext) => join(d, exe + ext))
+    extensions.map((ext) => join(d, exe + ext)),
   );
   try {
     return await Promise.any(candidates.map(checkFileExists));
@@ -353,7 +356,7 @@ export async function activate(context: ExtensionContext) {
   state.client?.start();
   context.subscriptions.push(
     execInterminal(context, state),
-    installFysh(state)
+    installFysh(state),
   );
   addPynkHeart();
 }

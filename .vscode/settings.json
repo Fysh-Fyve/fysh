@@ -1,11 +1,50 @@
 {
-  "editor.insertSpaces": false,
-  "typescript.tsc.autoDetect": "off",
-  "typescript.preferences.quoteStyle": "single",
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
-  },
-  "files.associations": {
-    "*.fysh": "fysh"
+  "editor.tokenColorCustomizations": {
+    "textMateRules": [
+      {
+        "scope": "keyword.control.fysh",
+        "settings": { "foreground": "#AD7BD0" }
+      },
+      {
+        "scope": "keyword.control.loop.fysh",
+        "settings": { "foreground": "#BC5350" }
+      },
+      {
+        "scope": "comment.block.fysh",
+        "settings": { "foreground": "#4FFF64" }
+      },
+      {
+        "scope": "comment.line.fysh",
+        "settings": { "foreground": "#4FFF64" }
+      },
+      {
+        "scope": "entity.name.function.fysh",
+        "settings": { "foreground": "#FEFE3B" }
+      },
+      {
+        "scope": "variable.fysh.right",
+        "settings": { "foreground": "#3BB2F5" }
+      },
+      {
+        "scope": "variable.fysh.right.increment",
+        "settings": { "foreground": "#4E82BE" }
+      },
+      {
+        "scope": "variable.fysh.left",
+        "settings": { "foreground": "#D59593" }
+      },
+      {
+        "scope": "variable.fysh.left.decrement",
+        "settings": { "foreground": "#C24F4C" }
+      },
+      {
+        "scope": "variable.fysh.right constant.numeric.integer",
+        "settings": { "foreground": "#5380B7" }
+      },
+      {
+        "scope": "variable.fysh.left constant.numeric.integer",
+        "settings": { "foreground": "#D24040" }
+      }
+    ]
   }
 }
