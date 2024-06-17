@@ -77,13 +77,13 @@
     },
     "right-scale": {
       "begin": "(><)(?=[{}()-])",
-      "beginCaptures": { "1": { "name": "constant.numeric.right" } },
+      "beginCaptures": { "1": { "name": "constant.numeric.fysh.right" } },
       "patterns": [
-        { "match": "[{}]", "name": "constant.numeric.right.scale"  },
+        { "match": "[{}]", "name": "constant.numeric.fysh.right.scale"  },
         { "match": "[()-]" }
       ],
       "end": "[oO0°]*(>)",
-      "endCaptures": { "1": { "name": "constant.numeric.right" } }
+      "endCaptures": { "1": { "name": "constant.numeric.fysh.right" } }
     },
     "right-identifier": {
       "match": "><[^[*^@]#\\\\\\{\\}()->][^\\{\\}()>]*>",
