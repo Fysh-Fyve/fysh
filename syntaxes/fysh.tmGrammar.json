@@ -3,17 +3,19 @@
   "fileTypes": ["fysh"],
   "name": "Fysh",
   "patterns": [
-    { "include": "#block-comment" },
-    { "include": "#left-identifier" },
-    { "include": "#right-identifier" },
-    { "include": "#decrement" },
-    { "include": "#increment" },
-    { "include": "#control-fysh" },
-    { "include": "#sub" },
-    { "include": "#broken-fysh" },
-    { "match": "<~", "name": "keyword.control.return.fysh" },
-    { "match": "~(?!o)", "name": "punctuation.terminator.fysh" },
+    { "begin": "></\\*>", "end": "<\\*/><", "name": "comment.block.fysh" },
     { "match": "><//>.*$", "name": "comment.line.fysh" },
+
+    { "match": "~(?!o)", "name": "punctuation.terminator.fysh" },
+
+    { "match": "><\\(*[*^@]>", "name": "keyword.control.fysh" },
+    { "match": "<~", "name": "keyword.control.return.fysh" },
+    {
+      "match": "(><\\\\/>)|(<\\\\/><)",
+      "name": "keyword.control.loop.break.fysh"
+    },
+
+    { "match": "(?:\\(\\+o|o\\+\\))", "name": "keyword.operator.anchor.fysh" },
     { "match": "[≈=](?![=≈o])", "name": "keyword.operator.assignment.fysh" },
     { "match": "[≈=]{2}", "name": "keyword.operator.comparison.fysh" },
     { "match": "o[≈=~]", "name": "keyword.operator.comparison.fysh" },
@@ -33,12 +35,36 @@
       "match": "</3",
       "name": "keyword.operator.arithmetic.divide.fysh"
     },
-    { "match": "(?:\\(\\+o|o\\+\\))", "name": "keyword.operator.archor.fysh" }
+
+    { "include": "#left-scale" },
+    { "include": "#right-scale" },
+    { "include": "#left-identifier" },
+    { "include": "#right-identifier" },
+    { "include": "#decrement" },
+    { "include": "#increment" },
+    { "include": "#sub" },
+    { "include": "#grilled" }
   ],
   "repository": {
-    "sub": {
-      "name": "entity.name.function.fysh",
-      "match": ">\\([^)]+\\)"
+    "grilled": {
+      "begin": "(><)(?=#)",
+      "beginCaptures": { "1": { "name": "support.function.grilled.fysh" } },
+      "patterns": [
+        { "match": "###", "name": "support.function.grilled.fysh.body"  }
+      ],
+      "end": "[oO0°]*(>)",
+      "endCaptures": { "1": { "name": "support.function.grilled.fysh" } }
+    },
+    "left-scale": {
+      "begin": "(<)[oO0°]*(?=[{}()-])",
+      "beginCaptures": { "1": { "name": "constant.numeric.fysh.left" } },
+      "patterns": [
+        { "match": "[{}]", "name": "constant.numeric.fysh.left.scale"  },
+        { "match": "-" },
+        { "match": "[()]", "name": "constant.numeric.fysh.left.scale.zero"}
+      ],
+      "end": "(><)(?!<)",
+      "endCaptures": { "1": { "name": "variable.fysh.left" } }
     },
     "left-identifier": {
       "match": "<[^[*^@]\\\\~/3\\{\\}()->][^\\{\\}()>]*><(?!<)",
@@ -49,27 +75,28 @@
       "captures": { "1": { "name": "variable.fysh.left.decrement" } },
       "name": "variable.fysh.left"
     },
+    "right-scale": {
+      "begin": "(><)(?=[{}()-])",
+      "beginCaptures": { "1": { "name": "constant.numeric.right" } },
+      "patterns": [
+        { "match": "[{}]", "name": "constant.numeric.right.scale"  },
+        { "match": "[()-]" }
+      ],
+      "end": "[oO0°]*(>)",
+      "endCaptures": { "1": { "name": "constant.numeric.right" } }
+    },
     "right-identifier": {
-      "match": "><[^[*^@]\\\\\\{\\}()->][^\\{\\}()>]*>",
+      "match": "><[^[*^@]#\\\\\\{\\}()->][^\\{\\}()>]*>",
       "name": "variable.fysh.right"
     },
     "increment": {
-      "match": "(>)><[^[*^@]\\\\\\{\\}()->][^\\{\\}()>]*>",
+      "match": "(>)><[^[*^@]#\\\\\\{\\}()->][^\\{\\}()>]*>",
       "captures": { "1": { "name": "variable.fysh.right.increment" } },
       "name": "variable.fysh.right"
     },
-    "block-comment": {
-      "begin": "></\\*>",
-      "end": "<\\*/><",
-      "name": "comment.block.fysh"
-    },
-    "broken-fysh": {
-      "name": "keyword.control.loop.fysh",
-      "match": "(><\\\\/>)|(<\\\\/><)"
-    },
-    "control-fysh": {
-      "name": "keyword.control.fysh",
-      "match": "><\\(*[*^@]>"
+    "sub": {
+      "match": ">\\([^)]+\\)",
+      "name": "entity.name.function.fysh"
     }
   }
 }
