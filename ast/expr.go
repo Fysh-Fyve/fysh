@@ -77,6 +77,18 @@ func (b *Binary) String() string {
 	return fmt.Sprintf("(%s %s %s)", b.Left, b.Op, b.Right)
 }
 
+type Index struct {
+	Left  Expression
+	Index Expression
+}
+
+func (b *Index) top()            {}
+func (b *Index) expression()     {}
+func (b *Index) Literal() string { return b.Left.Literal() }
+func (b *Index) String() string {
+	return fmt.Sprintf("%s[%s]", b.Left, b.Index)
+}
+
 type Aquarium struct{ Elems []Expression }
 
 func (c *Aquarium) top()            {}
@@ -101,3 +113,4 @@ var _ Expression = &Binary{}
 var _ Expression = &Unary{}
 var _ Expression = &Call{}
 var _ Expression = &Aquarium{}
+var _ Expression = &Index{}
