@@ -141,8 +141,19 @@ func (p *Parser) primary() ast.Expression {
 }
 
 func (p *Parser) index() ast.Expression {
-	// TODO: Parse index
-	return p.primary()
+	left := p.primary()
+	if p.cur.Type == fysh.LTank {
+		p.next()
+		idx := p.expression()
+		if idx == nil {
+			return nil
+		}
+		left = &ast.Index{Left: left, Index: idx}
+		if !p.expectFysh(fysh.RTank) {
+			return nil
+		}
+	}
+	return left
 }
 func (p *Parser) unary() ast.Expression {
 	ops := []unary.Op{}

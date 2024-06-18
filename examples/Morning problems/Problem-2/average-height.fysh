@@ -1,11 +1,11 @@
 ><//> Calculates average of an array (assuming last value = -1 as terminator)
 >(average) ><numbers>
 ><>
-  ><sum>   = ><}> ~ 
+  ><sum>   = ><}> ~
   ><itter> = ><)> ~
 
-  ><(((@> [><}>] 
-  ><> 
+  ><(((@> [><}>]
+  ><>
       ><//> breaks loop if current value = -1
       ><(((^> [><numbers>[><itter>] == <{><]
       ><>
@@ -20,4 +20,5 @@
 
 ><numbers> = [><})}> - ><}})> - ><}}}> - <({><] ~
 
-><average> = [>(average) ><numbers>] ~
+><avg> = [>(average) ><numbers>] ~
+(+o ><avg> ~
