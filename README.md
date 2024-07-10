@@ -106,13 +106,13 @@ proliferate. This gives Steven a value of `0b101010 = 0b110 * 0b111`. (42 = 6 * 
 
 ```fysh
 ><steven> = ><{{(°> <3 ><{{{°> ~
-><steven> ≈ ><{{(o>  ♡ ><{{{o> ~
+><steven> ≈ ><{{(°>  ♡ ><{{{°> ~
 
-><steven> ≈ ><{{(o°> ❤️ ><{{{°°> ~
-><steven> ≈ ><{{(oo> ❤️‍🔥><{{{°o> ~
+><steven> ≈ ><{{(°> ❤️ ><{{{°> ~
+><steven> ≈ ><{{(°> ❤️‍🔥 ><{{{°> ~
 
-><steven> ≈ ><{{(°°°> 🫀 ><{{{ooo> ~
-><steven> ≈ ><{{(°o°> 🫶 ><{{{o°o> ~
+><steven> ≈ ><{{(°> 🫀 ><{{{°> ~
+><steven> ≈ ><{{(°> 🫶 ><{{{°> ~
 
 .
 .
@@ -224,15 +224,11 @@ Tadpoles are fysh too. They swim towards bigger fysh
 if Steven is bigger than 5 and less than 7 respectively. 
 
 ```fysh
-><//> Greater, Less than (respectively)
+><//> Greater/Less than
 ><steven> o~ ><{({°>
 ><steven> ~o ><{{{°>
 
-><//> Greater, Less than or equal to (respectively)
-><steven> o~≈ ><{({°>
-><steven> ~o= ><{{{°>
-
-><//> Greater, Less than or equal to (shorthand)
+><//> Greater/Less than or equal to (replace ~ with ≈ or =)
 ><steven> o= ><{({°>
 ><steven> ≈o ><{{{°>
 ```
