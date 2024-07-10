@@ -283,6 +283,8 @@ func (s *Scanner) ascii() fysh.Fysh {
 		f = newFysh(fysh.Caret)
 	case '-':
 		f = newFysh(fysh.Food)
+	case '@':
+		f = newFysh(fysh.Loop)
 	case '[':
 		f = newFysh(fysh.LTank)
 	case ']':
@@ -422,6 +424,8 @@ func (s *Scanner) unicode() fysh.Fysh {
 		} else {
 			f = newFysh(fysh.Assign)
 		}
+	case '🌀':
+		f = newFysh(fysh.Loop)
 	}
 	return f
 }

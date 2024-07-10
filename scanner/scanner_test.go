@@ -122,6 +122,23 @@ func TestFactorial(t *testing.T) {
 
 	testScanner(t, input, tests)
 }
+func shortLoop(t *testing.T) {
+	input := "><((@> @ 🌀 ><((@>><{({o> @><{({o> 🌀><{({o>"
+	tests := []tt{
+		lit(fysh.Loop),
+		lit(fysh.Loop),
+		lit(fysh.Loop),
+		lit(fysh.Loop),
+		{fysh.Scales, "><{({o>"},
+		lit(fysh.Loop),
+		{fysh.Scales, "><{({o>"},
+		lit(fysh.Loop),
+		{fysh.Scales, "><{({o>"},
+		{fysh.End, ""},
+	}
+
+	testScanner(t, input, tests)
+}
 
 func TestBiblicallyAccurateFysh(t *testing.T) {
 	input := `
