@@ -81,7 +81,7 @@ func (s *Scanner) match(str string) bool {
 	return true
 }
 
-// Handles the '<' character and determines the appropriate fysh type (left tail)
+// Handles the '<' (less than) character and determines the appropriate fysh type 
 func (s *Scanner) lt(start int) fysh.Fysh {
 	var f fysh.Fysh
 
@@ -92,7 +92,7 @@ func (s *Scanner) lt(start int) fysh.Fysh {
 	case '\\':
 		s.reel()
 		if s.match("/><") {
-			f = newFysh(fysh.BrFysh)
+			f = newFysh(fysh.BreakFysh)
 		} else {
 			f = fyshWithValue(fysh.Invalid, s.input[start:s.peek])
 		}
@@ -145,12 +145,12 @@ func (s *Scanner) lt(start int) fysh.Fysh {
 	return f
 }
 
-// Handles the '>' character and determines the appropriate fysh type (right tail)
+// Handles the '>' (greater than) character and determines the appropriate fysh type
 func (s *Scanner) rt(start int) fysh.Fysh {
 	var f fysh.Fysh
 
 	switch s.periscope() {
-	case '(':
+	case '(': // >(
 		s.reel()
 		for ch := s.periscope(); ch != ')' && ch != 0; ch = s.reel() {
 		}
@@ -158,9 +158,9 @@ func (s *Scanner) rt(start int) fysh.Fysh {
 			f.Type = fysh.Sub
 			f.Value = s.input[start:s.peek]
 		}
-	case '>':
+	case '>': // >> 
 		s.reel()
-		if s.periscope() == '<' {
+		if s.periscope() == '<' { // >>< (increment)
 			f.Type = fysh.Ident
 			for ch := s.periscope(); ch != '>' && ch != 0; ch = s.reel() {
 			}
@@ -171,7 +171,7 @@ func (s *Scanner) rt(start int) fysh.Fysh {
 		} else {
 			f = newFysh(fysh.RShift)
 		}
-	case '<':
+	case '<': // ><
 		f = s.rightFysh(start)
 	}
 	return f
@@ -184,45 +184,45 @@ func (s *Scanner) rightFysh(start int) fysh.Fysh {
 
 	s.reel()
 	switch ch := s.periscope(); ch {
-	case '#':
+	case '#': // ><# (grilled fysh)
 		s.reel()
 		closeFysh = true
 		if s.match("##") {
 			f.Type = fysh.Grilled
 			noValue = true
 		}
-	case '\\':
+	case '\\': // ><\ (break fysh)
 		s.reel()
 		closeFysh = true
 		if s.expect('/') {
-			f.Type = fysh.BrFysh
+			f.Type = fysh.BreakFysh
 			noValue = true
 		}
-	case '/':
+	case '/': // ><// (comment) or ></* (block comment)
 		f = s.comment()
-	case '>':
+	case '>': // ><> // open bracket
 		f.Type = fysh.LFysh
 		noValue = true
 		closeFysh = true
 	default:
-		if isScale(ch) {
+		if isScale(ch) { // ><{} (number) or ><(((@> (loop) or ><(((^> (if) or ><(((*> (else)
 			closeFysh = true
 			f.Type = fysh.Scales
 			for ch := s.periscope(); isScale(ch); ch = s.reel() {
 			}
-			if s.expect('@') {
+			if s.expect('@') { // ><(((@> (loop)
 				f.Type = fysh.Loop
 				noValue = true
-			} else if s.expect('^') {
+			} else if s.expect('^') { // ><(((^> (if)
 				f.Type = fysh.If
 				noValue = true
-			} else if s.expect('*') {
+			} else if s.expect('*') { // ><(((*> (else)
 				f.Type = fysh.Else
 				noValue = true
 			}
-			for ch := s.periscope(); ch == 'o' || ch == 'O' || ch == '0' || ch == '°'; ch = s.reel() {
+			for ch := s.periscope(); ch == 'o' || ch == 'O' || ch == '0' || ch == '°'; ch = s.reel() { // fysh eyes
 			}
-		} else {
+		} else { // identifier (variable)
 			closeFysh = true
 			f.Type = fysh.Ident
 			for ch := s.periscope(); isIdentBody(ch); ch = s.reel() {

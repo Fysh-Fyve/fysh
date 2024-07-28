@@ -79,9 +79,9 @@ type BreakStatement struct{}
 
 func (r *BreakStatement) top()            {}
 func (r *BreakStatement) statement()      {}
-func (r *BreakStatement) Literal() string { return fysh.BrFysh.String() }
+func (r *BreakStatement) Literal() string { return fysh.BreakFysh.String() }
 func (r *BreakStatement) String() string {
-	return fmt.Sprintf("%s%s", fysh.BrFysh, fysh.Water)
+	return fmt.Sprintf("%s%s", fysh.BreakFysh, fysh.Water)
 }
 
 type IfStatement struct {

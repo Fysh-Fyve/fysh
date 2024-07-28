@@ -365,7 +365,7 @@ func TestWeirdFysh(t *testing.T) {
 
 func TestBrokenFysh(t *testing.T) {
 	input := "><\\/> <\\/><"
-	tests := []tt{lit(fysh.BrFysh), lit(fysh.BrFysh), {fysh.End, ""}}
+	tests := []tt{lit(fysh.BreakFysh), lit(fysh.BreakFysh), {fysh.End, ""}}
 	testScanner(t, input, tests)
 }
 

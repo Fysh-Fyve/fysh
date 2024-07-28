@@ -385,7 +385,7 @@ func (p *Parser) ifStmt() ast.Statement {
 
 func (p *Parser) statement() ast.Statement {
 	switch p.cur.Type {
-	case fysh.BrFysh:
+	case fysh.BreakFysh:
 		return p.breakStmt()
 	case fysh.LFysh:
 		return p.block()

@@ -55,7 +55,7 @@ const (
 	RAnchor /* o+) */
 	Sub     /* (submarine)< */
 	Squid   /* <~ return operator */
-	BrFysh  /* ><\/> or <\/>< (break) */
+	BreakFysh  /* ><\/> or <\/>< (break) */
 )
 
 var tokens = [...]string{
@@ -104,7 +104,7 @@ var tokens = [...]string{
 	RAnchor: "o+)",
 	Sub:     "SUBMARINE",
 	Squid:   "return",
-	BrFysh:  "break",
+	BreakFysh:  "break",
 }
 
 type Fysh struct {
