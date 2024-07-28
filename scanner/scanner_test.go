@@ -369,6 +369,20 @@ func TestBrokenFysh(t *testing.T) {
 	testScanner(t, input, tests)
 }
 
+func TestFyshBones(t *testing.T) {
+	input := "><-{({-{-{> <-{({-{-{>< <o-{({-{-{>< <o{({-{-{>< ><{({-{-{->"
+	tests := []tt{
+		{fysh.Bones, "><-{({-{-{>"},
+		{fysh.Bones, "<-{({-{-{><"},
+		{fysh.Bones, "<o-{({-{-{><"},
+		{fysh.Bones, "<o{({-{-{><"},
+		{fysh.Bones, "><{({-{-{->"},
+		{fysh.End, ""},
+	}
+
+	testScanner(t, input, tests)
+}
+
 // TODO: Pass original test cases
 //
 // TEST_CASE("fysh open & wtf open") {

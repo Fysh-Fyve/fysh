@@ -34,7 +34,7 @@ func isIdentBody(c rune) bool {
 
 // Checks if the character is a scale character
 func isScale(ch rune) bool {
-	return ch == '{' || ch == '}' || ch == '(' || ch == ')'
+	return ch == '{' || ch == '}' || ch == '(' || ch == ')' || ch == '-'
 }
 
 // Peeks at the next character without advancing the scanner
@@ -86,7 +86,7 @@ func (s *Scanner) lt(start int) fysh.Fysh {
 	var f fysh.Fysh
 
 	switch s.periscope() {
-	case '~':
+	case '~': // <~ (less than or equal to) or <= (less than or equal to)
 		s.reel()
 		f = newFysh(fysh.Squid)
 	case '\\':
@@ -123,9 +123,12 @@ func (s *Scanner) lt(start int) fysh.Fysh {
 		ch := s.periscope()
 		if isScale(ch) {
 			for ch := s.periscope(); isScale(ch); ch = s.reel() {
+				if ch == '-' {f.Type = fysh.Bones} // check if its a floating point number
 			}
+
+			// (end of the fysh) <((><
 			if s.match("><") {
-				f.Type = fysh.Scales
+				if f.Type != fysh.Bones {f.Type = fysh.Scales} // if not a floating point number then its an integer
 			} else {
 				f.Type = fysh.Invalid
 			}
@@ -133,9 +136,9 @@ func (s *Scanner) lt(start int) fysh.Fysh {
 			for ch := s.periscope(); ch != '>' && ch != 0; ch = s.reel() {
 			}
 			if s.match("><") {
-				if s.expect('<') {
+				if s.expect('<') { // <><< (decrement)
 					f.Type = fysh.Dec
-				} else {
+				} else { // <>< (identifier)
 					f.Type = fysh.Ident
 				}
 			}
@@ -209,6 +212,7 @@ func (s *Scanner) rightFysh(start int) fysh.Fysh {
 			closeFysh = true
 			f.Type = fysh.Scales
 			for ch := s.periscope(); isScale(ch); ch = s.reel() {
+				if ch == '-' {f.Type = fysh.Bones}
 			}
 			if s.expect('@') { // ><(((@> (loop)
 				f.Type = fysh.Loop
