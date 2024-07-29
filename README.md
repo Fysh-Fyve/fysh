@@ -38,7 +38,7 @@ Dive into Fysh, and let's make waves in the world of programming, together!
 
 ## 👩‍💻 How to compyle and run fysh:
 
-- Download the VScode Extenstion
+- Download the "Fysh" VScode Extenstion
 
 - Create a .fysh file
 
