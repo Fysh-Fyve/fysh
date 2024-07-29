@@ -158,6 +158,8 @@ func (f *Fysh) Unfysh() (string, bool) {
 		s = f.Value[3 : len(f.Value)-1]
 	case Scales:
 		fallthrough
+	case Bones:
+		fallthrough
 	case Ident:
 		fallthrough
 	case Sub:
@@ -173,7 +175,7 @@ func (f *Fysh) Unfysh() (string, bool) {
 		}
 
 	}
-	if f.Type == Scales {
+	if f.Type == Scales || f.Type == Bones {
 		s = getBin(s)
 	}
 	return s, negate

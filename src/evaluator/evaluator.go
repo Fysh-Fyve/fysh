@@ -52,6 +52,9 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 	case *ast.Scales:
 		return &object.Integer{Value: node.Value}
 
+	case *ast.Bones:
+		return &object.Float{Value: node.Value}
+
 	// case *ast.StringLiteral:
 	// 	return &object.String{Value: node.Value}
 

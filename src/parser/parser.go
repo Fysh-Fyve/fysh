@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/Fysh-Fyve/fysh/src/ast"
 	"github.com/Fysh-Fyve/fysh/src/ast/binary"
@@ -20,6 +21,45 @@ func (p ParserErrors) Error() string {
 		out.WriteString(e.Error() + "\n")
 	}
 	return out.String()
+}
+
+func (p *Parser) bonesToFloat (s string, neg bool) ast.Expression {
+	// split bones to get the binary values e.g. "101-110" -> ["101", "110"]
+	arr := strings.Split(s, "-")
+
+	strnums := ""
+
+	// build the float string (e.g. ["101", "110", "101"] -> 5.65)
+	for i, v := range arr {
+		if v == "" {
+			arr[i] = "0"
+		}
+		
+		nums, err := strconv.ParseInt(arr[i], 2, 64)
+		if err != nil {
+			p.errors = append(p.errors, err)
+			return nil
+		}
+
+		strnums += strconv.FormatInt(nums, 10)
+
+		if i == 0 {
+			strnums += "."
+		}
+	}
+
+	result, err := strconv.ParseFloat(strnums, 64)
+	if err != nil {
+		p.errors = append(p.errors, err)
+		return nil
+	}
+
+	if neg {
+		result = -result
+	}
+	
+	p.next()
+	return &ast.Bones{Value: result}
 }
 
 type Parser struct {
@@ -115,6 +155,10 @@ func (p *Parser) primary() ast.Expression {
 			}
 			return &ast.Scales{Value: i}
 		}
+	case fysh.Bones:
+		bin, neg := p.cur.Unfysh()
+		return p.bonesToFloat(bin, neg)
+
 	case fysh.Ident:
 		name, neg := p.cur.Unfysh()
 		var ident ast.Expression = &ast.Identifier{Name: name}

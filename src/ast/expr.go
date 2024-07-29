@@ -31,6 +31,13 @@ func (s *Scales) expression()     {}
 func (s *Scales) Literal() string { return fysh.Scales.String() }
 func (s *Scales) String() string  { return fmt.Sprintf("%d", s.Value) }
 
+type Bones struct{ Value float64 }
+
+func (s *Bones) top()            {}
+func (s *Bones) expression()     {}
+func (s *Bones) Literal() string { return fysh.Bones.String() }
+func (s *Bones) String() string  { return fmt.Sprintf("%f", s.Value) }
+
 type Unary struct {
 	Op    unary.Op
 	Right Expression
@@ -109,6 +116,7 @@ func (c *Aquarium) String() string {
 
 var _ Expression = &Identifier{}
 var _ Expression = &Scales{}
+var _ Expression = &Bones{}
 var _ Expression = &Binary{}
 var _ Expression = &Unary{}
 var _ Expression = &Call{}
