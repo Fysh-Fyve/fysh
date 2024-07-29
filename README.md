@@ -38,13 +38,16 @@ Dive into Fysh, and let's make waves in the world of programming, together!
 
 ## 👩‍💻 How to compyle and run fysh:
 
-- Download the "Fysh" VScode Extenstion
-
-- Create a .fysh file
-
+- Download the `Fysh` VScode extension
+- Create a `.fysh` file
 - Start writing code
-
 - Press the run button
+
+### ⚙️ Option 2:
+
+- Clone the repo
+- Run `go build`
+- Run `./fysh <filename>.fysh`
 
 ## 🐠 Fysh Syntax
 This is fysh.
