@@ -430,6 +430,8 @@ func (s *Scanner) unicode() fysh.Fysh {
 		}
 	case '🌀':
 		f = newFysh(fysh.Loop)
+	case '⚓':
+		f = newFysh(fysh.LAnchor)
 	}
 	return f
 }
