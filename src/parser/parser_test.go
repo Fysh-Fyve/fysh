@@ -3,8 +3,8 @@ package parser_test
 import (
 	"testing"
 
-	"github.com/Fysh-Fyve/fysh/parser"
-	"github.com/Fysh-Fyve/fysh/scanner"
+	"github.com/Fysh-Fyve/fysh/src/parser"
+	"github.com/Fysh-Fyve/fysh/src/scanner"
 )
 
 type Test struct{ statement string }

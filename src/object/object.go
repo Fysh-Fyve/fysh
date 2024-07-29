@@ -6,7 +6,7 @@ import (
 	"hash/fnv"
 	"strings"
 
-	"github.com/Fysh-Fyve/fysh/ast"
+	"github.com/Fysh-Fyve/fysh/src/ast"
 )
 
 type BuiltinFunction func(args ...Object) Object

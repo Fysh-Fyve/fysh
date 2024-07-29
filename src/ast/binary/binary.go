@@ -3,7 +3,7 @@ package binary
 import (
 	"strconv"
 
-	"github.com/Fysh-Fyve/fysh/fysh"
+	"github.com/Fysh-Fyve/fysh/src/fysh"
 )
 
 type Op int8
