@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Fysh-Fyve/fysh/fysh"
-	"github.com/Fysh-Fyve/fysh/scanner"
+	"github.com/Fysh-Fyve/fysh/src/fysh"
+	"github.com/Fysh-Fyve/fysh/src/scanner"
 )
 
 type tt struct {

@@ -6,10 +6,10 @@ import (
 	"io"
 	"log"
 
-	"github.com/Fysh-Fyve/fysh/evaluator"
-	"github.com/Fysh-Fyve/fysh/object"
-	"github.com/Fysh-Fyve/fysh/parser"
-	"github.com/Fysh-Fyve/fysh/scanner"
+	"github.com/Fysh-Fyve/fysh/src/evaluator"
+	"github.com/Fysh-Fyve/fysh/src/object"
+	"github.com/Fysh-Fyve/fysh/src/parser"
+	"github.com/Fysh-Fyve/fysh/src/scanner"
 )
 
 const PROMPT = "><> "

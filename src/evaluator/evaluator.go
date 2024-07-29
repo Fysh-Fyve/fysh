@@ -3,10 +3,10 @@ package evaluator
 import (
 	"fmt"
 
-	"github.com/Fysh-Fyve/fysh/ast"
-	"github.com/Fysh-Fyve/fysh/ast/binary"
-	"github.com/Fysh-Fyve/fysh/ast/unary"
-	"github.com/Fysh-Fyve/fysh/object"
+	"github.com/Fysh-Fyve/fysh/src/ast"
+	"github.com/Fysh-Fyve/fysh/src/ast/binary"
+	"github.com/Fysh-Fyve/fysh/src/ast/unary"
+	"github.com/Fysh-Fyve/fysh/src/object"
 )
 
 var (

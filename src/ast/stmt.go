@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"fmt"
 
-	"github.com/Fysh-Fyve/fysh/ast/binary"
-	"github.com/Fysh-Fyve/fysh/fysh"
+	"github.com/Fysh-Fyve/fysh/src/ast/binary"
+	"github.com/Fysh-Fyve/fysh/src/fysh"
 )
 
 type ExpressionStatement struct{ Expr Expression }
