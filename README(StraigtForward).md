@@ -1,7 +1,3 @@
-Sure! Below is the revised README with emojis and collapsible sections.
-
----
-
 # 🐠 Fysh Language Guide
 
 ## 🤔 Why is it called Fysh? 
