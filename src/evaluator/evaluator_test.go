@@ -327,8 +327,7 @@ addTwo(2);`
 }
 
 func TestStringLiteral(t *testing.T) {
-	t.Skip()
-	input := `"Hello World!"`
+	input := `🫧Hello World!🫧~`
 
 	evaluated := testEval(t, input)
 	str, ok := evaluated.(*object.String)
@@ -342,8 +341,7 @@ func TestStringLiteral(t *testing.T) {
 }
 
 func TestStringConcatenation(t *testing.T) {
-	t.Skip()
-	input := `"Hello" + " " + "World!"`
+	input := `🫧Hello🫧 🫧 🫧 🫧World!🫧~`
 
 	evaluated := testEval(t, input)
 	str, ok := evaluated.(*object.String)
@@ -422,8 +420,7 @@ func TestBuiltinFunctions(t *testing.T) {
 }
 
 func TestArrayLiterals(t *testing.T) {
-	t.Skip()
-	input := "[1, 2 * 2, 3 + 3]"
+	input := "[><{> - ><{(> <3 ><{(> - ><{{> ><{{>] ~"
 
 	evaluated := testEval(t, input)
 	result, ok := evaluated.(*object.Array)
