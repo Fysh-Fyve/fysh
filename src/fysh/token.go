@@ -11,102 +11,102 @@ const (
 	/* Invalid token! */
 	Invalid Species = iota
 
-	End     /* End of the input */
-	Scales  /* binary value */
-	Bones   /* floating point value ><}-}-}> */
-	Ident   /* variable */
-	Mul     /* <3 or ♡ */
-	Div     /* </3 or 💔 */
-	LT      /* ~o (less than    '<' ) */
-	GT      /* o~ (greater than '>' ) */
-	LTE     /* ~o≈ (less than equal to    '<=' ) */
-	GTE     /* o~≈ (greater than equal to '>=' ) */
-	Assign  /* ≈ */
-	Eq      /* ≈≈  (Equal to '==') */
-	NEq     /* ~≈  (Not equal to '!=') */
-	Inc     /* >><fysh> (add 1 'fysh++') */
-	Dec     /* <fysh><< (sub 1 'fysh--') */
-	LTank   /* [ (used for Arrays, loops, and conditionals) */
-	RTank   /* ] */
-	LBowl   /* ( (Used for FISHS (BEDMAS)) */
-	RBowl   /* ) */
-	LFysh   /* ><> (same as open curly bracket '{' ) */
-	RFysh   /* <>< (same as closing curly bracket '}' ) */
-	LWTF    /* WHAT THE FYSHs(Throw error opening) ><!@#$> */
-	RWTF    /* WHAT THE FYSH (Throw error closing) <!@#$>< */
-	Grilled /* Random fysh ><###> */
-	Loop    /* ><(((@> */
-	Comment /* ><//> Comment */
-	BlockC  /* Multiline Comment */
-	BWAnd   /* & */
-	BWOr    /* | */
-	BWNot   /* ! */
-	Caret   /* ^ */
-	LAnd    /* && */
-	LOr     /* || */
-	LNot    /* !! */
-	Water   /* ~ */
-	LShift  /* << */
-	RShift  /* \>\> */
-	If      /* ><(((^> */
-	Else    /* ><(((*> */
-	Food    /* - */
-	LAnchor /* (+o */
-	RAnchor /* o+) */
-	Sub     /* (submarine)< */
-	Squid   /* <~ return operator */
-	BreakFysh  /* ><\/> or <\/>< (break) */
-	String	/*🫧*/
+	End       /* End of the input */
+	Scales    /* binary value */
+	Bones     /* floating point value ><}-}-}> */
+	Ident     /* variable */
+	Mul       /* <3 or ♡ */
+	Div       /* </3 or 💔 */
+	LT        /* ~o (less than    '<' ) */
+	GT        /* o~ (greater than '>' ) */
+	LTE       /* ~o≈ (less than equal to    '<=' ) */
+	GTE       /* o~≈ (greater than equal to '>=' ) */
+	Assign    /* ≈ */
+	Eq        /* ≈≈  (Equal to '==') */
+	NEq       /* ~≈  (Not equal to '!=') */
+	Inc       /* >><fysh> (add 1 'fysh++') */
+	Dec       /* <fysh><< (sub 1 'fysh--') */
+	LTank     /* [ (used for Arrays, loops, and conditionals) */
+	RTank     /* ] */
+	LBowl     /* ( (Used for FISHS (BEDMAS)) */
+	RBowl     /* ) */
+	LFysh     /* ><> (same as open curly bracket '{' ) */
+	RFysh     /* <>< (same as closing curly bracket '}' ) */
+	LWTF      /* WHAT THE FYSHs(Throw error opening) ><!@#$> */
+	RWTF      /* WHAT THE FYSH (Throw error closing) <!@#$>< */
+	Grilled   /* Random fysh ><###> */
+	Loop      /* ><(((@> */
+	Comment   /* ><//> Comment */
+	BlockC    /* Multiline Comment */
+	BWAnd     /* & */
+	BWOr      /* | */
+	BWNot     /* ! */
+	Caret     /* ^ */
+	LAnd      /* && */
+	LOr       /* || */
+	LNot      /* !! */
+	Water     /* ~ */
+	LShift    /* << */
+	RShift    /* \>\> */
+	If        /* ><(((^> */
+	Else      /* ><(((*> */
+	Food      /* - */
+	LAnchor   /* (+o */
+	RAnchor   /* o+) */
+	Sub       /* (submarine)< */
+	Squid     /* <~ return operator */
+	BreakFysh /* ><\/> or <\/>< (break) */
+	String    /*🫧*/
 )
 
 var tokens = [...]string{
-	Scales:  "LITERAL",
-	Bones:   "FLOAT",
-	Ident:   "IDENT",
-	Mul:     "*",
-	Div:     "/",
-	LT:      "<",
-	GT:      ">",
-	LTE:     "<=",
-	GTE:     ">=",
-	Assign:  "=",
-	Eq:      "==",
-	NEq:     "!=",
-	Inc:     "++",
-	Dec:     "--",
-	LTank:   "[",
-	RTank:   "]",
-	LBowl:   "(",
-	RBowl:   ")",
-	LFysh:   "{",
-	RFysh:   "}",
-	LWTF:    "WTF(",
-	RWTF:    ")WTF",
-	Grilled: "><###>",
-	Loop:    "while",
-	Comment: "//",
-	BlockC:  "/**/",
-	Invalid: "INVALID",
-	End:     "END",
-	BWAnd:   "&",
-	BWOr:    "|",
-	BWNot:   "~",
-	Caret:   "^",
-	LAnd:    "&&",
-	LOr:     "||",
-	LNot:    "!",
-	Water:   ";",
-	LShift:  "<<",
-	RShift:  ">>",
-	If:      "if",
-	Else:    "else",
-	Food:    ",",
-	LAnchor: "(+o",
-	RAnchor: "o+)",
-	Sub:     "SUBMARINE",
-	Squid:   "return",
-	BreakFysh:  "break",
-	String: "STRING",
+	Scales:    "LITERAL",
+	Bones:     "FLOAT",
+	Ident:     "IDENT",
+	Mul:       "*",
+	Div:       "/",
+	LT:        "<",
+	GT:        ">",
+	LTE:       "<=",
+	GTE:       ">=",
+	Assign:    "=",
+	Eq:        "==",
+	NEq:       "!=",
+	Inc:       "++",
+	Dec:       "--",
+	LTank:     "[",
+	RTank:     "]",
+	LBowl:     "(",
+	RBowl:     ")",
+	LFysh:     "{",
+	RFysh:     "}",
+	LWTF:      "WTF(",
+	RWTF:      ")WTF",
+	Grilled:   "><###>",
+	Loop:      "while",
+	Comment:   "//",
+	BlockC:    "/**/",
+	Invalid:   "INVALID",
+	End:       "END",
+	BWAnd:     "&",
+	BWOr:      "|",
+	BWNot:     "~",
+	Caret:     "^",
+	LAnd:      "&&",
+	LOr:       "||",
+	LNot:      "!",
+	Water:     ";",
+	LShift:    "<<",
+	RShift:    ">>",
+	If:        "if",
+	Else:      "else",
+	Food:      ",",
+	LAnchor:   "(+o",
+	RAnchor:   "o+)",
+	Sub:       "SUBMARINE",
+	Squid:     "return",
+	BreakFysh: "break",
+	String:    "STRING",
 }
 
 type Fysh struct {
