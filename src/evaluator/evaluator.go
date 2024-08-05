@@ -2,6 +2,7 @@ package evaluator
 
 import (
 	"fmt"
+	"math"
 
 	"github.com/Fysh-Fyve/fysh/src/ast"
 	"github.com/Fysh-Fyve/fysh/src/ast/binary"
@@ -227,8 +228,8 @@ func evalUnary(op unary.Op, right object.Object) object.Object {
 
 func evalBinary(op binary.Op, left, right object.Object) object.Object {
 	switch lt, rt := left.Type(), right.Type(); {
-	case lt == object.INT && rt == object.INT:
-		return evalIntBinary(op, left, right)
+	case (lt == object.INT || lt == object.FLOAT) && (rt == object.INT || rt == object.FLOAT):
+		return evalNumBinary(op, left, right)
 	case lt == object.STR && rt == object.STR:
 		return evalStrBinary(op, left, right)
 	case op == binary.Equal:
@@ -284,27 +285,50 @@ func toBool(input bool) *object.Integer {
 	return FALSE
 }
 
-func evalIntBinary(op binary.Op, left, right object.Object) object.Object {
-	leftVal := left.(*object.Integer).Value
-	rightVal := right.(*object.Integer).Value
+// checks if a float is a whole number, if it is, it returns an integer object
+func intOrFloat(num float64) object.Object {
+	if num == math.Trunc(num) {
+		return &object.Integer{Value: int64(num)}
+	}
+	return &object.Float{Value: num}
+}
+
+
+
+func evalNumBinary(op binary.Op, left, right object.Object) object.Object {
+	var leftVal, rightVal float64
+	if int, ok := left.(*object.Integer); ok {
+			leftVal = float64(int.Value)
+	} else if flt, ok := left.(*object.Float); ok {
+			leftVal = flt.Value
+	} else {
+			return newError("evalNumBinary was called with non-numeric object %s", left)
+	}
+	if int, ok := right.(*object.Integer); ok {
+			rightVal = float64(int.Value)
+	} else if flt, ok := right.(*object.Float); ok {
+			rightVal = flt.Value
+	} else {
+			return newError("evalNumBinary was called with non-numeric object %s", right)
+	}
 
 	switch op {
 	case binary.Add:
-		return &object.Integer{Value: leftVal + rightVal}
+		return intOrFloat(leftVal + rightVal)
 	case binary.Mul:
-		return &object.Integer{Value: leftVal * rightVal}
+		return intOrFloat(leftVal * rightVal)
 	case binary.Div:
-		return &object.Integer{Value: leftVal / rightVal}
-	case binary.BitwiseOr:
-		return &object.Integer{Value: leftVal | rightVal}
-	case binary.BitwiseAnd:
-		return &object.Integer{Value: leftVal & rightVal}
-	case binary.BitwiseXor:
-		return &object.Integer{Value: leftVal ^ rightVal}
-	case binary.ShiftLeft:
-		return &object.Integer{Value: leftVal << rightVal}
-	case binary.ShiftRight:
-		return &object.Integer{Value: leftVal >> rightVal}
+		return intOrFloat(leftVal / rightVal)
+	// case binary.BitwiseOr:
+	// 	return &object.Integer{Value: leftVal | rightVal}
+	// case binary.BitwiseAnd:
+	// 	return &object.Integer{Value: leftVal & rightVal}
+	// case binary.BitwiseXor:
+	// 	return &object.Integer{Value: leftVal ^ rightVal}
+	// case binary.ShiftLeft:
+	// 	return &object.Integer{Value: leftVal << rightVal}
+	// case binary.ShiftRight:
+	// 	return &object.Integer{Value: leftVal >> rightVal}
 	case binary.LT:
 		return toBool(leftVal < rightVal)
 	case binary.LTE:
@@ -322,6 +346,7 @@ func evalIntBinary(op binary.Op, left, right object.Object) object.Object {
 			left.Type(), op, right.Type())
 	}
 }
+
 
 func evalStrBinary(op binary.Op, left, right object.Object) object.Object {
 	if op != binary.Add {
