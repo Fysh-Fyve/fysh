@@ -25,9 +25,9 @@
     "description": "Less than or equal tadpole."
   },
   "Assign": { "prefix": ["="], "body": ["≈"], "description": "Assign." },
-  "Loopy Fysh": {
-    "prefix": ["loop", "@"],
-    "body": ["><(((@> [${1:condition}]", "><>", "\t$0", "<><"],
+  "Whirlpool": {
+    "prefix": ["loop", "while"],
+    "body": ["🌀 [${1:condition}]", "><>", "\t$0", "<><"],
     "description": "A Loopy Fysh."
   },
   "Happy Fysh": {
