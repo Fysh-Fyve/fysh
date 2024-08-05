@@ -97,7 +97,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		params := node.Parameters
 		body := node.Body
 		sub := &object.Function{Parameters: params, Env: env, Body: body}
-		env.Set(node.Name, sub)
+		env.Set(string(node.Name), sub)
 		return sub
 
 	case *ast.Call:
@@ -162,8 +162,8 @@ func evalAnchor(anc *ast.AnchorStatement,
 func evalUpdate(expr ast.Expression,
 	env *object.Environment, add object.Object) object.Object {
 	// assuming the expression is an identifier
-	name := expr.String()
-	ident := Eval(&ast.Identifier{Name: name}, env)
+	id, _ := expr.(*ast.Identifier)
+	ident := Eval(&ast.Identifier{Name: id.Name}, env)
 	if object.IsError(ident) {
 		return ident
 	}
@@ -171,7 +171,7 @@ func evalUpdate(expr ast.Expression,
 	if object.IsError(res) {
 		return res
 	}
-	env.Set(name, res)
+	env.Set(string(id.Name), res)
 	return res
 }
 
@@ -375,15 +375,16 @@ func evalIf(ie *ast.IfStatement, env *object.Environment) object.Object {
 }
 
 func evalIdent(node *ast.Identifier, env *object.Environment) object.Object {
-	if val, ok := env.Get(node.Name); ok {
+	name := string(node.Name)
+	if val, ok := env.Get(name); ok {
 		return val
 	}
 
-	if builtin, ok := builtins[node.Name]; ok {
+	if builtin, ok := builtins[name]; ok {
 		return builtin
 	}
 
-	return newError("identifier not found: " + node.Name)
+	return newError("identifier not found: " + name)
 }
 
 func isTruthy(obj object.Object) bool {
@@ -444,7 +445,7 @@ func extendFunctionEnv(
 	env := object.NewEnclosedEnvironment(fn.Env)
 
 	for paramIdx, param := range fn.Parameters {
-		env.Set(param.Name, args[paramIdx])
+		env.Set(string(param.Name), args[paramIdx])
 	}
 
 	return env

@@ -95,14 +95,14 @@ func (f *Function) Type() ObjectType { return FUN }
 func (f *Function) Inspect() string {
 	var out bytes.Buffer
 
-	params := []string{}
+	params := [][]byte{}
 	for _, p := range f.Parameters {
 		params = append(params, p.Name)
 	}
 
 	out.WriteString("fn")
 	out.WriteString("(")
-	out.WriteString(strings.Join(params, ", "))
+	out.Write(bytes.Join(params, []byte(", ")))
 	out.WriteString(") {\n")
 	out.WriteString(f.Body.String())
 	out.WriteString("\n}")

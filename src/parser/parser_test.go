@@ -1,6 +1,7 @@
 package parser_test
 
 import (
+	"bytes"
 	"testing"
 
 	"github.com/Fysh-Fyve/fysh/src/parser"
@@ -11,7 +12,7 @@ type Test struct{ statement string }
 
 func testProgram(t testing.TB, input string, tests []Test) {
 	t.Helper()
-	s := scanner.New(input)
+	s, err := scanner.NewFile("parser-test-input", bytes.NewBuffer([]byte(input)))
 	p := parser.New(s)
 	prog, err := p.Parse()
 	if err != nil {

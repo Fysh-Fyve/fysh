@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"strconv"
-	"strings"
 
 	"github.com/Fysh-Fyve/fysh/src/ast"
 	"github.com/Fysh-Fyve/fysh/src/ast/binary"
@@ -23,19 +22,19 @@ func (p ParserErrors) Error() string {
 	return out.String()
 }
 
-func (p *Parser) bonesToFloat(s string, neg bool) ast.Expression {
+func (p *Parser) bonesToFloat(s []byte, neg bool) ast.Expression {
 	// split bones to get the binary values e.g. "101-110" -> ["101", "110"]
-	arr := strings.Split(s, "-")
+	arr := bytes.Split(s, []byte("-"))
 
 	strnums := ""
 
 	// build the float string (e.g. ["101", "110", "101"] -> 5.65)
 	for i, v := range arr {
-		if v == "" {
-			arr[i] = "0"
+		if len(v) == 0 {
+			arr[i] = []byte("0")
 		}
 
-		nums, err := strconv.ParseInt(arr[i], 2, 64)
+		nums, err := strconv.ParseInt(string(arr[i]), 2, 64)
 		if err != nil {
 			p.errors = append(p.errors, err)
 			return nil
@@ -102,12 +101,13 @@ func (p *Parser) expectFysh(f fysh.Species, ignore ...bool) bool {
 func (p *Parser) list() ast.Expression {
 	p.next()
 	exprs := []ast.Expression{}
-	sub, neg := "", false
+	var sub []byte
+	neg := false
 	for !p.cur.Type.IsOneOf(fysh.RTank, fysh.End, fysh.Invalid) {
 		if p.expectFysh(fysh.Food, true) {
 		}
 		if p.cur.Type == fysh.Sub {
-			if sub != "" {
+			if len(sub) > 0 {
 				p.errors = append(p.errors, fmt.Errorf("conflicting calls: %s", sub))
 				return nil
 			}
@@ -124,7 +124,7 @@ func (p *Parser) list() ast.Expression {
 	if !p.expectFysh(fysh.RTank) {
 		return nil
 	}
-	if sub != "" {
+	if len(sub) > 0 {
 		var c ast.Expression = &ast.Call{
 			Callee: sub,
 			Args:   exprs,
@@ -145,7 +145,7 @@ func (p *Parser) primary() ast.Expression {
 		return &ast.Grilled{}
 	case fysh.Scales:
 		bin, neg := p.cur.Unfysh()
-		if i, err := strconv.ParseInt(bin, 2, 64); err != nil {
+		if i, err := strconv.ParseInt(string(bin), 2, 64); err != nil {
 			p.errors = append(p.errors, err)
 			return nil
 		} else {
@@ -161,7 +161,7 @@ func (p *Parser) primary() ast.Expression {
 	case fysh.String:
 		str := p.cur.Value
 		p.next()
-		return &ast.String{Value: str}
+		return &ast.String{Value: string(str)}
 
 	case fysh.Ident:
 		name, neg := p.cur.Unfysh()
@@ -441,9 +441,7 @@ func (p *Parser) statement() ast.Statement {
 		return p.loop()
 	case fysh.Squid:
 		return p.squid()
-	case fysh.LAnchor:
-		fallthrough
-	case fysh.RAnchor:
+	case fysh.LAnchor, fysh.RAnchor:
 		return p.anchorStmt()
 	case fysh.If:
 		return p.ifStmt()

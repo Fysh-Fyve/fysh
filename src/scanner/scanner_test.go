@@ -1,6 +1,7 @@
 package scanner_test
 
 import (
+	"bytes"
 	"strings"
 	"testing"
 
@@ -522,7 +523,10 @@ func TestFyshBones(t *testing.T) {
 
 func testScanner(t testing.TB, input string, tests []tt) {
 	t.Helper()
-	s := scanner.New(input)
+	s, err := scanner.NewFile("scanner-test-input", bytes.NewBuffer([]byte(input)))
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	for i, tt := range tests {
 		tok := s.NextFysh()
@@ -532,7 +536,7 @@ func testScanner(t testing.TB, input string, tests []tt) {
 				i, tt.expectedType, tok.Type)
 		}
 
-		if tok.Value != tt.expectedValue {
+		if string(tok.Value) != tt.expectedValue {
 			t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q",
 				i, tt.expectedValue, tok)
 		}

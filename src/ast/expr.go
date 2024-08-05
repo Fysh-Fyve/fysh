@@ -9,12 +9,12 @@ import (
 	"github.com/Fysh-Fyve/fysh/src/fysh"
 )
 
-type Identifier struct{ Name string }
+type Identifier struct{ Name []byte }
 
 func (i *Identifier) top()            {}
 func (i *Identifier) expression()     {}
 func (i *Identifier) Literal() string { return fysh.Ident.String() }
-func (i *Identifier) String() string  { return i.Name }
+func (i *Identifier) String() string  { return string(i.Name) }
 
 type Grilled struct {
 }
@@ -57,13 +57,13 @@ func (u *Unary) String() string {
 }
 
 type Call struct {
-	Callee string
+	Callee []byte
 	Args   []Expression
 }
 
 func (c *Call) top()            {}
 func (c *Call) expression()     {}
-func (c *Call) Literal() string { return c.Callee }
+func (c *Call) Literal() string { return string(c.Callee) }
 func (c *Call) String() string {
 	var out bytes.Buffer
 	fmt.Fprintf(&out, "%s%s", c.Callee, fysh.LBowl)
