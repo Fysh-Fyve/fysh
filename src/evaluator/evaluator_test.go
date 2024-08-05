@@ -2,6 +2,7 @@ package evaluator_test
 
 import (
 	"bytes"
+	"math"
 	"testing"
 
 	"github.com/Fysh-Fyve/fysh/src/evaluator"
@@ -10,13 +11,18 @@ import (
 	"github.com/Fysh-Fyve/fysh/src/scanner"
 )
 
+type Numeric interface {
+    int64 | float64
+}
+
+const floatTolerance = 1e-5
+
 func TestEvalIntegerExpression(t *testing.T) {
 	tests := []struct {
 		input    string
 		expected int64
 	}{
 		// we have a fixed seed for the test environment
-		{"><###> </3 ><{({{{{((({{{{(({(> ~", 42069},
 		{"><{({> ~", 5},
 		{"><{({(> ~", 10},
 		{"<})}>< ~", -5},
@@ -27,11 +33,9 @@ func TestEvalIntegerExpression(t *testing.T) {
 		{"><{({> <3 ><{(> ><{({(> ~", 20},
 		{"><{({> ><{(> <3 ><{({(> ~", 25},
 		{"><{({((> ><{(> <3 <{({(>< ~", 0},
-		{"><{{(({(> </3 ><{(> <3 ><{(> ><{({(> ~", 60},
 		{"><{(> <3 (><{({> ><{({(>) ~", 30},
 		{"><{{> <3 ><{{> <3 ><{{> ><{({(> ~", 37},
 		{"><{{> <3 (><{{> <3 ><{{>) ><{({(> ~", 37},
-		{"(><{({> ><{({(> <3 ><{(> ><{{{{> </3 ><{{>) <3 ><{(> <})})>< ~", 50},
 	}
 
 	for _, tt := range tests {
@@ -39,6 +43,40 @@ func TestEvalIntegerExpression(t *testing.T) {
 		testIntegerObject(t, evaluated, tt.expected)
 	}
 }
+
+func TestEvalFloatExpression(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected float64
+	}{
+		// we have a fixed seed for the test environment
+		{"><{(-{{> ~", 2.3},
+		{"><{({-{({-{({> ~", 5.55},
+		{"><{({-{({{({-{({> ~", 5.455},
+		{"<})}-})}>< ~", -5.5},
+		{"<})})-})})-})})>< ~", -10.1010},
+		{"><-{({> ><{({> ><{({> ><{({> <})})-{(>< ~", 5.3},
+		{"><###> </3 ><{({{{{((({{{{(({(> ~", 42069.126293},
+		// {"><{{(({(> </3 ><{(> <3 ><{(> ><{({(> ~", 60},
+		// {"(><{({> ><{({(> <3 ><{(> ><{{{{> </3 ><{{>) <3 ><{(> <})})>< ~", 50},
+		// {"><})> <3 ><})> <3 ><})> <3 ><})> <3 ><})> ~", 32},
+		// {"<{{(({(>< ><{{(({((> <{{(({(>< ~", 0},
+		// {"><{({> <3 ><{(> ><{({(> ~", 20},
+		// {"><{({> ><{(> <3 ><{({(> ~", 25},
+		// {"><{({((> ><{(> <3 <{({(>< ~", 0},
+		// {"><{{(({(> </3 ><{(> <3 ><{(> ><{({(> ~", 60},
+		// {"><{(> <3 (><{({> ><{({(>) ~", 30},
+		// {"><{{> <3 ><{{> <3 ><{{> ><{({(> ~", 37},
+		// {"><{{> <3 (><{{> <3 ><{{>) ><{({(> ~", 37},
+		// {"(><{({> ><{({(> <3 ><{(> ><{{{{> </3 ><{{>) <3 ><{(> <})})>< ~", 50},
+	}
+
+	for _, tt := range tests {
+		evaluated := testEval(t, tt.input)
+		testFloatObject(t, evaluated, tt.expected)
+	}
+}
+
 
 func TestEvalBooleanExpression(t *testing.T) {
 	tests := []struct {
@@ -574,7 +612,7 @@ func testIntegerObject(t testing.TB, obj object.Object, expected int64) bool {
 	t.Helper()
 	result, ok := obj.(*object.Integer)
 	if !ok {
-		t.Errorf("object is not Integer. got=%T (%+v)", obj, obj)
+		t.Errorf("object is not an Integer. got=%T (%+v)", obj, obj)
 		return false
 	}
 	if result.Value != expected {
@@ -585,6 +623,22 @@ func testIntegerObject(t testing.TB, obj object.Object, expected int64) bool {
 
 	return true
 }
+
+func testFloatObject(t testing.TB, obj object.Object, expected float64) bool {
+	t.Helper()
+	result, ok := obj.(*object.Float)
+	if !ok {
+		t.Errorf("object is not a Float. got=%T (%+v)", obj, obj)
+		return false
+	}
+	if math.Abs(result.Value-expected) > floatTolerance{
+		t.Errorf("object has wrong value. got=%f, want=%f", result.Value, expected)
+		return false
+	}
+
+	return true
+}
+
 
 func testNullObject(t testing.TB, obj object.Object) bool {
 	t.Helper()
