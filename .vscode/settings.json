@@ -31,7 +31,7 @@
       },
       {
         "scope": "variable.fysh.left",
-        "settings": { "foreground": "#FF5566" }
+        "settings": { "foreground": "#ff7d7d" }
       },
       {
         "scope": "variable.fysh.left.decrement",
@@ -43,7 +43,7 @@
       },
       {
         "scope": "constant.numeric.fysh.left",
-        "settings": { "foreground": "#FF5566" }
+        "settings": { "foreground": "#ff7d7d" }
       },
       {
         "scope": "constant.numeric.fysh.right.scale",
@@ -51,7 +51,7 @@
       },
       {
         "scope": "constant.numeric.fysh.left.scale",
-        "settings": { "foreground": "#D24040" }
+        "settings": { "foreground": "#f44c4c" }
       },
       {
         "scope": "constant.numeric.fysh.left.scale.zero",
@@ -83,7 +83,7 @@
       },
       {
         "scope": "punctuation.terminator.fysh",
-        "settings": { "foreground": "#FF7F50" }
+        "settings": { "foreground": "#bafffe" }
       }
     ]
   }
