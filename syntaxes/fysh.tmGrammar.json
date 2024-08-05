@@ -9,6 +9,7 @@
     { "match": "~(?!o)", "name": "punctuation.terminator.fysh" },
 
     { "match": "><\\(*[*^@]>", "name": "keyword.control.fysh" },
+    { "match": "@", "name": "keyword.control.fysh" },
     { "match": "<~", "name": "keyword.control.return.fysh" },
     {
       "match": "(><\\\\/>)|(<\\\\/><)",
