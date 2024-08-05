@@ -31,6 +31,14 @@
 ],
   "main": "./out/extension",
   "contributes": {
+    "themes": [
+      {
+        "label": "Fysh Theme",
+        "id": "fysh",
+        "uiTheme": "vs-dark",
+        "path": "./themes/fysh.tmTheme.json"
+      }
+    ],
     "commands": [
       {
         "category": "Fysh",
@@ -169,7 +177,7 @@
     "@typescript-eslint/eslint-plugin": "^7.1.0",
     "@typescript-eslint/parser": "^7.1.0",
     "@vscode/test-electron": "^2.3.9",
-    "@vscode/vsce": "^2.26.0",
+    "@vscode/vsce": "^2.31.1",
     "esbuild": "^0.20.2",
     "eslint": "^8.57.0",
     "mocha": "^10.3.0",
