@@ -302,32 +302,34 @@ func shiftLeft(f float64, shift int64) float64 {
 	return f * float64(int64(1)<<shift)
 }
 
-func bitWiseEval(op binary.Op, left, right object.Float) object.Object {
+func bitWiseEval(op binary.Op, left, right object.Object) object.Object {
 	if right.Type() != object.INT {
 		return newError("unknown operator: %s %s %s", left.Type(), op, right.Type())
 	}
-	if left.Type() != object.INT {
+	rval := right.(*object.Integer).Value
+	if left.Type() == object.INT {
+		lval := left.(*object.Integer).Value
 		switch op {
 		case binary.BitwiseOr:
-			return &object.Integer{Value: int64(left.Value) | int64(right.Value)}
+			return &object.Integer{Value: lval | rval}
 		case binary.BitwiseAnd:
-			return &object.Integer{Value: int64(left.Value) & int64(right.Value)}
+			return &object.Integer{Value: lval & rval}
 		case binary.BitwiseXor:
-			return &object.Integer{Value: int64(left.Value) ^ int64(right.Value)}
+			return &object.Integer{Value: lval ^ rval}
 		case binary.ShiftLeft:
-			return &object.Integer{Value: int64(left.Value) << int64(right.Value)}
+			return &object.Integer{Value: lval << rval}
 		case binary.ShiftRight:
-			return &object.Integer{Value: int64(left.Value) >> int64(right.Value)}
+			return &object.Integer{Value: lval >> rval}
 		default:
 			return newError("unknown operator: %s %s %s", left.Type(), op, right.Type())
 		}
 	}
-
+	lval := left.(*object.Float).Value
 	switch op {
 	case binary.ShiftLeft:
-		return &object.Float{Value: shiftLeft(left.Value, int64(right.Value))}
+		return &object.Float{Value: shiftLeft(lval, rval)}
 	case binary.ShiftRight:
-		return &object.Float{Value: shiftRight(left.Value, int64(right.Value))}
+		return &object.Float{Value: shiftRight(lval, rval)}
 	default:
 		return newError("unknown operator: %s %s %s", left.Type(), op, right.Type())
 	}
@@ -362,7 +364,7 @@ func evalNumBinary(op binary.Op, left, right object.Object) object.Object {
 		binary.BitwiseXor,
 		binary.ShiftLeft,
 		binary.ShiftRight:
-		return bitWiseEval(op, object.Float{Value: leftVal}, object.Float{Value: rightVal})
+		return bitWiseEval(op, left, right)
 	case binary.LT:
 		return toBool(leftVal < rightVal)
 	case binary.LTE:
