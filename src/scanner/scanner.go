@@ -432,6 +432,10 @@ func (s *Scanner) unicode() fysh.Fysh {
 		f = newFysh(fysh.Loop)
 	case '⚓':
 		f = newFysh(fysh.LAnchor)
+	case '🫧':
+		for ch := s.periscope(); ch != '🫧' && ch != 0; ch = s.reel() {}
+		f = newFysh(fysh.String)
+		f.Value = s.input[start:s.peek]
 	}
 	return f
 }
