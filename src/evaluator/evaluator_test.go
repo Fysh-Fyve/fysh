@@ -12,7 +12,7 @@ import (
 )
 
 type Numeric interface {
-    int64 | float64
+	int64 | float64
 }
 
 const floatTolerance = 1e-5
@@ -76,7 +76,6 @@ func TestEvalFloatExpression(t *testing.T) {
 		testFloatObject(t, evaluated, tt.expected)
 	}
 }
-
 
 func TestEvalBooleanExpression(t *testing.T) {
 	tests := []struct {
@@ -631,14 +630,13 @@ func testFloatObject(t testing.TB, obj object.Object, expected float64) bool {
 		t.Errorf("object is not a Float. got=%T (%+v)", obj, obj)
 		return false
 	}
-	if math.Abs(result.Value-expected) > floatTolerance{
+	if math.Abs(result.Value-expected) > floatTolerance {
 		t.Errorf("object has wrong value. got=%f, want=%f", result.Value, expected)
 		return false
 	}
 
 	return true
 }
-
 
 func testNullObject(t testing.TB, obj object.Object) bool {
 	t.Helper()
