@@ -43,6 +43,11 @@ func isIdentStart(c rune) bool {
 	return c == '_' || c == '^' || unicode.IsLetter(c) || unicode.IsNumber(c) || c > unicode.MaxASCII
 }
 
+// Checks if the character is a fysh eye
+func isEye(c rune) bool {
+	return c == 'o' || c == 'O' || c == '0' || c == '°'
+}
+
 // Checks if the character can be part of an identifier body
 func isIdentBody(c rune) bool {
 	return c == '_' || c == ' ' || c == '^' || c == '-' || unicode.IsLetter(c) || unicode.IsNumber(c) || c > unicode.MaxASCII
@@ -134,7 +139,7 @@ func (s *Scanner) lt(start int) fysh.Fysh {
 		}
 	default:
 		// left swimming fysh
-		for ch := s.periscope(); ch == 'o' || ch == 'O' || ch == '0' || ch == '°'; ch = s.reel() {
+		for ch := s.periscope(); isEye(ch); ch = s.reel() {
 		}
 		ch := s.periscope()
 		if isScale(ch) {
@@ -153,7 +158,7 @@ func (s *Scanner) lt(start int) fysh.Fysh {
 				f.Type = fysh.Invalid
 			}
 		} else {
-			for ch := s.periscope(); ch != '>' && ch != 0; ch = s.reel() {
+			for ch := s.periscope(); isIdentBody(ch); ch = s.reel() {
 			}
 			if s.match("><") {
 				if s.expect('<') { // <><< (decrement)
@@ -175,22 +180,21 @@ func (s *Scanner) rt(start int) fysh.Fysh {
 	switch s.periscope() {
 	case '(': // >(
 		s.reel()
-		for ch := s.periscope(); ch != ')' && ch != 0; ch = s.reel() {
+		for ch := s.periscope(); isIdentBody(ch); ch = s.reel() {
 		}
 		if s.expect(')') {
 			f.Type = fysh.Sub
-			f.Value = s.input[start:s.peek]
 		}
+		f.Value = s.input[start:s.peek]
 	case '>': // >>
 		s.reel()
-		if s.periscope() == '<' { // >>< (increment)
-			f.Type = fysh.Ident
-			for ch := s.periscope(); ch != '>' && ch != 0; ch = s.reel() {
+		if s.expect('<') { // >>< (increment)
+			for ch := s.periscope(); isIdentBody(ch); ch = s.reel() {
 			}
 			if s.expect('>') {
 				f.Type = fysh.Inc
-				f.Value = s.input[start:s.peek]
 			}
+			f.Value = s.input[start:s.peek]
 		} else {
 			f = newFysh(fysh.RShift)
 		}
@@ -246,7 +250,7 @@ func (s *Scanner) rightFysh(start int) fysh.Fysh {
 				f.Type = fysh.Else
 				noValue = true
 			}
-			for ch := s.periscope(); ch == 'o' || ch == 'O' || ch == '0' || ch == '°'; ch = s.reel() { // fysh eyes
+			for ch := s.periscope(); isEye(ch); ch = s.reel() { // fysh eyes
 			}
 		} else { // identifier (variable)
 			closeFysh = true
@@ -457,10 +461,10 @@ func (s *Scanner) unicode() fysh.Fysh {
 	case '🫧':
 		for ch := s.periscope(); ch != '🫧' && ch != 0; ch = s.reel() {
 		}
-		s.reel()
-		f = newFysh(fysh.String)
-		// 4 bytes for the emoji
-		f.Value = s.input[start+4 : s.current]
+		if s.expect('🫧') {
+			f.Type = fysh.String
+		}
+		f.Value = s.input[start:s.peek]
 	}
 	return f
 }
@@ -477,9 +481,6 @@ func (s *Scanner) NextFysh() fysh.Fysh {
 		f = s.ascii()
 	}
 
-	if f.Type == fysh.Invalid {
-		fmt.Printf("%c", s.ch)
-	}
 	s.reel()
 	return f
 }

@@ -148,6 +148,10 @@ func (f *Fysh) Unfysh() ([]byte, bool) {
 	case Inc:
 		// >><name>
 		s = f.Value[3 : len(f.Value)-1]
+	case String:
+		// TODO: Unfysh other types of strings here
+		// 🫧name🫧 (4 bytes on each side)
+		s = f.Value[4 : len(f.Value)-4]
 	case Scales, Bones, Ident, Sub:
 		negate = f.Value[0] != '>'
 		if negate {

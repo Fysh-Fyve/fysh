@@ -38,10 +38,10 @@ func (s *Bones) expression()     {}
 func (s *Bones) Literal() string { return fysh.Bones.String() }
 func (s *Bones) String() string  { return fmt.Sprintf("%f", s.Value) }
 
-type String struct{ Value string }
+type String struct{ Value []byte }
 
 func (s *String) expression()     {}
-func (s *String) Literal() string { return s.Value }
+func (s *String) Literal() string { return string(s.Value) }
 func (s *String) String() string  { return fmt.Sprintf("\"%s\"", s.Value) }
 
 type Unary struct {

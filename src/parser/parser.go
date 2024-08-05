@@ -159,10 +159,12 @@ func (p *Parser) primary() ast.Expression {
 		bin, neg := p.cur.Unfysh()
 		return p.bonesToFloat(bin, neg)
 	case fysh.String:
-		str := p.cur.Value
+		str, neg := p.cur.Unfysh()
+		if neg {
+			// TODO: Implement negative strings
+		}
 		p.next()
-		return &ast.String{Value: string(str)}
-
+		return &ast.String{Value: str}
 	case fysh.Ident:
 		name, neg := p.cur.Unfysh()
 		var ident ast.Expression = &ast.Identifier{Name: name}
