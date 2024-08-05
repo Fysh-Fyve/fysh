@@ -47,6 +47,14 @@ type Object interface {
 	Inspect() string
 }
 
+type Numeric interface {
+	int64 | float64
+}
+
+type NumericObj[T Numeric] interface {
+	Val() T
+}
+
 type Integer struct{ Value int64 }
 
 func (i *Integer) Type() ObjectType { return INT }
@@ -54,8 +62,12 @@ func (i *Integer) Inspect() string  { return fmt.Sprintf("%d", i.Value) }
 func (i *Integer) HashKey() HashKey {
 	return HashKey{Type: i.Type(), Value: uint64(i.Value)}
 }
+func (i *Integer) Val() int64 { return i.Value }
 
 type Float struct{ Value float64 }
+
+var _ NumericObj[int64] = &Integer{}
+var _ NumericObj[float64] = &Float{}
 
 func float64bits(f float64) uint64 { return *(*uint64)(unsafe.Pointer(&f)) }
 
@@ -64,6 +76,7 @@ func (i *Float) Inspect() string  { return fmt.Sprintf("%f", i.Value) }
 func (i *Float) HashKey() HashKey {
 	return HashKey{Type: i.Type(), Value: float64bits(i.Value)}
 }
+func (i *Float) Val() float64 { return i.Value }
 
 type Null struct{}
 
