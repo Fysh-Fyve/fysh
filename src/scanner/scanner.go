@@ -2,6 +2,7 @@ package scanner
 
 import (
 	"fmt"
+	"io"
 	"unicode"
 	"unicode/utf8"
 
@@ -9,14 +10,29 @@ import (
 )
 
 type Scanner struct {
-	input   string
-	current int
-	peek    int
-	ch      rune
+	input    []byte
+	filename string
+	current  int
+	peek     int
+	ch       rune
+
+	line int
+	col  int
 }
 
-// Creates a new scanner given an input string
-func New(input string) *Scanner {
+// Creates a new scanner given a filename and reader
+func NewFile(filename string, r io.Reader) (*Scanner, error) {
+	b, err := io.ReadAll(r)
+	if err != nil {
+		return nil, fmt.Errorf("NewFile: %w", err)
+
+	}
+	s := &Scanner{filename: filename, input: b}
+	s.reel()
+	return s, nil
+}
+
+func New(input []byte) *Scanner {
 	s := &Scanner{input: input}
 	s.reel()
 	return s
@@ -43,7 +59,7 @@ func (s *Scanner) periscope() rune {
 		return 0
 	}
 	end := min(len(s.input), s.peek+4)
-	val, _ := utf8.DecodeRuneInString(s.input[s.peek:end])
+	val, _ := utf8.DecodeRune(s.input[s.peek:end])
 	return val
 }
 
@@ -54,7 +70,7 @@ func (s *Scanner) reel() rune {
 		s.current = s.peek
 	} else {
 		end := min(len(s.input), s.peek+4)
-		val, width := utf8.DecodeRuneInString(s.input[s.peek:end])
+		val, width := utf8.DecodeRune(s.input[s.peek:end])
 		s.ch = val
 		s.current = s.peek
 		s.peek += width
@@ -284,7 +300,7 @@ func (s *Scanner) ascii() fysh.Fysh {
 
 	switch s.ch {
 	case 0:
-		f = fyshWithValue(fysh.End, "")
+		f = fyshWithValue(fysh.End, []byte{})
 	case '<':
 		f = s.lt(start)
 	case '>':
@@ -304,7 +320,7 @@ func (s *Scanner) ascii() fysh.Fysh {
 			if s.expect('o') {
 				f = newFysh(fysh.LAnchor)
 			} else {
-				f.Value = string(s.input[start:s.peek])
+				f.Value = s.input[start:s.peek]
 			}
 		} else if isIdentStart(s.periscope()) {
 			for ch := s.periscope(); isIdentBody(ch); ch = s.reel() {
@@ -312,7 +328,7 @@ func (s *Scanner) ascii() fysh.Fysh {
 			if s.match(")<") {
 				f.Type = fysh.Sub
 			}
-			f.Value = string(s.input[start:s.peek])
+			f.Value = s.input[start:s.peek]
 		} else {
 			f = newFysh(fysh.LBowl)
 		}
@@ -332,7 +348,7 @@ func (s *Scanner) ascii() fysh.Fysh {
 		} else if s.match("+)") {
 			f = newFysh(fysh.RAnchor)
 		} else {
-			f.Value = string(s.input[start:s.peek])
+			f.Value = s.input[start:s.peek]
 		}
 	case '~':
 		if s.expect('o') {
@@ -414,7 +430,7 @@ func (s *Scanner) unicode() fysh.Fysh {
 				} else {
 					// unexpected ZWJ pair
 					f.Type = fysh.Invalid
-					f.Value = string(s.input[start:s.peek])
+					f.Value = s.input[start:s.peek]
 				}
 			} else {
 				// red heart emoji
@@ -468,11 +484,11 @@ func (s *Scanner) NextFysh() fysh.Fysh {
 	return f
 }
 
-func fyshWithValue(t fysh.Species, v string) fysh.Fysh {
+func fyshWithValue(t fysh.Species, v []byte) fysh.Fysh {
 	return fysh.Fysh{Type: t, Value: v}
 }
 func newFysh(t fysh.Species) fysh.Fysh {
-	return fysh.Fysh{Type: t, Value: t.String()}
+	return fysh.Fysh{Type: t, Value: []byte(t.String())}
 }
 
 func (s *Scanner) skipSpace() {

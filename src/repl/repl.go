@@ -2,6 +2,7 @@ package repl
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"io"
 	"log"
@@ -27,8 +28,12 @@ func Start(in io.Reader, out io.Writer, prompt bool) {
 			return
 		}
 
-		line := s.Text()
-		l := scanner.New(line)
+		line := s.Bytes()
+		l, err := scanner.NewFile("stdin", bytes.NewBuffer(line))
+		if err != nil {
+			log.Println(err)
+			continue
+		}
 		p := parser.New(l)
 
 		program, err := p.Parse()

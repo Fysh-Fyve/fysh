@@ -1,8 +1,8 @@
 package fysh
 
 import (
+	"bytes"
 	"strconv"
-	"strings"
 )
 
 type Species int
@@ -111,45 +111,35 @@ var tokens = [...]string{
 
 type Fysh struct {
 	Type  Species
-	Value string
+	Value []byte
+}
+
+func New(t Species, s string) Fysh {
+	return Fysh{Type: t, Value: []byte(s)}
 }
 
 func (f *Fysh) String() string {
 	var s string
 	switch f.Type {
+	case Scales, Bones, Ident, Inc, Dec, Comment, BlockC, Invalid:
+		s = string(f.Value)
 	default:
 		s = f.Type.String()
-	case Scales:
-		fallthrough
-	case Bones:
-		fallthrough
-	case Ident:
-		fallthrough
-	case Inc:
-		fallthrough
-	case Dec:
-		fallthrough
-	case Comment:
-		fallthrough
-	case BlockC:
-		fallthrough
-	case Invalid:
-		s = f.Value
 	}
 	return s
 }
 
-func getBin(s string) string {
-	s = strings.ReplaceAll(s, "o", "")
-	s = strings.ReplaceAll(s, "°", "")
-	s = strings.ReplaceAll(s, "}", "1")
-	s = strings.ReplaceAll(s, "{", "1")
-	s = strings.ReplaceAll(s, "(", "0")
-	return strings.ReplaceAll(s, ")", "0")
+func getBin(b []byte) []byte {
+	b = bytes.ReplaceAll(b, []byte("o"), []byte(""))
+	b = bytes.ReplaceAll(b, []byte("°"), []byte(""))
+	b = bytes.ReplaceAll(b, []byte("}"), []byte("1"))
+	b = bytes.ReplaceAll(b, []byte("{"), []byte("1"))
+	b = bytes.ReplaceAll(b, []byte("("), []byte("0"))
+	return bytes.ReplaceAll(b, []byte(")"), []byte("0"))
 }
 
-func (f *Fysh) Unfysh() (string, bool) {
-	var s string
+func (f *Fysh) Unfysh() ([]byte, bool) {
+	var s []byte
 	negate := false
 	switch f.Type {
 	case Dec:
@@ -158,13 +148,7 @@ func (f *Fysh) Unfysh() (string, bool) {
 	case Inc:
 		// >><name>
 		s = f.Value[3 : len(f.Value)-1]
-	case Scales:
-		fallthrough
-	case Bones:
-		fallthrough
-	case Ident:
-		fallthrough
-	case Sub:
+	case Scales, Bones, Ident, Sub:
 		negate = f.Value[0] != '>'
 		if negate {
 			// left

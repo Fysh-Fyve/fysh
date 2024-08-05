@@ -1,8 +1,10 @@
-package evaluator
+package evaluator_test
 
 import (
+	"bytes"
 	"testing"
 
+	"github.com/Fysh-Fyve/fysh/src/evaluator"
 	"github.com/Fysh-Fyve/fysh/src/object"
 	"github.com/Fysh-Fyve/fysh/src/parser"
 	"github.com/Fysh-Fyve/fysh/src/scanner"
@@ -265,7 +267,7 @@ func TestFunctionObject(t *testing.T) {
 			fn.Parameters)
 	}
 
-	if fn.Parameters[0].Name != "x" {
+	if string(fn.Parameters[0].Name) != "x" {
 		t.Fatalf("parameter is not 'x'. got=%q", fn.Parameters[0].Name)
 	}
 
@@ -489,8 +491,8 @@ func TestHashLiterals(t *testing.T) {
 		(&object.String{Value: "two"}).HashKey():   2,
 		(&object.String{Value: "three"}).HashKey(): 3,
 		(&object.Integer{Value: 4}).HashKey():      4,
-		TRUE.HashKey():                             5,
-		FALSE.HashKey():                            6,
+		evaluator.TRUE.HashKey():                   5,
+		evaluator.FALSE.HashKey():                  6,
 	}
 
 	if len(result.Pairs) != len(expected) {
@@ -554,7 +556,10 @@ func TestHashIndexExpressions(t *testing.T) {
 	}
 }
 func testEval(t testing.TB, input string) object.Object {
-	l := scanner.New(input)
+	l, err := scanner.NewFile("evaluator-test-input", bytes.NewBuffer([]byte(input)))
+	if err != nil {
+		t.Fatal(err)
+	}
 	p := parser.New(l)
 	program, err := p.Parse()
 	if err != nil {
@@ -562,7 +567,7 @@ func testEval(t testing.TB, input string) object.Object {
 	}
 	env := object.NewEnvironmentWithSeed(0)
 
-	return Eval(program, env)
+	return evaluator.Eval(program, env)
 }
 
 func testIntegerObject(t testing.TB, obj object.Object, expected int64) bool {
@@ -583,7 +588,7 @@ func testIntegerObject(t testing.TB, obj object.Object, expected int64) bool {
 
 func testNullObject(t testing.TB, obj object.Object) bool {
 	t.Helper()
-	if obj != NULL {
+	if obj != evaluator.NULL {
 		t.Errorf("object is not NULL. got=%T (%+v)", obj, obj)
 		return false
 	}

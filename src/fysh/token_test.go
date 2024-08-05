@@ -14,19 +14,20 @@ type nameCase struct {
 
 func TestUnfysh(t *testing.T) {
 	tests := []nameCase{
-		{fysh.Fysh{Type: fysh.Inc, Value: ">><increment>"}, "increment", false},
-		{fysh.Fysh{Type: fysh.Dec, Value: "<decrement><<"}, "decrement", false},
-		{fysh.Fysh{Type: fysh.Sub, Value: ">(submarine)"}, "submarine", false},
-		{fysh.Fysh{Type: fysh.Sub, Value: "(submarine)<"}, "submarine", true},
-		{fysh.Fysh{Type: fysh.Ident, Value: "><positive>"}, "positive", false},
-		{fysh.Fysh{Type: fysh.Ident, Value: "<negative><"}, "negative", true},
-		{fysh.Fysh{Type: fysh.Scales, Value: "><{{{>"}, "111", false},
-		{fysh.Fysh{Type: fysh.Scales, Value: "<{{{><"}, "111", true},
+		{fysh.New(fysh.Inc, ">><increment>"), "increment", false},
+		{fysh.New(fysh.Dec, "<decrement><<"), "decrement", false},
+		{fysh.New(fysh.Sub, ">(submarine)"), "submarine", false},
+		{fysh.New(fysh.Sub, "(submarine)<"), "submarine", true},
+		{fysh.New(fysh.Ident, "><positive>"), "positive", false},
+		{fysh.New(fysh.Ident, "<negative><"), "negative", true},
+		{fysh.New(fysh.Scales, "><{{{>"), "111", false},
+		{fysh.New(fysh.Scales, "<{{{><"), "111", true},
+		{fysh.New(fysh.Scales, "<°{{{><"), "111", true},
 	}
 
 	for i, tt := range tests {
 		name, neg := tt.fysh.Unfysh()
-		if name != tt.name {
+		if string(name) != tt.name {
 			t.Fatalf("tests[%d] (%s) - name wrong. expected=%q, got=%q",
 				i, tt.fysh.Value, tt.name, name)
 		}
