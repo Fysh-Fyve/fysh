@@ -293,23 +293,61 @@ func intOrFloat(num float64) object.Object {
 	return &object.Float{Value: num}
 }
 
+// shift operations for floats
+func shiftRight(f float64, shift int64) float64 {
+	return f / float64(int64(1)<<shift)
+}
 
+func shiftLeft(f float64, shift int64) float64 {
+	return f * float64(int64(1)<<shift)
+}
+
+func bitWiseEval(op binary.Op, left, right object.Float) object.Object {
+	if right.Type() != object.INT {
+		return newError("unknown operator: %s %s %s", left.Type(), op, right.Type())
+	}
+	if left.Type() != object.INT {
+		switch op {
+		case binary.BitwiseOr:
+			return &object.Integer{Value: int64(left.Value) | int64(right.Value)}
+		case binary.BitwiseAnd:
+			return &object.Integer{Value: int64(left.Value) & int64(right.Value)}
+		case binary.BitwiseXor:
+			return &object.Integer{Value: int64(left.Value) ^ int64(right.Value)}
+		case binary.ShiftLeft:
+			return &object.Integer{Value: int64(left.Value) << int64(right.Value)}
+		case binary.ShiftRight:
+			return &object.Integer{Value: int64(left.Value) >> int64(right.Value)}
+		default:
+			return newError("unknown operator: %s %s %s", left.Type(), op, right.Type())
+		}
+	}
+
+	switch op {
+	case binary.ShiftLeft:
+		return &object.Float{Value: shiftLeft(left.Value, int64(right.Value))}
+	case binary.ShiftRight:
+		return &object.Float{Value: shiftRight(left.Value, int64(right.Value))}
+	default:
+		return newError("unknown operator: %s %s %s", left.Type(), op, right.Type())
+	}
+}
 
 func evalNumBinary(op binary.Op, left, right object.Object) object.Object {
 	var leftVal, rightVal float64
 	if int, ok := left.(*object.Integer); ok {
-			leftVal = float64(int.Value)
+		leftVal = float64(int.Value)
 	} else if flt, ok := left.(*object.Float); ok {
-			leftVal = flt.Value
+		leftVal = flt.Value
 	} else {
-			return newError("evalNumBinary was called with non-numeric object %s", left)
+		return newError("evalNumBinary was called with non-numeric object %s", left)
 	}
 	if int, ok := right.(*object.Integer); ok {
-			rightVal = float64(int.Value)
+		rightVal = float64(int.Value)
 	} else if flt, ok := right.(*object.Float); ok {
-			rightVal = flt.Value
+		rightVal = flt.Value
 	} else {
-			return newError("evalNumBinary was called with non-numeric object %s", right)
+		return newError("evalNumBinary was called with non-numeric object %s", right)
 	}
 
 	switch op {
@@ -319,16 +357,12 @@ func evalNumBinary(op binary.Op, left, right object.Object) object.Object {
 		return intOrFloat(leftVal * rightVal)
 	case binary.Div:
 		return intOrFloat(leftVal / rightVal)
-	// case binary.BitwiseOr:
-	// 	return &object.Integer{Value: leftVal | rightVal}
-	// case binary.BitwiseAnd:
-	// 	return &object.Integer{Value: leftVal & rightVal}
-	// case binary.BitwiseXor:
-	// 	return &object.Integer{Value: leftVal ^ rightVal}
-	// case binary.ShiftLeft:
-	// 	return &object.Integer{Value: leftVal << rightVal}
-	// case binary.ShiftRight:
-	// 	return &object.Integer{Value: leftVal >> rightVal}
+	case binary.BitwiseOr,
+		binary.BitwiseAnd,
+		binary.BitwiseXor,
+		binary.ShiftLeft,
+		binary.ShiftRight:
+		return bitWiseEval(op, object.Float{Value: leftVal}, object.Float{Value: rightVal})
 	case binary.LT:
 		return toBool(leftVal < rightVal)
 	case binary.LTE:
@@ -346,7 +380,6 @@ func evalNumBinary(op binary.Op, left, right object.Object) object.Object {
 			left.Type(), op, right.Type())
 	}
 }
-
 
 func evalStrBinary(op binary.Op, left, right object.Object) object.Object {
 	if op != binary.Add {
