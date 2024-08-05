@@ -18,7 +18,6 @@ func TestEvalIntegerExpression(t *testing.T) {
 		input    string
 		expected int64
 	}{
-		// we have a fixed seed for the test environment
 		{"><{({> ~", 5},
 		{"><{({(> ~", 10},
 		{"<})}>< ~", -5},
@@ -45,14 +44,14 @@ func TestEvalFloatExpression(t *testing.T) {
 		input    string
 		expected float64
 	}{
-		// we have a fixed seed for the test environment
 		{"><{(-{{> ~", 2.3},
 		{"><{({-{({-{({> ~", 5.55},
 		{"><{({-{({{({-{({> ~", 5.455},
 		{"<})}-})}>< ~", -5.5},
 		{"<})})-})})-})})>< ~", -10.1010},
 		{"><-{({> ><{({> ><{({> ><{({> <})})-{(>< ~", 5.3},
-		{"><###> </3 ><{({{{{((({{{{(({(> ~", 42069.126293},
+		// we have a fixed seed for the test environment
+		{"><###> </3 ><{({{{{((({{{{(({(> ~", 42069.1263},
 		// {"><{{(({(> </3 ><{(> <3 ><{(> ><{({(> ~", 60},
 		// {"(><{({> ><{({(> <3 ><{(> ><{{{{> </3 ><{{>) <3 ><{(> <})})>< ~", 50},
 		// {"><})> <3 ><})> <3 ><})> <3 ><})> <3 ><})> ~", 32},
