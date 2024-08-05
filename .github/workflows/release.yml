@@ -29,5 +29,6 @@ jobs:
         goversion: 1.22
         project_path: "."
         binary_name: "fyshls"
+        pre_command: "export CGO_ENABLED=1"
         build_command: "make release"
         extra_files: LICENSE README.md
