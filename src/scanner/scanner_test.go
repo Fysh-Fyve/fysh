@@ -435,91 +435,87 @@ func TestFyshBones(t *testing.T) {
 //   T(S::FYSH_CLOSE);
 //   T(S::END);
 // }
-//
-// TEST_CASE("Arrays") {
-//   FyshLexer lexer{"><fysh> = [ ><{}o> - ><{}o> ] ~"};
-//
-//   IDENT("fysh");
-//   T(S::ASSIGN);
-//   T(S::FYSH_TANK_OPEN);
-//   T(3);
-//   T(S::FYSH_FOOD);
-//   T(3);
-//   T(S::FYSH_TANK_CLOSE);
-//   T(S::FYSH_WATER);
-//   T(S::END);
-// }
-//
-// TEST_CASE("Submarines (SUBroutines)") {
-//   FyshLexer lexer{">(submarine) (submarine)<"};
-//   SUB_DIR("submarine", false);
-//   SUB_DIR("submarine", true);
-// }
-//
-// TEST_CASE("BABY SQUID (Return)") {
-//   FyshLexer lexer{R"(
-//   >(submarine) ><fysh>
-//   ><>
-//     >><fysh> ~
-//     <~ <fysh>< ~
-//     🦑🦑
-//     ~<~<fysh><~
-//   <><
-//   )"};
-//   // clang-format off
-//   SUB_DIR("submarine", false); IDENT_DIR("fysh", false);
-//   T(S::FYSH_OPEN);
-//   Fysh fysh{lexer.nextFysh()};
-//   CHECK(fysh == "fysh"); CHECK(fysh == S::INCREMENT); T(S::FYSH_WATER);
-//   T(S::SQUID); IDENT_DIR("fysh", true); T(S::FYSH_WATER);
-//   T(S::SQUID); T(S::SQUID);
-//   T(S::FYSH_WATER); T(S::SQUID); IDENT_DIR("fysh", true); T(S::FYSH_WATER);
-//   T(S::FYSH_CLOSE);
-//   T(S::END);
-//   // clang-format on
-// }
-//
-// TEST_CASE("Contributors") {
-//   FyshLexer lexer{"><Contributors> ≈ [ ><Kyle Prince> - ><Charles Ancheta> - "
-//                   "><Yahya Al-Shamali>] ~"};
-//   IDENT("Contributors");
-//   T(S::ASSIGN);
-//   T(S::FYSH_TANK_OPEN);
-//   IDENT("Kyle Prince");
-//   T(S::FYSH_FOOD);
-//   IDENT("Charles Ancheta");
-//   T(S::FYSH_FOOD);
-//   IDENT("Yahya Al-Shamali");
-//   T(S::FYSH_TANK_CLOSE);
-//   T(S::FYSH_WATER);
-//   T(S::END);
-// }
-//
-// TEST_CASE("Floats") {
-//   FyshLexer lexer{
-//       "><}-}-}> <}-}-}>< ><}}-})-})}o> ><}--}> <}--}>< "
-//       "><}--------------------------------> <o->< <->< ><-o> ><-> ><---------> "
-//       " ><---------o>  <o--------->< <--------->< ><-{> <-{>< ><-{oo> <oo-{><"};
-//   F(1.11);
-//   F(-1.11);
-//   F(3.25);
-//   F(1.01);
-//   F(-1.01);
-//   F(1);
-//   F(0);
-//   F(0);
-//   F(0);
-//   F(0);
-//   F(0);
-//   F(0);
-//   F(0);
-//   F(0);
-//   F(0.1);
-//   F(-0.1);
-//   F(0.1);
-//   F(-0.1);
-//   T(S::END);
-// }
+
+func TestArrays(t *testing.T) {
+	input := `><fysh> = [ ><{}o> - ><{}o> ] ~`
+	tests := []tt{
+		{fysh.Ident, "><fysh>"},
+		lit(fysh.Assign),
+		lit(fysh.LTank),
+		{fysh.Scales, "><{}o>"},
+		lit(fysh.Food),
+		{fysh.Scales, "><{}o>"},
+		lit(fysh.RTank),
+		lit(fysh.Water),
+		{fysh.End, ""},
+	}
+
+	testScanner(t, input, tests)
+}
+
+func TestSubmarines(t *testing.T) {
+	input := `>(submarine) (submarine)<`
+	tests := []tt{
+		{fysh.Sub, ">(submarine)"},
+		{fysh.Sub, "(submarine)<"},
+		{fysh.End, ""},
+	}
+
+	testScanner(t, input, tests)
+}
+
+func TestBabySquid(t *testing.T) {
+	input := `
+>(submarine) ><fysh>
+><>
+  >><fysh> ~
+  <~ <fysh>< ~
+  🦑🦑
+  ~<~<fysh><~
+<><
+`
+	tests := []tt{
+		{fysh.Sub, ">(submarine)"},
+		{fysh.Ident, "><fysh>"},
+		lit(fysh.LFysh),
+		{fysh.Inc, ">><fysh>"},
+		lit(fysh.Water),
+		lit(fysh.Squid),
+		{fysh.Ident, "<fysh><"},
+		lit(fysh.Water),
+		lit(fysh.Squid),
+		lit(fysh.Squid),
+		lit(fysh.Water),
+		lit(fysh.Squid),
+		{fysh.Ident, "<fysh><"},
+		lit(fysh.Water),
+		lit(fysh.RFysh),
+		{fysh.End, ""},
+	}
+
+	testScanner(t, input, tests)
+}
+
+func TestContributors(t *testing.T) {
+	input := `
+><Contributors> ≈ [ ><Kyle Prince> - ><Charles Ancheta> - ><Yahya Al-Shamali>] ~
+`
+	tests := []tt{
+		{fysh.Ident, "><Contributors>"},
+		lit(fysh.Assign),
+		lit(fysh.LTank),
+		{fysh.Ident, "><Kyle Prince>"},
+		lit(fysh.Food),
+		{fysh.Ident, "><Charles Ancheta>"},
+		lit(fysh.Food),
+		{fysh.Ident, "><Yahya Al-Shamali>"},
+		lit(fysh.RTank),
+		lit(fysh.Water),
+		{fysh.End, ""},
+	}
+
+	testScanner(t, input, tests)
+}
 
 func testScanner(t testing.TB, input string, tests []tt) {
 	t.Helper()
