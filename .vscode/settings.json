@@ -3,19 +3,19 @@
     "textMateRules": [
       {
         "scope": "keyword.control.fysh",
-        "settings": { "foreground": "#AD7BD0" }
+        "settings": { "foreground": "#00ffe5" }
       },
       {
         "scope": "keyword.control.loop.break.fysh",
-        "settings": { "foreground": "#BC5350" }
+        "settings": { "foreground": "#d14844" }
       },
       {
         "scope": "comment.block.fysh",
-        "settings": { "foreground": "#4FFF64" }
+        "settings": { "foreground": "#4FFF64", "fontStyle": "italic" }
       },
       {
         "scope": "comment.line.fysh",
-        "settings": { "foreground": "#4FFF64" }
+        "settings": { "foreground": "#4FFF64", "fontStyle": "italic" }
       },
       {
         "scope": "entity.name.function.fysh",
@@ -31,7 +31,7 @@
       },
       {
         "scope": "variable.fysh.left",
-        "settings": { "foreground": "#D59593" }
+        "settings": { "foreground": "#FF5566" }
       },
       {
         "scope": "variable.fysh.left.decrement",
@@ -43,7 +43,7 @@
       },
       {
         "scope": "constant.numeric.fysh.left",
-        "settings": { "foreground": "#D59593" }
+        "settings": { "foreground": "#FF5566" }
       },
       {
         "scope": "constant.numeric.fysh.right.scale",
@@ -58,8 +58,16 @@
         "settings": { "foreground": "#F5CBCC" }
       },
       {
+        "scope": "constant.numeric.fysh.right.scale.zero",
+        "settings": { "foreground": "#DAE5F1" }
+      },
+      {
         "scope": "keyword.operator.arithmetic.multiply.fysh",
         "settings": { "foreground": "#F79FF3", "fontStyle": "bold" }
+      },
+      {
+        "scope": "keyword.operator",
+        "settings": { "foreground": "#d18ece"}
       },
       {
         "scope": "support.function.grilled.fysh",
@@ -68,6 +76,14 @@
       {
         "scope": "support.function.grilled.fysh.body",
         "settings": { "foreground": "#9A9A9A" }
+      },
+      {
+        "scope": "keyword.control.return.fysh",
+        "settings": { "foreground": "#00ffe5" }
+      },
+      {
+        "scope": "punctuation.terminator.fysh",
+        "settings": { "foreground": "#FF7F50" }
       }
     ]
   }

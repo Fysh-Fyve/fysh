@@ -81,7 +81,8 @@
       "beginCaptures": { "1": { "name": "constant.numeric.fysh.right" } },
       "patterns": [
         { "match": "[{}]", "name": "constant.numeric.fysh.right.scale"  },
-        { "match": "[()-]" }
+        { "match": "-" },
+        { "match": "[()]", "name": "constant.numeric.fysh.right.scale.zero" }
       ],
       "end": "[oO0°]*(>)",
       "endCaptures": { "1": { "name": "constant.numeric.fysh.right" } }
