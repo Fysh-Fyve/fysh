@@ -18,8 +18,8 @@ const (
 	NUL = "NULL"
 	ERR = "ERROR"
 
-	INT = "INTEGER"
-	STR = "STRING"
+	INT   = "INTEGER"
+	STR   = "STRING"
 	FLOAT = "FLOAT"
 
 	RET = "RETURN_VALUE"
@@ -56,6 +56,7 @@ func (i *Integer) HashKey() HashKey {
 }
 
 type Float struct{ Value float64 }
+
 func float64bits(f float64) uint64 { return *(*uint64)(unsafe.Pointer(&f)) }
 
 func (i *Float) Type() ObjectType { return FLOAT }

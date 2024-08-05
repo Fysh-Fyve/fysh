@@ -81,7 +81,7 @@ func (s *Scanner) match(str string) bool {
 	return true
 }
 
-// Handles the '<' (less than) character and determines the appropriate fysh type 
+// Handles the '<' (less than) character and determines the appropriate fysh type
 func (s *Scanner) lt(start int) fysh.Fysh {
 	var f fysh.Fysh
 
@@ -123,12 +123,16 @@ func (s *Scanner) lt(start int) fysh.Fysh {
 		ch := s.periscope()
 		if isScale(ch) {
 			for ch := s.periscope(); isScale(ch); ch = s.reel() {
-				if ch == '-' {f.Type = fysh.Bones} // check if its a floating point number
+				if ch == '-' {
+					f.Type = fysh.Bones
+				} // check if its a floating point number
 			}
 
 			// (end of the fysh) <((><
 			if s.match("><") {
-				if f.Type != fysh.Bones {f.Type = fysh.Scales} // if not a floating point number then its an integer
+				if f.Type != fysh.Bones {
+					f.Type = fysh.Scales
+				} // if not a floating point number then its an integer
 			} else {
 				f.Type = fysh.Invalid
 			}
@@ -161,7 +165,7 @@ func (s *Scanner) rt(start int) fysh.Fysh {
 			f.Type = fysh.Sub
 			f.Value = s.input[start:s.peek]
 		}
-	case '>': // >> 
+	case '>': // >>
 		s.reel()
 		if s.periscope() == '<' { // >>< (increment)
 			f.Type = fysh.Ident
@@ -212,7 +216,9 @@ func (s *Scanner) rightFysh(start int) fysh.Fysh {
 			closeFysh = true
 			f.Type = fysh.Scales
 			for ch := s.periscope(); isScale(ch); ch = s.reel() {
-				if ch == '-' {f.Type = fysh.Bones}
+				if ch == '-' {
+					f.Type = fysh.Bones
+				}
 			}
 			if s.expect('@') { // ><(((@> (loop)
 				f.Type = fysh.Loop
@@ -259,13 +265,13 @@ func (s *Scanner) comment() fysh.Fysh {
 			if s.periscope() == 0 {
 				break
 			} else if s.match("<*/>") && s.periscope() == '<' {
-					f.Type = fysh.BlockC
-					break
+				f.Type = fysh.BlockC
+				break
 			}
 		}
-	} else if s.expect('/') && s.expect('>'){
-			f.Type = fysh.Comment
-			for ch := s.periscope(); ch != '\n' && ch != 0; ch = s.reel() {
+	} else if s.expect('/') && s.expect('>') {
+		f.Type = fysh.Comment
+		for ch := s.periscope(); ch != '\n' && ch != 0; ch = s.reel() {
 		}
 	}
 	return f
@@ -330,13 +336,13 @@ func (s *Scanner) ascii() fysh.Fysh {
 		}
 	case '~':
 		if s.expect('o') {
-			// ~o or ~o= 
+			// ~o or ~o=
 			if s.expect('=') || s.expect('≈') {
 				f = newFysh(fysh.LTE)
 			} else {
 				f = newFysh(fysh.LT)
 			}
-			// ~= 
+			// ~=
 		} else if s.expect('=') || s.expect('≈') {
 			f = newFysh(fysh.NEq)
 		} else {
@@ -387,7 +393,7 @@ const (
 func (s *Scanner) unicode() fysh.Fysh {
 	start := s.current
 	var f fysh.Fysh
-	
+
 	switch s.ch {
 	case '🦑':
 		f = newFysh(fysh.Squid)
@@ -411,7 +417,7 @@ func (s *Scanner) unicode() fysh.Fysh {
 					f.Value = string(s.input[start:s.peek])
 				}
 			} else {
-				// red heart emoji 
+				// red heart emoji
 				f = newFysh(fysh.Mul)
 			}
 		} else {
@@ -433,11 +439,12 @@ func (s *Scanner) unicode() fysh.Fysh {
 	case '⚓':
 		f = newFysh(fysh.LAnchor)
 	case '🫧':
-		for ch := s.periscope(); ch != '🫧' && ch != 0; ch = s.reel() {}
+		for ch := s.periscope(); ch != '🫧' && ch != 0; ch = s.reel() {
+		}
 		s.reel()
 		f = newFysh(fysh.String)
 		// 4 bytes for the emoji
-		f.Value = s.input[start+4:s.current]
+		f.Value = s.input[start+4 : s.current]
 	}
 	return f
 }
@@ -473,6 +480,3 @@ func (s *Scanner) skipSpace() {
 		s.reel()
 	}
 }
-
-
-

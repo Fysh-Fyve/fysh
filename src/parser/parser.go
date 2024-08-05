@@ -23,7 +23,7 @@ func (p ParserErrors) Error() string {
 	return out.String()
 }
 
-func (p *Parser) bonesToFloat (s string, neg bool) ast.Expression {
+func (p *Parser) bonesToFloat(s string, neg bool) ast.Expression {
 	// split bones to get the binary values e.g. "101-110" -> ["101", "110"]
 	arr := strings.Split(s, "-")
 
@@ -34,7 +34,7 @@ func (p *Parser) bonesToFloat (s string, neg bool) ast.Expression {
 		if v == "" {
 			arr[i] = "0"
 		}
-		
+
 		nums, err := strconv.ParseInt(arr[i], 2, 64)
 		if err != nil {
 			p.errors = append(p.errors, err)
@@ -57,7 +57,7 @@ func (p *Parser) bonesToFloat (s string, neg bool) ast.Expression {
 	if neg {
 		result = -result
 	}
-	
+
 	p.next()
 	return &ast.Bones{Value: result}
 }
