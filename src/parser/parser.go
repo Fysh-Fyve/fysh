@@ -158,6 +158,10 @@ func (p *Parser) primary() ast.Expression {
 	case fysh.Bones:
 		bin, neg := p.cur.Unfysh()
 		return p.bonesToFloat(bin, neg)
+	case fysh.String:
+		str := p.cur.Value
+		p.next()
+		return &ast.String{Value: str}
 
 	case fysh.Ident:
 		name, neg := p.cur.Unfysh()
