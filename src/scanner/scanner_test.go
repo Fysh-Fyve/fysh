@@ -140,6 +140,16 @@ func shortLoop(t *testing.T) {
 	testScanner(t, input, tests)
 }
 
+func testStrings(t *testing.T) {
+	input := "🫧This is a String🫧"
+	tests := []tt{
+		{fysh.String, "This is a String"},
+		{fysh.End, ""},
+	}
+
+	testScanner(t, input, tests)
+}
+
 func TestBiblicallyAccurateFysh(t *testing.T) {
 	input := `
 ><{{{oo> ~

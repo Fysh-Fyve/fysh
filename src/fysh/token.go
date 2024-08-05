@@ -56,6 +56,7 @@ const (
 	Sub     /* (submarine)< */
 	Squid   /* <~ return operator */
 	BreakFysh  /* ><\/> or <\/>< (break) */
+	String	/*🫧*/
 )
 
 var tokens = [...]string{
@@ -105,6 +106,7 @@ var tokens = [...]string{
 	Sub:     "SUBMARINE",
 	Squid:   "return",
 	BreakFysh:  "break",
+	String: "STRING",
 }
 
 type Fysh struct {
