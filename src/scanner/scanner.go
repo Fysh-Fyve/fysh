@@ -434,8 +434,10 @@ func (s *Scanner) unicode() fysh.Fysh {
 		f = newFysh(fysh.LAnchor)
 	case '🫧':
 		for ch := s.periscope(); ch != '🫧' && ch != 0; ch = s.reel() {}
+		s.reel()
 		f = newFysh(fysh.String)
-		f.Value = s.input[start:s.peek]
+		// 4 bytes for the emoji
+		f.Value = s.input[start+4:s.current]
 	}
 	return f
 }

@@ -122,7 +122,7 @@ func TestFactorial(t *testing.T) {
 
 	testScanner(t, input, tests)
 }
-func shortLoop(t *testing.T) {
+func TestShortLoop(t *testing.T) {
 	input := "><((@> @ 🌀 ><((@>><{({o> @><{({o> 🌀><{({o>"
 	tests := []tt{
 		lit(fysh.Loop),
@@ -140,10 +140,11 @@ func shortLoop(t *testing.T) {
 	testScanner(t, input, tests)
 }
 
-func testStrings(t *testing.T) {
-	input := "🫧This is a String🫧"
+func TestStrings(t *testing.T) {
+	input := "🫧This is a String🫧 ~"
 	tests := []tt{
 		{fysh.String, "This is a String"},
+		lit(fysh.Water),
 		{fysh.End, ""},
 	}
 

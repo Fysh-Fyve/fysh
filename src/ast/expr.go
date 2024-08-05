@@ -38,6 +38,12 @@ func (s *Bones) expression()     {}
 func (s *Bones) Literal() string { return fysh.Bones.String() }
 func (s *Bones) String() string  { return fmt.Sprintf("%f", s.Value) }
 
+type String struct{ Value string }
+
+func (s *String) expression()     {}
+func (s *String) Literal() string { return s.Value }
+func (s *String) String() string  { return fmt.Sprintf("\"%s\"", s.Value) }
+
 type Unary struct {
 	Op    unary.Op
 	Right Expression
@@ -122,3 +128,4 @@ var _ Expression = &Unary{}
 var _ Expression = &Call{}
 var _ Expression = &Aquarium{}
 var _ Expression = &Index{}
+var _ Expression = &String{}

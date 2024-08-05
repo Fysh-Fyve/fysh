@@ -126,6 +126,16 @@ func TestTanks(t *testing.T) {
 	testProgram(t, input, tests)
 }
 
+func TestStrings(t *testing.T) {
+	input := `
+><numbers> = 🫧Test String🫧 ~
+`
+	tests := []Test{
+		{"numbers = \"Test String\";"},
+	}
+	testProgram(t, input, tests)
+}
+
 func TestBlink(t *testing.T) {
 	input := `
 ><{{(((> (+o ><{> ~
