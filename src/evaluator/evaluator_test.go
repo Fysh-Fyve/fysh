@@ -11,10 +11,6 @@ import (
 	"github.com/Fysh-Fyve/fysh/src/scanner"
 )
 
-type Numeric interface {
-	int64 | float64
-}
-
 const floatTolerance = 1e-5
 
 func TestEvalIntegerExpression(t *testing.T) {
@@ -40,7 +36,7 @@ func TestEvalIntegerExpression(t *testing.T) {
 
 	for _, tt := range tests {
 		evaluated := testEval(t, tt.input)
-		testIntegerObject(t, evaluated, tt.expected)
+		testNumericObject(t, evaluated, tt.expected)
 	}
 }
 
@@ -73,7 +69,7 @@ func TestEvalFloatExpression(t *testing.T) {
 
 	for _, tt := range tests {
 		evaluated := testEval(t, tt.input)
-		testFloatObject(t, evaluated, tt.expected)
+		testNumericObject(t, evaluated, tt.expected)
 	}
 }
 
@@ -94,7 +90,7 @@ func TestEvalBooleanExpression(t *testing.T) {
 
 	for _, tt := range tests {
 		evaluated := testEval(t, tt.input)
-		testIntegerObject(t, evaluated, tt.expected)
+		testNumericObject(t, evaluated, tt.expected)
 	}
 }
 
@@ -113,7 +109,7 @@ func TestBangOperator(t *testing.T) {
 
 	for _, tt := range tests {
 		evaluated := testEval(t, tt.input)
-		testIntegerObject(t, evaluated, tt.expected)
+		testNumericObject(t, evaluated, tt.expected)
 	}
 }
 
@@ -134,7 +130,7 @@ func TestIfElseExpressions(t *testing.T) {
 		evaluated := testEval(t, tt.input)
 		integer, ok := tt.expected.(int)
 		if ok {
-			testIntegerObject(t, evaluated, int64(integer))
+			testNumericObject(t, evaluated, int64(integer))
 		} else {
 			testNullObject(t, evaluated)
 		}
@@ -187,7 +183,7 @@ f(10);`,
 
 	for _, tt := range tests {
 		evaluated := testEval(t, tt.input)
-		testIntegerObject(t, evaluated, tt.expected)
+		testNumericObject(t, evaluated, tt.expected)
 	}
 }
 
@@ -285,7 +281,7 @@ func TestLetStatements(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		testIntegerObject(t, testEval(t, tt.input), tt.expected)
+		testNumericObject(t, testEval(t, tt.input), tt.expected)
 	}
 }
 
@@ -330,7 +326,7 @@ func TestFunctionApplication(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		testIntegerObject(t, testEval(t, tt.input), tt.expected)
+		testNumericObject(t, testEval(t, tt.input), tt.expected)
 	}
 }
 
@@ -349,7 +345,7 @@ let ourFunction = fn(first) {
 
 ourFunction(20) + first + second;`
 
-	testIntegerObject(t, testEval(t, input), 70)
+	testNumericObject(t, testEval(t, input), int64(70))
 }
 
 func TestClosures(t *testing.T) {
@@ -362,7 +358,7 @@ let newAdder = fn(x) {
 let addTwo = newAdder(2);
 addTwo(2);`
 
-	testIntegerObject(t, testEval(t, input), 4)
+	testNumericObject(t, testEval(t, input), int64(4))
 }
 
 func TestStringLiteral(t *testing.T) {
@@ -424,7 +420,7 @@ func TestBuiltinFunctions(t *testing.T) {
 
 		switch expected := tt.expected.(type) {
 		case int:
-			testIntegerObject(t, evaluated, int64(expected))
+			testNumericObject(t, evaluated, int64(expected))
 		case nil:
 			testNullObject(t, evaluated)
 		case string:
@@ -452,7 +448,7 @@ func TestBuiltinFunctions(t *testing.T) {
 			}
 
 			for i, expectedElem := range expected {
-				testIntegerObject(t, array.Elements[i], int64(expectedElem))
+				testNumericObject(t, array.Elements[i], int64(expectedElem))
 			}
 		}
 	}
@@ -472,9 +468,9 @@ func TestArrayLiterals(t *testing.T) {
 			len(result.Elements))
 	}
 
-	testIntegerObject(t, result.Elements[0], 1)
-	testIntegerObject(t, result.Elements[1], 4)
-	testIntegerObject(t, result.Elements[2], 6)
+	testNumericObject(t, result.Elements[0], int64(1))
+	testNumericObject(t, result.Elements[1], int64(4))
+	testNumericObject(t, result.Elements[2], int64(6))
 }
 
 func TestArrayIndexExpressions(t *testing.T) {
@@ -498,7 +494,7 @@ func TestArrayIndexExpressions(t *testing.T) {
 		evaluated := testEval(t, tt.input)
 		integer, ok := tt.expected.(int)
 		if ok {
-			testIntegerObject(t, evaluated, int64(integer))
+			testNumericObject(t, evaluated, int64(integer))
 		} else {
 			testNullObject(t, evaluated)
 		}
@@ -542,7 +538,7 @@ func TestHashLiterals(t *testing.T) {
 			t.Errorf("no pair for given key in Pairs")
 		}
 
-		testIntegerObject(t, pair.Value, expectedValue)
+		testNumericObject(t, pair.Value, expectedValue)
 	}
 }
 
@@ -586,7 +582,7 @@ func TestHashIndexExpressions(t *testing.T) {
 		evaluated := testEval(t, tt.input)
 		integer, ok := tt.expected.(int)
 		if ok {
-			testIntegerObject(t, evaluated, int64(integer))
+			testNumericObject(t, evaluated, int64(integer))
 		} else {
 			testNullObject(t, evaluated)
 		}
@@ -607,31 +603,19 @@ func testEval(t testing.TB, input string) object.Object {
 	return evaluator.Eval(program, env)
 }
 
-func testIntegerObject(t testing.TB, obj object.Object, expected int64) bool {
+func testNumericObject[T object.Numeric](t testing.TB, obj object.Object, expected T) bool {
 	t.Helper()
-	result, ok := obj.(*object.Integer)
+	result, ok := obj.(object.NumericObj[T])
 	if !ok {
-		t.Errorf("object is not an Integer. got=%T (%+v)", obj, obj)
+		t.Errorf("object is not %T. got=%T (%+v)", new(object.NumericObj[T]), obj, obj)
 		return false
 	}
-	if result.Value != expected {
-		t.Errorf("object has wrong value. got=%d, want=%d",
-			result.Value, expected)
-		return false
-	}
-
-	return true
-}
-
-func testFloatObject(t testing.TB, obj object.Object, expected float64) bool {
-	t.Helper()
-	result, ok := obj.(*object.Float)
-	if !ok {
-		t.Errorf("object is not a Float. got=%T (%+v)", obj, obj)
-		return false
-	}
-	if math.Abs(result.Value-expected) > floatTolerance {
-		t.Errorf("object has wrong value. got=%f, want=%f", result.Value, expected)
+	if result.Val() != expected {
+		if math.Abs(float64(result.Val()-expected)) <= floatTolerance {
+			return true
+		}
+		t.Errorf("object has wrong value. got=%v, want=%v",
+			result.Val(), expected)
 		return false
 	}
 
