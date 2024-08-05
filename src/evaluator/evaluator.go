@@ -56,7 +56,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		return &object.Float{Value: node.Value}
 
 	case *ast.String:
-		return &object.String{Value: node.Value}
+		return &object.String{Value: string(node.Value)}
 
 	// case *ast.Boolean:
 	// 	return nativeBoolToBooleanObject(node.Value)

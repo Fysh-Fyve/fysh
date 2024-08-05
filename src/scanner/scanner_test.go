@@ -16,6 +16,25 @@ type tt struct {
 
 func lit(f fysh.Species) tt { return tt{f, f.String()} }
 
+func TestUnclosedIdents(t *testing.T) {
+	inputs := []string{
+		">(abs ",
+		"(abs ",
+		"><fysh ",
+		">><fysh ",
+		"<fysh",
+		"🫧Unclosed",
+	}
+	for _, tc := range inputs {
+		tests := []tt{
+			{fysh.Invalid, tc},
+			{fysh.End, ""},
+		}
+
+		testScanner(t, tc, tests)
+	}
+}
+
 func TestSub(t *testing.T) {
 	input := `
 >(abs) ><num>
@@ -144,7 +163,7 @@ func TestShortLoop(t *testing.T) {
 func TestStrings(t *testing.T) {
 	input := "🫧This is a String🫧 ~"
 	tests := []tt{
-		{fysh.String, "This is a String"},
+		{fysh.String, "🫧This is a String🫧"},
 		lit(fysh.Water),
 		{fysh.End, ""},
 	}
