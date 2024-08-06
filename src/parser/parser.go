@@ -437,7 +437,7 @@ func (p *Parser) statement() ast.Statement {
 	switch p.cur.Type {
 	case fysh.BreakFysh:
 		return p.breakStmt()
-	case fysh.LFysh:
+	case fysh.OpenFysh:
 		return p.block()
 	case fysh.Loop:
 		return p.loop()
@@ -471,12 +471,12 @@ func (p *Parser) statement() ast.Statement {
 }
 
 func (p *Parser) block() *ast.BlockStatement {
-	if !p.expectFysh(fysh.LFysh) {
+	if !p.expectFysh(fysh.OpenFysh) {
 		return nil
 	}
 	b := &ast.BlockStatement{Statements: []ast.Statement{}}
 
-	for !p.cur.Type.IsOneOf(fysh.RFysh, fysh.End, fysh.Invalid) {
+	for !p.cur.Type.IsOneOf(fysh.CloseFysh, fysh.End, fysh.Invalid) {
 		s := p.statement()
 		if s == nil {
 			return nil
@@ -484,7 +484,7 @@ func (p *Parser) block() *ast.BlockStatement {
 		b.Statements = append(b.Statements, s)
 	}
 
-	if !p.expectFysh(fysh.RFysh) {
+	if !p.expectFysh(fysh.CloseFysh) {
 		return nil
 	}
 
