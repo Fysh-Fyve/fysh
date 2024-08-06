@@ -58,6 +58,26 @@ func isScale(ch rune) bool {
 	return ch == '{' || ch == '}' || ch == '(' || ch == ')' || ch == '-'
 }
 
+func isLeftTale(ch rune) bool {
+	leftTales := []rune{'<', '⧼', '⟨', '⟪', '〈', '⦃', '⦅', '⦇', '⦉', '⦋', '⦍', '⦏', '⦑', '⦓', '⦕', '〈', '❬', '❮', '❰', '❲', '❴'}
+	for _, tale := range leftTales {
+		if ch == tale {
+			return true
+		}
+	}
+	return false
+}
+
+func isRightTale(ch rune) bool {
+	rightTales := []rune{'>', '⧽', '⟩', '⟫', '〉', '⦄', '⦆', '⦈', '⦊', '⦌', '⦎', '⦐', '⦒', '⦔', '⦖', '〉', '❭', '❯', '❱', '❳', '❵'}
+	for _, tale := range rightTales {
+		if ch == tale {
+			return true
+		}
+	}
+	return false
+}
+
 // Peeks at the next character without advancing the scanner
 func (s *Scanner) periscope() rune {
 	if s.peek >= len(s.input) {
@@ -415,6 +435,8 @@ func (s *Scanner) unicode() fysh.Fysh {
 	var f fysh.Fysh
 
 	switch s.ch {
+	case '⧽', '⟩', '⟫', '〉', '⦄', '⦆', '⦈', '⦊', '⦌', '⦎', '⦐', '⦒', '⦔', '⦖', '〉', '❭', '❯', '❱', '❳', '❵':
+		f = s.rt(start)
 	case '🦑':
 		f = newFysh(fysh.Squid)
 	case '💝', '☙', '♥', '❣', '❥', '❦', '❧', '🎔', '🖤', '💙', '💚', '💛', '💜', '🧡', '🤍', '🤎', '🩶', '🩷', '🩵', '💓', '💕', '💖', '💗', '💘', '🫀', '💌', '💞', '💟', '🫶', '♡':

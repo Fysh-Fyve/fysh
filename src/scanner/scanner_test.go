@@ -78,6 +78,34 @@ func TestSub(t *testing.T) {
 	testScanner(t, input, tests)
 }
 
+func TestFancyRightTails(t *testing.T) {
+	input := `><> ⟩<> ⟫<> 〉<> ⦄<> ⦆<> ⦈<> ⦊<> ⦌<> ⦎<> ⦐<> ⦒<> ⦔<> ⦖<> 〉<> ❭<> ❯<> ❱<> ❳<> ❵<>`
+	tests := []tt{
+		lit(fysh.LFysh),
+		lit(fysh.LFysh),
+		lit(fysh.LFysh),
+		lit(fysh.LFysh),
+		lit(fysh.LFysh),
+		lit(fysh.LFysh),
+		lit(fysh.LFysh),
+		lit(fysh.LFysh),
+		lit(fysh.LFysh),
+		lit(fysh.LFysh),
+		lit(fysh.LFysh),
+		lit(fysh.LFysh),
+		lit(fysh.LFysh),
+		lit(fysh.LFysh),
+		lit(fysh.LFysh),
+		lit(fysh.LFysh),
+		lit(fysh.LFysh),
+		lit(fysh.LFysh),
+		lit(fysh.LFysh),
+		lit(fysh.LFysh),
+	}
+	testScanner(t, input, tests)
+
+}
+
 func TestFactorial(t *testing.T) {
 	input := `
 ><//> Comment
