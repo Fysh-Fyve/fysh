@@ -153,8 +153,8 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run esbuild-base -- --minify",
-    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
+    "vscode:prepublish": "npm run esbuild-base",
+    "esbuild-base": "esbuild ./src/extension.ts --bundle --minify --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
     "watch": "tsc -b -w",
     "lint": "eslint ./src --ext .ts,.tsx",
     "package": "pnpm vsce package --no-dependencies",
