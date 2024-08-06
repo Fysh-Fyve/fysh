@@ -9,9 +9,8 @@
 4. Press the run button.
 
 ### ⚙️ Option 2: Using Command Line
-1. Clone the repository.
-2. Run `go build`.
-3. Execute with `./fysh <filename>.fysh`.
+1. Install the latest version `go install github.com/Fysh-Fyve/fysh@latest`
+2. Execute with `fysh <filename>.fysh`.
 
 ## 🐙 Fyshing Manual
 
