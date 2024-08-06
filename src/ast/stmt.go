@@ -42,7 +42,7 @@ type AssignmentStatement struct {
 
 func (a *AssignmentStatement) top()            {}
 func (a *AssignmentStatement) statement()      {}
-func (a *AssignmentStatement) Literal() string { return fysh.LFysh.String() }
+func (a *AssignmentStatement) Literal() string { return fysh.OpenFysh.String() }
 func (a *AssignmentStatement) String() string {
 	return fmt.Sprintf("%s %s %s%s", a.Left, fysh.Assign, a.Right, fysh.Water)
 }
@@ -51,10 +51,10 @@ type BlockStatement struct{ Statements []Statement }
 
 func (b *BlockStatement) top()            {}
 func (b *BlockStatement) statement()      {}
-func (b *BlockStatement) Literal() string { return fysh.LFysh.String() }
+func (b *BlockStatement) Literal() string { return fysh.OpenFysh.String() }
 func (b *BlockStatement) String() string {
 	var out bytes.Buffer
-	out.WriteString(fysh.LFysh.String())
+	out.WriteString(fysh.OpenFysh.String())
 	for i, s := range b.Statements {
 		if i == 0 {
 			out.WriteString("\n")
@@ -62,7 +62,7 @@ func (b *BlockStatement) String() string {
 		out.WriteString(s.String())
 		out.WriteString("\n")
 	}
-	out.WriteString(fysh.RFysh.String())
+	out.WriteString(fysh.CloseFysh.String())
 	return out.String()
 }
 

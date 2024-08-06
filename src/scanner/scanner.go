@@ -153,7 +153,7 @@ func (s *Scanner) lt(start int) fysh.Fysh {
 	case '>':
 		s.reel()
 		if s.expect('<') {
-			f = newFysh(fysh.RFysh)
+			f = newFysh(fysh.CloseFysh)
 		} else {
 			f = fyshWithValue(fysh.Invalid, s.input[start:s.peek])
 		}
@@ -248,7 +248,7 @@ func (s *Scanner) rightFysh(start int) fysh.Fysh {
 	case '/': // ><// (comment) or ></* (block comment)
 		f = s.comment()
 	case '>': // ><> // open bracket
-		f.Type = fysh.LFysh
+		f.Type = fysh.OpenFysh
 		noValue = true
 		closeFysh = true
 	default:

@@ -30,8 +30,8 @@ const (
 	RTank     /* ] */
 	LBowl     /* ( (Used for FISHS (BEDMAS)) */
 	RBowl     /* ) */
-	LFysh     /* ><> (same as open curly bracket '{' ) */
-	RFysh     /* <>< (same as closing curly bracket '}' ) */
+	OpenFysh  /* ><> (same as open curly bracket '{' ) */
+	CloseFysh /* <>< (same as closing curly bracket '}' ) */
 	LWTF      /* WHAT THE FYSHs(Throw error opening) ><!@#$> */
 	RWTF      /* WHAT THE FYSH (Throw error closing) <!@#$>< */
 	Grilled   /* Random fysh ><###> */
@@ -78,8 +78,8 @@ var tokens = [...]string{
 	RTank:     "]",
 	LBowl:     "(",
 	RBowl:     ")",
-	LFysh:     "{",
-	RFysh:     "}",
+	OpenFysh:  "{",
+	CloseFysh: "}",
 	LWTF:      "WTF(",
 	RWTF:      ")WTF",
 	Grilled:   "><###>",
