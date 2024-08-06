@@ -58,26 +58,6 @@ func isScale(ch rune) bool {
 	return ch == '{' || ch == '}' || ch == '(' || ch == ')' || ch == '-'
 }
 
-func isLeftTale(ch rune) bool {
-	leftTales := []rune{'<', '⧼', '⟨', '⟪', '〈', '⦃', '⦅', '⦇', '⦉', '⦋', '⦍', '⦏', '⦑', '⦓', '⦕', '〈', '❬', '❮', '❰', '❲', '❴'}
-	for _, tale := range leftTales {
-		if ch == tale {
-			return true
-		}
-	}
-	return false
-}
-
-func isRightTale(ch rune) bool {
-	rightTales := []rune{'>', '⧽', '⟩', '⟫', '〉', '⦄', '⦆', '⦈', '⦊', '⦌', '⦎', '⦐', '⦒', '⦔', '⦖', '〉', '❭', '❯', '❱', '❳', '❵'}
-	for _, tale := range rightTales {
-		if ch == tale {
-			return true
-		}
-	}
-	return false
-}
-
 // Peeks at the next character without advancing the scanner
 func (s *Scanner) periscope() rune {
 	if s.peek >= len(s.input) {
@@ -101,6 +81,14 @@ func (s *Scanner) reel() rune {
 		s.peek += width
 	}
 	return s.periscope()
+}
+
+func (s *Scanner) expectLeftTail() bool {
+	res := IsLeftTailSwitch(s.periscope())
+	if res {
+		s.reel()
+	}
+	return res
 }
 
 // Expects a specific rune and advances if it matches
@@ -152,7 +140,7 @@ func (s *Scanner) lt(start int) fysh.Fysh {
 		f = newFysh(fysh.LShift)
 	case '>':
 		s.reel()
-		if s.expect('<') {
+		if s.expectLeftTail() {
 			f = newFysh(fysh.CloseFysh)
 		} else {
 			f = fyshWithValue(fysh.Invalid, s.input[start:s.peek])
@@ -170,7 +158,7 @@ func (s *Scanner) lt(start int) fysh.Fysh {
 			}
 
 			// (end of the fysh) <((><
-			if s.match("><") {
+			if s.expect('>') && s.expectLeftTail() {
 				if f.Type != fysh.Bones {
 					f.Type = fysh.Scales
 				} // if not a floating point number then its an integer
@@ -180,8 +168,8 @@ func (s *Scanner) lt(start int) fysh.Fysh {
 		} else {
 			for ch := s.periscope(); isIdentBody(ch); ch = s.reel() {
 			}
-			if s.match("><") {
-				if s.expect('<') { // <><< (decrement)
+			if s.expect('>') && s.expectLeftTail() {
+				if s.expectLeftTail() { // <><< (decrement)
 					f.Type = fysh.Dec
 				} else { // <>< (identifier)
 					f.Type = fysh.Ident
@@ -206,7 +194,7 @@ func (s *Scanner) rt(start int) fysh.Fysh {
 			f.Type = fysh.Sub
 		}
 		f.Value = s.input[start:s.peek]
-	case '>': // >>
+	case '>', '⧽', '⟩', '⟫', '〉', '⦄', '⦆', '⦈', '⦊', '⦌', '⦎', '⦐', '⦒', '⦔', '⦖', '〉', '❭', '❯', '❱', '❳', '❵':
 		s.reel()
 		if s.expect('<') { // >>< (increment)
 			for ch := s.periscope(); isIdentBody(ch); ch = s.reel() {
@@ -298,18 +286,18 @@ func (s *Scanner) comment() fysh.Fysh {
 	var f fysh.Fysh
 
 	s.reel()
-	if s.expect('*') && s.expect('>') {
+	if s.match("*>") {
 		for {
 			for ch := s.periscope(); ch != '<' && ch != 0; ch = s.reel() {
 			}
 			if s.periscope() == 0 {
 				break
-			} else if s.match("<*/>") && s.periscope() == '<' {
+			} else if s.match("<*/>") && IsLeftTailSwitch(s.periscope()) {
 				f.Type = fysh.BlockC
 				break
 			}
 		}
-	} else if s.expect('/') && s.expect('>') {
+	} else if s.match("/>") {
 		f.Type = fysh.Comment
 		for ch := s.periscope(); ch != '\n' && ch != 0; ch = s.reel() {
 		}
@@ -349,7 +337,7 @@ func (s *Scanner) ascii() fysh.Fysh {
 		} else if isIdentStart(s.periscope()) {
 			for ch := s.periscope(); isIdentBody(ch); ch = s.reel() {
 			}
-			if s.match(")<") {
+			if s.expect(')') && s.expectLeftTail() {
 				f.Type = fysh.Sub
 			}
 			f.Value = s.input[start:s.peek]
