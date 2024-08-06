@@ -13,6 +13,9 @@ type Test struct{ statement string }
 func testProgram(t testing.TB, input string, tests []Test) {
 	t.Helper()
 	s, err := scanner.NewFile("parser-test-input", bytes.NewBuffer([]byte(input)))
+	if err != nil {
+		t.Fatal(err)
+	}
 	p := parser.New(s)
 	prog, err := p.Parse()
 	if err != nil {

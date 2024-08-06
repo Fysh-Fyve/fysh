@@ -21,7 +21,7 @@ func Start(in io.Reader, out io.Writer, prompt bool) {
 
 	for {
 		if prompt {
-			fmt.Fprintf(out, PROMPT)
+			fmt.Fprint(out, PROMPT)
 		}
 		scanned := s.Scan()
 		if !scanned {
@@ -44,8 +44,14 @@ func Start(in io.Reader, out io.Writer, prompt bool) {
 
 		evaluated := evaluator.Eval(program, env)
 		if evaluated != nil {
-			io.WriteString(out, evaluated.Inspect())
-			io.WriteString(out, "\n")
+			_, err := io.WriteString(out, evaluated.Inspect())
+			if err != nil {
+				log.Println(err)
+			}
+			_, err = io.WriteString(out, "\n")
+			if err != nil {
+				log.Println(err)
+			}
 		}
 	}
 }

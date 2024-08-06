@@ -418,8 +418,7 @@ func (s *Scanner) unicode() fysh.Fysh {
 	case '🦑':
 		f = newFysh(fysh.Squid)
 	case '💝', '☙', '♥', '❣', '❥', '❦', '❧', '🎔', '🖤', '💙', '💚', '💛', '💜', '🧡', '🤍', '🤎', '🩶', '🩷', '🩵', '💓', '💕', '💖', '💗', '💘', '🫀', '💌', '💞', '💟', '🫶', '♡':
-		if s.expect(EMOJIFY) {
-		}
+		s.expect(EMOJIFY)
 		if ch := s.periscope(); ch >= SKIN_MIN && ch <= SKIN_MAX {
 			s.reel()
 		}

@@ -104,8 +104,8 @@ func (p *Parser) list() ast.Expression {
 	var sub []byte
 	neg := false
 	for !p.cur.Type.IsOneOf(fysh.RTank, fysh.End, fysh.Invalid) {
-		if p.expectFysh(fysh.Food, true) {
-		}
+		p.expectFysh(fysh.Food, true)
+
 		if p.cur.Type == fysh.Sub {
 			if len(sub) > 0 {
 				p.errors = append(p.errors, fmt.Errorf("conflicting calls: %s", sub))
