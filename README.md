@@ -1,236 +1,179 @@
-# 🌊 Dive into Fysh: A Programming Language for the World to Sea 🐠
+# 🐋 The Fyshhiker's Guide to the Ocean
 
-## Welcome to the Oceanic Future of Coding!
+## 👩‍💻 How to Compile and Run Fysh
 
-### 🐬 Meet Fysh: Not Just Another Drop in the Programming Waters 🌟
+### ⚙️ Option 1: Using VSCode
+1. Download the `Fysh` VSCode extension.
+2. Create a `.fysh` file.
+3. Write your code.
+4. Press the run button.
 
-**Introducing Fysh** - the latest, greatest splash in the programming waters!
-Fysh isn't your garden-variety coding language; it's the world's most
-_inclusive_ dialect, decipherable by terrestrials and sea creatures alike\*. Imagine a language so fluid, so versatile, that dolphins could debug your code and octopuses parallelize your processes. It's not just a programming language; it's an aquatic revolution!
+### ⚙️ Option 2: Using Command Line
+1. Clone the repository.
+2. Run `go build`.
+3. Execute with `./fysh <filename>.fysh`.
 
-### 🐟 A Revolutionary Ripple in the Digital Ocean
+## 🐙 Fyshing Manual
 
-For centuries, the fishy citizens of our planet's vast waters have been
-overlooked, their contributions to the tech world as invisible as their thoughts
-on quantum mechanics. But no longer! Fysh gives these silent swimmers the
-platform they've always deserved. At last, there's a beacon of hope, a
-symbol of unity across species, a... well, let's be honest, a bit of a wet dream for those who've always believed in inter-species collaboration.
+### 🐠 Chapter 1: Fysh Syntax
+<details>
+  <summary>Click to expand</summary>
 
-### 🌐 Fysh: Coding Without Borders
-
-Fysh – because why should humans have all the fun? With Fysh, we're scripting a
-better, brighter, more inclusive tomorrow. Envision a world where salmon suggest
-improvements to your UI, and jellyfish judiciously refactor your backend.
-Together, we can create a wave of change, one line of code at a time.
-
-### 🚫 **Discalmers:**
-
-- **Aquatic Comprehension**\*: The ability of sea creatures to actually
-  understand Fysh remains unconfirmed. Any effort to test this understanding
-  might result in puzzled expressions from marine and terrestrial observers.
-
-- **Communication Limitations**: Given the current linguistic barrier with our
-  underwater counterparts, Fysh temporarily excludes string variables. Our
-  marine linguistics team is diving deep into oceanic communication and promises updates as new discoveries surface.
-
-Dive into Fysh, and let's make waves in the world of programming, together!
-🌊👩‍💻🐟
-
-## 👩‍💻 How to compyle and run fysh:
-
-- Download the `Fysh` VScode extension
-- Create a `.fysh` file
-- Start writing code
-- Press the run button
-
-### ⚙️ Option 2:
-
-- Clone the repo
-- Run `go build`
-- Run `./fysh <filename>.fysh`
-
-## 🐠 Fysh Syntax
-This is fysh.
-
+#### 🐟 Variables
+- Meet Steven, our fishy friend. In Fysh, variables like Steven are declared with `><name>`. Every line of fysh ends with a wave `~`.
 ```fysh
-><>
+><Steven> ~
 ```
 
-Fysh have to be terminated `~`.
-
+- Steven has binary scales. In Fysh, `}` represents `1` and `)` represents `0`. Here, Steven is valued at `0b101`, which is `5` in decimal.
 ```fysh
-><> ~
+><steven> = ><})}> ~ 
 ```
 
-This is Steven.
-
-```fysh
-><steven> ~
-```
-
-Steven has binary scales. `}` represents 1 and `)` represents 0. Steven is
-valued at `0b101`. (5 in decimal)
-
-```fysh
-><steven> = ><})}> ~
-```
-
-Steven doesn’t give a flying fysh about scale direction. ≈ for variable
-assignment is cool with them too.
-
+- Steven doesn’t give a flying fysh about scale direction. `≈` for variable assignment is cool with them too.
 ```fysh
 ><steven> ≈ ><}({> ~
 ```
 
-Steven is blind. You have the power to bless them with sight, but it's
-completely optional. (you can make them biblically accurate by giving them multiple eyes)
-
+#### 👁️ Optional Visuals
+- Steven is blind. You have the power to bless them with sight, but it's completely optional! You can make them biblically accurate by giving them multiple eyes.
 ```fysh
 ><steven> ≈ ><{({°> ~
 ><steven> ≈ ><{({o> ~
-
 ><steven> ≈ ><{({°°> ~
 ><steven> ≈ ><{({o°> ~
-
 ><steven> = ><{({°o°> ~
 ```
 
-A school of fysh's value is equal to the sum of each individual member. 
-This gives Steven a value of `0b101 = 0b100 + 0b001`. (5 = 4 + 1)
-
+#### ➕ Arithmetic with Variables
+- **Summing values:** A school of Fysh's value is the sum of each member. This gives Steven a value of `0b101 = 0b100 + 0b001 = ` (5 = 4 + 1).
 ```fysh
 ><steven> ≈ ><{((°> ><(({°> ~
 ```
 
-Sometimes fysh want to be different and swim the other direction. 
-This takes away from the school’s value. This gives Steven a value of.
-`0b101 = 0b111 - 0b010`. (5 = 7 - 2)
-
+- **Subtracting values:** Sometimes fysh are negative and start to swim backwards. This takes away from the school's value. Steven's value is `0b101 = 0b111 - 0b010 ` (5 = 7 - 2).
 ```fysh
-><steven> ≈ ><{{{°> <°)})>< ~
+><steven> ≈ ><{{{°> <°)})>< ~  # 0b101 = 0b111 - 0b010
 ```
 
-Fysh often get lonely. This loneliness causes fysh to meet new fysh and
-proliferate. This gives Steven a value of `0b101010 = 0b110 * 0b111`. (42 = 6 * 7)
-
+- **Multiplying values:** Fysh often get lonely. This loneliness causes fysh to meet new fysh and proliferate. This gives Steven a value of `0b101010 = 0b110 * 0b111`. (42 = 6 * 7)
 ```fysh
 ><steven> = ><{{(°> <3 ><{{{°> ~
-><steven> ≈ ><{{(°>  ♡ ><{{{°> ~
-
-><steven> ≈ ><{{(°> ❤️ ><{{{°> ~
-><steven> ≈ ><{{(°> ❤️‍🔥 ><{{{°> ~
-
-><steven> ≈ ><{{(°> 🫀 ><{{{°> ~
-><steven> ≈ ><{{(°> 🫶 ><{{{°> ~
-
-.
-.
-.
-
-><//> (Should work with any heart, if we're missing any, let us know)
+><steven> ≈ ><{{(°> ♡ ><{{{°> ~
 ```
 
-Not every fysh story is a happy one. At times, separation is unavoidable, and
-their division breaks their heart. This gives Steven a value of
-`0b101 = 0b11001 / 0b101`. (5 = 25 / 5)
-
+- **Dividing values:** Not every fysh story is a happy one. At times, separation is inevitable, and their division breaks their heart. This gives Steven a value of `0b101 = 0b11001 / 0b101`. (5 = 25 / 5)
 ```fysh
+><steven> ≈ ><{{(({°> </3 ><{({°> ~
 ><steven> ≈ ><{{(({°> 💔 ><{({°> ~
-><steven> = ><{{(({o> </3 ><{({o> ~
 ```
 
-Fysh are often abducted and forced into fyshbowls for terrestrials'
-amusment. This isolates the fysh and makes them sad. Fyshbowls are
-represented by `( )`. This gives Steven a value of
-`0b101 = 0b101 / (0b101 - 0b100)`. (5 = 5 / (5 - 4))
-
+- **Using parentheses for complex operations:** Fysh are often abducted and isolated into fyshbowls `( )` for terrestrials' amusment. This makes the fysh sad and gives Steven a value of `0b101 = 0b101 / (0b101 - 0b100)`. (5 = 5 / (5 - 4))
 ```fysh
 ><steven> ≈ ><{({°> 💔 ( ><{({°> <°}))>< ) ~
 ```
 
-As life goes on, we learn from our mistakes and improve. Steven’s self help
-journey allowed them to grow an extra tail, incrementing their value by 1.
-
+#### 🔼🔽 Increment and Decrement
+- **Increment:** As life goes on, we learn from our mistakes and improve. Steven’s self help journey allowed them to grow an extra tail, incrementing their value by 1.
 ```fysh
 >><steven> ~
 ```
 
-Sometimes we feel like a fyshup, a failure. And that's ok, it’s a part of being
-fysh. However for some fysh, this feeling is too much to handle and is
-internalized. They haven’t received the emotional support they need and have
-gone on a downward spiral, causing them to feel worthless. They begin to retreat
-and try to swim away in the opposite direction causing their value to decrement
-by 1.
-
+- **Decrement:** Sometimes we feel like a fyshup, a failure. And that's ok, it’s a part of being fysh. However for some fysh, this feeling is too much to handle and is internalized. They haven’t received the emotional support they need and have gone on a downward spiral, causing them to feel worthless. They begin to retreat and try to swim away in the opposite direction causing their value to decrement by 1.
 ```fysh
 <steven><< ~
 ```
 
-BEDMAS/PEMDAS has been taught to humans for over a century. But what about fysh?
-Fysh have a different way of doing things. Introducing FISHS: Fyshbowl,
-Increment, Species reproduction, Heartbreak, and School of fish ( (), >><>, ♡ , 💔, ><> <>< ). 
-This gives Steven a value of
-`0b10101111 = (0b11001 + 1) + 0b110 * 0b11001 - 0b1100 / (0b110 + 0b110)`. (175 = (25 + 1) + 6 * 25 - 12 / (6 + 6))
-
-```fysh
-><steven> ≈ >><{{(({°>  ><{{(°> ♡ ><{{(({°> <°}}))>< 💔 ( ><{{(°> ><{{(°> )  ~
-```
-
-Sometimes Steven fyshs up and throws an error. This can be done using two WTF
-(What The Fysh) fysh encompassing a string.
-
-```fysh
-><!@#$>
-	What The Fysh?!
-<!@#$><
-```
-
-Navigator fysh are used to guide the reader through the code. They are
-represented by `><//>`. (comments)
-
-```fysh
-><//> What's cookin good lookin?
-```
-
-Sometimes, the journey through the sea of code is long and dark. In these cases,
-multiline comments are used to provide a more detailed explanation of the code.
-They are represented by `></*>` and `<*\><`. (multiline comments)
-
-```fysh
-></*>
-How to grill a fysh:
-1. Catch a fysh
-2. Grill the fysh
-3. Eat the fysh
-<*/><
-```
-
-This is a grilled fysh. It generates a random signed 32-bit number that determines the
+#### 🍢 Random Number Generation
+**Random Number:** This is a grilled fysh. It generates a random signed 32-bit number that determines the
 doneness of the fysh.
-
 ```fysh
-><###> ~
+><####> ~
+```
+</details>
+
+### 📊 Chapter 2: Data Types
+
+<details>
+  <summary>Click to expand</summary>
+
+#### 📏 Integers
+- **Integer:** Steven is an integer represented using binary scales. They have scales that are either `1` or `0`. Steven's value is `0b101`, which is `5` in decimal.
+```fysh
+><steven> ≈ ><{({°> ~
 ```
 
-Not all fysh are created equal. But sometimes they are. We can check using `≈≈`
-or `==`.
-
+#### 📐 Floating Point Numbers
+- **Floats:** Steven can also be a float fysh. To seperate the integer and decimal parts, we use a fysh bone `-`. Steven's value is `5.5`.
 ```fysh
-><steven> ≈≈ ><theFysh> ~
-><steven> == ><theFysh> ~
+><steven> ≈ ><{({-{({°> ~
+```
+- **Floats with multiple bones:** Steven can also have multiple bones to seperate each decimal place. Steven's value is `5 + 0.2 + 0.05 = 5.25`.
+```fysh
+><steven> ≈ ><{({-{(-{({°> ~
 ```
 
-Sometimes we want to check if two fysh are different. This can be done using
-`~≈` or `~=`.
-
+- **Floats with numbers larger than 9:** If a value in the decimal place is greater than 9, it will occupy an extra decimal place. Steven's value is `15 + 0.15 + 0.005 15.155`.
 ```fysh
-><steven> ~≈ ><theFysh> ~
-><steven> ~= ><theFysh> ~
+><steven> ≈ ><{{{{-{{{{-{({°> ~
 ```
 
-Tadpoles are fysh too. They swim towards bigger fysh
-(they like the danger) and are represented by `~o or o~`. Here we are checking
-if Steven is bigger than 5 and less than 7 respectively. 
+#### 📝 Strings
+- **Strings:** Steven can also be a string fysh. They speak using bubbles. Steven's value is `"Hello, World!"`.
+```fysh
+><steven> ≈ 🫧Hello, World!🫧 ~
+```
+
+#### 📦 Arrays and Traversal
+- **Arrays:** A fysh tank `[ ]` is used create an array. Each item is separated by fysh food -.value is `[0b010, 0b010] = [2, 2]`.
+```fysh
+><steven> ≈ [><({(°> - ><({(°>] ~
+```
+
+- **Accessing Array Elements:** These fysh tanks can be traversed using a fysh tank `[ ]` with a number inside it. Steven returns the element at index 1. Array indexes start at 0.
+```fysh
+><steven>[><(({°>] ~
+```
+</details>
+
+### 🧠 Chapter 3: Fysh Logic and Operations
+
+<details>
+  <summary>Click to expand</summary>
+
+#### 🤔 Logical Operations
+- **`AND (&&)`, `OR (||)`, and `NOT (!!)`**: 
+  Steven is experiencing an existential crisis. They're questioning the very fabric of reality.
+  - If steven is real `and` they found the truth, they're happy. (Steven && theTruth)
+  - Steven is happy if either they're real `or` found the truth.  (Steven || theTruth)
+  - But then Steven thought about it and said "hey it would be kinda cool if I wasn't real" and is now only happy if they're `not` real. (!!Steven)
+```fysh
+><steven> && ><TheTruth> ~
+><steven> || ><TheTruth> ~
+!! ><steven> ~
+```
+
+#### 🔧 Bitwise Operations
+- Steven is bored and looking to have their bits rearranged. At Fysh, we're hereto help! We have provided Steven with a variety of tools and bitwise manipulations to satisfy their bit busting needs:
+  - `AND (&)`
+  - `OR (|)`
+  - `XOR (^)`
+  - `NOT (!)`
+```fysh
+><steven> & ><(({°> ~
+><steven> | ><(({°> ~
+><steven> ^ ><(({°> ~
+! ><steven> ~
+```
+- **Logical shifts:** Steven can also use logical shifts! Steven shifts their bits to the left then right by 1.
+  - **Left shift (`<<`):**
+  - **Right shift (`>>`):**
+```fysh
+><steven> << ><(({°> ~
+><steven> >> ><(({°> ~
+```
+#### 🐸 Tadpoles
+Tadpoles are Fysh too. They swim towards bigger Fysh (they like the danger) and are represented by `~o` or `o~`. Here, we are checking if Steven is bigger than 5 and less than 7, respectively.
 
 ```fysh
 ><//> Greater/Less than
@@ -241,139 +184,138 @@ if Steven is bigger than 5 and less than 7 respectively.
 ><steven> o= ><{({°>
 ><steven> ≈o ><{{{°>
 ```
+</details>
 
-Steven is experiencing an existential crisis. They are questioning the very fabric of reality.
-- If steven is real `and` they found the truth, they are happy. (Steven && theTruth)
-- Steven would also be happy if either they are real `or` if they found the truth. (Steven || theTruth)
-- But then Steven thought about it and thought "hey it would be kinda cool if I wasn't real" and are only happy if they are `not` real. (!!Steven)
+### 🔄 Chapter 3: Control Structures
+<details>
+  <summary>Click to expand</summary>
 
+#### 🔁 While Loops
+- In the whirlpool of Fysh logic, the while loop, represented by `@` or `🌀`, with the condition stored in either `[ ]` or `( )`. Small fysh define the iterative heart `><>` and `<><`.
+
+Here we repeat the loop while Steve is greater than 5. Steven decrements by 1 each iteration.
 ```fysh
-><steven> && ><theTruth> ~
-><steven> || ><theTruth> ~
-!! ><steven> ~
-```
-
-Steven is bored and looking to have their bits rearranged. At Fysh, we're here
-to help! We have provided Steven with a variety of tools and bitwise
-manipulations to satisfy their bit busting needs: 
-- `AND (&)`
-- `OR (|)`,
-- `XOR (^)`
-- `NOT (!)`
-
-```fysh
-><steven> &  ><{((°> ~
-><steven> |  ><{((°> ~
-><steven> ^  ><{((°> ~
-! ><steven> ~
-```
-  
-For those moments when they're feeling particularly
-adventurous, they might even consider logical shift operations:
-- `logical shift left (<<)` 
-- `logical shift right (>>)` 
-
-```fysh
-><steven> << ><{((°> ~
-><steven> >> ><{((°> ~
-```
-
-In the whirlpool of fysh logic, the while loop, symbolized by `><(((@>` or `><@>`,
-ensnaring conditions within a fysh tank`[ ]`, with `><>` and `<><` encapsulating the
-iterative heart.
-
-```fysh
-><(((@> [ ><steven> o~ ><{((°> ]
+🌀 [><steven> o~ ><{((°>]
 ><>
-	<steven><< ~
+    <steven><< ~
 <><
 
-><@> [ ><steven> o~ ><{((°> ]
+@ (><steven> o~ ><{((°>)
 ><>
-	<steven><< ~
+    <steven><< ~
 <><
 ```
 
-Conditonal starements run based on how each fysh feels.
-- `If statements` are happy since they're the condition you're looking for. It helps validate them and improve their self-esteem. `><(((^>`
-- `Else statements` feel like they're the last resort, an afterthought. This makes them feel unimportant and sad. They are represended by a dead fysh `><(((*>`
-- `Else if statements` are the middle child, they're not the first choice but they're not the last either. They're the middle ground. They are represented by both a happy and a dead fysh `><(((*> ><(((^>`
-
-Conditions are encapsulated within a fysh tank `[ ]`, with `><>` and `<><` encapsulating the conditional heart.
+#### ❓ Conditional Statements
+Conditional statements run based on how each Fysh feels
+- **`if` statement:** are happy since they're the condition you're looking for. They feel wanted and loved. They are represented by a happy Fysh
 
 ```fysh
-><//> if statement
-><(((^> [ ><steven> o~ ><{((°> ]
+><(((^> [><steven> o~ ><{((°>]
 ><>
-	<steven><< ~
+    <steven><< ~
 <><
+```
 
-><//> else if statement
-><(((*> ><(((^> [ ><steven> ~o ><{((°> ]
-><>
-	>><steven> ~
-<><
-
-><//> else statement
+- **`else` statement:** feel like they're the last resort, an afterthought. This makes them feel unimportant and sad. They are represented by a dead Fysh
+```fysh
 ><(((*>
 ><>
-	><steven> ≈ ><(((°> ~
+    ><steven> ≈ ><(((°> ~
 <><
 ```
-
-A fysh tank `[ ]` is also used for an array of fysh that is seperated by fysh food `-`.
-
+- **`else if` statement:** are the middle child. They're not the first choice, but they're not the last either. They're represented by both a dead and happy Fysh
 ```fysh
-><steven> ≈ [><({(°> - ><({(°>] ~
+><(((*> ><(((^> [><steven> ~o ><{((°>]
+><>
+    >><steven> ~
+<><
 ```
+</details>
 
-These fysh tanks can be traversed using a fysh.\
-(Steven returns the element at index 1 (0-indexed))
-```fysh
-><steven>[><(({°>] ~
-```
+### 🧑‍🔧 Chapter 4: Functions
+<details>
+  <summary>Click to expand</summary>
 
-To define a function or SUBroutine, use a submarine `>(funcNameHere)` along with any
-parameters `><param>`. By default, last expression in the subroutine acts as the
-return value. To explicitly return a value, use a baby squid `<~` or `🦑`.
+#### ✏️ Defining Functions
+To define a function or SUBroutine, use a submarine `>(funcNameHere)` along with any parameters `><param>`. To return a value, use a squid `<~` or `🦑`. 
 
+Here the function is called `submarine` and has 3 parameters. It returns the sum of the 3 parameters.
 ```fysh
 >(submarine) ><param1> ><param2> ><param3>
 ><>
-	<~ <fysh>< ~
+    <~ ><param1> ><param2> ><param3> ~ 
 <><
 ```
 
-To call a subroutine, put the submarine in a fysh tank along with its arguments in any order. If two params are next to each other, seperate them with a fysh food `-`.:
-
+#### 📞 Calling Functions
+- To call a subroutine, put the submarine in a Fysh tank along with its arguments. If two or more params are next to each other, separate them with Fysh food `-`.
 ```fysh
-[><fysh1> >(submarine) ><fysh2> - ><fysh3>] ~
+[>(submarine) ><fysh1> - ><fysh2> - ><fysh3>] ~
 ```
+</details>
 
-When we finally reach our destination, we anchor ourselves. Anchors are used to output the value of a fysh. They are represented by `(+o`.
+### ⚓ Chapter 5: Output
+<details>
+  <summary>Click to expand</summary>
 
+#### ⛓️ Output Value
+When we finally reach our destination, we anchor ourselves. Anchors are used to output the value of a Fysh. They are represented by `(+o` or `⚓`
+
+Here we're outputting `0b101` (5).
 ```fysh
-><//> prints 5
 (+o ><{({°> ~
 ```
+</details>
 
-### Factorial Example
+### 💬 Chapter 6: Comments
+<details>
+  <summary>Click to expand</summary>
 
+#### 🔉 Single-line Comments
+Navigator Fysh are used to guide the reader through the code. They are represented by `><//>`.
 ```fysh
-><//> Comment
+><//> What's cookin' good lookin'?
+```
 
-><number>    ≈ ><{({°> ~  ><//> b101 = 5
-><factorial> ≈ ><(({°> ~  ><//> b001 = 1
+#### 🔊 Multi-line Comments
+For longer explanations, multiline comments are used. They are represented by `></*>` and `<*\><`
+```fysh
+></*>
+How to grill a Fysh:
+1. Catch a Fysh
+2. Grill the Fysh
+3. Eat the Fysh
+<*/><
+```
+</details>
 
-><//> while number > 1
-><(((@> [><number> o~ ><(({°>]
+### 📈 Examples
+<details>
+  <summary>Click to expand</summary>
+
+#### ❗Factorial Example
+This program calculates the factorial of number. In this case 5. The factorial of 5 is 120.
+```fysh
+><//> Factorial Example
+
+><number>    ≈ ><{({°> ~ 
+><factorial> ≈ ><(({°> ~
+
+🌀 [><number> o~ ><(({°>]
 ><>
-	><//> factorial = factorial * number
-	><factorial> ≈ ><factorial> ♡ ><number> ~
-
-	><//> number -= 1
-	<number><< ~
+    ><factorial> ≈ ><factorial> ♡ ><number> ~
+    <number><< ~
 <><
-
 (+o ><factorial> ~
 ```
+
+Let's break it down:
+1. `><number> ≈ ><{({°> ~` - Declare the number to calculate the factorial of. (5 in this case)
+2. `><factorial> ≈ ><(({°> ~` - Declare the factorial variable. (1 in this case)
+3. `🌀 [><number> o~ ><(({°>]` - While the number is greater than 1, do the following:
+   1. `><factorial> ≈ ><factorial> ♡ ><number> ~` - Multiply the factorial by the number.
+   2. `<number><< ~` - Decrement the number.
+   3. Repeat until the number is 1.
+4. `(+o ><factorial> ~` - Output the factorial.
+</details>
