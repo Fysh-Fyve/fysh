@@ -46,8 +46,12 @@ func main() {
 
 		evaluated := evaluator.Eval(program, env)
 		if object.IsError(evaluated) {
-			io.WriteString(os.Stdout, evaluated.Inspect())
-			io.WriteString(os.Stdout, "\n")
+			if _, err := io.WriteString(os.Stdout, evaluated.Inspect()); err != nil {
+				log.Print(err)
+			}
+			if _, err := io.WriteString(os.Stdout, "\n"); err != nil {
+				log.Print(err)
+			}
 			os.Exit(1)
 		}
 	}
