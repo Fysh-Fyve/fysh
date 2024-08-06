@@ -78,32 +78,23 @@ func TestSub(t *testing.T) {
 	testScanner(t, input, tests)
 }
 
-func TestFancyRightTails(t *testing.T) {
-	input := `><> ⟩<> ⟫<> 〉<> ⦄<> ⦆<> ⦈<> ⦊<> ⦌<> ⦎<> ⦐<> ⦒<> ⦔<> ⦖<> 〉<> ❭<> ❯<> ❱<> ❳<> ❵<>`
-	tests := []tt{
-		lit(fysh.OpenFysh),
-		lit(fysh.OpenFysh),
-		lit(fysh.OpenFysh),
-		lit(fysh.OpenFysh),
-		lit(fysh.OpenFysh),
-		lit(fysh.OpenFysh),
-		lit(fysh.OpenFysh),
-		lit(fysh.OpenFysh),
-		lit(fysh.OpenFysh),
-		lit(fysh.OpenFysh),
-		lit(fysh.OpenFysh),
-		lit(fysh.OpenFysh),
-		lit(fysh.OpenFysh),
-		lit(fysh.OpenFysh),
-		lit(fysh.OpenFysh),
-		lit(fysh.OpenFysh),
-		lit(fysh.OpenFysh),
-		lit(fysh.OpenFysh),
-		lit(fysh.OpenFysh),
-		lit(fysh.OpenFysh),
-	}
-	testScanner(t, input, tests)
+func TestFancyTails(t *testing.T) {
+	l := [...]string{"><>", "⟩<>", "⟫<>", "〉<>", "⦄<>", "⦆<>", "⦈<>", "⦊<>", "⦌<>", "⦎<>", "⦐<>", "⦒<>", "⦔<>", "⦖<>", "〉<>", "❭<>", "❯<>", "❱<>", "❳<>", "❵<>"}
+	r := [...]string{"<><", "<>⟨", "<>⟪", "<>〈", "<>⦃"}
 
+	tests := make([]tt, 0, len(l)+len(r)+1)
+	input := strings.Builder{}
+	appendToTest := func(s []string, t tt) {
+		for _, str := range s {
+			tests = append(tests, t)
+			input.WriteString(str)
+			input.WriteRune(' ')
+		}
+	}
+	appendToTest(l[:], lit(fysh.OpenFysh))
+	appendToTest(r[:], lit(fysh.CloseFysh))
+	tests = append(tests, tt{fysh.End, ""})
+	testScanner(t, input.String(), tests)
 }
 
 func TestFactorial(t *testing.T) {
