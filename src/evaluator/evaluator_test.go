@@ -146,45 +146,52 @@ func TestIfElseExpressions(t *testing.T) {
 }
 
 func TestReturnStatements(t *testing.T) {
-	t.Skip()
 	tests := []struct {
 		input    string
 		expected int64
 	}{
-		{"return 10;", 10},
-		{"return 10; 9;", 10},
-		{"return 2 * 5; 9;", 10},
-		{"9; return 2 * 5; 9;", 10},
-		{"if (10 > 1) { return 10; }", 10},
+		{"<~ ><{({(> ~", 10},
+		{"<~ ><{({(> ~ ><{(({> ~", 10},
+		{"<~ ><{(> <3 ><{({> ~ ><{(({> ~", 10},
+		{"><{(({> ~ <~ ><{(> <3 ><{({> ~ ><{(({> ~", 10},
+		{"><(((^> (><{({(> o~ ><{>) ><> <~  ><{({(> ~ <><", 10},
 		{
 			`
-if (10 > 1) {
-  if (10 > 1) {
-    return 10;
-  }
+><(((^> (><{({(> o~ ><{>)
+><>
+	><(((^> (><{({(> o~ ><{>)
+	><>
+		<~  ><{({(> ~
+	<><
 
-  return 1;
-}
+	<~ ><{> ~
+<><
 `,
 			10,
 		},
 		{
 			`
-let f = fn(x) {
-  return x;
-  x + 10;
-};
-f(10);`,
+>(f) ><x>
+><>
+	<~ ><x> ~
+	><x> ><{({(> ~
+<><
+
+[>(f) ><{({(>] ~
+`,
 			10,
 		},
 		{
 			`
-let f = fn(x) {
-   let result = x + 10;
-   return result;
-   return 10;
-};
-f(10);`,
+>(f) ><x>
+><>
+	><result> = ><x> ><{({(> ~
+	<~ ><result> ~
+	<~ ><{({(> ~
+<><
+
+[>(f) ><{({(>] ~
+`,
 			20,
 		},
 	}
@@ -196,65 +203,16 @@ f(10);`,
 }
 
 func TestErrorHandling(t *testing.T) {
-	t.Skip()
 	tests := []struct {
 		input           string
 		expectedMessage string
 	}{
 		{
-			"5 + true;",
-			"type mismatch: INTEGER + BOOLEAN",
-		},
-		{
-			"5 + true; 5;",
-			"type mismatch: INTEGER + BOOLEAN",
-		},
-		{
-			"-true",
-			"unknown operator: -BOOLEAN",
-		},
-		{
-			"true + false;",
-			"unknown operator: BOOLEAN + BOOLEAN",
-		},
-		{
-			"true + false + true + false;",
-			"unknown operator: BOOLEAN + BOOLEAN",
-		},
-		{
-			"5; true + false; 5",
-			"unknown operator: BOOLEAN + BOOLEAN",
-		},
-		{
-			`"Hello" - "World"`,
-			"unknown operator: STRING - STRING",
-		},
-		{
-			"if (10 > 1) { true + false; }",
-			"unknown operator: BOOLEAN + BOOLEAN",
-		},
-		{
-			`
-if (10 > 1) {
-  if (10 > 1) {
-    return true + false;
-  }
-
-  return 1;
-}
-`,
-			"unknown operator: BOOLEAN + BOOLEAN",
-		},
-		{
-			"foobar",
+			"><foobar> ~",
 			"identifier not found: foobar",
 		},
 		{
-			`{"name": "Monkey"}[fn(x) { x }];`,
-			"unusable as hash key: FUNCTION",
-		},
-		{
-			`999[1]`,
+			`><{{{>[><{>] ~`,
 			"index operator not supported: INTEGER",
 		},
 	}
@@ -277,15 +235,14 @@ if (10 > 1) {
 }
 
 func TestLetStatements(t *testing.T) {
-	t.Skip()
 	tests := []struct {
 		input    string
 		expected int64
 	}{
-		{"let a = 5; a;", 5},
-		{"let a = 5 * 5; a;", 25},
-		{"let a = 5; let b = a; b;", 5},
-		{"let a = 5; let b = a; let c = a + b + 5; c;", 15},
+		{"><a> = ><{(}> ~ ><a> ~", 5},
+		{"><a> = ><{(}> <3 ><{(}> ~ ><a> ~", 25},
+		{"><a> = ><{(}> ~ ><b> = ><a> ~ ><b> ~", 5},
+		{"><a> = ><{(}> ~ ><b> = ><a> ~ ><c> = ><a> ><b> ><{(}> ~ ><c> ~", 15},
 	}
 
 	for _, tt := range tests {
@@ -294,8 +251,7 @@ func TestLetStatements(t *testing.T) {
 }
 
 func TestFunctionObject(t *testing.T) {
-	t.Skip()
-	input := "fn(x) { x + 2; };"
+	input := ">(sub) ><x> ><> ><x> ><{(> ~ <><"
 
 	evaluated := testEval(t, input)
 	fn, ok := evaluated.(*object.Function)
@@ -312,7 +268,7 @@ func TestFunctionObject(t *testing.T) {
 		t.Fatalf("parameter is not 'x'. got=%q", fn.Parameters[0].Name)
 	}
 
-	expectedBody := "(x + 2)"
+	expectedBody := "{\n(x + 2);\n}"
 
 	if fn.Body.String() != expectedBody {
 		t.Fatalf("body is not %q. got=%q", expectedBody, fn.Body.String())
@@ -320,17 +276,15 @@ func TestFunctionObject(t *testing.T) {
 }
 
 func TestFunctionApplication(t *testing.T) {
-	t.Skip()
 	tests := []struct {
 		input    string
 		expected int64
 	}{
-		{"let identity = fn(x) { x; }; identity(5);", 5},
-		{"let identity = fn(x) { return x; }; identity(5);", 5},
-		{"let double = fn(x) { x * 2; }; double(5);", 10},
-		{"let add = fn(x, y) { x + y; }; add(5, 5);", 10},
-		{"let add = fn(x, y) { x + y; }; add(5 + 5, add(5, 5));", 20},
-		{"fn(x) { x; }(5)", 5},
+		{">(identity) ><x> ><> ><x> ~ <>< [>(identity) ><{({>] ~", 5},
+		{">(identity) ><x> ><> <~ ><x> ~ <>< [>(identity) ><{({>] ~", 5},
+		{">(double) ><x> ><> ><x> <3 ><{(> ~ <>< [>(double) ><{({>] ~", 10},
+		{">(add) ><x> ><y> ><> ><x> ><y> ~ <>< [>(add) ><{({> - ><{({>] ~", 10},
+		{">(add) ><x> ><y> ><> ><x> ><y> ~ <>< [>(add) ><{({> ><{({> - [>(add) ><{({> - ><{({>] ] ~", 20},
 	}
 
 	for _, tt := range tests {
@@ -339,34 +293,21 @@ func TestFunctionApplication(t *testing.T) {
 }
 
 func TestEnclosingEnvironments(t *testing.T) {
-	t.Skip()
 	input := `
-let first = 10;
-let second = 10;
-let third = 10;
+><first> = ><{({(> ~
+><second> = ><{({(> ~
+><third> = ><{({(> ~
 
-let ourFunction = fn(first) {
-  let second = 20;
+>(ourFunction) ><first>
+><>
+	><second> = ><{({((> ~
+	><first> ><second> ><third> ~
+<><
 
-  first + second + third;
-};
-
-ourFunction(20) + first + second;`
+[>(ourFunction) - ><{({((>] ><second> ><third> ~
+`
 
 	testNumericObject(t, testEval(t, input), int64(70))
-}
-
-func TestClosures(t *testing.T) {
-	t.Skip()
-	input := `
-let newAdder = fn(x) {
-  fn(y) { x + y };
-};
-
-let addTwo = newAdder(2);
-addTwo(2);`
-
-	testNumericObject(t, testEval(t, input), int64(4))
 }
 
 func TestStringLiteral(t *testing.T) {
@@ -510,16 +451,15 @@ func TestArrayIndexExpressions(t *testing.T) {
 }
 
 func TestHashLiterals(t *testing.T) {
-	t.Skip()
-	input := `let two = "two";
-	{
-		"one": 10 - 9,
-		two: 1 + 1,
-		"thr" + "ee": 6 / 2,
-		4: 4,
-		true: 5,
-		false: 6
-	}`
+	input := `><two> = 🫧two🫧 ~
+	[
+		🫧one🫧 : ><{({(> <}))}>< -
+		><two> : ><{> ><{> -
+		🫧thr🫧 🫧ee🫧 : ><{{(> </3 ><{(> -
+		><{((> : ><{((> -
+		><{> : ><{({> -
+		><(> : ><{{(>
+	] ~`
 
 	evaluated := testEval(t, input)
 	result, ok := evaluated.(*object.Hash)
@@ -551,39 +491,15 @@ func TestHashLiterals(t *testing.T) {
 }
 
 func TestHashIndexExpressions(t *testing.T) {
-	t.Skip()
 	tests := []struct {
 		input    string
 		expected interface{}
 	}{
-		{
-			`{"foo": 5}["foo"]`,
-			5,
-		},
-		{
-			`{"foo": 5}["bar"]`,
-			nil,
-		},
-		{
-			`let key = "foo"; {"foo": 5}[key]`,
-			5,
-		},
-		{
-			`{}["foo"]`,
-			nil,
-		},
-		{
-			`{5: 5}[5]`,
-			5,
-		},
-		{
-			`{true: 5}[true]`,
-			5,
-		},
-		{
-			`{false: 5}[false]`,
-			5,
-		},
+		{`[🫧foo🫧 : ><{({>][🫧foo🫧] ~`, 5},
+		{`[🫧foo🫧 : ><{({>][🫧bar🫧] ~`, nil},
+		{`><key> = 🫧foo🫧 ~ [🫧foo🫧 : ><{({>][><key>] ~`, 5},
+		{`[:][🫧foo🫧] ~`, nil},
+		{`[><{({> : ><{({>][><{({>] ~`, 5},
 	}
 
 	for _, tt := range tests {
@@ -596,6 +512,7 @@ func TestHashIndexExpressions(t *testing.T) {
 		}
 	}
 }
+
 func testEval(t testing.TB, input string) object.Object {
 	l, err := scanner.NewFile("evaluator-test-input", bytes.NewBuffer([]byte(input)))
 	if err != nil {
