@@ -3,6 +3,8 @@ package ast
 import (
 	"bytes"
 	"fmt"
+	"slices"
+	"strings"
 
 	"github.com/Fysh-Fyve/fysh/src/ast/binary"
 	"github.com/Fysh-Fyve/fysh/src/ast/unary"
@@ -101,13 +103,29 @@ func (c *Aquarium) Literal() string { return fysh.LTank.String() }
 func (c *Aquarium) String() string {
 	var out bytes.Buffer
 	out.WriteString(fysh.LTank.String())
-	for i, p := range c.Elems {
-		if i != 0 {
-			out.WriteString(", ")
-		}
-		out.WriteString(p.String())
+	elems := make([]string, 0, len(c.Elems))
+	for _, p := range c.Elems {
+		elems = append(elems, p.String())
 	}
+	out.WriteString(strings.Join(elems, ", "))
 	out.WriteString(fysh.RTank.String())
+	return out.String()
+}
+
+type SeaHash struct{ Pairs map[Expression]Expression }
+
+func (c *SeaHash) expression()     {}
+func (c *SeaHash) Literal() string { return fysh.LTank.String() }
+func (c *SeaHash) String() string {
+	var out bytes.Buffer
+	out.WriteString("{")
+	pairs := make([]string, 0, len(c.Pairs))
+	for key, value := range c.Pairs {
+		pairs = append(pairs, key.String()+": "+value.String())
+	}
+	slices.Sort(pairs)
+	out.WriteString(strings.Join(pairs, ", "))
+	out.WriteString("}")
 	return out.String()
 }
 
@@ -118,5 +136,6 @@ var _ Expression = &Binary{}
 var _ Expression = &Unary{}
 var _ Expression = &Call{}
 var _ Expression = &Aquarium{}
+var _ Expression = &SeaHash{}
 var _ Expression = &Index{}
 var _ Expression = &String{}

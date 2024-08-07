@@ -141,12 +141,12 @@ func (b *Builtin) Inspect() string  { return "builtin function" }
 
 type Array struct{ Elements []Object }
 
-func (ao *Array) Type() ObjectType { return ARR }
-func (ao *Array) Inspect() string {
+func (a *Array) Type() ObjectType { return ARR }
+func (a *Array) Inspect() string {
 	var out bytes.Buffer
 
 	elements := []string{}
-	for _, e := range ao.Elements {
+	for _, e := range a.Elements {
 		elements = append(elements, e.Inspect())
 	}
 
