@@ -11,7 +11,6 @@ import (
 
 type Identifier struct{ Name []byte }
 
-func (i *Identifier) top()            {}
 func (i *Identifier) expression()     {}
 func (i *Identifier) Literal() string { return fysh.Ident.String() }
 func (i *Identifier) String() string  { return string(i.Name) }
@@ -19,21 +18,18 @@ func (i *Identifier) String() string  { return string(i.Name) }
 type Grilled struct {
 }
 
-func (s *Grilled) top()            {}
 func (s *Grilled) expression()     {}
 func (s *Grilled) Literal() string { return fysh.Grilled.String() }
 func (s *Grilled) String() string  { return fysh.Grilled.String() }
 
 type Scales struct{ Value int64 }
 
-func (s *Scales) top()            {}
 func (s *Scales) expression()     {}
 func (s *Scales) Literal() string { return fysh.Scales.String() }
 func (s *Scales) String() string  { return fmt.Sprintf("%d", s.Value) }
 
 type Bones struct{ Value float64 }
 
-func (s *Bones) top()            {}
 func (s *Bones) expression()     {}
 func (s *Bones) Literal() string { return fysh.Bones.String() }
 func (s *Bones) String() string  { return fmt.Sprintf("%f", s.Value) }
@@ -49,7 +45,6 @@ type Unary struct {
 	Right Expression
 }
 
-func (u *Unary) top()            {}
 func (u *Unary) expression()     {}
 func (u *Unary) Literal() string { return u.Op.String() }
 func (u *Unary) String() string {
@@ -61,7 +56,6 @@ type Call struct {
 	Args   []Expression
 }
 
-func (c *Call) top()            {}
 func (c *Call) expression()     {}
 func (c *Call) Literal() string { return string(c.Callee) }
 func (c *Call) String() string {
@@ -83,7 +77,6 @@ type Binary struct {
 	Right Expression
 }
 
-func (b *Binary) top()            {}
 func (b *Binary) expression()     {}
 func (b *Binary) Literal() string { return b.Op.String() }
 func (b *Binary) String() string {
@@ -95,7 +88,6 @@ type Index struct {
 	Index Expression
 }
 
-func (b *Index) top()            {}
 func (b *Index) expression()     {}
 func (b *Index) Literal() string { return b.Left.Literal() }
 func (b *Index) String() string {
@@ -104,7 +96,6 @@ func (b *Index) String() string {
 
 type Aquarium struct{ Elems []Expression }
 
-func (c *Aquarium) top()            {}
 func (c *Aquarium) expression()     {}
 func (c *Aquarium) Literal() string { return fysh.LTank.String() }
 func (c *Aquarium) String() string {
