@@ -2,6 +2,7 @@ package parser
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"strconv"
 
@@ -101,24 +102,51 @@ func (p *Parser) expectFysh(f fysh.Species, ignore ...bool) bool {
 func (p *Parser) list() ast.Expression {
 	p.next()
 	exprs := []ast.Expression{}
+	pairs := map[ast.Expression]ast.Expression{}
+	if p.expectFysh(fysh.Colon, true) {
+		// Empty sea hash
+		if p.expectFysh(fysh.RTank) {
+			return &ast.SeaHash{Pairs: pairs}
+		} else {
+			return nil
+		}
+	}
 	var sub []byte
 	neg := false
 	for !p.cur.Type.IsOneOf(fysh.RTank, fysh.End, fysh.Invalid) {
 		p.expectFysh(fysh.Food, true)
 
 		if p.cur.Type == fysh.Sub {
+			// This is a sea hash!
 			if len(sub) > 0 {
 				p.errors = append(p.errors, fmt.Errorf("conflicting calls: %s", sub))
 				return nil
 			}
 			sub, neg = p.cur.Unfysh()
+			if len(pairs) > 0 {
+				p.errors = append(p.errors, fmt.Errorf("invalid key/value in sea hash: %s", sub))
+				return nil
+			}
 			p.next()
 		} else {
 			e := p.expression()
 			if e == nil {
 				return nil
 			}
-			exprs = append(exprs, e)
+			if p.expectFysh(fysh.Colon, true) {
+				// this is a list!
+				if len(exprs) > 0 {
+					p.errors = append(p.errors, errors.New("unexpected colon in list"))
+					return nil
+				}
+				v := p.expression()
+				if v == nil {
+					return nil
+				}
+				pairs[e] = v
+			} else {
+				exprs = append(exprs, e)
+			}
 		}
 	}
 	if !p.expectFysh(fysh.RTank) {
@@ -133,6 +161,8 @@ func (p *Parser) list() ast.Expression {
 			c = &ast.Unary{Op: unary.Neg, Right: c}
 		}
 		return c
+	} else if len(pairs) > 0 {
+		return &ast.SeaHash{Pairs: pairs}
 	} else {
 		return &ast.Aquarium{Elems: exprs}
 	}
@@ -248,9 +278,23 @@ func (p *Parser) binOp(pLeft, pRight func() ast.Expression,
 
 func (p *Parser) multiplicative() ast.Expression {
 	return p.binOp(p.unary, p.unary, func(o binary.Op) bool {
-		return o.IsOneOf(binary.Mul, binary.Div, binary.ShiftLeft,
-			binary.ShiftRight, binary.BitwiseAnd)
+		switch o {
+		case binary.Mul, binary.Div, binary.ShiftLeft,
+			binary.ShiftRight, binary.BitwiseAnd:
+			return true
+		default:
+			return false
+		}
 	})
+}
+
+func endingFysh(s fysh.Species) bool {
+	switch s {
+	case fysh.Water, fysh.RBowl, fysh.RTank, fysh.Sub, fysh.Food, fysh.Colon:
+		return true
+	default:
+		return false
+	}
 }
 
 func (p *Parser) additive() ast.Expression {
@@ -260,9 +304,7 @@ func (p *Parser) additive() ast.Expression {
 	}
 	op := binary.FromFysh(p.cur.Type)
 	for op.IsOneOf(binary.BitwiseOr, binary.BitwiseXor) ||
-		(op == binary.Invalid && !p.cur.Type.IsOneOf(
-			fysh.Water, fysh.RBowl, fysh.RTank, fysh.Sub, fysh.Food,
-		)) {
+		(op == binary.Invalid && !endingFysh(p.cur.Type)) {
 		if op != binary.Invalid {
 			p.next()
 		} else {
