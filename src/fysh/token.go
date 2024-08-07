@@ -57,6 +57,7 @@ const (
 	Squid     /* <~ return operator */
 	BreakFysh /* ><\/> or <\/>< (break) */
 	Bubbles   /*🫧*/
+	Colon     /* : */
 )
 
 var tokens = [...]string{
@@ -107,6 +108,7 @@ var tokens = [...]string{
 	Squid:     "return",
 	BreakFysh: "break",
 	Bubbles:   "STRING",
+	Colon:     ":",
 }
 
 type Fysh struct {
