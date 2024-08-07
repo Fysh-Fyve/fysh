@@ -323,6 +323,8 @@ func (s *Scanner) ascii() fysh.Fysh {
 		f = newFysh(fysh.Food)
 	case '@':
 		f = newFysh(fysh.Loop)
+	case ':':
+		f = newFysh(fysh.Colon)
 	case '[':
 		f = newFysh(fysh.LTank)
 	case ']':

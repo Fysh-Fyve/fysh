@@ -413,6 +413,28 @@ func TestWeirdFysh(t *testing.T) {
 	testScanner(t, input, tests)
 }
 
+func TestSeaHash(t *testing.T) {
+	input := "[ ><foo> : ><{> - ><bar> : ><{(> - ><baz> : ><{{> ] ~"
+	tests := []tt{
+		lit(fysh.LTank),
+		{fysh.Ident, "><foo>"},
+		lit(fysh.Colon),
+		{fysh.Scales, "><{>"},
+		lit(fysh.Food),
+		{fysh.Ident, "><bar>"},
+		lit(fysh.Colon),
+		{fysh.Scales, "><{(>"},
+		lit(fysh.Food),
+		{fysh.Ident, "><baz>"},
+		lit(fysh.Colon),
+		{fysh.Scales, "><{{>"},
+		lit(fysh.RTank),
+		lit(fysh.Water),
+		{fysh.End, ""},
+	}
+	testScanner(t, input, tests)
+}
+
 func TestBrokenFysh(t *testing.T) {
 	input := "><\\/> <\\/><"
 	tests := []tt{lit(fysh.BreakFysh), lit(fysh.BreakFysh), {fysh.End, ""}}
