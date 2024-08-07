@@ -158,11 +158,8 @@ func (p *Parser) primary() ast.Expression {
 	case fysh.Bones:
 		bin, neg := p.cur.Unfysh()
 		return p.bonesToFloat(bin, neg)
-	case fysh.String:
-		str, neg := p.cur.Unfysh()
-		if neg {
-			// TODO: Implement negative strings
-		}
+	case fysh.Bubbles:
+		str, _ := p.cur.Unfysh()
 		p.next()
 		return &ast.String{Value: str}
 	case fysh.Ident:

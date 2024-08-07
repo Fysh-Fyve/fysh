@@ -182,7 +182,7 @@ func TestShortLoop(t *testing.T) {
 func TestStrings(t *testing.T) {
 	input := "🫧This is a String🫧 ~"
 	tests := []tt{
-		{fysh.String, "🫧This is a String🫧"},
+		{fysh.Bubbles, "🫧This is a String🫧"},
 		lit(fysh.Water),
 		{fysh.End, ""},
 	}

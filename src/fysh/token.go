@@ -56,7 +56,7 @@ const (
 	Sub       /* (submarine)< */
 	Squid     /* <~ return operator */
 	BreakFysh /* ><\/> or <\/>< (break) */
-	String    /*🫧*/
+	Bubbles   /*🫧*/
 )
 
 var tokens = [...]string{
@@ -106,7 +106,7 @@ var tokens = [...]string{
 	Sub:       "SUBMARINE",
 	Squid:     "return",
 	BreakFysh: "break",
-	String:    "STRING",
+	Bubbles:   "STRING",
 }
 
 type Fysh struct {
@@ -148,7 +148,7 @@ func (f *Fysh) Unfysh() ([]byte, bool) {
 	case Inc:
 		// >><name>
 		s = f.Value[3 : len(f.Value)-1]
-	case String:
+	case Bubbles:
 		// TODO: Unfysh other types of strings here
 		// 🫧name🫧 (4 bytes on each side)
 		s = f.Value[4 : len(f.Value)-4]

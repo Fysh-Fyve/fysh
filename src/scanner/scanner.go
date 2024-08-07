@@ -471,7 +471,7 @@ func (s *Scanner) unicode() fysh.Fysh {
 		for ch := s.periscope(); ch != '🫧' && ch != 0; ch = s.reel() {
 		}
 		if s.expect('🫧') {
-			f.Type = fysh.String
+			f.Type = fysh.Bubbles
 		}
 		f.Value = s.input[start:s.peek]
 	}
