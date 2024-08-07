@@ -23,6 +23,7 @@ func TestUnfysh(t *testing.T) {
 		{fysh.New(fysh.Scales, "><{{{>"), "111", false},
 		{fysh.New(fysh.Scales, "<{{{><"), "111", true},
 		{fysh.New(fysh.Scales, "<°{{{><"), "111", true},
+		{fysh.New(fysh.Bubbles, "🫧bubbles🫧"), "bubbles", false},
 	}
 
 	for i, tt := range tests {
