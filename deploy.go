@@ -53,7 +53,7 @@ func main() {
 	getCmdOutput("git config --get remote.origin.url")
 	latestHash := getCmdOutput("git rev-parse HEAD")
 
-	execCmd("pnpm vite build")
+	execCmd("hugo build")
 
 	src, err := filepath.Abs(dir)
 	if err != nil {
