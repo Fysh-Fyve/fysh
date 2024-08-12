@@ -1,9 +1,12 @@
 {{ define "head" }}
-{{- with resources.Get "css/opening.css" | resources.Minify | resources.Fingerprint "sha512" }}
-<link rel="preload" href="{{ .Permalink }}" as="style" integrity="{{ .Data.Integrity }}" onload="this.onload=null;this.rel='stylesheet'">
-<noscript>
-    <link rel="stylesheet" href="{{ .Permalink }}" integrity="{{ .Data.Integrity }}">
-</noscript>
+{{- with resources.Get "css/opening.css" }}
+  {{- if eq hugo.Environment "development" }}
+    <link rel="stylesheet" href="{{ .RelPermalink }}">
+  {{- else }}
+    {{- with . | minify | fingerprint }}
+      <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
+    {{- end }}
+  {{- end }}
 {{- end }}
 {{ end }}
 
