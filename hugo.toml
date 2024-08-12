@@ -3,6 +3,8 @@ languageCode = 'en-us'
 title = 'Fysh'
 markup.goldmark.renderer.unsafe = true
 
+minify.minifyOutput = true
+
 [[menus.main]]
 name = 'Home'
 pageRef = '/'

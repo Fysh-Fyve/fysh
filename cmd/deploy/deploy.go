@@ -16,9 +16,11 @@ import (
 )
 
 const (
+	originUrl        = "git@github.com:Fysh-Fyve/Fysh-Fyve.github.io"
 	projectName      = "fysh-five.github.io"
 	deploymentBranch = "gh-pages"
-	dir              = "dist"
+	buildCmd         = "hugo"
+	dir              = "public"
 )
 
 func execCmd(cmd string) error {
@@ -48,17 +50,20 @@ func mkTmpDir() (string, func()) {
 	}
 }
 
-func main() {
-	originUrl := "git@github.com:Fysh-Fyve/Fysh-Fyve.github.io"
-	getCmdOutput("git config --get remote.origin.url")
-	latestHash := getCmdOutput("git rev-parse HEAD")
-
-	execCmd("hugo build")
-
-	src, err := filepath.Abs(dir)
+func dieIf(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func main() {
+	getCmdOutput("git config --get remote.origin.url")
+	latestHash := getCmdOutput("git rev-parse HEAD")
+
+	dieIf(execCmd(buildCmd))
+
+	src, err := filepath.Abs(dir)
+	dieIf(err)
 	gitPublish, cleanGitPublish := mkTmpDir()
 	defer cleanGitPublish()
 
@@ -66,17 +71,17 @@ func main() {
 	cloneCmd := fmt.Sprintf("git clone --depth 1 --branch \"%s\" \"%s\" \"%s\"", deploymentBranch, originUrl, gitPublish)
 	if err := execCmd(cloneCmd); err != nil {
 		// Branch doesn't exist, create new branch
-		execCmd("git init")
-		execCmd("git checkout -b " + deploymentBranch)
-		execCmd("git remote add origin " + originUrl)
+		dieIf(execCmd("git init"))
+		dieIf(execCmd("git checkout -b " + deploymentBranch))
+		dieIf(execCmd("git remote add origin " + originUrl))
 	} else {
-		execCmd("git rm -rf .") // Simply remove all files
+		dieIf(execCmd("git rm -rf .")) // Simply remove all files
 	}
 	if err := gorecurcopy.CopyDirectory(src, gitPublish); err != nil {
 		log.Fatalf("failed to copy output to publish dir: %v", err)
 	}
 	os.Chdir(gitPublish)
-	execCmd("git add --all")
+	dieIf(execCmd("git add --all"))
 	commitErr := execCmd(fmt.Sprintf("git commit -m \"Deploy website - based on %s\"", latestHash))
 	if err := execCmd("git push --force origin " + deploymentBranch); err != nil {
 		log.Fatalf("failed to push to origin: %v", err)
