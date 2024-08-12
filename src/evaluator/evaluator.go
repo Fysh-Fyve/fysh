@@ -232,10 +232,6 @@ func evalBinary(op binary.Op, left, right object.Object) object.Object {
 		return evalNumBinary(op, left, right)
 	case lt == object.STR && rt == object.STR:
 		return evalStrBinary(op, left, right)
-	case op == binary.Equal:
-		return toBool(left == right)
-	case op == binary.NotEqual:
-		return toBool(left != right)
 	case lt != rt:
 		return newError("type mismatch: %s %s %s", lt, op, rt)
 	default:
