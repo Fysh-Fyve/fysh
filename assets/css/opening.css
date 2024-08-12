@@ -8,6 +8,10 @@
   box-sizing: border-box;
 }
 
+:root {
+  --fysh: 8vw;
+}
+
 html,
 body,
 .opening {
@@ -21,7 +25,7 @@ body,
   position: absolute;
   top: 50%;
   left: 50%;
-  font-size: 2rem;
+  font-size: var(--fysh);
 }
 .og-fysh > code {
   position: relative;
@@ -68,7 +72,7 @@ main[role="main"] {
   position: relative;
   top: -50%;
   left: -50%;
-  font-size: 2rem;
+  font-size: var(--fysh);
 }
 
 @keyframes cursor {
@@ -97,7 +101,7 @@ main[role="main"] {
     font-size: 0;
   }
   100% {
-    font-size: 2rem;
+    font-size: 10vw;
   }
 }
 
@@ -111,8 +115,8 @@ code.blinking-after {
 }
 
 @keyframes cursor-after {
-  0% { font-size:2rem}
-  100% { font-size:2rem}
+  0% { font-size: var(--fysh); }
+  100% { font-size: var(--fysh); }
 }
 
 .fysh {
