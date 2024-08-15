@@ -122,18 +122,17 @@ code.blinking-after {
 .fysh {
   color: #4fff64;
   opacity: 0;
-  animation: ani 0.5s ease 5s forwards, glow 2s ease infinite;
+  animation: ani 0.5s ease 5s forwards, glow 1s ease infinite alternate;
 }
 
 @keyframes glow {
-  0% {
-    color: #4fff64;
+  from {
+    color: #4fff64a3;
+    text-shadow: 0 0 5px #00cc4488, 0 0 7px #00cc4488;
   }
-  50% {
-    color: #4fff64b7;
-  }
-  100% {
-    color: #4fff64;
+  to {
+    color: #4fff647b;
+    text-shadow: none;
   }
 }
 
