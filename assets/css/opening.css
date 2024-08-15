@@ -22,6 +22,8 @@ body,
 }
 
 .og-fysh {
+  text-decoration: none;
+  color: #333;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -62,16 +64,7 @@ main[role="main"] {
   overflow-x: hidden;
 }
 
-.fysh-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-}
-
 .fysh {
-  position: relative;
-  top: -50%;
-  left: -50%;
   font-size: var(--fysh);
 }
 
@@ -197,6 +190,9 @@ code.blinking-after {
   bottom: -100%;
   height: 100vh;
   background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   animation: imthebgnow 0.5s ease 4.25s forwards;
 }
 
@@ -288,4 +284,8 @@ code.blinking-after {
   100% {
     opacity: 1;
   }
+}
+
+main#main {
+  height: 100vh;
 }
