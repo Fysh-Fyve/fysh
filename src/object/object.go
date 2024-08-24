@@ -93,10 +93,18 @@ type ReturnValue struct{ Value Object }
 func (rv *ReturnValue) Type() ObjectType { return RET }
 func (rv *ReturnValue) Inspect() string  { return rv.Value.Inspect() }
 
-type Error struct{ Message string }
+type Error struct {
+	Message string
+	Error   error
+}
 
 func (e *Error) Type() ObjectType { return ERR }
-func (e *Error) Inspect() string  { return "ERROR: " + e.Message }
+func (e *Error) Inspect() string {
+	if e.Error != nil {
+		return "ERROR: " + e.Error.Error()
+	}
+	return "ERROR: " + e.Message
+}
 
 type Function struct {
 	Parameters []ast.Param
