@@ -5,41 +5,22 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
-	"strings"
-	"time"
+
+	"github.com/Fysh-Fyve/fyshls/cmd/util"
 )
 
 const PACKAGE = "github.com/Fysh-Fyve/fyshls"
 
-func X(k, v string) string { return fmt.Sprintf("-X '%s/version.%s=%s'", PACKAGE, k, v) }
-
-func run(args ...string) string {
-	cmd := exec.Command(args[0], args[1:]...)
-	if output, err := cmd.Output(); err == nil {
-		return strings.TrimSpace(string(output))
-	}
-	return ""
-}
-
 func main() {
 	outputFile := flag.String("o", "", "Output path of the executable")
 	flag.Parse()
-	version := run("git", "describe", "--tags", "--always", "--abbrev=0", "--match=v[0-9]*.[0-9]*.[0-9]*")
-	commitHash := run("git", "rev-parse", "--short", "HEAD")
-	buildTimeStamp := time.Now().Format("2006-01-02T15:04:05")
-
-	// Set linker flags
-	ldflags := strings.Join(
-		[]string{
-			X("version", version),
-			X("commitHash", commitHash),
-			X("buildTimestamp", buildTimeStamp),
-			X("LogStderr", "true"),
-		},
-		" ",
-	)
+	ldflags, _, err := util.GetLDFlags()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	args := os.Args[1:]
 
@@ -58,8 +39,7 @@ func main() {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
-		fmt.Println("error: ", err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 }
 
