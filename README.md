@@ -1,4 +1,4 @@
-# 🐋 The Fyshhiker's Guide to the Ocean
+# 🌊 The Fyshhiker's Guide to the Ocean 🐋 
 
 ## 👩‍💻 How to Compile and Run Fysh
 
