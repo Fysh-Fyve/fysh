@@ -211,8 +211,6 @@ func (p *Parser) primary() ast.Expression {
 		if p.expectFysh(fysh.RBowl) {
 			return expr
 		}
-	default:
-		p.expectFysh(fysh.Scales)
 	}
 	return nil
 }

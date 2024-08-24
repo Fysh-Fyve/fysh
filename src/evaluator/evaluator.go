@@ -17,6 +17,20 @@ var (
 	BREAK = &object.Break{}
 )
 
+type UnknownBinaryOperator struct {
+	lt string
+	op string
+	rt string
+}
+
+func (e UnknownBinaryOperator) Error() string {
+	return fmt.Sprintf("unknown operator: %s %s %s", e.lt, e.op, e.rt)
+}
+
+func unknownBinaryOp(lt object.ObjectType, op binary.Op, rt object.ObjectType) *object.Error {
+	return &object.Error{Error: UnknownBinaryOperator{lt: string(lt), op: op.String(), rt: string(rt)}}
+}
+
 func Eval(node ast.Node, env *object.Environment) object.Object {
 	switch node := node.(type) {
 	// Statements
@@ -232,10 +246,8 @@ func evalBinary(op binary.Op, left, right object.Object) object.Object {
 		return evalNumBinary(op, left, right)
 	case lt == object.STR && rt == object.STR:
 		return evalStrBinary(op, left, right)
-	case lt != rt:
-		return newError("type mismatch: %s %s %s", lt, op, rt)
 	default:
-		return newError("unknown operator: %s %s %s", lt, op, rt)
+		return unknownBinaryOp(lt, op, rt)
 	}
 }
 
@@ -300,7 +312,7 @@ func shiftLeft(f float64, shift int64) float64 {
 
 func bitWiseEval(op binary.Op, left, right object.Object) object.Object {
 	if right.Type() != object.INT {
-		return newError("unknown operator: %s %s %s", left.Type(), op, right.Type())
+		return unknownBinaryOp(left.Type(), op, right.Type())
 	}
 	rval := right.(*object.Integer).Value
 	if left.Type() == object.INT {
@@ -317,7 +329,7 @@ func bitWiseEval(op binary.Op, left, right object.Object) object.Object {
 		case binary.ShiftRight:
 			return &object.Integer{Value: lval >> rval}
 		default:
-			return newError("unknown operator: %s %s %s", left.Type(), op, right.Type())
+			return unknownBinaryOp(left.Type(), op, right.Type())
 		}
 	}
 	lval := left.(*object.Float).Value
@@ -327,7 +339,7 @@ func bitWiseEval(op binary.Op, left, right object.Object) object.Object {
 	case binary.ShiftRight:
 		return &object.Float{Value: shiftRight(lval, rval)}
 	default:
-		return newError("unknown operator: %s %s %s", left.Type(), op, right.Type())
+		return unknownBinaryOp(left.Type(), op, right.Type())
 	}
 }
 
@@ -373,16 +385,18 @@ func evalNumBinary(op binary.Op, left, right object.Object) object.Object {
 		return toBool(leftVal == rightVal)
 	case binary.NotEqual:
 		return toBool(leftVal != rightVal)
+	case binary.LogicalAnd:
+		return toBool(leftVal != 0 && rightVal != 0)
+	case binary.LogicalOr:
+		return toBool(leftVal != 0 || rightVal != 0)
 	default:
-		return newError("unknown operator: %s %s %s",
-			left.Type(), op, right.Type())
+		return unknownBinaryOp(left.Type(), op, right.Type())
 	}
 }
 
 func evalStrBinary(op binary.Op, left, right object.Object) object.Object {
 	if op != binary.Add {
-		return newError("unknown operator: %s %s %s",
-			left.Type(), op, right.Type())
+		return unknownBinaryOp(left.Type(), op, right.Type())
 	}
 
 	leftVal := left.(*object.String).Value

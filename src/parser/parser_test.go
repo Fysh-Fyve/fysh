@@ -146,12 +146,18 @@ func TestBlink(t *testing.T) {
 	input := `
 ><{{(((> (+o ><{> ~
 
-o+) ><steven> ~
-(+o ><###> ~
+><>
+	o+) ><steven> ~
+	(+o ><###> ~
+<><
 
-><(((^> [><steven> o~ ><}}>]
+><(((^> (><steven> o~ ><}}>)
 ><>
         <~ ><steven> ~
+<><
+><(((*> ><(((^> (><steven> o~ ><}))>)
+><>
+        <~ ><steven> ><{> ~
 <><
 
 ><(((@> [><{>]
@@ -169,9 +175,8 @@ o+) ><steven> ~
 `
 	tests := []Test{
 		{"(24 (+o 1);"},
-		{"o+) steven;"},
-		{"(+o ><###>;"},
-		{"if ((steven > 3)) {\nreturn steven;\n}"},
+		{"{\no+) steven;\n(+o ><###>;\n}"},
+		{"if ((steven > 3)) {\nreturn steven;\n} else {\nif ((steven > 4)) {\nreturn (steven + 1);\n}\n}"},
 		{"while (1) {\n(24 (+o 1);\n(24 (+o 0);\n}"},
 		{"while (1) {\nbreak;\nbreak;\n}"},
 	}
