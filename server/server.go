@@ -11,7 +11,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Fysh-Fyve/fyshls/support"
 	"github.com/Fysh-Fyve/fyshls/version"
 	fysh "github.com/Fysh-Fyve/tree-sitter-fysh"
 	sitter "github.com/smacker/go-tree-sitter"
@@ -83,8 +82,6 @@ func NewFyshLs(logger *log.Logger) *Server {
 		TextDocumentHover:      s.hover,
 		TextDocumentDefinition: s.definition,
 		TextDocumentCompletion: s.completion,
-
-		TextDocumentSemanticTokensFull: s.semanticTokensFull,
 	}
 	return s
 }
@@ -222,22 +219,6 @@ func (s *Server) completion(
 	return completionList, nil
 }
 
-func (s *Server) semanticTokensFull(
-	context *glsp.Context,
-	params *protocol.SemanticTokensParams,
-) (*protocol.SemanticTokens, error) {
-	data := Encode(
-		s.documents[params.TextDocument.URI],
-		s.trees[params.TextDocument.URI],
-	)
-	// var lineNum uint32 = 0
-	// for i := 0; i < len(data)/5; i++ {
-	// 	lineNum += data[i*5]
-	// 	s.log.Println(lineNum, data[i*5:i*5+5])
-	// }
-	return &protocol.SemanticTokens{Data: data}, nil
-}
-
 func (s *Server) initialize(
 	context *glsp.Context,
 	params *protocol.InitializeParams,
@@ -251,18 +232,6 @@ func (s *Server) initialize(
 	capabilities.CompletionProvider = &protocol.CompletionOptions{
 		TriggerCharacters: []string{"0", "1", "2", "3", "4", "5", "6", "7", "8",
 			"9", "0", "-", "@", "^", "*"},
-	}
-
-	if params.Capabilities.TextDocument.SemanticTokens != nil {
-		tokenTypes, _ := support.GetTokenTypes()
-		tokenModifiers, _ := support.GetTokenModifiers()
-		capabilities.SemanticTokensProvider = &protocol.SemanticTokensOptions{
-			Full: true,
-			Legend: protocol.SemanticTokensLegend{
-				TokenTypes:     tokenTypes,
-				TokenModifiers: tokenModifiers,
-			},
-		}
 	}
 
 	n, err := json.MarshalIndent(params, "", " ")
