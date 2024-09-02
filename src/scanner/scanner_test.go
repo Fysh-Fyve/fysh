@@ -180,9 +180,15 @@ func TestShortLoop(t *testing.T) {
 }
 
 func TestStrings(t *testing.T) {
-	input := "🫧This is a String🫧 ~"
+	input := "🫧This is a String🫧 ~ *This is a String* ~ *bubbles 🫧🫧 in string* ~ 🫧stars ** in string🫧~"
 	tests := []tt{
 		{fysh.Bubbles, "🫧This is a String🫧"},
+		lit(fysh.Water),
+		{fysh.Bubbles, "*This is a String*"},
+		lit(fysh.Water),
+		{fysh.Bubbles, "*bubbles 🫧🫧 in string*"},
+		lit(fysh.Water),
+		{fysh.Bubbles, "🫧stars ** in string🫧"},
 		lit(fysh.Water),
 		{fysh.End, ""},
 	}
