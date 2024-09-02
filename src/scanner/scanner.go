@@ -329,6 +329,14 @@ func (s *Scanner) ascii() fysh.Fysh {
 		f = newFysh(fysh.LTank)
 	case ']':
 		f = newFysh(fysh.RTank)
+	case '*':
+		f = newFysh(fysh.Bubbles)
+		for ch := s.periscope(); ch!= '*' && ch != 0; ch = s.reel() {
+		}
+		if s.expect('*') {
+			f.Type = fysh.Bubbles
+		}
+		f.Value = s.input[start:s.peek]
 	case '(':
 		if s.expect('+') {
 			if s.expect('o') {

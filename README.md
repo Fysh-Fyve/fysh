@@ -180,6 +180,7 @@ number that determines the doneness of the fysh.
 
 ```fysh
 ><steven> ≈ 🫧Hello, World!🫧 ~
+><steven> = *Hello, World!* ~
 ```
 
 #### 📦 Arrays and Traversal
