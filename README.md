@@ -276,7 +276,7 @@ are represented by `~o` or `o~`. Here, we are checking if Steven is bigger than
 
 #### 🔁 While Loops
 
-- In the whirlpool of Fysh logic, the while loop, represented by `@` or `🌀`,
+- In the whirlpool of Fysh logic, the while loop, represented by `@`, `🌀`, or `><(((@>`
   with the condition stored in either `[ ]` or `( )`. Small fysh define the
   iterative heart `><>` and `<><`.
 
@@ -290,6 +290,11 @@ each iteration.
 <><
 
 @ (><steven> o~ ><{((°>)
+><>
+    <steven><< ~
+<><
+
+><(((@> [><steven> o~ ><{((°>]
 ><>
     <steven><< ~
 <><
