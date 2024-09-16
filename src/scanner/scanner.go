@@ -484,6 +484,12 @@ func (s *Scanner) unicode() fysh.Fysh {
 			f.Type = fysh.Bubbles
 		}
 		f.Value = s.input[start:s.peek]
+	case '⸾':
+		if s.expect('⸾') {
+			f = newFysh(fysh.LOr)
+		} else {
+			f = newFysh(fysh.BWOr)
+		}
 	}
 	return f
 }

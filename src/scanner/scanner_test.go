@@ -228,6 +228,7 @@ func TestOperators(t *testing.T) {
 		{"</3", fysh.Div},
 		{"&", fysh.BWAnd},
 		{"|", fysh.BWOr},
+		{"⸾", fysh.BWOr},
 		{"!", fysh.BWNot},
 		{"^", fysh.Caret},
 		{"~=", fysh.NEq},
@@ -250,6 +251,7 @@ func TestOperators(t *testing.T) {
 		{"&&", fysh.LAnd},
 		{"<<", fysh.LShift},
 		{"||", fysh.LOr},
+		{"⸾⸾", fysh.LOr},
 		{"!!", fysh.LNot},
 	}
 	tests := make([]tt, len(operators))
