@@ -7,6 +7,10 @@
     { "match": "><//>.*$", "name": "comment.line.fysh" },
 
     { "match": "~(?!o)", "name": "punctuation.terminator.fysh" },
+    {
+      "match": "(><>)|(<><)",
+      "name": "punctuation.bracket.fysh"
+    },
 
     { "match": "><\\(*[*^@]>", "name": "keyword.control.fysh" },
     { "match": "@", "name": "keyword.control.fysh" },
@@ -14,6 +18,14 @@
     {
       "match": "(><\\\\/>)|(<\\\\/><)",
       "name": "keyword.control.loop.break.fysh"
+    },
+    {
+      "match": "\\*[a-zA-Z0-9_]+\\*",
+      "name": "string.quoted.double.fysh"
+    },
+    {
+      "match": "🫧[a-zA-Z0-9_]+🫧",
+      "name": "string.quoted.special.fysh"
     },
 
     { "match": "(?:\\(\\+o|o\\+\\))", "name": "keyword.operator.anchor.fysh" },
