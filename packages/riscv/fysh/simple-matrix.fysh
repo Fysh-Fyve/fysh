@@ -1,0 +1,62 @@
+></*>
+Simple 8x8 matrix!
+C1 - JE1 - gpio[24]
+C2 - JE2 - gpio[25]
+C3 - JE3 - gpio[26]
+R1 - JE4 - gpio[27]
+R2 - JE5 - gpio[28]
+R3 - JE6 - gpio[29]
+EN - JE7 - gpio[30]
+
+Buttons:
+H - gpio[0]
+J - gpio[1]
+K - gpio[2]
+L - gpio[3]
+
+o x o o x x x x
+x o x x o x x x
+o x o o x x x x
+x x x x x x x x
+x x x x o o x o
+x x x o x x o x
+x x x x o o x o
+x x x x x x x x
+
+(0,0), (0,2), (0,3), (1,1), (1,4), (2,0), (2,2), (2,3)
+(4,4), (4,5), (4,7), (5,3), (5,6), (6,4), (6,5), (6,7)
+<*/><
+
+>(set pixel) ><row> ><col>
+><>
+   (+o  (><{°> << ><{{{°>) | ><//> Output enable
+        ((><row> & ><{{{°>) << ><{{°>) | ><//> Row is next higher 3 bits
+        (><col> & ><{{{°>) ~ ><//> Col is first 3 bits
+<><
+
+>(draw fysh) ><dy> ><dx>
+><>
+   [(><dy> ><(((°>) >(set pixel) (><dx> ><(((°>)] ~ ><//> 0 0
+   [(><dy> ><(((°>) >(set pixel) (><dx> ><({(°>)] ~ ><//> 0 2
+   [(><dy> ><(((°>) >(set pixel) (><dx> ><({{°>)] ~ ><//> 0 3
+   [(><dy> ><(({°>) >(set pixel) (><dx> ><(({°>)] ~ ><//> 1 1
+   [(><dy> ><(({°>) >(set pixel) (><dx> ><{((°>)] ~ ><//> 1 4
+   [(><dy> ><({(°>) >(set pixel) (><dx> ><(((°>)] ~ ><//> 2 0
+   [(><dy> ><({(°>) >(set pixel) (><dx> ><({(°>)] ~ ><//> 2 2
+   [(><dy> ><({(°>) >(set pixel) (><dx> ><({{°>)] ~ ><//> 2 3
+<><
+
+><(((@> [><{°>]
+><>
+   [><(({°> >(draw_frame) ><(((°>] ~
+   [><(({°> >(draw_frame) ><(({°>] ~
+   [><(({°> >(draw_frame) ><({(°>] ~
+   [><(({°> >(draw_frame) ><({{°>] ~
+   [><(({°> >(draw_frame) ><{((°>] ~
+   [><(({°> >(draw_frame) ><{({°>] ~
+   [><(({°> >(draw_frame) ><{{(°>] ~
+   [><(({°> >(draw_frame) ><{{{°>] ~
+<><
+
+><//> we're just being nice to LLVM
+><(°> ~
