@@ -1,0 +1,106 @@
+=============
+Operators
+=============
+
+><fysh> == ><}}> ~
+><fysh> ≈≈ ><}}> ~
+><fysh> ~= ><}}> ~
+><fysh> ~≈ ><}}> ~
+><fysh> o~ ><}}> ~
+><fysh> ~o ><}}> ~
+><fysh> o~= ><}}> ~
+><fysh> o~≈ ><}}> ~
+><fysh> ~o= ><}}> ~
+><fysh> ~o≈ ><}}> ~
+><fysh> o≈ ><}}> ~
+><fysh> ≈o ><}}> ~
+><fysh> o= ><}}> ~
+><fysh> =o ><}}> ~
+
+-----------------------------
+
+(source_file
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_scales
+        (one)
+        (one))))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_scales
+        (one)
+        (one))))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_scales
+        (one)
+        (one))))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_scales
+        (one)
+        (one))))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_scales
+        (one)
+        (one))))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_scales
+        (one)
+        (one))))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_scales
+        (one)
+        (one))))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_scales
+        (one)
+        (one))))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_scales
+        (one)
+        (one))))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_scales
+        (one)
+        (one))))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_scales
+        (one)
+        (one))))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_scales
+        (one)
+        (one))))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_scales
+        (one)
+        (one))))
+  (expression_statement
+    (binary_expression
+      (positive_ident)
+      (positive_scales
+        (one)
+        (one)))))

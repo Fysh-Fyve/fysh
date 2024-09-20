@@ -1,0 +1,61 @@
+================================================================================
+Factorial Example
+================================================================================
+
+><//> Comment
+
+><number>    ≈ ><{({°> ~  ><//> b101 = 5
+><factorial> ≈ ><(({°> ~  ><//> b001 = 1
+
+><//> while number > 1
+><(((@> [><number> o~ ><(({°>]
+><>
+	><//> factorial = factorial * number
+	><factorial> ≈ ><factorial> ♡ ><number> ~
+
+	><//> number -= 1
+	<number><< ~
+<><
+><//> Last expression is "returned" to the _start function
+><factorial> ~
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment)
+  (assignment_statement
+    (positive_ident)
+    (positive_scales
+      (one)
+      (zero)
+      (one)))
+  (comment)
+  (assignment_statement
+    (positive_ident)
+    (positive_scales
+      (zero)
+      (zero)
+      (one)))
+  (comment)
+  (comment)
+  (loop_statement
+    (loopy_fysh)
+    (fysh_tank
+      (binary_expression
+        (positive_ident)
+        (positive_scales
+          (zero)
+          (zero)
+          (one))))
+    (block
+      (comment)
+      (assignment_statement
+        (positive_ident)
+        (binary_expression
+          (positive_ident)
+          (positive_ident)))
+      (comment)
+      (dec_statement)))
+  (comment)
+  (expression_statement
+    (positive_ident)))

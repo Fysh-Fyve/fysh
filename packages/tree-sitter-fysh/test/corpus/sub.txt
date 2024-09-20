@@ -1,0 +1,78 @@
+================================================================================
+SUBroutines
+================================================================================
+
+>(foo) ><arg1> ><arg2> ><arg3>
+><>
+    o+) ><local> ~
+    (+o ><local> ><arg1> ><arg2> <arg3>< ~
+<><
+
+[><}> >(foo) (><}> ><}>) ><}>] ~
+[>(foo) ><}> (><}> ><}>) ><}>] ~
+[><}> (><}> ><}>) ><}> (foo)<] ~
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (subroutine
+    (right_sub)
+    (positive_ident)
+    (positive_ident)
+    (positive_ident)
+    (block
+      (anchor_statement
+        (positive_ident))
+      (anchor_statement
+        (binary_expression
+          (addition
+            (binary_expression
+              (addition
+                (binary_expression
+                  (addition
+                    (positive_ident)
+                    (positive_ident)))
+                (positive_ident)))
+            (negative_ident))))))
+  (expression_statement
+    (call_expression
+      (positive_scales
+        (one))
+      (right_sub)
+      (fysh_bowl
+        (binary_expression
+          (addition
+            (positive_scales
+              (one))
+            (positive_scales
+              (one)))))
+      (positive_scales
+        (one))))
+  (expression_statement
+    (call_expression
+      (right_sub)
+      (positive_scales
+        (one))
+      (fysh_bowl
+        (binary_expression
+          (addition
+            (positive_scales
+              (one))
+            (positive_scales
+              (one)))))
+      (positive_scales
+        (one))))
+  (expression_statement
+    (call_expression
+      (positive_scales
+        (one))
+      (fysh_bowl
+        (binary_expression
+          (addition
+            (positive_scales
+              (one))
+            (positive_scales
+              (one)))))
+      (positive_scales
+        (one))
+      (left_sub))))

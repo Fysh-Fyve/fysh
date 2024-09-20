@@ -1,0 +1,1705 @@
+[
+  {
+    "type": "addition",
+    "named": true,
+    "fields": {
+      "left": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "aquarium",
+            "named": true
+          },
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "fysh_bowl",
+            "named": true
+          },
+          {
+            "type": "grilled_fysh",
+            "named": true
+          },
+          {
+            "type": "negative_bones",
+            "named": true
+          },
+          {
+            "type": "negative_ident",
+            "named": true
+          },
+          {
+            "type": "negative_scales",
+            "named": true
+          },
+          {
+            "type": "positive_bones",
+            "named": true
+          },
+          {
+            "type": "positive_ident",
+            "named": true
+          },
+          {
+            "type": "positive_scales",
+            "named": true
+          }
+        ]
+      },
+      "right": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "aquarium",
+            "named": true
+          },
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "fysh_bowl",
+            "named": true
+          },
+          {
+            "type": "grilled_fysh",
+            "named": true
+          },
+          {
+            "type": "negative_bones",
+            "named": true
+          },
+          {
+            "type": "negative_ident",
+            "named": true
+          },
+          {
+            "type": "negative_scales",
+            "named": true
+          },
+          {
+            "type": "positive_bones",
+            "named": true
+          },
+          {
+            "type": "positive_ident",
+            "named": true
+          },
+          {
+            "type": "positive_scales",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "anchor_statement",
+    "named": true,
+    "fields": {
+      "dir": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "(+o",
+            "named": false
+          },
+          {
+            "type": "o+)",
+            "named": false
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "aquarium",
+            "named": true
+          },
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "fysh_bowl",
+            "named": true
+          },
+          {
+            "type": "grilled_fysh",
+            "named": true
+          },
+          {
+            "type": "negative_bones",
+            "named": true
+          },
+          {
+            "type": "negative_ident",
+            "named": true
+          },
+          {
+            "type": "negative_scales",
+            "named": true
+          },
+          {
+            "type": "positive_bones",
+            "named": true
+          },
+          {
+            "type": "positive_ident",
+            "named": true
+          },
+          {
+            "type": "positive_scales",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "aquarium",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "aquarium",
+          "named": true
+        },
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "fysh_bowl",
+          "named": true
+        },
+        {
+          "type": "grilled_fysh",
+          "named": true
+        },
+        {
+          "type": "negative_bones",
+          "named": true
+        },
+        {
+          "type": "negative_ident",
+          "named": true
+        },
+        {
+          "type": "negative_scales",
+          "named": true
+        },
+        {
+          "type": "positive_bones",
+          "named": true
+        },
+        {
+          "type": "positive_ident",
+          "named": true
+        },
+        {
+          "type": "positive_scales",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "assignment_statement",
+    "named": true,
+    "fields": {
+      "left": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "positive_ident",
+            "named": true
+          }
+        ]
+      },
+      "right": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "aquarium",
+            "named": true
+          },
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "fysh_bowl",
+            "named": true
+          },
+          {
+            "type": "grilled_fysh",
+            "named": true
+          },
+          {
+            "type": "negative_bones",
+            "named": true
+          },
+          {
+            "type": "negative_ident",
+            "named": true
+          },
+          {
+            "type": "negative_scales",
+            "named": true
+          },
+          {
+            "type": "positive_bones",
+            "named": true
+          },
+          {
+            "type": "positive_ident",
+            "named": true
+          },
+          {
+            "type": "positive_scales",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "binary_expression",
+    "named": true,
+    "fields": {
+      "left": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "aquarium",
+            "named": true
+          },
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "fysh_bowl",
+            "named": true
+          },
+          {
+            "type": "grilled_fysh",
+            "named": true
+          },
+          {
+            "type": "negative_bones",
+            "named": true
+          },
+          {
+            "type": "negative_ident",
+            "named": true
+          },
+          {
+            "type": "negative_scales",
+            "named": true
+          },
+          {
+            "type": "positive_bones",
+            "named": true
+          },
+          {
+            "type": "positive_ident",
+            "named": true
+          },
+          {
+            "type": "positive_scales",
+            "named": true
+          }
+        ]
+      },
+      "operator": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "&",
+            "named": false
+          },
+          {
+            "type": "(+o",
+            "named": false
+          },
+          {
+            "type": "</3",
+            "named": false
+          },
+          {
+            "type": "<3",
+            "named": false
+          },
+          {
+            "type": "<<",
+            "named": false
+          },
+          {
+            "type": "==",
+            "named": false
+          },
+          {
+            "type": "=o",
+            "named": false
+          },
+          {
+            "type": ">>",
+            "named": false
+          },
+          {
+            "type": "^",
+            "named": false
+          },
+          {
+            "type": "o+)",
+            "named": false
+          },
+          {
+            "type": "o=",
+            "named": false
+          },
+          {
+            "type": "o~",
+            "named": false
+          },
+          {
+            "type": "o~=",
+            "named": false
+          },
+          {
+            "type": "o~≈",
+            "named": false
+          },
+          {
+            "type": "o≈",
+            "named": false
+          },
+          {
+            "type": "|",
+            "named": false
+          },
+          {
+            "type": "~=",
+            "named": false
+          },
+          {
+            "type": "~o",
+            "named": false
+          },
+          {
+            "type": "~o=",
+            "named": false
+          },
+          {
+            "type": "~o≈",
+            "named": false
+          },
+          {
+            "type": "~≈",
+            "named": false
+          },
+          {
+            "type": "≈o",
+            "named": false
+          },
+          {
+            "type": "≈≈",
+            "named": false
+          },
+          {
+            "type": "☙",
+            "named": false
+          },
+          {
+            "type": "♡",
+            "named": false
+          },
+          {
+            "type": "♥",
+            "named": false
+          },
+          {
+            "type": "❣",
+            "named": false
+          },
+          {
+            "type": "❣️",
+            "named": false
+          },
+          {
+            "type": "❤",
+            "named": false
+          },
+          {
+            "type": "❤️",
+            "named": false
+          },
+          {
+            "type": "❤️‍🩹",
+            "named": false
+          },
+          {
+            "type": "❥",
+            "named": false
+          },
+          {
+            "type": "❦",
+            "named": false
+          },
+          {
+            "type": "❧",
+            "named": false
+          },
+          {
+            "type": "🎔",
+            "named": false
+          },
+          {
+            "type": "🏩",
+            "named": false
+          },
+          {
+            "type": "💌",
+            "named": false
+          },
+          {
+            "type": "💓",
+            "named": false
+          },
+          {
+            "type": "💔",
+            "named": false
+          },
+          {
+            "type": "💕",
+            "named": false
+          },
+          {
+            "type": "💖",
+            "named": false
+          },
+          {
+            "type": "💗",
+            "named": false
+          },
+          {
+            "type": "💘",
+            "named": false
+          },
+          {
+            "type": "💙",
+            "named": false
+          },
+          {
+            "type": "💚",
+            "named": false
+          },
+          {
+            "type": "💛",
+            "named": false
+          },
+          {
+            "type": "💜",
+            "named": false
+          },
+          {
+            "type": "💝",
+            "named": false
+          },
+          {
+            "type": "💞",
+            "named": false
+          },
+          {
+            "type": "💟",
+            "named": false
+          },
+          {
+            "type": "🖤",
+            "named": false
+          },
+          {
+            "type": "🤍",
+            "named": false
+          },
+          {
+            "type": "🤎",
+            "named": false
+          },
+          {
+            "type": "🧡",
+            "named": false
+          },
+          {
+            "type": "🩵",
+            "named": false
+          },
+          {
+            "type": "🩶",
+            "named": false
+          },
+          {
+            "type": "🩷",
+            "named": false
+          },
+          {
+            "type": "🫀",
+            "named": false
+          },
+          {
+            "type": "🫶",
+            "named": false
+          },
+          {
+            "type": "🫶🏻",
+            "named": false
+          },
+          {
+            "type": "🫶🏼",
+            "named": false
+          },
+          {
+            "type": "🫶🏽",
+            "named": false
+          },
+          {
+            "type": "🫶🏾",
+            "named": false
+          },
+          {
+            "type": "🫶🏿",
+            "named": false
+          }
+        ]
+      },
+      "right": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "aquarium",
+            "named": true
+          },
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "fysh_bowl",
+            "named": true
+          },
+          {
+            "type": "grilled_fysh",
+            "named": true
+          },
+          {
+            "type": "negative_bones",
+            "named": true
+          },
+          {
+            "type": "negative_ident",
+            "named": true
+          },
+          {
+            "type": "negative_scales",
+            "named": true
+          },
+          {
+            "type": "positive_bones",
+            "named": true
+          },
+          {
+            "type": "positive_ident",
+            "named": true
+          },
+          {
+            "type": "positive_scales",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "addition",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "anchor_statement",
+          "named": true
+        },
+        {
+          "type": "assignment_statement",
+          "named": true
+        },
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "break_statement",
+          "named": true
+        },
+        {
+          "type": "dec_statement",
+          "named": true
+        },
+        {
+          "type": "expression_statement",
+          "named": true
+        },
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "inc_statement",
+          "named": true
+        },
+        {
+          "type": "loop_statement",
+          "named": true
+        },
+        {
+          "type": "return_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "break_statement",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "call_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "aquarium",
+          "named": true
+        },
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "fysh_bowl",
+          "named": true
+        },
+        {
+          "type": "grilled_fysh",
+          "named": true
+        },
+        {
+          "type": "left_sub",
+          "named": true
+        },
+        {
+          "type": "negative_bones",
+          "named": true
+        },
+        {
+          "type": "negative_ident",
+          "named": true
+        },
+        {
+          "type": "negative_scales",
+          "named": true
+        },
+        {
+          "type": "positive_bones",
+          "named": true
+        },
+        {
+          "type": "positive_ident",
+          "named": true
+        },
+        {
+          "type": "positive_scales",
+          "named": true
+        },
+        {
+          "type": "right_sub",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "dead_fysh",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "dec_statement",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "expression_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "aquarium",
+          "named": true
+        },
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "fysh_bowl",
+          "named": true
+        },
+        {
+          "type": "grilled_fysh",
+          "named": true
+        },
+        {
+          "type": "negative_bones",
+          "named": true
+        },
+        {
+          "type": "negative_ident",
+          "named": true
+        },
+        {
+          "type": "negative_scales",
+          "named": true
+        },
+        {
+          "type": "positive_bones",
+          "named": true
+        },
+        {
+          "type": "positive_ident",
+          "named": true
+        },
+        {
+          "type": "positive_scales",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "fysh_bowl",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "aquarium",
+          "named": true
+        },
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "fysh_bowl",
+          "named": true
+        },
+        {
+          "type": "grilled_fysh",
+          "named": true
+        },
+        {
+          "type": "negative_bones",
+          "named": true
+        },
+        {
+          "type": "negative_ident",
+          "named": true
+        },
+        {
+          "type": "negative_scales",
+          "named": true
+        },
+        {
+          "type": "positive_bones",
+          "named": true
+        },
+        {
+          "type": "positive_ident",
+          "named": true
+        },
+        {
+          "type": "positive_scales",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "fysh_tank",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "aquarium",
+          "named": true
+        },
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "fysh_bowl",
+          "named": true
+        },
+        {
+          "type": "grilled_fysh",
+          "named": true
+        },
+        {
+          "type": "negative_bones",
+          "named": true
+        },
+        {
+          "type": "negative_ident",
+          "named": true
+        },
+        {
+          "type": "negative_scales",
+          "named": true
+        },
+        {
+          "type": "positive_bones",
+          "named": true
+        },
+        {
+          "type": "positive_ident",
+          "named": true
+        },
+        {
+          "type": "positive_scales",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "grilled_fysh",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "happy_fysh",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "if_statement",
+    "named": true,
+    "fields": {
+      "cond": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "fysh_tank",
+            "named": true
+          }
+        ]
+      },
+      "else": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          },
+          {
+            "type": "if_statement",
+            "named": true
+          }
+        ]
+      },
+      "then": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "dead_fysh",
+          "named": true
+        },
+        {
+          "type": "happy_fysh",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "inc_statement",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "left_sub",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "loop_statement",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "cond": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "fysh_tank",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "loopy_fysh",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "loopy_fysh",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "negative_bones",
+    "named": true,
+    "fields": {
+      "bones": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "one",
+            "named": true
+          },
+          {
+            "type": "spine",
+            "named": true
+          },
+          {
+            "type": "zero",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "negative_ident",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "negative_scales",
+    "named": true,
+    "fields": {
+      "scales": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "one",
+            "named": true
+          },
+          {
+            "type": "zero",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "positive_bones",
+    "named": true,
+    "fields": {
+      "bones": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "one",
+            "named": true
+          },
+          {
+            "type": "spine",
+            "named": true
+          },
+          {
+            "type": "zero",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "positive_ident",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "positive_scales",
+    "named": true,
+    "fields": {
+      "scales": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "one",
+            "named": true
+          },
+          {
+            "type": "zero",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "return_statement",
+    "named": true,
+    "fields": {
+      "right": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "aquarium",
+            "named": true
+          },
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "fysh_bowl",
+            "named": true
+          },
+          {
+            "type": "grilled_fysh",
+            "named": true
+          },
+          {
+            "type": "negative_bones",
+            "named": true
+          },
+          {
+            "type": "negative_ident",
+            "named": true
+          },
+          {
+            "type": "negative_scales",
+            "named": true
+          },
+          {
+            "type": "positive_bones",
+            "named": true
+          },
+          {
+            "type": "positive_ident",
+            "named": true
+          },
+          {
+            "type": "positive_scales",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "right_sub",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "source_file",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "anchor_statement",
+          "named": true
+        },
+        {
+          "type": "assignment_statement",
+          "named": true
+        },
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "break_statement",
+          "named": true
+        },
+        {
+          "type": "dec_statement",
+          "named": true
+        },
+        {
+          "type": "expression_statement",
+          "named": true
+        },
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "inc_statement",
+          "named": true
+        },
+        {
+          "type": "loop_statement",
+          "named": true
+        },
+        {
+          "type": "return_statement",
+          "named": true
+        },
+        {
+          "type": "subroutine",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "spine",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "subroutine",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "params": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "positive_ident",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "right_sub",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "###",
+    "named": false
+  },
+  {
+    "type": "&",
+    "named": false
+  },
+  {
+    "type": "(",
+    "named": false
+  },
+  {
+    "type": "(((",
+    "named": false
+  },
+  {
+    "type": "(+o",
+    "named": false
+  },
+  {
+    "type": ")",
+    "named": false
+  },
+  {
+    "type": ")<",
+    "named": false
+  },
+  {
+    "type": "*",
+    "named": false
+  },
+  {
+    "type": "-",
+    "named": false
+  },
+  {
+    "type": "<",
+    "named": false
+  },
+  {
+    "type": "</3",
+    "named": false
+  },
+  {
+    "type": "<3",
+    "named": false
+  },
+  {
+    "type": "<<",
+    "named": false
+  },
+  {
+    "type": "<><",
+    "named": false
+  },
+  {
+    "type": "<\\/><",
+    "named": false
+  },
+  {
+    "type": "<~",
+    "named": false
+  },
+  {
+    "type": "=",
+    "named": false
+  },
+  {
+    "type": "==",
+    "named": false
+  },
+  {
+    "type": "=o",
+    "named": false
+  },
+  {
+    "type": ">",
+    "named": false
+  },
+  {
+    "type": ">(",
+    "named": false
+  },
+  {
+    "type": "><",
+    "named": false
+  },
+  {
+    "type": "><>",
+    "named": false
+  },
+  {
+    "type": "><\\/>",
+    "named": false
+  },
+  {
+    "type": ">>",
+    "named": false
+  },
+  {
+    "type": "@",
+    "named": false
+  },
+  {
+    "type": "[",
+    "named": false
+  },
+  {
+    "type": "]",
+    "named": false
+  },
+  {
+    "type": "^",
+    "named": false
+  },
+  {
+    "type": "comment",
+    "named": true
+  },
+  {
+    "type": "multiline_comment",
+    "named": true
+  },
+  {
+    "type": "o+)",
+    "named": false
+  },
+  {
+    "type": "o=",
+    "named": false
+  },
+  {
+    "type": "one",
+    "named": true
+  },
+  {
+    "type": "o~",
+    "named": false
+  },
+  {
+    "type": "o~=",
+    "named": false
+  },
+  {
+    "type": "o~≈",
+    "named": false
+  },
+  {
+    "type": "o≈",
+    "named": false
+  },
+  {
+    "type": "zero",
+    "named": true
+  },
+  {
+    "type": "|",
+    "named": false
+  },
+  {
+    "type": "~",
+    "named": false
+  },
+  {
+    "type": "~=",
+    "named": false
+  },
+  {
+    "type": "~o",
+    "named": false
+  },
+  {
+    "type": "~o=",
+    "named": false
+  },
+  {
+    "type": "~o≈",
+    "named": false
+  },
+  {
+    "type": "~≈",
+    "named": false
+  },
+  {
+    "type": "≈",
+    "named": false
+  },
+  {
+    "type": "≈o",
+    "named": false
+  },
+  {
+    "type": "≈≈",
+    "named": false
+  },
+  {
+    "type": "☙",
+    "named": false
+  },
+  {
+    "type": "♡",
+    "named": false
+  },
+  {
+    "type": "♥",
+    "named": false
+  },
+  {
+    "type": "❣",
+    "named": false
+  },
+  {
+    "type": "❣️",
+    "named": false
+  },
+  {
+    "type": "❤",
+    "named": false
+  },
+  {
+    "type": "❤️",
+    "named": false
+  },
+  {
+    "type": "❤️‍🩹",
+    "named": false
+  },
+  {
+    "type": "❥",
+    "named": false
+  },
+  {
+    "type": "❦",
+    "named": false
+  },
+  {
+    "type": "❧",
+    "named": false
+  },
+  {
+    "type": "🎔",
+    "named": false
+  },
+  {
+    "type": "🏩",
+    "named": false
+  },
+  {
+    "type": "💌",
+    "named": false
+  },
+  {
+    "type": "💓",
+    "named": false
+  },
+  {
+    "type": "💔",
+    "named": false
+  },
+  {
+    "type": "💕",
+    "named": false
+  },
+  {
+    "type": "💖",
+    "named": false
+  },
+  {
+    "type": "💗",
+    "named": false
+  },
+  {
+    "type": "💘",
+    "named": false
+  },
+  {
+    "type": "💙",
+    "named": false
+  },
+  {
+    "type": "💚",
+    "named": false
+  },
+  {
+    "type": "💛",
+    "named": false
+  },
+  {
+    "type": "💜",
+    "named": false
+  },
+  {
+    "type": "💝",
+    "named": false
+  },
+  {
+    "type": "💞",
+    "named": false
+  },
+  {
+    "type": "💟",
+    "named": false
+  },
+  {
+    "type": "🖤",
+    "named": false
+  },
+  {
+    "type": "🤍",
+    "named": false
+  },
+  {
+    "type": "🤎",
+    "named": false
+  },
+  {
+    "type": "🦑",
+    "named": false
+  },
+  {
+    "type": "🧡",
+    "named": false
+  },
+  {
+    "type": "🩵",
+    "named": false
+  },
+  {
+    "type": "🩶",
+    "named": false
+  },
+  {
+    "type": "🩷",
+    "named": false
+  },
+  {
+    "type": "🫀",
+    "named": false
+  },
+  {
+    "type": "🫶",
+    "named": false
+  },
+  {
+    "type": "🫶🏻",
+    "named": false
+  },
+  {
+    "type": "🫶🏼",
+    "named": false
+  },
+  {
+    "type": "🫶🏽",
+    "named": false
+  },
+  {
+    "type": "🫶🏾",
+    "named": false
+  },
+  {
+    "type": "🫶🏿",
+    "named": false
+  }
+]

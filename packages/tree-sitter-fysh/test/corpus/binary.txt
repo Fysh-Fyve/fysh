@@ -1,0 +1,76 @@
+================================================================================
+Binary Expressions
+================================================================================
+
+><steven> ≈ ><{{(({°> 💔 ><{({°> ~
+><steven> = ><{{(({o> </3 ><{({o> ~
+><steven> ≈ ><{{(({°> ><{{(°> ♡ ><{{(({°> <°}})>< 💔 ( ><{{(°> ><{{(°> )  ~
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (assignment_statement
+    (positive_ident)
+    (binary_expression
+      (positive_scales
+        (one)
+        (one)
+        (zero)
+        (zero)
+        (one))
+      (positive_scales
+        (one)
+        (zero)
+        (one))))
+  (assignment_statement
+    (positive_ident)
+    (binary_expression
+      (positive_scales
+        (one)
+        (one)
+        (zero)
+        (zero)
+        (one))
+      (positive_scales
+        (one)
+        (zero)
+        (one))))
+  (assignment_statement
+    (positive_ident)
+    (binary_expression
+      (addition
+        (binary_expression
+          (addition
+            (positive_scales
+              (one)
+              (one)
+              (zero)
+              (zero)
+              (one))
+            (binary_expression
+              (positive_scales
+                (one)
+                (one)
+                (zero))
+              (positive_scales
+                (one)
+                (one)
+                (zero)
+                (zero)
+                (one)))))
+        (binary_expression
+          (negative_scales
+            (one)
+            (one)
+            (zero))
+          (fysh_bowl
+            (binary_expression
+              (addition
+                (positive_scales
+                  (one)
+                  (one)
+                  (zero))
+                (positive_scales
+                  (one)
+                  (one)
+                  (zero))))))))))
