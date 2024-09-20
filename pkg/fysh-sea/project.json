@@ -1,6 +1,6 @@
 {
   "name": "fysh-sea",
-  "sourceRoot": "packages/fysh-sea",
+  "sourceRoot": "pkg/fysh-sea",
   "targets": {
     "build": {
       "executor": "nx:run-commands",
@@ -14,7 +14,7 @@
         "outputs": [
           "{projectRoot}/build/fysh-sea"
         ],
-        "cwd": "packages/fysh-sea",
+        "cwd": "pkg/fysh-sea",
         "command": "make fysh-sea",
         "color": true
       },
@@ -29,7 +29,7 @@
           "!{projectRoot}/dprint.json",
           "!{projectRoot}/examples"
         ],
-        "cwd": "packages/fysh-sea",
+        "cwd": "pkg/fysh-sea",
         "command": "make test",
         "color": true
       },

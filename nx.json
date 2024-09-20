@@ -1,4 +1,9 @@
 {
+  "$schema": "./.nx/installation/node_modules/nx/schemas/nx-schema.json",
+  "workspaceLayout": {
+    "appsDir": "pkg",
+    "libsDir": "pkg"
+  },
   "installation": {
     "version": "19.7.4",
     "plugins": {
