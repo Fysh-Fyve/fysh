@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/Fysh-Fyve/fyshls/server"
+	"github.com/Fysh-Fyve/fysh/pkg/fyshls/server"
 	"github.com/stretchr/testify/assert"
 )
 

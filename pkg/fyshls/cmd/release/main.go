@@ -10,7 +10,7 @@ import (
 	"os/exec"
 	"path"
 
-	"github.com/Fysh-Fyve/fyshls/cmd/util"
+	"github.com/Fysh-Fyve/fysh/pkg/fyshls/cmd/util"
 	"github.com/bitfield/script"
 )
 

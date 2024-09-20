@@ -4,7 +4,7 @@ import (
 	_ "embed"
 	"fmt"
 
-	"github.com/Fysh-Fyve/fyshls/support"
+	"github.com/Fysh-Fyve/fysh/pkg/fyshls/support"
 	fysh "github.com/Fysh-Fyve/tree-sitter-fysh"
 	queries "github.com/Fysh-Fyve/tree-sitter-fysh/queries"
 	sitter "github.com/smacker/go-tree-sitter"

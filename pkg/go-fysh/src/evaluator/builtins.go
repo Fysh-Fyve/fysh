@@ -2,7 +2,8 @@ package evaluator
 
 import (
 	"fmt"
-	"github.com/Fysh-Fyve/fysh/src/object"
+
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/object"
 )
 
 var builtins = map[string]*object.Builtin{

@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/Fysh-Fyve/fysh/src/ast"
-	"github.com/Fysh-Fyve/fysh/src/ast/binary"
-	"github.com/Fysh-Fyve/fysh/src/ast/unary"
-	"github.com/Fysh-Fyve/fysh/src/object"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/ast"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/ast/binary"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/ast/unary"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/object"
 )
 
 var (

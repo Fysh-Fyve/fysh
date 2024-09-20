@@ -7,7 +7,7 @@ import (
 	"strings"
 	"unsafe"
 
-	"github.com/Fysh-Fyve/fysh/src/ast"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/ast"
 )
 
 type BuiltinFunction func(args ...Object) Object

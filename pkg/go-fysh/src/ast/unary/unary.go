@@ -3,7 +3,7 @@ package unary
 import (
 	"strconv"
 
-	"github.com/Fysh-Fyve/fysh/src/fysh"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/fysh"
 )
 
 type Op int8

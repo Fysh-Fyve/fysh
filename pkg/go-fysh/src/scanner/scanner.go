@@ -6,7 +6,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/Fysh-Fyve/fysh/src/fysh"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/fysh"
 )
 
 type Scanner struct {
@@ -331,7 +331,7 @@ func (s *Scanner) ascii() fysh.Fysh {
 		f = newFysh(fysh.RTank)
 	case '*':
 		f = newFysh(fysh.Bubbles)
-		for ch := s.periscope(); ch!= '*' && ch != 0; ch = s.reel() {
+		for ch := s.periscope(); ch != '*' && ch != 0; ch = s.reel() {
 		}
 		if s.expect('*') {
 			f.Type = fysh.Bubbles

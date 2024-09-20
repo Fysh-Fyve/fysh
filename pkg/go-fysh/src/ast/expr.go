@@ -6,9 +6,9 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/Fysh-Fyve/fysh/src/ast/binary"
-	"github.com/Fysh-Fyve/fysh/src/ast/unary"
-	"github.com/Fysh-Fyve/fysh/src/fysh"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/ast/binary"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/ast/unary"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/fysh"
 )
 
 type Identifier struct{ Name []byte }

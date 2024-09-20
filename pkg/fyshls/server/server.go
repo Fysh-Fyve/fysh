@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Fysh-Fyve/fyshls/version"
+	"github.com/Fysh-Fyve/fysh/pkg/fyshls/version"
 	fysh "github.com/Fysh-Fyve/tree-sitter-fysh"
 	sitter "github.com/smacker/go-tree-sitter"
 	"github.com/tliron/glsp"

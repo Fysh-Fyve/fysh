@@ -5,10 +5,10 @@ import (
 	"math"
 	"testing"
 
-	"github.com/Fysh-Fyve/fysh/src/evaluator"
-	"github.com/Fysh-Fyve/fysh/src/object"
-	"github.com/Fysh-Fyve/fysh/src/parser"
-	"github.com/Fysh-Fyve/fysh/src/scanner"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/evaluator"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/object"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/parser"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/scanner"
 )
 
 const floatTolerance = 1e-5

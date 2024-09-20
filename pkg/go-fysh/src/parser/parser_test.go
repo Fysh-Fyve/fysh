@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/Fysh-Fyve/fysh/src/parser"
-	"github.com/Fysh-Fyve/fysh/src/scanner"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/parser"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/scanner"
 )
 
 type Test struct{ statement string }

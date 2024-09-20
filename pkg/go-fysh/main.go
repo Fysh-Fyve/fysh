@@ -9,11 +9,11 @@ import (
 
 	"golang.org/x/term"
 
-	"github.com/Fysh-Fyve/fysh/src/evaluator"
-	"github.com/Fysh-Fyve/fysh/src/object"
-	"github.com/Fysh-Fyve/fysh/src/parser"
-	"github.com/Fysh-Fyve/fysh/src/repl"
-	"github.com/Fysh-Fyve/fysh/src/scanner"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/evaluator"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/object"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/parser"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/repl"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/scanner"
 )
 
 func main() {

@@ -8,7 +8,7 @@ import (
 	"github.com/bitfield/script"
 )
 
-const PACKAGE = "github.com/Fysh-Fyve/fyshls"
+const PACKAGE = "github.com/Fysh-Fyve/fysh/pkg/fyshls"
 
 func X(k, v string) string { return fmt.Sprintf("-X '%s/version.%s=%s'", PACKAGE, k, v) }
 

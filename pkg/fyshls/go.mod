@@ -1,4 +1,4 @@
-module github.com/Fysh-Fyve/fyshls
+module github.com/Fysh-Fyve/fysh/pkg/fyshls
 
 go 1.22
 

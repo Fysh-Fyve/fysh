@@ -29,11 +29,11 @@
         - Doctest
     - [ ] Make it less reliant on Linux-specific stuff
 - [ ] go-fysh
-    - [ ] Change package name
+    - [x] Change package name
     - [ ] Factor out parser
     - [ ] Still need tree-sitter-fysh?
 - [ ] fyshls
-    - [ ] Change package name
+    - [x] Change package name
     - [ ] Use go-fysh parser
 - [ ] tree-sitter-fysh
     - Not sure what to do with this

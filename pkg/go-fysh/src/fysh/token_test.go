@@ -3,7 +3,7 @@ package fysh_test
 import (
 	"testing"
 
-	"github.com/Fysh-Fyve/fysh/src/fysh"
+	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/fysh"
 )
 
 type nameCase struct {

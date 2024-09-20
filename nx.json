@@ -4,10 +4,19 @@
     "appsDir": "pkg",
     "libsDir": "pkg"
   },
+  "targetDefaults": {
+    "test": {
+      "cache": true
+    },
+    "lint": {
+      "cache": true
+    }
+  },
   "installation": {
     "version": "19.7.4",
     "plugins": {
-      "@nx-go/nx-go": "3.2.0"
+      "@nx-go/nx-go": "3.2.0",
+      "@nrwl/node": "19.7.4"
     }
   },
   "plugins": [

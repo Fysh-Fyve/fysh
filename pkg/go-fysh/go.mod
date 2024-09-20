@@ -1,4 +1,4 @@
-module github.com/Fysh-Fyve/fysh
+module github.com/Fysh-Fyve/fysh/pkg/go-fysh
 
 go 1.22
 
