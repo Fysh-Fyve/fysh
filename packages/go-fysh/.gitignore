@@ -1,0 +1,7 @@
+.cache
+build
+doctest/doctest.h
+test/doctest.h
+docs/diagrams
+/fysh
+cover.out

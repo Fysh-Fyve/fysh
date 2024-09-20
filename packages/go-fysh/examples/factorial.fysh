@@ -1,0 +1,16 @@
+><//> Comment
+
+><number>    ≈ ><{({°> ~  ><//> b101 = 5
+><factorial> ≈ ><(({°> ~  ><//> b001 = 1
+
+><//> while number > 1
+><(((@> [><number> o~ ><(({°>]
+><>
+	><//> factorial = factorial * number
+	><factorial> ≈ ><factorial> ♡ ><number> ~
+
+	><//> number -= 1
+	<number><< ~
+<><
+><//> Last expression is "returned" to the _start function
+><factorial> ~
