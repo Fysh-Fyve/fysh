@@ -1,0 +1,4 @@
+html
+cmd/out/*
+!cmd/out/.keep
+

@@ -1,0 +1,39 @@
+{
+  "name": "fysh-sea",
+  "sourceRoot": "packages/fysh-sea",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "inputs": [
+          "!{projectRoot}/**/*.md",
+          "!{projectRoot}/LICENSE",
+          "!{projectRoot}/dprint.json",
+          "!{projectRoot}/examples"
+        ],
+        "outputs": [
+          "{projectRoot}/build/fysh-sea"
+        ],
+        "cwd": "packages/fysh-sea",
+        "command": "make fysh-sea",
+        "color": true
+      },
+      "cache": true
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "inputs": [
+          "!{projectRoot}/**/*.md",
+          "!{projectRoot}/LICENSE",
+          "!{projectRoot}/dprint.json",
+          "!{projectRoot}/examples"
+        ],
+        "cwd": "packages/fysh-sea",
+        "command": "make test",
+        "color": true
+      },
+      "cache": true
+    }
+  }
+}
