@@ -1,0 +1,34 @@
+{
+  "name": "website",
+  "$schema": "../../.nx/installation/node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "pkg/website",
+  "tags": [],
+  "targets": {
+    "deploy": {
+      "executor": "@nx-go/nx-go:serve",
+      "options": {
+        "main": "{projectRoot}/cmd/deploy/main.go"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "hugo",
+        "cwd": "pkg/website"
+      },
+      "cache": true
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "hugo server -D",
+        "cwd": "pkg/website"
+      },
+      "cache": true
+    },
+    "tidy": {
+      "executor": "@nx-go/nx-go:tidy"
+    }
+  }
+}

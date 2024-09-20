@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	originUrl        = "git@github.com:Fysh-Fyve/Fysh-Fyve.github.io"
+	originUrl        = "https://github.com/Fysh-Fyve/Fysh-Fyve.github.io"
 	projectName      = "fysh-five.github.io"
 	deploymentBranch = "gh-pages"
 	buildCmd         = "hugo"
@@ -57,6 +57,9 @@ func dieIf(err error) {
 }
 
 func main() {
+	if err := os.RemoveAll("public"); err != nil {
+		log.Printf("failed to remove dir: %v\n", err)
+	}
 	getCmdOutput("git config --get remote.origin.url")
 	latestHash := getCmdOutput("git rev-parse HEAD")
 

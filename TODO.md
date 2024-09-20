@@ -14,8 +14,9 @@
   - [ ] Create project.json
   - [ ] Create tasks for publishing and testing
 - [ ] website
-  - [ ] Create project.json
-  - [ ] Create tasks for publishing
+  - [x] Create project.json
+  - [x] Create tasks for publishing
+  - [ ] Interpreter page
 - [ ] docs-capstone
   - [ ] Create project.json
   - [ ] Create tasks for publishing

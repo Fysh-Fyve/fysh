@@ -3,4 +3,5 @@ go 1.22
 use (
 	./pkg/fyshls
 	./pkg/go-fysh
+	./pkg/website
 )
