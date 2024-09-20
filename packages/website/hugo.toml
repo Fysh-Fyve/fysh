@@ -1,0 +1,26 @@
+baseURL = 'https://fysh-fyve.github.io/'
+languageCode = 'en-us'
+title = 'Fysh'
+markup.goldmark.renderer.unsafe = true
+
+minify.minifyOutput = true
+
+[[menus.main]]
+name = 'Home'
+pageRef = '/'
+weight = 10
+
+[[menus.main]]
+name = 'Docs'
+pageRef = '/docs'
+weight = 20
+
+# [[menus.main]]
+# name = 'Tags'
+# pageRef = '/tags'
+# weight = 30
+
+[module]
+[module.hugoVersion]
+extended = false
+min = "0.116.0"
