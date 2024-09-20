@@ -1,0 +1,44 @@
+# Monorepo tasks
+
+- [ ] README
+    - Highlight different parts of the project
+- [ ] riscv
+    - [ ] Create project.json
+    - [ ] Highlight its requirements
+        - Vivado
+        - GHDL
+        - RISCV-GCC
+    - [ ] Make it less reliant on Linux-specific stuff
+- [ ] vscode-fysh
+    - [ ] Create project.json
+    - [ ] Create tasks for publishing and testing
+- [ ] website
+    - [ ] Create project.json
+    - [ ] Create tasks for publishing
+- [ ] docs-capstone
+    - [ ] Create project.json
+    - [ ] Create tasks for publishing
+    - [ ] Fix links for documentation
+- [ ] fysh-sea
+    - [ ] Move output to dist/fysh-sea
+    - [ ] Highlight its requirements
+        - Ninja
+        - CMake
+        - LLVM
+        - C++ Compiler
+        - Doctest
+    - [ ] Make it less reliant on Linux-specific stuff
+- [ ] go-fysh
+    - [ ] Change package name
+    - [ ] Factor out parser
+    - [ ] Still need tree-sitter-fysh?
+- [ ] fyshls
+    - [ ] Change package name
+    - [ ] Use go-fysh parser
+- [ ] tree-sitter-fysh
+    - Not sure what to do with this
+    - [ ] Get it up to spec
+    - [ ] Add project.json?
+- [ ] Fysh
+    - [ ] Create separate definition for the Fysh language
+    - [ ] Create compliance tests for both implementations
