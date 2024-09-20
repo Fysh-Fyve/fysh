@@ -1,45 +1,45 @@
 # Monorepo tasks
 
 - [ ] README
-    - [x] Highlight different parts of the project
-    - [ ] Add links once we're on master
+  - [x] Highlight different parts of the project
+  - [ ] Add links once we're on master
 - [ ] riscv
-    - [ ] Create project.json
-    - [ ] Highlight its requirements
-        - Vivado
-        - GHDL
-        - RISCV-GCC
-    - [ ] Make it less reliant on Linux-specific stuff
+  - [ ] Create project.json
+  - [ ] Highlight its requirements
+    - Vivado
+    - GHDL
+    - RISCV-GCC
+  - [ ] Make it less reliant on Linux-specific stuff
 - [ ] vscode-fysh
-    - [ ] Create project.json
-    - [ ] Create tasks for publishing and testing
+  - [ ] Create project.json
+  - [ ] Create tasks for publishing and testing
 - [ ] website
-    - [ ] Create project.json
-    - [ ] Create tasks for publishing
+  - [ ] Create project.json
+  - [ ] Create tasks for publishing
 - [ ] docs-capstone
-    - [ ] Create project.json
-    - [ ] Create tasks for publishing
-    - [ ] Fix links for documentation
+  - [ ] Create project.json
+  - [ ] Create tasks for publishing
+  - [ ] Fix links for documentation
 - [ ] fysh-sea
-    - [ ] Move output to dist/fysh-sea
-    - [ ] Highlight its requirements
-        - Ninja
-        - CMake
-        - LLVM
-        - C++ Compiler
-        - Doctest
-    - [ ] Make it less reliant on Linux-specific stuff
+  - [ ] Move output to dist/fysh-sea
+  - [ ] Highlight its requirements
+    - Ninja
+    - CMake
+    - LLVM
+    - C++ Compiler
+    - Doctest
+  - [ ] Make it less reliant on Linux-specific stuff
 - [ ] go-fysh
-    - [x] Change package name
-    - [ ] Factor out parser
-    - [ ] Still need tree-sitter-fysh?
+  - [x] Change package name
+  - [ ] Factor out parser
+  - [ ] Still need tree-sitter-fysh?
 - [ ] fyshls
-    - [x] Change package name
-    - [ ] Use go-fysh parser
+  - [x] Change package name
+  - [ ] Use go-fysh parser
 - [ ] tree-sitter-fysh
-    - Not sure what to do with this
-    - [ ] Get it up to spec
-    - [ ] Add project.json?
+  - [ ] Get it up to spec
+  - [ ] Add project.json
+  - We actually need it for the playground
 - [ ] Fysh
-    - [ ] Create separate definition for the Fysh language
-    - [ ] Create compliance tests for both implementations
+  - [ ] Create separate definition for the Fysh language
+  - [ ] Create compliance tests for both implementations (and tree-sitter-fysh)
