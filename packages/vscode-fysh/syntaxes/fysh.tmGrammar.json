@@ -1,0 +1,116 @@
+{
+  "scopeName": "source.fysh",
+  "fileTypes": ["fysh"],
+  "name": "Fysh",
+  "patterns": [
+    { "begin": "></\\*>", "end": "<\\*/><", "name": "comment.block.fysh" },
+    { "match": "><//>.*$", "name": "comment.line.fysh" },
+
+    { "match": "~(?!o)", "name": "punctuation.terminator.fysh" },
+    {
+      "match": "(><>)|(<><)",
+      "name": "punctuation.bracket.fysh"
+    },
+
+    { "match": "><\\(*[*^@]>", "name": "keyword.control.fysh" },
+    { "match": "@", "name": "keyword.control.fysh" },
+    { "match": "<~", "name": "keyword.control.return.fysh" },
+    {
+      "match": "(><\\\\/>)|(<\\\\/><)",
+      "name": "keyword.control.loop.break.fysh"
+    },
+    {
+      "match": "\\*[a-zA-Z0-9_]+\\*",
+      "name": "string.quoted.double.fysh"
+    },
+    {
+      "match": "🫧[a-zA-Z0-9_]+🫧",
+      "name": "string.quoted.special.fysh"
+    },
+
+    { "match": "(?:\\(\\+o|o\\+\\))", "name": "keyword.operator.anchor.fysh" },
+    { "match": "[≈=](?![=≈o])", "name": "keyword.operator.assignment.fysh" },
+    { "match": "[≈=]{2}", "name": "keyword.operator.comparison.fysh" },
+    { "match": "o[≈=~]", "name": "keyword.operator.comparison.fysh" },
+    { "match": "[≈=~]o", "name": "keyword.operator.comparison.fysh" },
+    { "match": ">>(?!<)", "name": "keyword.operator.bitwise.shift.fysh" },
+    { "match": "<<", "name": "keyword.operator.bitwise.shift.fysh" },
+    { "match": "\\^", "name": "keyword.operator.bitwise.fysh" },
+    { "match": "&(?!&)", "name": "keyword.operator.bitwise.fysh" },
+    { "match": "&&", "name": "keyword.operator.logical.fysh" },
+    { "match": "\\|(?!\\|)", "name": "keyword.operator.bitwise.fysh" },
+    { "match": "\\|\\|", "name": "keyword.operator.logical.fysh" },
+    {
+      "match": "[♡♥❤🎔❥❣❦❧☙]|(<3)",
+      "name": "keyword.operator.arithmetic.multiply.fysh"
+    },
+    {
+      "match": "</3",
+      "name": "keyword.operator.arithmetic.divide.fysh"
+    },
+
+    { "include": "#left-scale" },
+    { "include": "#right-scale" },
+    { "include": "#left-identifier" },
+    { "include": "#right-identifier" },
+    { "include": "#decrement" },
+    { "include": "#increment" },
+    { "include": "#sub" },
+    { "include": "#grilled" }
+  ],
+  "repository": {
+    "grilled": {
+      "begin": "(><)(?=#)",
+      "beginCaptures": { "1": { "name": "support.function.grilled.fysh" } },
+      "patterns": [
+        { "match": "###", "name": "support.function.grilled.fysh.body"  }
+      ],
+      "end": "[oO0°]*(>)",
+      "endCaptures": { "1": { "name": "support.function.grilled.fysh" } }
+    },
+    "left-scale": {
+      "begin": "(<)[oO0°]*(?=[{}()-])",
+      "beginCaptures": { "1": { "name": "constant.numeric.fysh.left" } },
+      "patterns": [
+        { "match": "[{}]", "name": "constant.numeric.fysh.left.scale"  },
+        { "match": "-" },
+        { "match": "[()]", "name": "constant.numeric.fysh.left.scale.zero"}
+      ],
+      "end": "(><)(?!<)",
+      "endCaptures": { "1": { "name": "variable.fysh.left" } }
+    },
+    "left-identifier": {
+      "match": "<[^[*^@]\\\\~/3\\{\\}()->][^\\{\\}()>]*><(?!<)",
+      "name": "variable.fysh.left"
+    },
+    "decrement": {
+      "match": "<[^[*^@]\\\\~/3\\{\\}()->][^\\{\\}()>]*><(<)",
+      "captures": { "1": { "name": "variable.fysh.left.decrement" } },
+      "name": "variable.fysh.left"
+    },
+    "right-scale": {
+      "begin": "(><)(?=[{}()-])",
+      "beginCaptures": { "1": { "name": "constant.numeric.fysh.right" } },
+      "patterns": [
+        { "match": "[{}]", "name": "constant.numeric.fysh.right.scale"  },
+        { "match": "-" },
+        { "match": "[()]", "name": "constant.numeric.fysh.right.scale.zero" }
+      ],
+      "end": "[oO0°]*(>)",
+      "endCaptures": { "1": { "name": "constant.numeric.fysh.right" } }
+    },
+    "right-identifier": {
+      "match": "><[^[*^@]#\\\\\\{\\}()->][^\\{\\}()>]*>",
+      "name": "variable.fysh.right"
+    },
+    "increment": {
+      "match": "(>)><[^[*^@]#\\\\\\{\\}()->][^\\{\\}()>]*>",
+      "captures": { "1": { "name": "variable.fysh.right.increment" } },
+      "name": "variable.fysh.right"
+    },
+    "sub": {
+      "match": ">\\([^)]+\\)",
+      "name": "entity.name.function.fysh"
+    }
+  }
+}

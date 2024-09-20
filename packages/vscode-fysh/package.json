@@ -1,0 +1,186 @@
+{
+  "name": "fysh",
+  "displayName": "Fysh",
+  "preview": true,
+  "description": "VSCode Language Support for Fysh",
+  "author": {
+    "name": "Fysh-Fyve Team"
+  },
+  "license": "MIT",
+  "icon": "media/icon.png",
+  "version": "1.2.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Fysh-Fyve/vscode-fysh"
+  },
+  "publisher": "Fysh-Fyve",
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
+  "keywords": [
+    "fysh",
+    "fyshls",
+    "multi-root ready"
+  ],
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "activationEvents": [
+    "onCommand:extension.convertDecimalToBinary"
+],
+  "main": "./out/extension",
+  "contributes": {
+    "themes": [
+      {
+        "label": "Fysh Theme",
+        "id": "fysh",
+        "uiTheme": "vs-dark",
+        "path": "./themes/fysh.tmTheme.json"
+      }
+    ],
+    "commands": [
+      {
+        "category": "Fysh",
+        "command": "fysh.execInTerminal",
+        "icon": "$(play)",
+        "title": "Run Fysh File in Terminal"
+      },
+      {
+        "category": "Fysh",
+        "command": "fysh.installFysh",
+        "title": "Install Fysh"
+      },
+      {
+        "category": "Fysh",
+        "command": "fysh.convertDecimalToBinary",
+        "title": "Convert Decimal to Binary"
+      },
+      {
+        "category": "Fysh",
+        "command": "fysh.convertLineToBinary",
+        "title": "Convert Binary to Decimal"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "fysh.run",
+          "group": "Fysh",
+          "when": "editorLangId == fysh"
+        }
+      ],
+      "fysh.run": [
+        {
+          "command": "fysh.execInTerminal",
+          "group": "Fysh",
+          "icon": "$(play)",
+          "when": "editorLangId == fysh"
+        }
+      ],
+      "editor/title/run": [
+        {
+          "command": "fysh.execInTerminal",
+          "group": "navigation@0",
+          "title": "Run Fysh in Terminal",
+          "when": "resourceLangId == fysh && !isInDiffEditor && !virtualWorkspace && shellExecutionSupported"
+        }
+      ]
+    },
+    "submenus": [
+      {
+        "id": "fysh.run",
+        "label": "Run Fysh",
+        "icon": "$(play)"
+      }
+    ],
+    "languages": [
+      {
+        "id": "fysh",
+        "extensions": [
+          ".fysh"
+        ],
+        "aliases": [
+          "Fysh"
+        ],
+        "configuration": "./src/language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "fysh",
+        "scopeName": "source.fysh",
+        "path": "./syntaxes/fysh.tmGrammar.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "fysh",
+        "path": "./src/snippets.json"
+      }
+    ],
+    "walkthroughs": [
+      {
+        "id": "sample",
+        "title": "Sample",
+        "description": "A sample walkthrough",
+        "steps": [
+          {
+            "id": "runcommand",
+            "title": "Run Command",
+            "description": "This step will run a command and check off once it has been run.\n[Run Command](command:getting-started-sample.runCommand)",
+            "media": {
+              "image": "media/image.png",
+              "altText": "Empty image"
+            },
+            "completionEvents": [
+              "onCommand:getting-started-sample.runCommand"
+            ]
+          },
+          {
+            "id": "changesetting",
+            "title": "Change Setting",
+            "description": "This step will change a setting and check off when the setting has changed\n[Change Setting](command:getting-started-sample.changeSetting)",
+            "media": {
+              "markdown": "media/markdown.md"
+            },
+            "completionEvents": [
+              "onSettingChanged:getting-started-sample.sampleSetting"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run esbuild-base",
+    "esbuild-base": "esbuild ./src/extension.ts --bundle --minify --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
+    "watch": "tsc -b -w",
+    "lint": "eslint ./src --ext .ts,.tsx",
+    "package": "pnpm vsce package --no-dependencies",
+    "publish": "pnpm vsce publish --no-dependencies"
+  },
+  "enabledApiProposals": [
+    "terminalDataWriteEvent",
+    "terminalExecuteCommandEvent",
+    "terminalShellIntegration"
+  ],
+  "dependencies": {
+    "adm-zip": "^0.5.14",
+    "vscode-languageclient": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/adm-zip": "^0.5.5",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^18.14.6",
+    "@types/vscode": "^1.75.1",
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
+    "@vscode/test-electron": "^2.3.9",
+    "@vscode/vsce": "^2.31.1",
+    "esbuild": "^0.20.2",
+    "eslint": "^8.57.0",
+    "mocha": "^10.3.0",
+    "typescript": "^5.3.3"
+  }
+}
