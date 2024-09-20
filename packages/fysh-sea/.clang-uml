@@ -1,0 +1,29 @@
+# Change to directory where compile_commands.json is
+compilation_database_dir: build
+# Change to directory where diagram should be written
+output_directory: docs/diagrams
+diagrams:
+  fysh_diagram:
+    type: class
+    glob:
+      - src/**/*.cc
+    # mermaid:
+    #   # Add this line at the end of a Mermaid diagram
+    #   end:
+    #     - 'direction LR'
+    # exclude:
+    #   namespaces:
+    #     - std
+    #     - llvm
+    # using_namespace:
+    #   - myproject
+    include:
+      namespaces:
+        - fysh
+    exclude:
+      # Do not include private members and methods in the diagram
+      access:
+        - private
+    # exclude:
+    #   namespaces:
+    #     - myproject::detail

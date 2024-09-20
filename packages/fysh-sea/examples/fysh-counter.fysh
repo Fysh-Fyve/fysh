@@ -1,0 +1,39 @@
+></*>
+Fysh Counter Demo
+Features:
+1. Counter counts up every second (0 up to 255)
+  1a. If at 255 (0xff), reset to 0
+2. If button is pressed, number changes to a random number
+  2a. Not sure yet whether the grilled fysh would be THE random
+      number or whether it would be the seed
+
+      Output Pins:
+      AA      - JC1 | V15 | gpio[0]  |
+      AB      - JC2 | W15 | gpio[1]  |
+      AC      - JC3 | T11 | gpio[2]  |
+      AD      - JC4 | T10 | gpio[3]  |
+      AE      - JD1 | T14 | gpio[4]  |
+      AF      - JD2 | T15 | gpio[5]  |
+      AG      - JD3 | P14 | gpio[6]  |
+      /\_/\   - JD4 | R14 | gpio[7]  |
+     ( o.o ) <*/>< ><//>  |          |
+><//> > ^ <         |     |          |
+></*> Input Pins:   |     |          |
+      Switch button | P16 | gpio[8]  |
+<*/><
+
+><//> val is our counter
+><val> ~
+
+></*>
+get_seg and counter_read should be defined externally
+
+int get_seg(int)
+int counter_read()
+<*/><
+
+
+><low_dig> = [>(get_seg) (><val> & ><{{{{o>)] ~
+><high_dig> = [>(get_seg) ((><val> >> ><{((o>) & ><{{{{o>)] | (><{o> << ><{{{°>) ~
+
+><//> vim: commentstring=><//>%s colorcolumn=64,80,100
