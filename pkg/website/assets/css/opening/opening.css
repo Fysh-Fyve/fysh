@@ -1,0 +1,153 @@
+/* best seen at 1500px or less */
+/* based on animation by Ted McDonald https://codepen.io/tedmcdo/pen/PqxKXg */
+
+*,
+:root {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --fysh: 8vw;
+}
+
+html,
+body,
+.opening {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.og-fysh {
+  text-decoration: none;
+  color: #333;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: var(--fysh);
+}
+.og-fysh > code {
+  position: relative;
+  top: -50%;
+  left: -50%;
+}
+
+.opening {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 254, 234, 1) 0%,
+    rgba(255, 254, 234, 1) 35%,
+    #b7e8eb 100%
+  );
+  overflow: hidden;
+}
+
+.opening::-webkit-scrollbar {
+  display: none;
+}
+
+main[role="main"] {
+  height: 100vh;
+  color: white;
+  background: black;
+  margin: 0 auto;
+}
+
+.opening, .fysh-container {
+  animation: fade 2s cubic-bezier(0.22, 0.61, 0.36, 1) 1 none;
+}
+
+.fysh {
+  font-size: var(--fysh);
+}
+
+.fysh {
+  color: #4fff64;
+  opacity: 0;
+  animation: ani 0.5s ease 5s forwards, glow 1s ease infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    color: #4fff64a3;
+    text-shadow: 0 0 5px #00cc4488, 0 0 7px #00cc4488;
+  }
+  to {
+    color: #4fff647b;
+    text-shadow: none;
+  }
+}
+
+
+@keyframes ani {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.fysh > code.c {
+  z-index: 999;
+  animation: appear 0s steps(1) 0s 1;
+}
+.fysh > code.c.c-1 {
+  animation-duration: 6.25s;
+}
+.fysh > code.c.c-2 {
+  animation-duration: 6.5s;
+}
+.fysh > code.c.c-3 {
+  animation-duration: 6.75s;
+}
+.fysh > code.c.c-4 {
+  animation-duration: 7s;
+}
+
+.bottom-fysh {
+  position: relative;
+  width: 100%;
+  bottom: -100%;
+  height: 100vh;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: imthebgnow 0.5s ease 4.25s forwards;
+}
+
+@keyframes imthebgnow {
+  0% {
+    background: linear-gradient(#015871, black), black;
+    background-size: 100% 500%;
+    background-position: 0% 80%;
+    position: absolute;
+    bottom: 0;
+  }
+  90% {
+    background-position: 0% 90%;
+  }
+  100% {
+    position: absolute;
+    bottom: 0;
+    background: black;
+  }
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+main#main {
+  height: 100vh;
+}
