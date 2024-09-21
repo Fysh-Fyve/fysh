@@ -121,6 +121,20 @@ main[role="main"] {
   animation: imthebgnow 0.5s ease 4.25s forwards;
 }
 
+.fysh-container {
+  animation: swim-right 1s ease-in 9s  forwards;
+}
+
+@keyframes swim-right {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(200%);
+  }
+}
+
 @keyframes imthebgnow {
   0% {
     background: linear-gradient(#015871, black), black;

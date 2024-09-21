@@ -20,3 +20,10 @@ a {
   color: #00e;
   text-decoration: none;
 }
+
+nav.corner-nav {
+  position: sticky;
+  top: 0;
+  z-index: 400;
+  height: 0;
+}
