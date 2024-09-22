@@ -1,5 +1,5 @@
 {
-  "name": "fysh",
+  "name": "vscode-fysh",
   "displayName": "Fysh",
   "preview": true,
   "description": "VSCode Language Support for Fysh",
@@ -11,7 +11,8 @@
   "version": "1.2.2",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Fysh-Fyve/vscode-fysh"
+    "url": "https://github.com/Fysh-Fyve/fysh.git",
+    "directory": "pkg/vscode-fysh"
   },
   "publisher": "Fysh-Fyve",
   "categories": [
@@ -28,7 +29,7 @@
   },
   "activationEvents": [
     "onCommand:extension.convertDecimalToBinary"
-],
+  ],
   "main": "./out/extension",
   "contributes": {
     "themes": [

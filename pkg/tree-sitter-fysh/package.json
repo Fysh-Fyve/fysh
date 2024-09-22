@@ -4,6 +4,15 @@
   "description": "fysh grammar for tree-sitter",
   "main": "bindings/node",
   "types": "bindings/node",
+  "author": {
+    "name": "Fysh-Fyve Team"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Fysh-Fyve/fysh.git",
+    "directory": "pkg/tree-sitter-fysh"
+  },
   "keywords": [
     "parsing",
     "incremental"
