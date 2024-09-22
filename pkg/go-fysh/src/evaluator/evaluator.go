@@ -97,7 +97,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		return evalBinary(node.Op, left, right)
 
 	case *ast.Grilled:
-		return &object.Integer{Value: int64(env.RNG.Num())}
+		return &object.Integer{Value: int64(env.RandomNum())}
 
 	case *ast.IfStatement:
 		return evalIf(node, env)
@@ -170,7 +170,7 @@ func evalAnchor(anc *ast.AnchorStatement,
 	if object.IsError(val) {
 		return val
 	}
-	fmt.Println(val.Inspect())
+	env.Print(val.Inspect())
 	return NULL
 }
 

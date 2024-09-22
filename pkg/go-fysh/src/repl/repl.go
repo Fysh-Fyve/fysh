@@ -15,9 +15,21 @@ import (
 
 const PROMPT = "><> "
 
+type DefaultPrinter struct {
+	w io.Writer
+}
+
+func NewPrinter(w io.Writer) *DefaultPrinter {
+	return &DefaultPrinter{w}
+}
+
+func (d *DefaultPrinter) Print(s string) {
+	fmt.Fprintln(d.w, s)
+}
+
 func Start(in io.Reader, out io.Writer, prompt bool) {
 	s := bufio.NewScanner(in)
-	env := object.NewEnvironment()
+	env := object.NewEnvironment(NewPrinter(out))
 
 	for {
 		if prompt {

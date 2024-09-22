@@ -1,8 +1,6 @@
 package evaluator
 
 import (
-	"fmt"
-
 	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/object"
 )
 
@@ -23,15 +21,6 @@ var builtins = map[string]*object.Builtin{
 				args[0].Type())
 		}
 	},
-	},
-	"puts": {
-		Fn: func(args ...object.Object) object.Object {
-			for _, arg := range args {
-				fmt.Println(arg.Inspect())
-			}
-
-			return NULL
-		},
 	},
 	"first": {
 		Fn: func(args ...object.Object) object.Object {

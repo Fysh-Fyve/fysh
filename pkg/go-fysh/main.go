@@ -28,7 +28,7 @@ func main() {
 		fmt.Printf("Feel free to type in commands.\n")
 		repl.Start(os.Stdin, os.Stdout, atty)
 	} else {
-		env := object.NewEnvironment()
+		env := object.NewEnvironment(repl.NewPrinter(os.Stdout))
 		filename, r, err := getInput()
 		if err != nil {
 			log.Fatal(err)

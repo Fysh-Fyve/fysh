@@ -1,11 +1,13 @@
 package object
 
-import "math/rand"
+import (
+	"math/rand"
+)
 
 func NewEnclosedEnvironment(outer *Environment) *Environment {
-	env := NewEnvironment()
+	env := NewEnvironment(outer.printer)
 	env.outer = outer
-	env.RNG = outer.RNG
+	env.rng = outer.rng
 	return env
 }
 
@@ -22,14 +24,14 @@ func (l *localRng) Num() uint32 {
 }
 
 func NewEnvironmentWithSeed(seed int64) *Environment {
-	e := NewEnvironment()
-	e.RNG = &localRng{r: rand.New(rand.NewSource(seed))}
+	e := NewEnvironment(nil)
+	e.rng = &localRng{r: rand.New(rand.NewSource(seed))}
 	return e
 }
 
-func NewEnvironment() *Environment {
+func NewEnvironment(p Printer) *Environment {
 	s := make(map[string]Object)
-	return &Environment{store: s, outer: nil, RNG: globalRng{}}
+	return &Environment{store: s, outer: nil, rng: globalRng{}}
 }
 
 type rng interface {
@@ -37,9 +39,24 @@ type rng interface {
 }
 
 type Environment struct {
-	store map[string]Object
-	outer *Environment
-	RNG   rng
+	store   map[string]Object
+	outer   *Environment
+	rng     rng
+	printer Printer
+}
+
+type Printer interface {
+	Print(s string)
+}
+
+func (e *Environment) RandomNum() uint32 {
+	return e.rng.Num()
+}
+
+func (e *Environment) Print(s string) {
+	if e.printer != nil {
+		e.printer.Print(s)
+	}
 }
 
 func (e *Environment) Get(name string) (Object, bool) {
