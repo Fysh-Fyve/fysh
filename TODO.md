@@ -1,8 +1,8 @@
 # Monorepo tasks
 
-- [ ] README
+- [x] README
   - [x] Highlight different parts of the project
-  - [ ] Add links once we're on master
+  - [x] Add links once we're on master
 - [ ] riscv
   - [ ] Create project.json
   - [ ] Highlight its requirements
