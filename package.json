@@ -1,0 +1,13 @@
+{
+  "name": "@fysh-fyve/source",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {},
+  "private": true,
+  "devDependencies": {
+    "@nx-go/nx-go": "^3.2.0",
+    "@nx/node": "19.8.0",
+    "@nx/workspace": "19.8.0",
+    "nx": "19.8.0"
+  }
+}
