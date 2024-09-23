@@ -3,6 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "sourceRoot": "pkg/website",
+  "implicitDependencies": ["web-interpreter"],
   "tags": [],
   "targets": {
     "deploy": {
@@ -13,17 +14,19 @@
     },
     "build": {
       "executor": "nx:run-commands",
+      "dependsOn": ["^optimize"],
       "options": {
         "command": "hugo",
-        "cwd": "pkg/website"
+        "cwd": "{projectRoot}"
       },
       "cache": true
     },
     "serve": {
       "executor": "nx:run-commands",
+      "dependsOn": ["^optimize"],
       "options": {
         "command": "hugo server -D",
-        "cwd": "pkg/website"
+        "cwd": "{projectRoot}"
       },
       "cache": true
     },

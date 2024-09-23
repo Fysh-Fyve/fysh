@@ -13,6 +13,24 @@
     {{- end }}
   {{- end }}
 {{- end }}
+{{- with (resources.Get "js/wasm_exec.js") }}
+  {{- if eq hugo.Environment "development" }}
+    <script src="{{ .RelPermalink }}" defer></script>
+  {{- else }}
+    {{- with . | minify | fingerprint }}
+      <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous" defer></script>
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- with (resources.Get "js/interpreter.js") }}
+  {{- if eq hugo.Environment "development" }}
+    <script src="{{ .RelPermalink }}" defer></script>
+  {{- else }}
+    {{- with . | minify | fingerprint }}
+      <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous" defer></script>
+    {{- end }}
+  {{- end }}
+{{- end }}
 {{ end }}
 
 {{ define "all" }}
@@ -25,5 +43,10 @@
   <p><a href="/docs/installation">Installation</a></p>
   <p><a href="/docs/manual">Manual</a></p>
   <p><a href="#opening">Back to top</a></p>
+
+  <web-interpreter>
+    <button class="play">Play</button>
+    <textarea class="input"></textarea>
+  </web-interpreter>
 </main>
 {{ end }}

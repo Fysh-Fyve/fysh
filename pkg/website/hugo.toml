@@ -24,3 +24,17 @@ weight = 20
 [module.hugoVersion]
 extended = false
 min = "0.116.0"
+
+
+[[module.mounts]]
+source = "assets"
+target = "assets"
+
+[[module.mounts]]
+source = "static"
+target = "static"
+
+
+[[module.mounts]]
+source = "../web-interpreter/out/opt"
+target = "static"

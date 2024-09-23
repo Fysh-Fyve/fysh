@@ -16,10 +16,8 @@
       "executor": "nx:run-commands",
       "options": {
         "inputs": ["ignore"],
-        "outputs": [
-          "{projectRoot}/build/fysh-sea"
-        ],
-        "cwd": "pkg/fysh-sea",
+        "outputs": ["{projectRoot}/build/fysh-sea"],
+        "cwd": "{projectRoot}",
         "command": "make fysh-sea",
         "color": true
       },
@@ -29,7 +27,7 @@
       "executor": "nx:run-commands",
       "options": {
         "inputs": ["ignore"],
-        "cwd": "pkg/fysh-sea",
+        "cwd": "{projectRoot}",
         "command": "make test",
         "color": true
       }

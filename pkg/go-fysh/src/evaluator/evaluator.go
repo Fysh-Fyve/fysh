@@ -176,8 +176,10 @@ func evalAnchor(anc *ast.AnchorStatement,
 
 func evalUpdate(expr ast.Expression,
 	env *object.Environment, add object.Object) object.Object {
-	// assuming the expression is an identifier
-	id, _ := expr.(*ast.Identifier)
+	id, ok := expr.(*ast.Identifier)
+	if !ok {
+		return newError("not an identifier")
+	}
 	ident := Eval(&ast.Identifier{Name: id.Name}, env)
 	if object.IsError(ident) {
 		return ident
@@ -273,8 +275,12 @@ func evalNot(right object.Object) object.Object {
 		return newError("unknown operator: ~%s", right.Type())
 	}
 
-	value := right.(*object.Integer).Value
-	return &object.Integer{Value: ^value}
+	if r, ok := right.(*object.Integer); !ok {
+		return newError("%s is not an integer!", right.Inspect())
+	} else {
+		value := r.Value
+		return &object.Integer{Value: ^value}
+	}
 }
 
 func evalNeg(right object.Object) object.Object {
@@ -282,8 +288,12 @@ func evalNeg(right object.Object) object.Object {
 		return newError("unknown operator: -%s", right.Type())
 	}
 
-	value := right.(*object.Integer).Value
-	return &object.Integer{Value: -value}
+	if r, ok := right.(*object.Integer); !ok {
+		return newError("%s is not an integer!", right.Inspect())
+	} else {
+		value := r.Value
+		return &object.Integer{Value: -value}
+	}
 }
 
 func toBool(input bool) *object.Integer {
@@ -314,9 +324,17 @@ func bitWiseEval(op binary.Op, left, right object.Object) object.Object {
 	if right.Type() != object.INT {
 		return unknownBinaryOp(left.Type(), op, right.Type())
 	}
-	rval := right.(*object.Integer).Value
+	rv, ok := right.(*object.Integer)
+	if !ok {
+		return newError("%s is not an integer object!", right.Inspect())
+	}
+	rval := rv.Value
 	if left.Type() == object.INT {
-		lval := left.(*object.Integer).Value
+		lv, ok := left.(*object.Integer)
+		if !ok {
+			return newError("%s is not an integer object!", left.Inspect())
+		}
+		lval := lv.Value
 		switch op {
 		case binary.BitwiseOr:
 			return &object.Integer{Value: lval | rval}
@@ -332,7 +350,11 @@ func bitWiseEval(op binary.Op, left, right object.Object) object.Object {
 			return unknownBinaryOp(left.Type(), op, right.Type())
 		}
 	}
-	lval := left.(*object.Float).Value
+	lv, ok := left.(*object.Float)
+	if !ok {
+		return newError("%s is not a float object!", left.Inspect())
+	}
+	lval := lv.Value
 	switch op {
 	case binary.ShiftLeft:
 		return &object.Float{Value: shiftLeft(lval, rval)}
@@ -345,17 +367,17 @@ func bitWiseEval(op binary.Op, left, right object.Object) object.Object {
 
 func evalNumBinary(op binary.Op, left, right object.Object) object.Object {
 	var leftVal, rightVal float64
-	if int, ok := left.(*object.Integer); ok {
-		leftVal = float64(int.Value)
-	} else if flt, ok := left.(*object.Float); ok {
-		leftVal = flt.Value
+	if integer, ok := left.(*object.Integer); ok {
+		leftVal = float64(integer.Value)
+	} else if float, ok := left.(*object.Float); ok {
+		leftVal = float.Value
 	} else {
 		return newError("evalNumBinary was called with non-numeric object %s", left)
 	}
-	if int, ok := right.(*object.Integer); ok {
-		rightVal = float64(int.Value)
-	} else if flt, ok := right.(*object.Float); ok {
-		rightVal = flt.Value
+	if integer, ok := right.(*object.Integer); ok {
+		rightVal = float64(integer.Value)
+	} else if float, ok := right.(*object.Float); ok {
+		rightVal = float.Value
 	} else {
 		return newError("evalNumBinary was called with non-numeric object %s", right)
 	}
@@ -399,9 +421,13 @@ func evalStrBinary(op binary.Op, left, right object.Object) object.Object {
 		return unknownBinaryOp(left.Type(), op, right.Type())
 	}
 
-	leftVal := left.(*object.String).Value
-	rightVal := right.(*object.String).Value
-	return &object.String{Value: leftVal + rightVal}
+	if lv, ok := left.(*object.String); !ok {
+		return newError("%s is not a string!", left.Inspect())
+	} else if rv, ok := right.(*object.String); !ok {
+		return newError("%s is not a string!", right.Inspect())
+	} else {
+		return &object.String{Value: lv.Value + rv.Value}
+	}
 }
 
 func evalLoop(ie *ast.LoopStatement, env *object.Environment) object.Object {
@@ -541,15 +567,21 @@ func evalIndexExpression(left, index object.Object) object.Object {
 }
 
 func evalArrayIndexExpression(array, index object.Object) object.Object {
-	arrayObject := array.(*object.Array)
-	idx := index.(*object.Integer).Value
+	arrayObject, ok := array.(*object.Array)
+	if !ok {
+		return newError("%s is not an array object!", array.Inspect())
+	}
+	idx, ok := index.(*object.Integer)
+	if !ok {
+		return newError("%s is not an integer object!", idx.Inspect())
+	}
 	max := int64(len(arrayObject.Elements) - 1)
 
-	if idx < 0 || idx > max {
+	if idx.Value < 0 || idx.Value > max {
 		return NULL
 	}
 
-	return arrayObject.Elements[idx]
+	return arrayObject.Elements[idx.Value]
 }
 
 func evalHashLiteral(
@@ -582,7 +614,10 @@ func evalHashLiteral(
 }
 
 func evalHashIndexExpression(hash, index object.Object) object.Object {
-	hashObject := hash.(*object.Hash)
+	hashObject, ok := hash.(*object.Hash)
+	if !ok {
+		return newError("%s is not a hash object!", hash.Inspect())
+	}
 
 	key, ok := index.(object.Hashable)
 	if !ok {

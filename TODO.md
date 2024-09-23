@@ -16,7 +16,8 @@
 - [ ] website
   - [x] Create project.json
   - [x] Create tasks for publishing
-  - [ ] Interpreter page
+  - [x] Interpreter page
+  - [ ] Make interpreter page pretty
 - [ ] docs-capstone
   - [ ] Create project.json
   - [ ] Create tasks for publishing

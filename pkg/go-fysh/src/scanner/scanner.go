@@ -21,11 +21,17 @@ type Scanner struct {
 }
 
 // Creates a new scanner given a filename and reader
+func NewFileFromString(input string) *Scanner {
+	s := &Scanner{filename: "input", input: []byte(input)}
+	s.reel()
+	return s
+}
+
+// Creates a new scanner given a filename and reader
 func NewFile(filename string, r io.Reader) (*Scanner, error) {
 	b, err := io.ReadAll(r)
 	if err != nil {
 		return nil, fmt.Errorf("NewFile: %w", err)
-
 	}
 	s := &Scanner{filename: filename, input: b}
 	s.reel()

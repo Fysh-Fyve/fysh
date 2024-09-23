@@ -31,7 +31,7 @@ func NewEnvironmentWithSeed(seed int64) *Environment {
 
 func NewEnvironment(p Printer) *Environment {
 	s := make(map[string]Object)
-	return &Environment{store: s, outer: nil, rng: globalRng{}}
+	return &Environment{store: s, outer: nil, rng: globalRng{}, printer: p}
 }
 
 type rng interface {

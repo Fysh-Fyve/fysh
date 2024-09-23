@@ -437,17 +437,13 @@ func (p *Parser) ifStmt() ast.Statement {
 	} else {
 		return nil
 	}
-	i.Cond = p.expression()
-	if i.Cond == nil {
+	if i.Cond = p.expression(); i.Cond == nil {
 		return nil
 	}
-
 	if !p.expectFysh(closing) {
 		return nil
 	}
-
-	i.Then = p.block()
-	if i.Then == nil {
+	if i.Then = p.block(); i.Then == nil {
 		return nil
 	}
 

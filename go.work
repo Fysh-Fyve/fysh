@@ -3,5 +3,6 @@ go 1.22
 use (
 	./pkg/fyshls
 	./pkg/go-fysh
+	./pkg/web-interpreter
 	./pkg/website
 )

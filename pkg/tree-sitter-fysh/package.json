@@ -46,5 +46,6 @@
     "test": "tree-sitter test",
     "install": "node-gyp-build",
     "prebuildify": "prebuildify --napi --strip"
-  }
+  },
+  "nx": {}
 }
