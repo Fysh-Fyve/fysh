@@ -6,6 +6,9 @@
     "libsDir": "pkg"
   },
   "targetDefaults": {
+    "@nx-go/nx-go:build": {
+      "cache": true
+    },
     "test": {
       "cache": true
     },
