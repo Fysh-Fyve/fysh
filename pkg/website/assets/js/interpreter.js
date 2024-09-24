@@ -4,6 +4,9 @@
 const WASM_URL = "web-interpreter-opt.wasm";
 
 class WebInterpreter extends HTMLElement {
+  /**
+   * @type {WebAssembly.WebAssemblyInstantiatedSource['instance']}
+   */
   #wasm;
 
   /**
@@ -38,8 +41,7 @@ class WebInterpreter extends HTMLElement {
     return text;
   }
 
-  connectedCallback() {
-    // @ts-expect-error Go is defined in wasm_exec.js
+  #newRunner() {
     const go = new Go();
     go.importObject["main.go.printError"] = (addr, length) => {
       console.error(this.logText(addr, length));
@@ -52,10 +54,32 @@ class WebInterpreter extends HTMLElement {
       printOut: go.importObject["main.go.printOut"],
     };
 
+    return go;
+  }
+
+  connectedCallback() {
+    this.querySelector("textarea.input").value = `><//> Calculate 5!
+
+><number>    ≈ ><{({°> ~  ><//> b101 = 5
+><factorial> ≈ ><(({°> ~  ><//> b001 = 1
+
+><//> while number > 1
+><(((@> [><number> o~ ><(({°>]
+><>
+	><//> factorial = factorial * number
+	><factorial> ≈ ><factorial> ♡ ><number> ~
+
+	><//> number -= 1
+	<number><< ~
+<><
+(+o ><factorial> ~ ><//> Should be 120
+`
+    const go = this.#newRunner();
     if ("instantiateStreaming" in WebAssembly) {
       WebAssembly.instantiateStreaming(fetch(WASM_URL), go.importObject).then(
         (obj) => {
           this.#wasm = obj.instance;
+          go.run(this.#wasm);
         }
       );
     } else {
@@ -64,12 +88,12 @@ class WebInterpreter extends HTMLElement {
         .then((bytes) =>
           WebAssembly.instantiate(bytes, go.importObject).then((obj) => {
             this.#wasm = obj.instance;
+            go.run(this.#wasm);
           })
         );
     }
     this.querySelector("button.play")?.addEventListener("click", () => {
       if (!this.#wasm) return;
-      go.run(this.#wasm);
       // @ts-expect-error
       const inputText = this.querySelector("textarea.input").value;
       const [addr, len] = this.insertText(inputText);
