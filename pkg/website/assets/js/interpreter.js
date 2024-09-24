@@ -14,7 +14,7 @@ class WebInterpreter extends HTMLElement {
    * @param {string} text
    * @returns
    */
-  insertText(text) {
+  #insertText(text) {
     const encoder = new TextEncoder();
     const bytes = encoder.encode(text);
 
@@ -33,7 +33,7 @@ class WebInterpreter extends HTMLElement {
     return [addr, bytes.length];
   }
 
-  logText(addr, length) {
+  #logText(addr, length) {
     const memory = this.#wasm.exports.memory;
     const bytes = memory.buffer.slice(addr, addr + length);
     const decoder = new TextDecoder("UTF-8");
@@ -44,10 +44,10 @@ class WebInterpreter extends HTMLElement {
   #newRunner() {
     const go = new Go();
     go.importObject["main.go.printError"] = (addr, length) => {
-      console.error(this.logText(addr, length));
+      console.error(this.#logText(addr, length));
     };
     go.importObject["main.go.printOut"] = (addr, length) => {
-      console.log(this.logText(addr, length));
+      console.log(this.#logText(addr, length));
     };
     go.importObject.env = {
       printError: go.importObject["main.go.printError"],
@@ -96,7 +96,7 @@ class WebInterpreter extends HTMLElement {
       if (!this.#wasm) return;
       // @ts-expect-error
       const inputText = this.querySelector("textarea.input").value;
-      const [addr, len] = this.insertText(inputText);
+      const [addr, len] = this.#insertText(inputText);
       this.#wasm.exports.goFysh(addr, len);
     });
   }
