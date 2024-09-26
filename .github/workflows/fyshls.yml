@@ -30,8 +30,10 @@ jobs:
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.ref_name }}
+        upload_url: ${{ github.api_url }}/repos/${{ github.repository }}/releases/tag/${{ github.ref_name }}
         asset_path: fyshls
         asset_name: fyshls-${{ matrix.os }}
         asset_content_type: application/octet-stream
