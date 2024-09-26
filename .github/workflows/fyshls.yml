@@ -1,0 +1,35 @@
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Matches version tags like v1.0.0
+
+jobs:
+  build-and-release:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        go-version: ['1.22']
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: ${{ matrix.go-version }}
+        check-latest: true
+
+    - name: Build
+      run: |
+        CGO_ENABLED=1 go build -o fyshls ./pkg/fyshls
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: fyshls
+        asset_name: fyshls-${{ matrix.os }}
+        asset_content_type: application/octet-stream
