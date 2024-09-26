@@ -27,6 +27,8 @@ func main() {
 	var cmd *exec.Cmd
 	if *outputFile != "" {
 		cmd = exec.Command("go", "build", "-o", *outputFile, "-ldflags", ldflags)
+	} else if len(args) == 2 {
+		cmd = exec.Command("go", "build", "-o", args[0], "-ldflags", ldflags, args[1])
 	} else if len(args) == 1 {
 		cmd = exec.Command("go", "build", "-o", args[0], "-ldflags", ldflags)
 	} else if len(args) == 0 {

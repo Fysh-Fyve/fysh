@@ -1,3 +1,5 @@
+name: Create fyshls release
+
 on:
   push:
     tags:
@@ -24,12 +26,12 @@ jobs:
 
     - name: Build
       run: |
-        CGO_ENABLED=1 go build -o fyshls ./pkg/fyshls
+        go run ./pkg/fyshls/cmd/install fyshls ./pkg/fyshls
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       with:
-        upload_url: ${{ github.event.release.upload_url }}
+        upload_url: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.ref_name }}
         asset_path: fyshls
         asset_name: fyshls-${{ matrix.os }}
         asset_content_type: application/octet-stream
