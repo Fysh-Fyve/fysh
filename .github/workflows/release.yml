@@ -32,4 +32,4 @@ jobs:
         goversion: 1.23
         binary_name: "fysh"
         project_path: "./pkg/go-fysh"
-        extra_files: LICENSE README.md
+        extra_files: ./pkg/go-fysh/LICENSE ./pkg/go-fysh/README.md
