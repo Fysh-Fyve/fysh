@@ -1,6 +1,6 @@
 module github.com/Fysh-Fyve/fysh/pkg/go-fysh
 
-go 1.22
+go 1.23
 
 require golang.org/x/term v0.19.0
 
