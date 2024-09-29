@@ -47,5 +47,25 @@
     "install": "node-gyp-build",
     "prebuildify": "prebuildify --napi --strip"
   },
-  "nx": {}
+  "nx": {
+    "targets": {
+      "build": {
+        "inputs": [
+          "{projectRoot}/grammar.js"
+        ],
+        "outputs": [
+          "{projectRoot}/build/tree_sitter_fysh.wasm"
+        ],
+        "executor": "nx:run-commands",
+        "options": {
+          "inputs": [
+            "ignore"
+          ],
+          "cwd": "{projectRoot}",
+          "command": "tree-sitter build --wasm -o build/tree_sitter_fysh.wasm"
+        },
+        "cache": true
+      }
+    }
+  }
 }
