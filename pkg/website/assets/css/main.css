@@ -27,3 +27,14 @@ nav.corner-nav {
   z-index: 400;
   height: 0;
 }
+
+main#main {
+  background-color: black;
+  color: white;
+  text-align: center;
+  padding: 4rem;
+}
+
+main#main a {
+  color: #4fff64;
+}
