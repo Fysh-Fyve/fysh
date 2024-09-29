@@ -62,7 +62,7 @@
             "ignore"
           ],
           "cwd": "{projectRoot}",
-          "command": "tree-sitter build --wasm -o build/tree_sitter_fysh.wasm"
+          "command": "tree-sitter build --wasm -o build/tree-sitter-fysh.wasm"
         },
         "cache": true
       }
