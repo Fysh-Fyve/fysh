@@ -163,12 +163,15 @@
   },
   "enabledApiProposals": [
     "terminalDataWriteEvent",
-    "terminalExecuteCommandEvent",
-    "terminalShellIntegration"
+    "terminalExecuteCommandEvent"
   ],
   "dependencies": {
     "adm-zip": "^0.5.14",
-    "vscode-languageclient": "^9.0.1"
+    "vscode-languageclient": "^9.0.1",
+    "vscode-languageserver": "^9.0.1",
+    "vscode-languageserver-textdocument": "^1.0.12",
+    "vscode-uri": "^3.0.8",
+    "web-tree-sitter": "^0.23.0"
   },
   "devDependencies": {
     "@types/adm-zip": "^0.5.5",
@@ -185,6 +188,24 @@
     "typescript": "^5.6.3"
   },
   "nx": {
-    "implicitDependencies": ["tree-sitter-fysh"]
+    "namedInputs": {
+      "ts-fysh-in": "{workspaceRoot}/pkg/tree-sitter-fysh/build/tree-sitter-fysh.wasm"
+    },
+    "implicitDependencies": [
+      "tree-sitter-fysh"
+    ],
+    "targets": {
+      "wasm": {
+        "dependsOn": [
+          "tree-sitter-fysh:build"
+        ],
+        "inputs": [
+          "ts-fysh-in"
+        ],
+        "outputs": [
+          "{projectRoot}/tree-sitter-fysh.wasm"
+        ]
+      }
+    }
   }
 }
