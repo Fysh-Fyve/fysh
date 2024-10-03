@@ -5,7 +5,14 @@ const WASM_URL = "web-interpreter-opt.wasm";
 
 class WebInterpreter extends HTMLElement {
   /**
-   * @type {WebAssembly.WebAssemblyInstantiatedSource['instance']}
+   * @typedef {{
+   *   getBuffer(): number
+   *   goFysh(addr: number, len: number): void
+   *   memory: WebAssembly.Memory
+   * }} Exports
+   */
+  /**
+   * @type {WebAssembly.Instance & { exports: WebAssembly.Exports & Exports }}
    */
   #wasm;
 
@@ -42,12 +49,16 @@ class WebInterpreter extends HTMLElement {
   }
 
   #newRunner() {
+    // @ts-expect-error
     const go = new Go();
+    /** @type {HTMLTextAreaElement}  */ 
+    // @ts-expect-error
+    const output = this.querySelector("textarea.output")
     go.importObject["main.go.printError"] = (addr, length) => {
-      console.error(this.#logText(addr, length));
+      output.value = (output.value ?? "") + this.#logText(addr, length) + "\n";
     };
     go.importObject["main.go.printOut"] = (addr, length) => {
-      console.log(this.#logText(addr, length));
+      output.value = (output.value ?? "") + this.#logText(addr, length) + "\n";
     };
     go.importObject.env = {
       printError: go.importObject["main.go.printError"],
@@ -58,6 +69,7 @@ class WebInterpreter extends HTMLElement {
   }
 
   connectedCallback() {
+    // @ts-expect-error
     this.querySelector("textarea.input").value = `><//> Calculate 5!
 
 ><number>    ≈ ><{({°> ~  ><//> b101 = 5
@@ -78,6 +90,7 @@ class WebInterpreter extends HTMLElement {
     if ("instantiateStreaming" in WebAssembly) {
       WebAssembly.instantiateStreaming(fetch(WASM_URL), go.importObject).then(
         (obj) => {
+          // @ts-expect-error
           this.#wasm = obj.instance;
           go.run(this.#wasm);
         }
@@ -87,6 +100,7 @@ class WebInterpreter extends HTMLElement {
         .then((resp) => resp.arrayBuffer())
         .then((bytes) =>
           WebAssembly.instantiate(bytes, go.importObject).then((obj) => {
+            // @ts-expect-error
             this.#wasm = obj.instance;
             go.run(this.#wasm);
           })
@@ -94,6 +108,8 @@ class WebInterpreter extends HTMLElement {
     }
     this.querySelector("button.play")?.addEventListener("click", () => {
       if (!this.#wasm) return;
+      // @ts-expect-error
+      this.querySelector("textarea.output").value = "";
       // @ts-expect-error
       const inputText = this.querySelector("textarea.input").value;
       const [addr, len] = this.#insertText(inputText);

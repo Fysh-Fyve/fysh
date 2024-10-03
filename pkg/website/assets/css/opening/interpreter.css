@@ -1,0 +1,14 @@
+web-interpreter.interpreter {
+    display: flex;
+    flex-direction: column;
+}
+
+web-interpreter textarea.input {
+    height: 50vh;
+    resize: vertical;
+}
+
+web-interpreter textarea.output {
+    height: 20vh;
+    resize: vertical;
+}

@@ -3,6 +3,7 @@
   (resources.Get "css/opening/cursor.css")
   (resources.Get "css/opening/opening.css")
   (resources.Get "css/opening/wave.css")
+  (resources.Get "css/opening/interpreter.css")
   | resources.Concat "css/opening.css" }}
 {{- with $opening }}
   {{- if eq hugo.Environment "development" }}
@@ -35,18 +36,20 @@
 
 {{ define "all" }}
 <nav class="corner-nav">
-<code>&gt;&lt;fysh&gt;</code>
+  <a href="/"><code>&gt;&lt;fysh&gt;</code>
 </nav>
 {{ partial "partials/opening.html"}}
 <main id="main">
   The Programming Language of the sea!
   <p><a href="/docs/installation">Installation</a></p>
   <p><a href="/docs/manual">Manual</a></p>
-  <p><a href="#opening">Back to top</a></p>
 
-  <web-interpreter>
-    <button class="play">Play</button>
+  <web-interpreter class="interpreter">
+    <div>
+      <button class="play">Play</button>
+    </div>
     <textarea class="input"></textarea>
+    <textarea class="output" readonly aria-readonly></textarea>
   </web-interpreter>
 </main>
 {{ end }}

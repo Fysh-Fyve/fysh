@@ -67,29 +67,7 @@ main[role="main"] {
 .fysh {
   color: #4fff64;
   opacity: 0;
-  animation: ani 0.5s ease 5s forwards, glow 1s ease infinite alternate;
-}
-
-@keyframes glow {
-  from {
-    color: #4fff64a3;
-    text-shadow: 0 0 5px #00cc4488, 0 0 7px #00cc4488;
-  }
-  to {
-    color: #4fff647b;
-    text-shadow: none;
-  }
-}
-
-
-@keyframes ani {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
+  animation: fade 0.5s ease 5s forwards, glow 1s ease infinite alternate;
 }
 
 .fysh > code.c {
@@ -164,10 +142,35 @@ main[role="main"] {
 
 main#main {
   height: 100vh;
+  background-color: #015871;
+  animation: to-black 0.125s cubic-bezier(0.22, 0.61, 0.36, 1) 2.5s forwards;
+}
+
+@keyframes to-black {
+  0% {
+    background-color: #015871;
+  }
+  100% {
+    background-color: black;
+  }
 }
 
 .opening {
   animation: be-gone 0.75s cubic-bezier(0.22, 0.61, 0.36, 1) 10s forwards;
+}
+
+nav.corner-nav {
+  animation: come 0.75s cubic-bezier(0.22, 0.61, 0.36, 1) 10s forwards;
+  transform: translateX(-50vw);
+}
+
+@keyframes come {
+  0% {
+    transform: translateX(-50vw);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 @keyframes be-gone {

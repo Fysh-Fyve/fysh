@@ -28,6 +28,15 @@ nav.corner-nav {
   height: 0;
 }
 
+nav.corner-nav a {
+  margin: 1rem;
+  cursor: pointer;
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 200;
+  animation: glow 1s ease infinite alternate;
+}
+
 main#main {
   background-color: black;
   color: white;
@@ -37,4 +46,16 @@ main#main {
 
 main#main a {
   color: #4fff64;
+  font-weight: bold;
+}
+
+@keyframes glow {
+  from {
+    color: #4fff64a3;
+    text-shadow: 0 0 5px #00cc4488, 0 0 7px #00cc4488;
+  }
+  to {
+    color: #4fff647b;
+    text-shadow: none;
+  }
 }
