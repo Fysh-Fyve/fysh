@@ -1,23 +1,12 @@
-/* body {
-  color: #222;
-  font-family: sans-serif;
-  line-height: 1.5;
-  margin: 1rem;
-  max-width: 768px;
-} */
-
-header {
-  border-bottom: 1px solid #222;
-  margin-bottom: 1rem;
-}
-
-footer {
-  border-top: 1px solid #222;
-  margin-top: 1rem;
+*,
+:root {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 a {
-  color: #00e;
+  color: #4fff64;
   text-decoration: none;
 }
 
@@ -37,16 +26,33 @@ nav.corner-nav a {
   animation: glow 1s ease infinite alternate;
 }
 
-main#main {
+main#main, main#main-block, header#header, footer#footer {
   background-color: black;
   color: white;
+}
+
+main#main {
   text-align: center;
   padding: 4rem;
 }
 
 main#main a {
-  color: #4fff64;
   font-weight: bold;
+}
+
+main#main-block {
+  padding-left: 4rem;
+  padding-right: 4rem;
+  flex: 1;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
 }
 
 @keyframes glow {

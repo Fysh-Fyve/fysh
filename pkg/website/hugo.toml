@@ -6,13 +6,13 @@ markup.goldmark.renderer.unsafe = true
 minify.minifyOutput = true
 
 [[menus.main]]
-name = 'Home'
-pageRef = '/'
-weight = 10
-
-[[menus.main]]
 name = 'Docs'
 pageRef = '/docs'
+weight = 20
+
+[[menus.main]]
+name = 'Source'
+url = 'https://github.com/Fysh-Fyve/fysh'
 weight = 20
 
 # [[menus.main]]

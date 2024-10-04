@@ -6,15 +6,15 @@
 </head>
 <body>
   {{- block "all" . }}
-  <header>
+  <header id="header">
     {{- block "header" . }}
       {{ partial "header.html" . }}
     {{- end }}
   </header>
-  <main>
+  <main id="main-block">
     {{ block "main" . }}{{ end }}
   </main>
-  <footer>
+  <footer id="footer">
     {{- block "footer" . }}
       {{ partial "footer.html" . }}
     {{- end }}

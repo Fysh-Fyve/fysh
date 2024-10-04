@@ -1,13 +1,6 @@
 /* best seen at 1500px or less */
 /* based on animation by Ted McDonald https://codepen.io/tedmcdo/pen/PqxKXg */
 
-*,
-:root {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 :root {
   --fysh: 8vw;
 }
@@ -19,6 +12,10 @@ body,
   width: 100%;
   overflow-x: hidden;
   position: relative;
+}
+
+body {
+  display: inline;
 }
 
 .og-fysh {
