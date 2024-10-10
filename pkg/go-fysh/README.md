@@ -139,7 +139,8 @@ Here we assign the binary value `0b101` (5 in decimal) to `Steven`:
 ### ➕ Chapter 3: Arithmetics
 <details>
   <summary>Click to expand</summary>
-#### Addition
+
+#### ➕ Addition
 To add two fyshes, place variables or values next to each other. The value of a school of Fysh is the sum of each member. 
 
 **Example:**
