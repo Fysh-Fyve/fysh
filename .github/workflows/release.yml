@@ -31,5 +31,5 @@ jobs:
         goarch: ${{ matrix.goarch }}
         goversion: 1.23
         binary_name: "fysh"
-        project_path: "./pkg/go-fysh"
+        project_path: ./pkg/go-fysh/cmd/fysh.go
         extra_files: ./pkg/go-fysh/LICENSE ./pkg/go-fysh/README.md
