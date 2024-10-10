@@ -9,7 +9,15 @@
 
 ## 👩‍💻 How to Compile and Run Fysh
 
-### ⚙️ Option 1: Using VSCode
+### ⚙️ Option 1: Using Our Online Interpreter
+1. **Visit Our Webpage**
+   - Visit our webpage at: https://fysh-fyve.github.io/
+
+2. **Press Play**
+   - Write your code and press the play button
+
+
+### ⚙️ Option 2: Using VSCode
 
 1. **Download the Fysh VSCode Extension**
    - Install the Fysh extension from the VSCode marketplace.
@@ -24,12 +32,12 @@
    - Press the run button provided by the extension to execute your program.
 
 
-### ⚙️ Option 2: Using Command Line
+### ⚙️ Option 3: Using Command Line
 1. **Install the Latest Version of Fysh**
    - Use the Go command to install Fysh:
 
      ```bash
-     go install github.com/Fysh-Fyve/fysh@latest
+     go install github.com/Fysh-Fyve/fysh/pkg/go-fysh@latest
      ```
 
 2. **Execute Your Fysh Program**
