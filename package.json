@@ -11,6 +11,7 @@
     "@nx-go/nx-go": "^3.2.0",
     "@nx/node": "19.8.0",
     "@nx/workspace": "19.8.0",
+    "@types/react": "^18.3.11",
     "nx": "19.8.0",
     "typescript": "~5.2.2"
   },

@@ -51,6 +51,9 @@ importers:
       '@nx/workspace':
         specifier: 19.8.0
         version: 19.8.0
+      '@types/react':
+        specifier: ^18.3.11
+        version: 18.3.11
       nx:
         specifier: 19.8.0
         version: 19.8.0
