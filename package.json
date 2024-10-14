@@ -9,5 +9,8 @@
     "@nx/node": "19.8.0",
     "@nx/workspace": "19.8.0",
     "nx": "19.8.0"
+  },
+  "dependencies": {
+    "@nx-extend/docusaurus": "^3.0.0"
   }
 }
