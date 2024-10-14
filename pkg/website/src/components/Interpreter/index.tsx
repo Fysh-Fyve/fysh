@@ -1,5 +1,6 @@
 import Head from '@docusaurus/Head';
-import React, { useEffect } from 'react';
+import React from 'react';
+import styles from './styles.module.css';
 
 declare global {
   namespace JSX {
@@ -16,12 +17,12 @@ export default function Interpreter() {
         <script src="/js/wasm_exec.js" async></script>
         <script src="/js/interpreter.js" async></script>
       </Head>
-      <web-interpreter className="interpreter">
+      <web-interpreter className={styles.interpreter}>
         <div>
-          <button className="play">Swim</button>
+          <button data-id="play">Swim</button>
         </div>
-        <textarea className="input"></textarea>
-        <textarea className="output" readOnly aria-readonly></textarea>
+        <textarea data-id="input"></textarea>
+        <textarea data-id="output" readOnly aria-readonly></textarea>
       </web-interpreter>
     </>
   );

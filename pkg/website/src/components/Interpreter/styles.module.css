@@ -3,13 +3,13 @@ web-interpreter.interpreter {
     flex-direction: column;
 }
 
-web-interpreter textarea.input {
+web-interpreter textarea[data-id="input"] {
     height: 50vh;
     resize: vertical;
     font-family: monospace;
 }
 
-web-interpreter textarea.output {
+web-interpreter textarea[data-id="output"] {
     height: 20vh;
     resize: vertical;
     font-family: monospace;

@@ -1,6 +1,7 @@
 // @ts-check
 'use strict';
 
+// TODO: build this in React?
 // @ts-expect-error prevent re-declaration
 if (typeof WebInterpreter === 'undefined') {
   const WASM_URL = 'web-interpreter-opt.wasm';
@@ -54,7 +55,7 @@ if (typeof WebInterpreter === 'undefined') {
       const go = new Go();
       /** @type {HTMLTextAreaElement}  */
       // @ts-expect-error
-      const output = this.querySelector('textarea.output');
+      const output = this.querySelector('textarea[data-id="output"]');
       go.importObject['main.go.printError'] = (addr, length) => {
         output.value = (output.value ?? '') + this.#logText(addr, length) + '\n';
       };
@@ -71,7 +72,7 @@ if (typeof WebInterpreter === 'undefined') {
 
     connectedCallback() {
       // @ts-expect-error
-      this.querySelector('textarea.input').value = `><//> Calculate 5!
+      this.querySelector('textarea[data-id="input"]').value = `><//> Calculate 5!
 
   ><number>    ≈ ><{({°> ~  ><//> b101 = 5
   ><factorial> ≈ ><(({°> ~  ><//> b001 = 1
@@ -105,12 +106,12 @@ if (typeof WebInterpreter === 'undefined') {
             })
           );
       }
-      this.querySelector('button.play')?.addEventListener('click', () => {
+      this.querySelector('button[data-id="play"]')?.addEventListener('click', () => {
         if (!this.#wasm) return;
         // @ts-expect-error
-        this.querySelector('textarea.output').value = '';
+        this.querySelector('textarea[data-id="output"]').value = '';
         // @ts-expect-error
-        const inputText = this.querySelector('textarea.input').value;
+        const inputText = this.querySelector('textarea[data-id="input"]').value;
         const [addr, len] = this.#insertText(inputText);
         this.#wasm.exports.goFysh(addr, len);
       });

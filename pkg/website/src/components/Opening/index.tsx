@@ -1,6 +1,5 @@
 import React from 'react';
 import './opening/cursor.css';
-import './opening/interpreter.css';
 import './opening/opening.css';
 import styles from './styles.module.css';
 import waveStyles from './wave.module.css';
