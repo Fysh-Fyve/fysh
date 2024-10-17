@@ -2,7 +2,19 @@
 /* based on animation by Ted McDonald https://codepen.io/tedmcdo/pen/PqxKXg */
 
 :root {
-  --fysh: 8rem;
+  --fysh: 4rem;
+}
+
+@media only screen and (min-width: 400px) {
+  :root {
+    --fysh: 5rem;
+  }
+}
+ 
+@media only screen and (min-width: 600px) {
+  :root {
+    --fysh: 8rem;
+  }
 }
 
 html,
@@ -43,11 +55,8 @@ main[role="main"] {
   animation: fade 2s cubic-bezier(0.22, 0.61, 0.36, 1) 1 none;
 }
 
-.fysh {
+code.fysh {
   font-size: var(--fysh);
-}
-
-.fysh {
   color: #4fff64;
   opacity: 0;
   animation: fade 0.5s ease 5s forwards, glow 1s ease infinite alternate;
