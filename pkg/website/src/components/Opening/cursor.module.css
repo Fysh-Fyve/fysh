@@ -33,6 +33,10 @@ code.blinkingAfter {
 }
 
 @keyframes cursor-after {
-  0% { font-size: var(--fysh); }
-  100% { font-size: var(--fysh); }
+  0% {
+    font-size: var(--fysh);
+  }
+  100% {
+    font-size: var(--fysh);
+  }
 }
