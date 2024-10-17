@@ -66,6 +66,14 @@ main[role="main"] {
   }
 }
 
+@keyframes appear {
+  0% {
+    font-size: 0;
+  }
+  100% {
+    font-size: var(--fysh);
+  }
+}
 
 .fysh > code.c {
   z-index: 999;

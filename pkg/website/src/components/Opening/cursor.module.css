@@ -1,3 +1,16 @@
+code.blinking {
+  animation: cursor 4s 1 steps(1) 3.5s forwards;
+  background-color: transparent;
+  border: none;
+}
+
+code.blinkingAfter {
+  font-size: 0;
+  animation: cursor-after 0.5s 1 steps(1) 7.5s;
+  background-color: transparent;
+  border: none;
+}
+
 @keyframes cursor {
   0% {
     opacity: 1;
@@ -17,15 +30,6 @@
   100% {
     font-size: 0;
   }
-}
-
-code.blinking {
-  animation: cursor 4s 1 steps(1) 3.5s forwards;
-}
-
-code.blinking-after {
-  font-size: 0;
-  animation: cursor-after 0.5s 1 steps(1) 7.5s;
 }
 
 @keyframes cursor-after {

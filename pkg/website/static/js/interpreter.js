@@ -89,8 +89,7 @@ if (typeof WebInterpreter === 'undefined') {
   ><//> number -= 1
   <number><< ~
 <><
-(+o ><factorial> ~ ><//> Should be 120
-  `;
+(+o ><factorial> ~ ><//> Should be 120`;
       const go = this.#newRunner();
       if ('instantiateStreaming' in WebAssembly) {
         WebAssembly.instantiateStreaming(fetch(WASM_URL), go.importObject).then((obj) => {
