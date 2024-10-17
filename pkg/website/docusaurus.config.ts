@@ -5,7 +5,7 @@ import type { Options, ThemeConfig } from '@docusaurus/preset-classic';
 const config: Config = {
   title: 'Fysh',
   tagline: 'The Programming Language of the Sea',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/fysh-logo.png',
 
   // Set the production url of your site here
   url: 'https://fysh-fyve.github.io',
@@ -54,7 +54,10 @@ const config: Config = {
 
   themeConfig: {
     // Replace with your project's social card
-    image: 'img/docusaurus-social-card.jpg',
+    image: 'img/fysh-logo.png',
+    colorMode: {
+      defaultMode: 'dark',
+    },
     navbar: {
       title: 'Fysh',
       logo: {

@@ -16,6 +16,7 @@ if (typeof WebInterpreter === 'undefined') {
     /**
      * @type {WebAssembly.Instance & { exports: WebAssembly.Exports & Exports }}
      */
+    // @ts-expect-error private identifier
     #wasm;
 
     /**
@@ -23,6 +24,7 @@ if (typeof WebInterpreter === 'undefined') {
      * @param {string} text
      * @returns
      */
+    // @ts-expect-error private identifier
     #insertText(text) {
       const encoder = new TextEncoder();
       const bytes = encoder.encode(text);
@@ -42,6 +44,7 @@ if (typeof WebInterpreter === 'undefined') {
       return [addr, bytes.length];
     }
 
+    // @ts-expect-error private identifier
     #logText(addr, length) {
       const memory = this.#wasm.exports.memory;
       const bytes = memory.buffer.slice(addr, addr + length);
@@ -50,11 +53,11 @@ if (typeof WebInterpreter === 'undefined') {
       return text;
     }
 
+    // @ts-expect-error private identifier
     #newRunner() {
-      // @ts-expect-error
+      // @ts-expect-error wasm_exec.js class
       const go = new Go();
       /** @type {HTMLTextAreaElement}  */
-      // @ts-expect-error
       const output = this.querySelector('textarea[data-id="output"]');
       go.importObject['main.go.printError'] = (addr, length) => {
         output.value = (output.value ?? '') + this.#logText(addr, length) + '\n';
@@ -74,19 +77,19 @@ if (typeof WebInterpreter === 'undefined') {
       // @ts-expect-error
       this.querySelector('textarea[data-id="input"]').value = `><//> Calculate 5!
 
-  ><number>    ≈ ><{({°> ~  ><//> b101 = 5
-  ><factorial> ≈ ><(({°> ~  ><//> b001 = 1
+><number>    ≈ ><{({°> ~  ><//> b101 = 5
+><factorial> ≈ ><(({°> ~  ><//> b001 = 1
 
-  ><//> while number > 1
-  ><(((@> [><number> o~ ><(({°>]
-  ><>
-    ><//> factorial = factorial * number
-    ><factorial> ≈ ><factorial> ♡ ><number> ~
+><//> while number > 1
+><(((@> [><number> o~ ><(({°>]
+><>
+  ><//> factorial = factorial * number
+  ><factorial> ≈ ><factorial> ♡ ><number> ~
 
-    ><//> number -= 1
-    <number><< ~
-  <><
-  (+o ><factorial> ~ ><//> Should be 120
+  ><//> number -= 1
+  <number><< ~
+<><
+(+o ><factorial> ~ ><//> Should be 120
   `;
       const go = this.#newRunner();
       if ('instantiateStreaming' in WebAssembly) {

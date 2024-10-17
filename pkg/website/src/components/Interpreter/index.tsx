@@ -17,12 +17,22 @@ export default function Interpreter() {
         <script src="/js/wasm_exec.js" async></script>
         <script src="/js/interpreter.js" async></script>
       </Head>
-      <web-interpreter className={styles.interpreter}>
-        <div>
-          <button data-id="play">Swim</button>
+      {/* TODO: Make this a React component... or not.
+        https://github.com/facebook/react/issues/4933 */}
+      <web-interpreter {...{ class: styles.interpreter }}>
+        <div className={styles.btnContainer}>
+          <button className={styles.swimButton} data-id="play">
+            Swim
+          </button>
         </div>
-        <textarea data-id="input"></textarea>
-        <textarea data-id="output" readOnly aria-readonly></textarea>
+        <div className={styles.boxContainer}>
+          <div>
+            <textarea className={styles.inputBox} data-id="input"></textarea>
+          </div>
+          <div>
+            <textarea className={styles.outputBox} data-id="output" readOnly aria-readonly></textarea>
+          </div>
+        </div>
       </web-interpreter>
     </>
   );
