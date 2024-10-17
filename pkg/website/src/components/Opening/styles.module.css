@@ -17,6 +17,7 @@
 }
 
 .ogFysh > code {
+  background-color: transparent;
   flex: 1;
   border: none;
   align-content: center;
