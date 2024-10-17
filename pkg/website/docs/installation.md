@@ -13,5 +13,5 @@ sidebar_position: 1
 
 ## ⚙️ Option 2: Using Command Line
 
-1. Install the latest version `go install github.com/Fysh-Fyve/fysh@latest`
+1. Install the latest version `go install github.com/Fysh-Fyve/fysh/pkg/go-fysh/cmd@latest`
 2. Execute with `fysh <filename>.fysh`.

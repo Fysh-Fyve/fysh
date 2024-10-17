@@ -1,6 +1,6 @@
-module github.com/Fysh-Fyve/website
+module github.com/Fysh-Fyve/fysh/pkg/website/cmd
 
-go 1.23
+go 1.23.2
 
 require (
 	github.com/bitfield/script v0.22.1

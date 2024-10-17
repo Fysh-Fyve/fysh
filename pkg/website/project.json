@@ -15,6 +15,14 @@
       "options": {
         "port": 3000
       }
+    },
+    "deploy": {
+      "dependsOn": ["build"],
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "go run pkg/website/cmd/main.go",
+        "cwd": "{workspaceRoot}"
+      }
     }
   },
   "tags": []

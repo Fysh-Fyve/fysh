@@ -1,8 +1,9 @@
-go 1.23
+go 1.23.2
 
 use (
 	./pkg/fyshls
 	./pkg/go-fysh
 	./pkg/web-interpreter
 	./pkg/website-old
+	./pkg/website/cmd
 )
