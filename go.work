@@ -4,6 +4,5 @@ use (
 	./pkg/fyshls
 	./pkg/go-fysh
 	./pkg/web-interpreter
-	./pkg/website-old
 	./pkg/website/cmd
 )
