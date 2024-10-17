@@ -89,11 +89,11 @@ const config: Config = {
           items: [
             {
               label: 'Installation',
-              to: '/docs/installation',
+              to: '/docs/fysh/installation',
             },
             {
               label: 'Language Docs',
-              to: '/docs/manual',
+              to: '/docs/fysh/manual',
             },
           ],
         },
