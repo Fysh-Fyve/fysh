@@ -1,4 +1,5 @@
 html
+xml
 cmd/out/*
 !cmd/out/.keep
 
