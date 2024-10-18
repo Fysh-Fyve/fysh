@@ -3,6 +3,7 @@ package repl
 import (
 	"bufio"
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -65,5 +66,40 @@ func Start(in io.Reader, out io.Writer, prompt bool) {
 				log.Println(err)
 			}
 		}
+	}
+}
+
+func StartParse(in io.Reader, out io.Writer, prompt bool) {
+	s := bufio.NewScanner(in)
+	for {
+		if prompt {
+			fmt.Fprint(out, PROMPT)
+		}
+		scanned := s.Scan()
+		if !scanned {
+			return
+		}
+
+		line := s.Bytes()
+		l, err := scanner.NewFile("stdin", bytes.NewBuffer(line))
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		p := parser.New(l)
+
+		program, err := p.Parse()
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+
+		b, err := json.Marshal(program)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+
+		fmt.Println(string(b))
 	}
 }

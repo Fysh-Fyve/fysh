@@ -42,12 +42,12 @@ func (p *Program) String() string {
 }
 
 type Param struct {
-	Name []byte
+	Name string
 	Neg  bool
 }
 
 type SUBRoutine struct {
-	Name       []byte
+	Name       string
 	Neg        bool
 	Parameters []Param
 	Body       *BlockStatement
@@ -68,7 +68,7 @@ func (s *SUBRoutine) String() string {
 		if p.Neg {
 			out.WriteString("-")
 		}
-		out.Write(p.Name)
+		out.WriteString(p.Name)
 	}
 	fmt.Fprintf(&out, ") %s", s.Body)
 	return out.String()
