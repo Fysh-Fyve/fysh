@@ -6,16 +6,13 @@ sidebar_position: 2
 
 ## 🐠 Chapter 1: Fysh Syntax
 
-<details>
-  <summary>Click to expand</summary>
-
 ### 🐟 Variables
 
 - Meet Steven, our fishy friend. In Fysh, variables like Steven are declared
   with `><name>`. Every line of fysh ends with a wave `~`.
 
 ```fysh
-><Steven> ~
+><steven> ~
 ```
 
 - Steven has binary scales. In Fysh, `}` represents `1` and `)` represents `0`.
@@ -65,7 +62,7 @@ sidebar_position: 2
 
 - **Multiplying values:** Fysh often get lonely. This loneliness causes fysh to
   meet new fysh and proliferate. This gives Steven a value of
-  `0b101010 = 0b110 * 0b111`. (42 = 6 * 7)
+  `0b101010 = 0b110 * 0b111`. (42 = 6 \* 7)
 
 ```fysh
 ><steven> = ><{{(°> <3 ><{{{°> ~
@@ -120,12 +117,7 @@ number that determines the doneness of the fysh.
 ><###> ~
 ```
 
-</details>
-
 ## 📊 Chapter 2: Data Types
-
-<details>
-  <summary>Click to expand</summary>
 
 ### 📏 Integers
 
@@ -187,12 +179,7 @@ number that determines the doneness of the fysh.
 ><steven>[><(({°>] ~
 ```
 
-</details>
-
 ## 🧠 Chapter 3: Fysh Logic and Operations
-
-<details>
-  <summary>Click to expand</summary>
 
 ### 🤔 Logical Operations
 
@@ -254,12 +241,7 @@ are represented by `~o` or `o~`. Here, we are checking if Steven is bigger than
 ><steven> ≈o ><{{{°>
 ```
 
-</details>
-
 ## 🔄 Chapter 3: Control Structures
-
-<details>
-  <summary>Click to expand</summary>
 
 ### 🔁 While Loops
 
@@ -317,12 +299,7 @@ Conditional statements run based on how each Fysh feels
 <><
 ```
 
-</details>
-
 ## 🧑‍🔧 Chapter 4: Functions
-
-<details>
-  <summary>Click to expand</summary>
 
 ### ✏️ Defining Functions
 
@@ -349,12 +326,7 @@ of the 3 parameters.
 [>(submarine) ><fysh1> - ><fysh2> - ><fysh3>] ~
 ```
 
-</details>
-
 ## ⚓ Chapter 5: Output
-
-<details>
-  <summary>Click to expand</summary>
 
 ### ⛓️ Output Value
 
@@ -367,12 +339,7 @@ Here we're outputting `0b101` (5).
 (+o ><{({°> ~
 ```
 
-</details>
-
 ## 💬 Chapter 6: Comments
-
-<details>
-  <summary>Click to expand</summary>
 
 ### 🔉 Single-line Comments
 
@@ -397,12 +364,7 @@ How to grill a Fysh:
 <*/><
 ```
 
-</details>
-
 ## 📈 Examples
-
-<details>
-  <summary>Click to expand</summary>
 
 ### ❗Factorial Example
 
@@ -435,5 +397,3 @@ Let's break it down:
    2. `<number><< ~` - Decrement the number.
    3. Repeat until the number is 1.
 4. `(+o ><factorial> ~` - Output the factorial.
-
-</details>

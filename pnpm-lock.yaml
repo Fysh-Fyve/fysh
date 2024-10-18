@@ -51,15 +51,24 @@ importers:
       '@nx/workspace':
         specifier: 19.8.0
         version: 19.8.0
+      '@types/prismjs':
+        specifier: ^1.26.4
+        version: 1.26.4
       '@types/react':
         specifier: ^18.3.11
         version: 18.3.11
       nx:
         specifier: 19.8.0
         version: 19.8.0
+      prismjs:
+        specifier: ^1.29.0
+        version: 1.29.0
       typescript:
         specifier: ~5.2.2
         version: 5.2.2
+      utility-types:
+        specifier: ^3.11.0
+        version: 3.11.0
 
   pkg/tree-sitter-fysh:
     dependencies:
@@ -125,6 +134,8 @@ importers:
       typescript:
         specifier: ^5.3.3
         version: 5.4.5
+
+  pkg/website: {}
 
 packages:
 
