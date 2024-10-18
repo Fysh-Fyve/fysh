@@ -11,7 +11,7 @@ import (
 	"github.com/Fysh-Fyve/fysh/pkg/go-fysh/src/fysh"
 )
 
-type Identifier struct{ Name []byte }
+type Identifier struct{ Name string }
 
 func (i *Identifier) expression()     {}
 func (i *Identifier) Literal() string { return fysh.Ident.String() }
@@ -54,7 +54,7 @@ func (u *Unary) String() string {
 }
 
 type Call struct {
-	Callee []byte
+	Callee string
 	Args   []Expression
 }
 

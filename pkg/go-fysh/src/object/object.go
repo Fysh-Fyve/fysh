@@ -118,7 +118,7 @@ func (f *Function) Inspect() string {
 
 	params := [][]byte{}
 	for _, p := range f.Parameters {
-		params = append(params, p.Name)
+		params = append(params, []byte(p.Name))
 	}
 
 	out.WriteString("fn")

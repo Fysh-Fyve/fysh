@@ -154,7 +154,7 @@ func (p *Parser) list() ast.Expression {
 	}
 	if len(sub) > 0 {
 		var c ast.Expression = &ast.Call{
-			Callee: sub,
+			Callee: string(sub),
 			Args:   exprs,
 		}
 		if neg {
@@ -194,7 +194,7 @@ func (p *Parser) primary() ast.Expression {
 		return &ast.String{Value: str}
 	case fysh.Ident:
 		name, neg := p.cur.Unfysh()
-		var ident ast.Expression = &ast.Identifier{Name: name}
+		var ident ast.Expression = &ast.Identifier{Name: string(name)}
 		p.next()
 		if neg {
 			ident = &ast.Unary{Op: unary.Neg, Right: ident}
@@ -350,7 +350,7 @@ func (p *Parser) expression() ast.Expression {
 
 func (p *Parser) assignment() ast.Statement {
 	name, negate := p.cur.Unfysh()
-	left := &ast.Identifier{Name: name}
+	left := &ast.Identifier{Name: string(name)}
 	p.next()
 	p.next()
 
@@ -482,12 +482,12 @@ func (p *Parser) statement() ast.Statement {
 		return p.ifStmt()
 	case fysh.Inc:
 		name, _ := p.cur.Unfysh()
-		ident := &ast.Identifier{Name: name}
+		ident := &ast.Identifier{Name: string(name)}
 		p.next()
 		return p.water(&ast.IncrementStatement{Expr: ident})
 	case fysh.Dec:
 		name, _ := p.cur.Unfysh()
-		ident := &ast.Identifier{Name: name}
+		ident := &ast.Identifier{Name: string(name)}
 		p.next()
 		return p.water(&ast.DecrementStatement{Expr: ident})
 	default:
@@ -526,12 +526,15 @@ func (p *Parser) block() *ast.BlockStatement {
 
 func (p *Parser) submarine() *ast.SUBRoutine {
 	sub := &ast.SUBRoutine{}
-	sub.Name, sub.Neg = p.cur.Unfysh()
+	var name []byte
+	name, sub.Neg = p.cur.Unfysh()
+	sub.Name = string(name)
 	sub.Parameters = []ast.Param{}
 	p.next()
 	for p.cur.Type.IsOneOf(fysh.Ident) {
 		var par ast.Param
-		par.Name, par.Neg = p.cur.Unfysh()
+		name, par.Neg = p.cur.Unfysh()
+		par.Name = string(name)
 		sub.Parameters = append(sub.Parameters, par)
 		p.next()
 	}

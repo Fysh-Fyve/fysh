@@ -1,0 +1,65 @@
+>(set pixel) ><row> ><col>
+><>
+   (+o  (><{°> << ><{{{°>) | ((><row> & ><{{{°>) << ><{{°>)
+      | (><col> & ><{{{°>) ~
+<><
+
+>(draw fysh) ><dy> ><dx>
+><>
+   [(><dy> ><(((°>) >(set pixel) (><dx> ><(((°>)] ~ ><//> 0 0
+   ></*> More code... <*/><
+   [(><dy> ><({(°>) >(set pixel) (><dx> ><({{°>)] ~ ><//> 2 3
+<><
+
+><(((@> [><{°>]
+><>
+   [><(({°> >(draw fysh) ><(((°>] ~
+   ></*> More code... <*/><
+   [><(({°> >(draw fysh) ><{{{°>] ~
+<><
+
+><(°> ~
+
+></*>
+Program
+├── Function: set pixel, Parameters: row, col
+│   └── Body:
+│       └── Anchor Statement:
+│           └── Output: Bitwise OR Binary Expr
+│               ├── Left: Shift Left Binary Expr
+│               │   ├── Left: 1
+│               │   └── Right: 7
+│               └── Right: Bitwise OR Binary Expr
+│                   ├── Left: Shift Left Binary Expr
+│                   │   ├── Left: Bitwise AND Binary Expr
+│                   │   │   ├── Left: row
+│                   │   │   └── Right: 7
+│                   │   └── Right: 3
+│                   └── Right: Bitwise AND Binary Expr
+│                       ├── Left: col
+│                       └── Right: 7
+├── Function: draw fysh, Parameters: dy, dx
+│   └── Body:
+│       ├── Expr Statement: Call Expr: set pixel
+│       │   └── Args:
+│       │       ├── (dy + 0)
+│       │       └── (dx + 0)
+|       ├── ... More code ...
+│       └── Expr Statement: Call Expr: set pixel
+│           └── Args:
+│               ├── (dy + 2)
+│               └── (dx + 3)
+├── Conditional Block:
+│   ├── Condition: 1 (true)
+│   └── Body:
+│       ├── Expr Statement: Call Expr: draw fysh
+│       │   └── Args:
+│       │       ├── 1
+│       │       └── 0
+|       ├── ... More code ...
+│       └── Expr Statement: Call Expr: draw fysh
+│           └── Args:
+│               ├── 1
+│               └── 7
+└── Expression: 0
+<*/><
