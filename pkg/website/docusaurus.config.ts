@@ -93,7 +93,7 @@ const config: Config = {
             },
             {
               label: 'Language Docs',
-              to: '/docs/fysh/manual',
+              to: '/docs/category/-fyshing-manual',
             },
           ],
         },

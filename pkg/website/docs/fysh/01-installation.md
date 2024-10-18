@@ -1,7 +1,3 @@
----
-sidebar_position: 1
----
-
 # 👩‍💻 How to Compile and Run Fysh
 
 ## ⚙️ Option 1: Using VSCode
