@@ -1,5 +1,4 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "allowJs": true,
     "esModuleInterop": true,
@@ -7,11 +6,7 @@
     "lib": ["DOM"],
     "noEmit": true,
     "noImplicitAny": false,
-    "types": [
-      "node",
-      "@docusaurus/module-type-aliases",
-      "@docusaurus/theme-classic"
-    ],
+    "types": ["node", "@docusaurus/module-type-aliases", "@docusaurus/theme-classic"],
     "baseUrl": ".",
     "paths": {
       "@site/*": ["./*"]

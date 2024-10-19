@@ -11,6 +11,7 @@
     "@nx-go/nx-go": "^3.2.0",
     "@nx/node": "19.8.0",
     "@nx/workspace": "19.8.0",
+    "@types/node": "^18.14.6",
     "@types/prismjs": "^1.26.4",
     "@types/react": "^18.3.11",
     "nx": "19.8.0",
@@ -21,6 +22,7 @@
   "dependencies": {
     "@docusaurus/core": "3.4.0",
     "@docusaurus/preset-classic": "3.4.0",
+    "@docusaurus/theme-classic": "^3.5.2",
     "@mdx-js/react": "^3.0.1",
     "@nx-extend/docusaurus": "^3.0.0",
     "clsx": "^2.1.1",

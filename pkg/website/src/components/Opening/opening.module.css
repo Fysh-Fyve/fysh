@@ -1,3 +1,31 @@
 .opening {
-  height: 100vh;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 254, 234, 1) 0%,
+    rgba(255, 254, 234, 1) 35%,
+    #b7e8eb 100%
+  );
+  overflow: hidden;
+  position: relative;
+}
+
+.opening::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.opening,
+.fyshContainer {
+  animation: fade 2s cubic-bezier(0.22, 0.61, 0.36, 1) 1 none;
 }

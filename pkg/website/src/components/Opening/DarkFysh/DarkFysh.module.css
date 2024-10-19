@@ -1,0 +1,133 @@
+.bottomFysh {
+  position: relative;
+  width: 100%;
+  bottom: -100%;
+  height: 100vh;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: imthebgnow 0.5s ease 4.25s forwards;
+}
+
+@keyframes imthebgnow {
+  0% {
+    background: linear-gradient(#015871, black), black;
+    background-size: 100% 500%;
+    background-position: 0% 80%;
+    position: absolute;
+    bottom: 0;
+  }
+  90% {
+    background-position: 0% 90%;
+  }
+  100% {
+    position: absolute;
+    bottom: 0;
+    background: black;
+  }
+}
+
+code.blinking {
+  animation: cursor 4s 1 steps(1) 3.5s forwards;
+  background-color: transparent;
+  border: none;
+}
+
+code.blinkingAfter {
+  font-size: 0;
+  animation: cursor-after 0.5s 1 steps(1) 7.5s;
+  background-color: transparent;
+  border: none;
+}
+
+@keyframes cursor {
+  0% {
+    opacity: 1;
+  }
+  20% {
+    opacity: 0.1;
+  }
+  40% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 0.1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    font-size: 0;
+  }
+}
+
+@keyframes cursor-after {
+  0% {
+    font-size: var(--fysh);
+  }
+  100% {
+    font-size: var(--fysh);
+  }
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes glow {
+  from {
+    color: #4fff64a3;
+    text-shadow:
+      0 0 5px #00cc4488,
+      0 0 7px #00cc4488;
+  }
+  to {
+    color: #4fff647b;
+    text-shadow: none;
+  }
+}
+
+@keyframes appear {
+  0% {
+    font-size: 0;
+  }
+  100% {
+    font-size: var(--fysh);
+  }
+}
+
+code.fysh {
+  font-size: var(--fysh);
+  color: #4fff64;
+  opacity: 0;
+  animation:
+    fade 0.5s ease 5s forwards,
+    glow 1s ease infinite alternate;
+  border: none;
+  background-color: transparent;
+}
+
+.fysh > code.c {
+  z-index: 999;
+  animation: appear 0s steps(1) 0s 1;
+  border: none;
+  background-color: transparent;
+}
+.fysh > code.c.c1 {
+  animation-duration: 6.25s;
+}
+.fysh > code.c.c2 {
+  animation-duration: 6.5s;
+}
+.fysh > code.c.c3 {
+  animation-duration: 6.75s;
+}
+.fysh > code.c.c4 {
+  animation-duration: 7s;
+}

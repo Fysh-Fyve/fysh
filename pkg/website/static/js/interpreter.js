@@ -105,7 +105,7 @@ if (typeof WebInterpreter === 'undefined') {
               // @ts-expect-error
               this.#wasm = obj.instance;
               go.run(this.#wasm);
-            })
+            }),
           );
       }
       this.querySelector('button[data-id="play"]')?.addEventListener('click', () => {
