@@ -1,23 +1,23 @@
-web-interpreter.interpreter {
+.interpreter {
   flex: 1;
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-web-interpreter div.btnContainer {
+.interpreter div.btnContainer {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 1rem;
 }
 
-web-interpreter div.boxContainer {
+.interpreter div.boxContainer {
   display: block;
 }
 
-web-interpreter textarea.inputBox,
-web-interpreter textarea.outputBox {
+.interpreter textarea.inputBox,
+.interpreter textarea.outputBox {
   height: 100%;
   width: 100%;
   resize: vertical;
@@ -25,18 +25,18 @@ web-interpreter textarea.outputBox {
   min-height: 50vh;
 }
 
-web-interpreter div.boxContainer div {
+.interpreter div.boxContainer div {
   margin: 2rem;
 }
 
 @media only screen and (min-width: 992px) {
-  web-interpreter div.boxContainer {
+  .interpreter div.boxContainer {
     display: flex;
     flex-direction: row;
     flex: 1;
   }
 
-  web-interpreter div.boxContainer div {
+  .interpreter div.boxContainer div {
     flex: 1;
   }
 }
