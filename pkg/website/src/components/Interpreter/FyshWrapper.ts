@@ -20,7 +20,7 @@ export default class FyshWrapper {
 
   constructor(private onPrintOut: OutputFunc, private onPrintError: OutputFunc) {}
 
-  public async initialize(): Promise<void> {
+  public async initialize(baseURL: string): Promise<void> {
     this.go = new Go();
     this.go.importObject['main.go.printError'] = (addr: number, length: number) => {
       this.onPrintOut(this.logText(addr, length));
@@ -32,7 +32,7 @@ export default class FyshWrapper {
       printError: this.go.importObject['main.go.printError'],
       printOut: this.go.importObject['main.go.printOut'],
     };
-    const WASM_URL = '/web-interpreter-opt.wasm';
+    const WASM_URL = baseURL + 'web-interpreter-opt.wasm';
     const obj =
       'instantiateStreaming' in WebAssembly
         ? await WebAssembly.instantiateStreaming(fetch(WASM_URL), this.go.importObject)

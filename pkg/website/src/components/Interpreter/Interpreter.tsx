@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { exampleFactorial } from './factorial';
 import FyshWrapper from './FyshWrapper';
 import styles from './Interpreter.module.css';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 function useScript(script: string) {
   const [loaded, setLoaded] = useState(false);
@@ -19,6 +20,7 @@ function useScript(script: string) {
 }
 
 export default function Interpreter() {
+  const context = useDocusaurusContext();
   const [input, setInput] = useState(exampleFactorial);
   const [output, setOutput] = useState('');
   const isBrowser = useIsBrowser();
@@ -35,7 +37,7 @@ export default function Interpreter() {
     let mounted = true;
     if (isBrowser && loadedWasm) {
       const fysh = new FyshWrapper(printOutput, printOutput);
-      fysh.initialize().then(() => {
+      fysh.initialize(context.siteConfig.baseUrl).then(() => {
         if (mounted) {
           setFysh(fysh);
         }
@@ -44,7 +46,7 @@ export default function Interpreter() {
     return () => {
       mounted = false;
     };
-  }, [isBrowser, loadedWasm]);
+  }, [isBrowser, loadedWasm, context.siteConfig.baseUrl]);
 
   function runFysh() {
     setOutput('');
