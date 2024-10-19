@@ -48,14 +48,19 @@ x x x x x x x x
 
 ><(((@> [><{°>]
 ><>
-   [><(({°> >(draw fysh) ><(((°>] ~
-   [><(({°> >(draw fysh) ><(({°>] ~
-   [><(({°> >(draw fysh) ><({(°>] ~
-   [><(({°> >(draw fysh) ><({{°>] ~
-   [><(({°> >(draw fysh) ><{((°>] ~
-   [><(({°> >(draw fysh) ><{({°>] ~
-   [><(({°> >(draw fysh) ><{{(°>] ~
-   [><(({°> >(draw fysh) ><{{{°>] ~
+   ></*>
+     `draw frame` is defined in `gpio.c`,
+     which calls both `set pixel` and `draw fysh`.
+     This showcases Fysh-C interop.
+   <*/><
+   [><(({°> >(draw frame) ><(((°>] ~
+   [><(({°> >(draw frame) ><(({°>] ~
+   [><(({°> >(draw frame) ><({(°>] ~
+   [><(({°> >(draw frame) ><({{°>] ~
+   [><(({°> >(draw frame) ><{((°>] ~
+   [><(({°> >(draw frame) ><{({°>] ~
+   [><(({°> >(draw frame) ><{{(°>] ~
+   [><(({°> >(draw frame) ><{{{°>] ~
 <><
 
 ><//> we're just being nice to LLVM
