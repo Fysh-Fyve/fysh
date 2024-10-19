@@ -49,7 +49,7 @@ Program
 │           └── Args:
 │               ├── (dy + 2)
 │               └── (dx + 3)
-├── Conditional Block:
+├── Loop Block:
 │   ├── Condition: 1 (true)
 │   └── Body:
 │       ├── Expr Statement: Call Expr: draw fysh
