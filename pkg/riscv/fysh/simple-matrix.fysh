@@ -53,14 +53,14 @@ x x x x x x x x
      which calls both `set pixel` and `draw fysh`.
      This showcases Fysh-C interop.
    <*/><
-   [><(({°> >(draw frame) ><(((°>] ~
-   [><(({°> >(draw frame) ><(({°>] ~
-   [><(({°> >(draw frame) ><({(°>] ~
-   [><(({°> >(draw frame) ><({{°>] ~
-   [><(({°> >(draw frame) ><{((°>] ~
-   [><(({°> >(draw frame) ><{({°>] ~
-   [><(({°> >(draw frame) ><{{(°>] ~
-   [><(({°> >(draw frame) ><{{{°>] ~
+   [><(({°> >(draw_frame) ><(((°>] ~
+   [><(({°> >(draw_frame) ><(({°>] ~
+   [><(({°> >(draw_frame) ><({(°>] ~
+   [><(({°> >(draw_frame) ><({{°>] ~
+   [><(({°> >(draw_frame) ><{((°>] ~
+   [><(({°> >(draw_frame) ><{({°>] ~
+   [><(({°> >(draw_frame) ><{{(°>] ~
+   [><(({°> >(draw_frame) ><{{{°>] ~
 <><
 
 ><//> we're just being nice to LLVM
