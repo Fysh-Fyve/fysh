@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+    paths:
+      - 'pkg/go-fysh/**'
   pull_request:
     branches:
       - master
