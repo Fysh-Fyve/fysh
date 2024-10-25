@@ -5,29 +5,35 @@
   "scripts": {},
   "private": true,
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "3.4.0",
-    "@docusaurus/tsconfig": "3.4.0",
-    "@docusaurus/types": "3.4.0",
+    "@docusaurus/module-type-aliases": "^3.5.2",
+    "@docusaurus/tsconfig": "^3.5.2",
+    "@docusaurus/types": "^3.5.2",
     "@nx-go/nx-go": "^3.2.0",
-    "@nx/node": "19.8.0",
-    "@nx/workspace": "19.8.0",
-    "@types/node": "^18.14.6",
-    "@types/prismjs": "^1.26.4",
-    "@types/react": "^18.3.11",
-    "nx": "19.8.0",
+    "@nx/node": "20.0.5",
+    "@nx/workspace": "20.0.5",
+    "@types/node": "^18.19.59",
+    "@types/prismjs": "^1.26.5",
+    "@types/react": "^18.3.12",
+    "nx": "20.0.5",
     "prismjs": "^1.29.0",
     "typescript": "~5.2.2",
     "utility-types": "^3.11.0"
   },
   "dependencies": {
-    "@docusaurus/core": "3.4.0",
-    "@docusaurus/preset-classic": "3.4.0",
+    "@docusaurus/core": "^3.5.2",
+    "@docusaurus/preset-classic": "^3.5.2",
     "@docusaurus/theme-classic": "^3.5.2",
-    "@mdx-js/react": "^3.0.1",
-    "@nx-extend/docusaurus": "^3.0.0",
+    "@mdx-js/react": "^3.1.0",
+    "@nx-extend/docusaurus": "^3.1.0",
     "clsx": "^2.1.1",
     "prism-react-renderer": "^2.4.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "glob": "10.4.2",
+      "rimraf": "4.4.1"
+    }
   }
 }
