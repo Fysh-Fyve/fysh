@@ -20,7 +20,7 @@ import (
 )
 
 func getLogger(file string) io.WriteCloser {
-	if version.LogStderr == "true" && file == "-" {
+	if (version.LogStderr == "true" || !strings.HasPrefix(version.BuildVersion(), "v0.0.0")) && file == "-" {
 		return os.Stderr
 	} else {
 		// file, err := os.CreateTemp(".", "fyshls")

@@ -30,7 +30,7 @@ func GetLDFlags(extra ...string) (string, string, error) {
 		X("version", version),
 		X("commitHash", commitHash),
 		X("buildTimestamp", buildTimeStamp),
-		X("LogStderr", "true"),
+		X("logStderr", "true"),
 	}
 	ldflags = append(ldflags, extra...)
 	return strings.Join(ldflags, " "), version, nil
