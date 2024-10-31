@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	projectName      = "fysh-five.github.io"
+	projectName      = "fysh-fyve.github.io"
 	deploymentBranch = "gh-pages"
 )
 

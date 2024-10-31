@@ -20,7 +20,7 @@ var buildDir = path.Join("dist", "pkg", "website")
 
 const (
 	originUrl        = "https://github.com/Fysh-Fyve/Fysh-Fyve.github.io"
-	projectName      = "fysh-five.github.io"
+	projectName      = "fysh-fyve.github.io"
 	deploymentBranch = "gh-pages"
 	buildCmd         = ""
 )
