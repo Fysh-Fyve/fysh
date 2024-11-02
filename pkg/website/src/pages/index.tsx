@@ -6,7 +6,7 @@ import Opening from '../components/Opening';
 export default function Home(): JSX.Element {
   return (
     <Layout
-      wrapperClassName='home-layout'
+      wrapperClassName="home-layout"
       title={`Hello from Fysh`}
       description="Description will go into a meta tag in <head />"
     >

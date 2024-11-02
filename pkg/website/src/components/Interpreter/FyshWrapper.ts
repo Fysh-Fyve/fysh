@@ -18,7 +18,10 @@ export default class FyshWrapper {
   private go: Go;
   private wasm: FyshWASMInstance;
 
-  constructor(private onPrintOut: OutputFunc, private onPrintError: OutputFunc) {}
+  constructor(
+    private onPrintOut: OutputFunc,
+    private onPrintError: OutputFunc,
+  ) {}
 
   public async initialize(baseURL: string): Promise<void> {
     this.go = new Go();

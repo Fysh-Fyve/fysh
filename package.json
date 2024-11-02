@@ -17,6 +17,7 @@
     "@types/prismjs": "^1.26.5",
     "@types/react": "^18.3.12",
     "nx": "20.0.6",
+    "prettier": "^3.3.3",
     "prismjs": "^1.29.0",
     "typescript": "~5.2.2",
     "utility-types": "^3.11.0"
