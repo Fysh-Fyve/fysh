@@ -11,6 +11,11 @@ export default function DarkFysh() {
           <code className={clsx(styles.c, styles.c2)}>y</code>
           <code className={clsx(styles.c, styles.c3)}>s</code>
           <code className={clsx(styles.c, styles.c4)}>h</code>
+          <code className={clsx(styles.c, styles.c5)}>-</code>
+          <code className={clsx(styles.c, styles.c6)}>f</code>
+          <code className={clsx(styles.c, styles.c7)}>y</code>
+          <code className={clsx(styles.c, styles.c8)}>v</code>
+          <code className={clsx(styles.c, styles.c9)}>e</code>
           <code className={styles.blinking}>&#x25AF;</code>&gt;
           <code className={styles.blinkingAfter}>&#x25AF;</code>
         </code>

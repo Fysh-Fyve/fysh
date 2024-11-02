@@ -123,11 +123,26 @@ code.fysh {
   animation-duration: 6.25s;
 }
 .fysh > code.c.c2 {
-  animation-duration: 6.5s;
+  animation-duration: 6.34375s;
 }
 .fysh > code.c.c3 {
-  animation-duration: 6.75s;
+  animation-duration: 6.4375s;
 }
 .fysh > code.c.c4 {
+  animation-duration: 6.53125s;
+}
+.fysh > code.c.c5 {
+  animation-duration: 6.625s;
+}
+.fysh > code.c.c6 {
+  animation-duration: 6.71875s;
+}
+.fysh > code.c.c7 {
+  animation-duration: 6.8125s;
+}
+.fysh > code.c.c8 {
+  animation-duration: 6.90625s;
+}
+.fysh > code.c.c9 {
   animation-duration: 7s;
 }
