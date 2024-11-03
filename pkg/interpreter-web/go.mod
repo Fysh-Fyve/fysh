@@ -1,4 +1,4 @@
-module pkg/web-interpreter
+module github.com/Fysh-Fyve/fysh/pkg/interpreter-web
 
 go 1.23.2
 

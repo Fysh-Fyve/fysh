@@ -13,7 +13,7 @@ All sub-projects are inside the `pkg` directory.
 | [riscv](https://github.com/Fysh-Fyve/fysh/tree/master/pkg/riscv#readme)                       | Hardware Description for Fysh-Fyve [RISC-V](https://riscv.org/) CPU (VHDL)                             |
 | [tree-sitter-fysh](https://github.com/Fysh-Fyve/fysh/tree/master/pkg/tree-sitter-fysh#readme) | Fysh [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) Grammar                                 |
 | [vscode-fysh](https://github.com/Fysh-Fyve/fysh/tree/master/pkg/vscode-fysh#readme)           | [VSCode Language Support for Fysh](https://marketplace.visualstudio.com/items?itemName=Fysh-Fyve.fysh) |
-| [web-interpreter](https://github.com/Fysh-Fyve/fysh/tree/master/pkg/web-interpreter#readme)   | WASM library for the Fysh Web Interpreter                                                              |
+| [interpreter-web](https://github.com/Fysh-Fyve/fysh/tree/master/pkg/interpreter-web#readme)   | WASM library for the Fysh Web Interpreter                                                              |
 | [website](https://github.com/Fysh-Fyve/fysh/tree/master/pkg/website#readme)                   | [Fysh website](https://fysh-fyve.github.io)                                                            |
 
 ## Requirements

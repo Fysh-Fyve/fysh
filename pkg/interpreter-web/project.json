@@ -1,19 +1,19 @@
 {
-  "name": "web-interpreter",
+  "name": "interpreter-web",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "sourceRoot": "pkg/web-interpreter",
+  "sourceRoot": "pkg/interpreter-web",
   "tags": [],
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "outputs": ["{projectRoot}/out/web-interpreter-raw.wasm"],
+      "outputs": ["{projectRoot}/out/interpreter-web-raw.wasm"],
       "options": {
         "env": {
           "GOOS": "js",
           "GOARCH": "wasm"
         },
-        "command": "tinygo build -o ./out/web-interpreter-raw.wasm ./main.go",
+        "command": "tinygo build -o ./out/interpreter-web-raw.wasm ./main.go",
         "cwd": "{projectRoot}"
       },
       "cache": true
@@ -21,10 +21,10 @@
     "optimize": {
       "executor": "nx:run-commands",
       "dependsOn": ["build"],
-      "inputs": ["{projectRoot}/out/web-interpreter-raw.wasm"],
-      "outputs": ["{workspaceRoot}/pkg/website/static/web-interpreter-opt.wasm"],
+      "inputs": ["{projectRoot}/out/interpreter-web-raw.wasm"],
+      "outputs": ["{workspaceRoot}/pkg/website/static/interpreter-web-opt.wasm"],
       "options": {
-        "command": "wasm-opt -Oz ./out/web-interpreter-raw.wasm -o ../website/static/web-interpreter-opt.wasm",
+        "command": "wasm-opt -Oz ./out/interpreter-web-raw.wasm -o ../website/static/interpreter-web-opt.wasm",
         "cwd": "{projectRoot}"
       },
       "cache": true

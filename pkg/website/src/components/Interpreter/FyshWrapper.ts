@@ -35,7 +35,7 @@ export default class FyshWrapper {
       printError: this.go.importObject['main.go.printError'],
       printOut: this.go.importObject['main.go.printOut'],
     };
-    const WASM_URL = baseURL + 'web-interpreter-opt.wasm';
+    const WASM_URL = baseURL + 'interpreter-web-opt.wasm';
     const obj =
       'instantiateStreaming' in WebAssembly
         ? await WebAssembly.instantiateStreaming(fetch(WASM_URL), this.go.importObject)

@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "nx serve website --open",
-    "wasm-build": "nx optimize web-interpreter"
+    "wasm-build": "nx optimize interpreter-web"
   },
   "private": true,
   "devDependencies": {
