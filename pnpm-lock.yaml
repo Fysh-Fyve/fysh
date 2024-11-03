@@ -86,21 +86,21 @@ importers:
   pkg/tree-sitter-fysh:
     dependencies:
       node-addon-api:
-        specifier: ^8.2.1
+        specifier: ^8.1.0
         version: 8.2.1
       node-gyp-build:
         specifier: ^4.8.2
         version: 4.8.2
       tree-sitter:
-        specifier: ^0.21.0
+        specifier: ^0.21.1
         version: 0.21.1
     devDependencies:
       prebuildify:
         specifier: ^6.0.1
         version: 6.0.1
       tree-sitter-cli:
-        specifier: ^0.22.6
-        version: 0.22.6
+        specifier: ^0.24.3
+        version: 0.24.3
 
   pkg/vscode-fysh:
     dependencies:
@@ -5942,8 +5942,9 @@ packages:
     resolution: {integrity: sha512-sf4i37nQ2LBx4m3wB74y+ubopq6W/dIzXg0FDGjsYnZHVa1Da8FH853wlL2gtUhg+xJXjfk3kUZS3BRoQeoQBQ==}
     engines: {node: '>=6'}
 
-  tree-sitter-cli@0.22.6:
-    resolution: {integrity: sha512-s7mYOJXi8sIFkt/nLJSqlYZP96VmKTc3BAwIX0rrrlRxWjWuCwixFqwzxWZBQz4R8Hx01iP7z3cT3ih58BUmZQ==}
+  tree-sitter-cli@0.24.3:
+    resolution: {integrity: sha512-5vS0SiJf31tMTn9CYLsu5l18qXaw5MLFka3cuGxOB5f4TtgoUSK1Sog6rKmqBc7PvFJq37YcQBjj9giNy2cJPw==}
+    engines: {node: '>=12.0.0'}
     hasBin: true
 
   tree-sitter@0.21.1:
@@ -14167,7 +14168,7 @@ snapshots:
 
   totalist@3.0.1: {}
 
-  tree-sitter-cli@0.22.6: {}
+  tree-sitter-cli@0.24.3: {}
 
   tree-sitter@0.21.1:
     dependencies:

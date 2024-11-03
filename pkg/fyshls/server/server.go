@@ -12,7 +12,7 @@ import (
 	"strings"
 
 	"github.com/Fysh-Fyve/fysh/pkg/fyshls/version"
-	fysh "github.com/Fysh-Fyve/tree-sitter-fysh"
+	fysh "github.com/Fysh-Fyve/fysh/pkg/tree-sitter-fysh/bindings/go"
 	sitter "github.com/smacker/go-tree-sitter"
 	"github.com/tliron/glsp"
 	protocol "github.com/tliron/glsp/protocol_3_16"
@@ -91,9 +91,13 @@ func (s *Server) logTrace(context *glsp.Context, params *protocol.LogTraceParams
 	return nil
 }
 
+func GetLanguage() *sitter.Language {
+	return sitter.NewLanguage(fysh.Language())
+}
+
 func GetTree(content []byte) (*sitter.Tree, error) {
 	p := sitter.NewParser()
-	p.SetLanguage(fysh.GetLanguage())
+	p.SetLanguage(GetLanguage())
 	tree, err := p.ParseCtx(ctx.Background(), nil, content)
 	if err != nil {
 		return nil, err

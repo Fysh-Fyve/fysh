@@ -3,8 +3,8 @@ package tree_sitter_fysh_test
 import (
 	"testing"
 
-	tree_sitter "github.com/smacker/go-tree-sitter"
-	"github.com/tree-sitter/tree-sitter-fysh"
+	tree_sitter_fysh "github.com/Fysh-Fyve/fysh/pkg/tree-sitter-fysh/bindings/go"
+	tree_sitter "github.com/tree-sitter/go-tree-sitter"
 )
 
 func TestCanLoadGrammar(t *testing.T) {

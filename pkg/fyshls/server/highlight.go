@@ -5,14 +5,13 @@ import (
 	"fmt"
 
 	"github.com/Fysh-Fyve/fysh/pkg/fyshls/support"
-	fysh "github.com/Fysh-Fyve/tree-sitter-fysh"
-	queries "github.com/Fysh-Fyve/tree-sitter-fysh/queries"
+	queries "github.com/Fysh-Fyve/fysh/pkg/tree-sitter-fysh"
 	sitter "github.com/smacker/go-tree-sitter"
 	protocol "github.com/tliron/glsp/protocol_3_16"
 )
 
 func Encode(sourceCode []byte, n *sitter.Tree) []protocol.UInteger {
-	q, err := sitter.NewQuery(queries.Highlights, fysh.GetLanguage())
+	q, err := sitter.NewQuery(queries.Highlights, GetLanguage())
 	if err != nil {
 		panic(fmt.Errorf("highlight.scm: %v", err))
 	}

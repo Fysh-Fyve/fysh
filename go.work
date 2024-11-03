@@ -4,5 +4,6 @@ use (
 	./pkg/fyshls
 	./pkg/go-fysh
 	./pkg/interpreter-web
+	./pkg/tree-sitter-fysh
 	./pkg/website
 )

@@ -1,0 +1,33 @@
+{
+  "grammars": [
+    {
+      "name": "fysh",
+      "camelcase": "Fysh",
+      "scope": "source.fysh",
+      "path": ".",
+      "file-types": null,
+      "injection-regex": "^fysh$"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "Fysh grammar for tree-sitter",
+    "authors": [
+      {
+        "name": "Fysh-Fyve Team"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/Fysh-Fyve/fysh"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true
+  }
+}

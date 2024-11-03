@@ -8,14 +8,14 @@
 // @ts-check
 
 const PREC = {
-    primary: 7,
-    unary: 6,
-    multiplicative: 5,
-    additive: 4,
-    comparative: 3,
-    anchor: 2,
-    composite_literal: -1,
-  },
+  primary: 7,
+  unary: 6,
+  multiplicative: 5,
+  additive: 4,
+  comparative: 3,
+  anchor: 2,
+  composite_literal: -1,
+},
   hearts = [
     "<3",
     "♡",

@@ -11,12 +11,12 @@ type ChildNode = {
 
 type NodeInfo =
   | (BaseNode & {
-    subtypes: BaseNode[];
-  })
+      subtypes: BaseNode[];
+    })
   | (BaseNode & {
-    fields: { [name: string]: ChildNode };
-    children: ChildNode[];
-  });
+      fields: { [name: string]: ChildNode };
+      children: ChildNode[];
+    });
 
 type Language = {
   name: string;

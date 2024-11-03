@@ -1,21 +1,23 @@
 {
   "name": "tree-sitter-fysh",
-  "version": "0.0.1",
-  "description": "fysh grammar for tree-sitter",
-  "main": "bindings/node",
-  "types": "bindings/node",
-  "author": {
-    "name": "Fysh-Fyve Team"
-  },
-  "license": "MIT",
+  "version": "0.1.0",
+  "description": "Fysh grammar for tree-sitter",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Fysh-Fyve/fysh.git",
+    "url": "git+https://github.com/Fysh-Fyve/fysh.git",
     "directory": "pkg/tree-sitter-fysh"
   },
+  "license": "MIT",
+  "author": {
+    "name": "Charles Ancheta"
+  },
+  "main": "bindings/node",
+  "types": "bindings/node",
   "keywords": [
+    "incremental",
     "parsing",
-    "incremental"
+    "tree-sitter",
+    "fysh"
   ],
   "files": [
     "grammar.js",
@@ -23,49 +25,35 @@
     "prebuilds/**",
     "bindings/node/*",
     "queries/*",
-    "src/**"
+    "src/**",
+    "*.wasm"
   ],
   "dependencies": {
-    "node-addon-api": "^8.2.1",
+    "node-addon-api": "^8.1.0",
     "node-gyp-build": "^4.8.2"
   },
+  "devDependencies": {
+    "prebuildify": "^6.0.1",
+    "tree-sitter-cli": "^0.24.3"
+  },
   "peerDependencies": {
-    "tree-sitter": "^0.21.0"
+    "tree-sitter": "^0.21.1"
   },
   "peerDependenciesMeta": {
-    "tree_sitter": {
+    "tree-sitter": {
       "optional": true
     }
   },
-  "tree-sitter": [],
-  "devDependencies": {
-    "prebuildify": "^6.0.1",
-    "tree-sitter-cli": "^0.22.6"
-  },
   "scripts": {
-    "test": "tree-sitter test",
     "install": "node-gyp-build",
-    "prebuildify": "prebuildify --napi --strip"
+    "prestart": "tree-sitter build --wasm",
+    "start": "tree-sitter playground",
+    "test": "node --test bindings/node/*_test.js"
   },
-  "nx": {
-    "targets": {
-      "build": {
-        "inputs": [
-          "{projectRoot}/grammar.js"
-        ],
-        "outputs": [
-          "{projectRoot}/build/tree_sitter_fysh.wasm"
-        ],
-        "executor": "nx:run-commands",
-        "options": {
-          "inputs": [
-            "ignore"
-          ],
-          "cwd": "{projectRoot}",
-          "command": "tree-sitter build --wasm -o build/tree_sitter_fysh.wasm"
-        },
-        "cache": true
-      }
+  "tree-sitter": [
+    {
+      "scope": "source.fysh",
+      "injection-regex": "^fysh$"
     }
-  }
+  ]
 }

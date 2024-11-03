@@ -3,7 +3,6 @@ module github.com/Fysh-Fyve/fysh/pkg/fyshls
 go 1.23.2
 
 require (
-	github.com/Fysh-Fyve/tree-sitter-fysh v0.0.0-20240404142455-df477e6e0c69
 	github.com/smacker/go-tree-sitter v0.0.0-20240320021847-a4b649a78290
 	github.com/stretchr/testify v1.9.0
 	github.com/tliron/glsp v0.2.2
