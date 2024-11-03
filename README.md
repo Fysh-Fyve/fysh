@@ -15,3 +15,11 @@ All sub-projects are inside the `pkg` directory.
 | [vscode-fysh](https://github.com/Fysh-Fyve/fysh/tree/master/pkg/vscode-fysh#readme)           | [VSCode Language Support for Fysh](https://marketplace.visualstudio.com/items?itemName=Fysh-Fyve.fysh) |
 | [web-interpreter](https://github.com/Fysh-Fyve/fysh/tree/master/pkg/web-interpreter#readme)   | WASM library for the Fysh Web Interpreter                                                              |
 | [website](https://github.com/Fysh-Fyve/fysh/tree/master/pkg/website#readme)                   | [Fysh website](https://fysh-fyve.github.io)                                                            |
+
+## Requirements
+
+- `pnpm` - Package manager for JS projects
+- `nx` - Monorepo tooling
+- `go` - Go toolchain
+- `tinygo` - Go toolchain for WASM target
+- `wasm-opt` - For optimizing

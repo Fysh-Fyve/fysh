@@ -22,9 +22,9 @@
       "executor": "nx:run-commands",
       "dependsOn": ["build"],
       "inputs": ["{projectRoot}/out/web-interpreter-raw.wasm"],
-      "outputs": ["{projectRoot}/out/opt/web-interpreter-opt.wasm"],
+      "outputs": ["{workspaceRoot}/pkg/website/static/web-interpreter-opt.wasm"],
       "options": {
-        "command": "wasm-opt -Oz ./out/web-interpreter-raw.wasm -o ./out/opt/web-interpreter-opt.wasm",
+        "command": "wasm-opt -Oz ./out/web-interpreter-raw.wasm -o ../website/static/web-interpreter-opt.wasm",
         "cwd": "{projectRoot}"
       },
       "cache": true

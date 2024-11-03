@@ -1,4 +1,4 @@
-module github.com/Fysh-Fyve/fysh/pkg/website/cmd
+module github.com/Fysh-Fyve/fysh/pkg/website
 
 go 1.23.2
 
