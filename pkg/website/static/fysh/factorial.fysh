@@ -1,4 +1,4 @@
-export const exampleFactorial = `><//> Calculate 5!
+><//> Calculate 5!
 
 ><number>    ≈ ><{({°> ~  ><//> b101 = 5
 ><factorial> ≈ ><(({°> ~  ><//> b001 = 1
@@ -12,4 +12,4 @@ export const exampleFactorial = `><//> Calculate 5!
   ><//> number -= 1
   <number><< ~
 <><
-(+o ><factorial> ~ ><//> Should be 120`;
+(+o ><factorial> ~ ><//> Should be 120
