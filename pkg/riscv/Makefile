@@ -39,7 +39,7 @@ hex: $(ASM_HEX)
 
 rom: rtl/core/rom_pkg.vhd
 
-rtl/core/rom_pkg.vhd: asm/example.hex \
+rtl/core/rom_pkg.vhd: fysh/simple-matrix.hex \
 	build/fyve-rom \
 	scripts/rom_pkg.part1.vhd \
 	scripts/rom_pkg.part2.vhd
