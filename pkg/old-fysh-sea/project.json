@@ -1,8 +1,8 @@
 {
-  "name": "fysh-sea",
+  "name": "old-fysh-sea",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "sourceRoot": "pkg/fysh-sea",
+  "sourceRoot": "pkg/old-fysh-sea",
   "namedInputs": {
     "ignore": [
       "!{projectRoot}/**/*.md",
