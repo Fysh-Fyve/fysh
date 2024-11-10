@@ -1,6 +1,7 @@
 go 1.23.2
 
 use (
+	./pkg/fysh-sea
 	./pkg/fyshls
 	./pkg/go-fysh
 	./pkg/interpreter-web
